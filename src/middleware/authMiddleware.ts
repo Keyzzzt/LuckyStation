@@ -14,13 +14,30 @@ export const privateRoute = asyncHandler(async (req: any, res, next) => {
       req.user = await User.findById(decoded.id).select('-password -refreshToken')
       next()
     } catch (error) {
-      console.error(error)
-      res.status(401)
-      throw new Error('Not authorized, token failed.')
+      res.status(401).json({
+        resultCode: 0,
+        errorMessage: ['Not authorized, token failed'],
+        data: null,
+      })
     }
   }
   if (!token) {
-    res.status(401)
-    throw new Error('Not authorized, no token.')
+    res.status(401).json({
+      resultCode: 0,
+      errorMessage: ['Not authorized.'],
+      data: null,
+    })
+  }
+})
+
+export const adminRoute = asyncHandler(async (req: any, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next()
+  } else {
+    res.status(401).json({
+      resultCode: 0,
+      errorMessage: ['Not authorized, admin access only.'],
+      data: null,
+    })
   }
 })

@@ -17,7 +17,7 @@ import { issueTokenPair } from '@src/middleware/issueTokenPair'
 // @desc     Authenticate user & get token + refresh token.
 // @route    POST /api/user
 // @access   Public
-const login = asyncHandler(async (req, res) => {
+export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
   if (user && (await user.matchPassword(password))) {
@@ -36,15 +36,18 @@ const login = asyncHandler(async (req, res) => {
       },
     })
   } else {
-    res.status(401)
-    throw new Error('Invalid email or password')
+    res.status(401).json({
+      resultCode: 1,
+      errorMessage: ['Invalid email or password'],
+      data: null,
+    })
   }
 })
 
 // @desc     Refresh JWT & refresh tokens.
 // @route    POST /api/user/refresh
 // @access   Private
-const updateRefreshToken = asyncHandler(async (req, res) => {
+export const updateRefreshToken = asyncHandler(async (req, res) => {
   const { _id, refreshToken } = req.body
   const doc = await User.findById({ _id })
 
@@ -63,43 +66,48 @@ const updateRefreshToken = asyncHandler(async (req, res) => {
       },
     })
   } else {
-    res.status(401)
-    throw new Error('Invalid refresh token')
+    res.status(401).json({
+      resultCode: 0,
+      errorMessage: ['Invalid refresh token'],
+      data: null,
+    })
   }
 })
 
 // @desc     Authenticate user & get token + refresh token.
 // @route    POST /api/user
 // @access   Public
-const logout = asyncHandler(async (req, res) => {})
+export const logout = asyncHandler(async (req, res) => {})
 
 // @desc     Get user own profile
 // @route    GET /api/user/profile
 // @access   Private
-// OBS НЕ ВОЗВРАЩАЕТ ТОКЕНЫ, правильно это или нет ХЗ
-const getProfile = asyncHandler(async (req: any, res) => {
+// TODO OBS НЕ ВОЗВРАЩАЕТ ТОКЕНЫ, правильно это или нет ХЗ
+export const getProfile = asyncHandler(async (req: any, res) => {
   let user
   if (req.user) {
     const { _id } = req.user._id
     user = await User.findById(_id)
   }
   if (user) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
+    res.status(200).json({
+      resultCode: 0,
+      errorMessage: ['User not found'],
+      data: user,
     })
   } else {
-    res.status(404)
-    throw new Error('User not found.')
+    res.status(404).json({
+      resultCode: 0,
+      errorMessage: ['User not found'],
+      data: null,
+    })
   }
 })
 
 // @desc     Update user profile
 // @route    PUT /api/user/profile
 // @access   Private
-const updateProfile = asyncHandler(async (req: any, res) => {
+export const updateProfile = asyncHandler(async (req: any, res) => {
   const user = await User.findById(req.user._id)
   if (user) {
     user.name = req.body.name || user.name
@@ -112,29 +120,39 @@ const updateProfile = asyncHandler(async (req: any, res) => {
     if (updatedUser) {
       const { token, refreshToken } = await issueTokenPair(updatedUser._id)
       res.status(200).json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-        token,
-        refreshToken,
+        resultCode: 1,
+        errorMessage: [],
+        data: {
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+          token,
+          refreshToken,
+        },
       })
     }
   } else {
-    res.status(404)
-    throw new Error('User not found.')
+    res.status(404).json({
+      resultCode: 0,
+      errorMessage: ['User not found'],
+      data: null,
+    })
   }
 })
 
 // @desc     Get user own profile
 // @route    GET /api/user/profile
 // @access   Private
-const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
   const userExists = await User.findOne({ email })
   if (userExists) {
-    res.status(400)
-    throw new Error('User already exists.')
+    res.status(400).json({
+      resultCode: 0,
+      errorMessage: ['User already exists'],
+      data: null,
+    })
   }
   const user = await User.create({ name, email, password, refreshToken: '' })
   if (user) {
@@ -154,4 +172,22 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 })
 
-export { login, logout, updateRefreshToken, getProfile, registerUser, updateProfile }
+// @desc     Get all users
+// @route    GET /api/user
+// @access   Private & Admin
+export const getAllUsers = asyncHandler(async (req: any, res) => {
+  const users = await User.find({})
+  if (users && users.length > 0) {
+    res.status(200).json({
+      resultCode: 1,
+      errorMessage: [],
+      data: users,
+    })
+  } else {
+    res.status(404).json({
+      resultCode: 0,
+      errorMessage: ['Users not found'],
+      data: null,
+    })
+  }
+})
