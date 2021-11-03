@@ -206,8 +206,8 @@ export const getAllOrders = asyncHandler(async (req: any, res) => {
 
 // @desc     Update order to paid
 // @route    GET /api/order/:id/pay
-// @access   Private
-export const updateOrderToPaid = asyncHandler(async (req: any, res) => {
+// @access   Private & Admin
+export const setOrderToPaid = asyncHandler(async (req: any, res) => {
   const order = await Order.findById(req.params.id)
   if (order) {
     const { id, status, updateTime } = req.body
@@ -238,17 +238,48 @@ export const updateOrderToPaid = asyncHandler(async (req: any, res) => {
   }
 })
 
-// @desc     Update order to delivered
-// @route    GET /api/order/:id/delivered
+// @desc     Set order to - NOT PAID
+// @route    PUT /api/order/:id/pay
 // @access   Private & Admin
-export const updateOrderToDelivered = asyncHandler(async (req: any, res) => {
+export const setOrderToNotPaid = asyncHandler(async (req: any, res) => {
   const order = await Order.findById(req.params.id)
-
-  if (order && order.isPaid) {
-    order.isDelivered = true
-    order.deliveredAt = Date.now()
+  if (order) {
+    order.isPaid = false
+    order.paidAt = undefined
+    order.paymentResult = {
+      id: '',
+      status: '',
+      updateTime: '',
+      emailAddress: '',
+    }
 
     const updatedOrder = await order.save()
+
+    res.status(201).json({
+      resultCode: 1,
+      errorMessage: [],
+      data: updatedOrder,
+    })
+  } else {
+    res.status(404).json({
+      resultCode: 1,
+      errorMessage: ['Order not found'],
+      data: null,
+    })
+  }
+})
+
+// @desc     Set order to delivered
+// @route    GET /api/order/:id/delivered
+// @access   Private & Admin
+export const setOrderToDelivered = asyncHandler(async (req: any, res) => {
+  const order = await Order.findById(req.params.id)
+
+  if (order) {
+    order.isDelivered = true
+    order.deliveredAt = Date.now()
+    const updatedOrder = await order.save()
+
     if (updatedOrder) {
       res.status(201).json({
         resultCode: 1,
@@ -262,16 +293,43 @@ export const updateOrderToDelivered = asyncHandler(async (req: any, res) => {
         data: null,
       })
     }
-  } else if (!order) {
+  } else {
     res.status(404).json({
       resultCode: 0,
       errorMessage: ['Order not found'],
       data: null,
     })
-  } else if (!order.isPaid) {
-    res.status(400).json({
+  }
+})
+
+// @desc     Set order to NOT delivered
+// @route    PUT /api/order/:id/delivered
+// @access   Private & Admin
+export const setOrderToNotDelivered = asyncHandler(async (req: any, res) => {
+  const order = await Order.findById(req.params.id)
+
+  if (order) {
+    order.isDelivered = false
+    order.deliveredAt = undefined
+    const updatedOrder = await order.save()
+
+    if (updatedOrder) {
+      res.status(201).json({
+        resultCode: 1,
+        errorMessage: [],
+        data: updatedOrder,
+      })
+    } else {
+      res.status(500).json({
+        resultCode: 0,
+        errorMessage: ['Order status has not been updated'],
+        data: null,
+      })
+    }
+  } else {
+    res.status(404).json({
       resultCode: 0,
-      errorMessage: ['Order must be payed before you can change delivery status.'],
+      errorMessage: ['Order not found'],
       data: null,
     })
   }

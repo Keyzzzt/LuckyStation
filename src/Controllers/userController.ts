@@ -44,6 +44,29 @@ export const login = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc     Logout
+// @route    DELETE /api/user
+// @access   Public
+export const logout = asyncHandler(async (req: any, res) => {
+  const { _id } = req.user._id
+  const user = await User.findById(_id)
+  if (user) {
+    user.refreshToken = ''
+    await user.save()
+    res.status(200).json({
+      resultCode: 1,
+      errorMessage: [],
+      data: null,
+    })
+  } else {
+    res.status(404).json({
+      resultCode: 0,
+      errorMessage: ['User not found'],
+      data: null,
+    })
+  }
+})
+
 // @desc     Refresh JWT & refresh tokens.
 // @route    POST /api/user/refresh
 // @access   Private
@@ -73,11 +96,6 @@ export const updateRefreshToken = asyncHandler(async (req, res) => {
     })
   }
 })
-
-// @desc     Authenticate user & get token + refresh token.
-// @route    POST /api/user
-// @access   Public
-export const logout = asyncHandler(async (req, res) => {})
 
 // @desc     Get user own profile
 // @route    GET /api/user/profile

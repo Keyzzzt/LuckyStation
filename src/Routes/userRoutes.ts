@@ -6,7 +6,7 @@ import { privateRoute, adminRoute } from '@src/middleware/authMiddleware'
 const router = express.Router()
 
 router.route('/').post(registerUser).get(privateRoute, adminRoute, getAllUsers)
-router.route('/login').post(login)
+router.route('/login').post(login).delete(privateRoute, logout)
 router.route('/logout').post(logout)
 router.route('/refresh').post(updateRefreshToken)
 router.route('/profile').get(privateRoute, getProfile).put(privateRoute, updateProfile)
