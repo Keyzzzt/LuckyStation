@@ -1,8 +1,9 @@
-import express from 'express'
+import express, { Router } from 'express'
 import multer from 'multer'
 import path from 'path'
+import { privateRoute, adminRoute } from '@src/middleware/auth.middleware'
 
-const router = express.Router()
+const router: Router = express.Router()
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -31,7 +32,7 @@ const upload = multer({
   },
 })
 
-router.post('/', upload.single('image'), (req: any, res) => {
+router.post('/', privateRoute, adminRoute, upload.single('image'), (req: any, res) => {
   res.send(`/${req.file.path}`)
 })
 

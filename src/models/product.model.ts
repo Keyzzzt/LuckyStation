@@ -14,6 +14,11 @@ const ReviewSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
@@ -74,4 +79,4 @@ const ProductSchema = new mongoose.Schema(
   }
 )
 
-export const Product = mongoose.model('Product', ProductSchema)
+export const ProductModel = mongoose.model('Product', ProductSchema)

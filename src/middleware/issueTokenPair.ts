@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 import { v4 as uuidv4 } from 'uuid'
-import { User } from '@src/Models/UserModel'
+import { UserModel } from '@src/models/user.model'
 
-export async function issueTokenPair(userId: string) {
-  const newRefreshToken: string = uuidv4()
-  const doc = await User.findById({ _id: userId })
+export async function issueTokenPair(userId) {
+  const newRefreshToken = uuidv4()
+  const doc = await UserModel.findById({ _id: userId })
   if (!doc) {
     throw new Error('No user found')
   }
@@ -12,7 +12,7 @@ export async function issueTokenPair(userId: string) {
   await doc.save()
 
   return {
-    token: jwt.sign({ id: doc._id }, process.env.JWT_TOKEN, { expiresIn: '30m' }),
+    accessToken: jwt.sign({ id: doc._id }, process.env.JWT_TOKEN, { expiresIn: '100m' }),
     refreshToken: newRefreshToken,
   }
 }
