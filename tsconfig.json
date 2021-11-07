@@ -76,5 +76,5 @@
   ],
   "include": [
     "src"
-  ]
+, "fakeDB.ts", "default.ts"  ]
 }

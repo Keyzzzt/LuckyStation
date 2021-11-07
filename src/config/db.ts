@@ -1,12 +1,9 @@
-import mongoose, { ConnectOptions } from 'mongoose'
+import mongoose from 'mongoose'
 
-export const connectDB = async () => {
+export async function connectDB() {
   const uri: string = process.env.mongodbURI
   try {
-    const connect = await mongoose.connect(uri, {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    } as ConnectOptions)
+    const connect = await mongoose.connect(uri)
     console.log(`MongoDB connected: ${connect.connection.host}`)
   } catch (error) {
     console.error(`Error: ${error.message}`)

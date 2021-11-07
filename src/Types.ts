@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 type ReviewType = {
   name: string
   rating: number
@@ -14,6 +15,19 @@ export type UserType = {
   updatedAt: Date
   refreshToken: string
 }
+export interface GoogleUserProfile {
+  id: string
+  email: string
+  name: string
+  verified_email: boolean
+  given_name: string
+  family_name: string
+  picture: string
+  locale: string
+  iat: Date
+  exp: Date
+}
+
 export type ProductType = {
   user: UserType | null
   name: string
@@ -35,4 +49,8 @@ export type ProductType = {
 
 export type ID = {
   id: string
+}
+
+export interface ResponseWithUser{
+  
 }

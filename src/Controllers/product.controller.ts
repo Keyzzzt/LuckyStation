@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response } from 'express'
 import { ID } from '@src/Types'
@@ -65,20 +66,23 @@ export const getProductById = async (req: Request<ID>, res: Response) => {
 // @desc     Create review
 // @route    POST /api/product/:id/review
 // @access   Private
-export const createReview = async (req: Request<ID, any, CreateReviewBody, any>, res: Response) => {
+export const createReview = async (req: Request<ID, object, CreateReviewBody, object>, res: Response) => {
   try {
     const { rating, comment } = req.body
     const product = await findProduct(req.params.id, 'id')
     if (!product) throw new Error('Product not found')
 
-    const alreadyReviewed = product.reviews.find((r) => r.user._id.toString() === res.locals.user._id.toString())
+    // @ts-ignore
+    const alreadyReviewed = product.reviews.find((r) => r.user._id.toString() === req.user._id.toString())
     if (alreadyReviewed) {
       throw new Error('Product already reviewed')
     } else {
       const review = {
-        name: res.locals.user.name,
+        // @ts-ignore
+        name: req.user.name,
         rating: Number(rating),
-        user: res.locals.user,
+        // @ts-ignore
+        user: req.user,
         comment,
       }
 

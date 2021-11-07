@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response } from 'express'
 import { ID } from '@src/Types'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findOrder, createOrder } from '@src/services/order.services'
+import { request } from 'https'
 
 // TODO Define OrderType
 
@@ -20,14 +22,15 @@ type CreateOrderBody = {
 // @desc     Create new order
 // @route    POST /api/order
 // @access   Private
-const createNewOrder = async (req: Request<any, any, CreateOrderBody, any>, res: Response) => {
+const createNewOrder = async (req: Request<object, object, CreateOrderBody, object>, res: Response) => {
   try {
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
     if (orderItems && orderItems.length === 0) {
       throw new Error('No products in order')
     } else {
       const order = await createOrder({
-        user: res.locals.user._id,
+        // @ts-ignore
+        user: req.user._id,
         orderItems,
         shippingAddress,
         paymentMethod,
@@ -83,7 +86,8 @@ const getOrderById = async (req: Request<ID>, res: Response) => {
 // @access   Private
 const getOwnOrders = async (req: Request, res: Response) => {
   try {
-    const orders = await findOrder({ user: res.locals.user._id }, 'all')
+    // @ts-ignore
+    const orders = await findOrder({ user: req.user._id }, 'all')
     if (!orders || orders.length === 0) throw new Error('Orders not found')
 
     res.status(200).json({

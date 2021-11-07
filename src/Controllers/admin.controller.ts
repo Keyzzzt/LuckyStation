@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
@@ -95,7 +96,7 @@ export const getUserByAdmin = async (req: Request<ID>, res: Response) => {
 // @desc     Change user profile by Admin
 // @route    PUT /api/user/:id
 // @access   Private & Admin
-export const updateUserProfileByAdmin = async (req: Request<ID, any, UpdateProfileBody, any>, res: Response) => {
+export const updateUserProfileByAdmin = async (req: Request<ID, object, UpdateProfileBody, object>, res: Response) => {
   try {
     const user = await findUser({ _id: req.params.id }, 'id')
     if (!user) throw new Error('User not found')
@@ -154,13 +155,14 @@ export const deleteProduct = async (req: Request<ID>, res: Response) => {
 // @desc     Create a product
 // @route    POST /api/product
 // @access   Private & Admin
-export const createProduct = async (req: Request<any, any, CreateAndUpdateProductBody, any>, res: Response) => {
+export const createProduct = async (req: Request<object, object, CreateAndUpdateProductBody, object>, res: Response) => {
   try {
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = new ProductModel({
       name,
       price,
-      user: res.locals.user._id,
+      // @ts-ignore
+      user: req.user._id,
       image,
       brand,
       category,
@@ -191,7 +193,8 @@ export const createProduct = async (req: Request<any, any, CreateAndUpdateProduc
 // @desc     Update a product
 // @route    PUT /api/product/:id
 // @access   Private & Admin
-export const updateProduct = asyncHandler(async (req: Request<ID, any, CreateAndUpdateProductBody, any>, res: Response) => {
+// TODO remove asyncHandler, add try catch
+export const updateProduct = asyncHandler(async (req: Request<ID, object, CreateAndUpdateProductBody, object>, res: Response) => {
   const { name, price, image, brand, category, countInStock, description } = req.body
 
   const product = await findProduct(req.params.id, 'id')
