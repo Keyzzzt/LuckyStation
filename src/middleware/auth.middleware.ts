@@ -1,63 +1,48 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable spaced-comment */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable prefer-destructuring */
 import { NextFunction, Response, Request } from 'express'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { signJWT, verifyJWT } from './issueTokenPair'
-import { getSession } from '@src/fakeDB'
-
-// export const privateRoute = async (req: Request, res: Response, next: NextFunction) => {
-//   try {
-//     let token
-//     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-//       token = req.headers.authorization.split(' ')[1]
-//       const decoded: any = jwt.verify(token, process.env.JWT_TOKEN)
-//       res.locals.user = await findUser({ _id: decoded.id }, 'id')
-//       next()
-//     } else {
-//       throw new Error('Not authorized')
-//     }
-//     if (!token) throw Error('Not authorized')
-//   } catch (error) {
-//     res.status(issueStatusCode(error.message)).json({
-//       resultCode: 0,
-//       errorMessage: [error.message, 'privateRoute controller'],
-//       data: null,
-//     })
-//   }
-// }
-
-// This function
+import { verifyJWT } from './issueTokenPair'
+import { reIssueAccessToken } from '@src/services/session.services'
+import { accessTokenOptions, refreshTokenOptions } from '@src/Controllers/session.controller'
 
 export async function deserializeUser(req: Request, res: Response, next: NextFunction) {
+  // Получаем accessToken & refreshToken из cookies, выходим если нет accessToken
+
   const { accessToken, refreshToken } = req.cookies
+  console.log(verifyJWT(accessToken).payload)
 
   if (!accessToken) {
     return next()
   }
+
+  // При протухшем токене verifyJWT(accessToken) вернет { payload: null, expired: true, valid: false }
   const { payload, expired } = verifyJWT(accessToken)
 
-  // For valid accesToken
+  // Если accessToken не протух, то помещаем в req.user инфу о пользователе из accessToken и выходим.
   if (payload) {
     // To avoid ts-inore - use lodash set function
     // @ts-ignore
     req.user = payload
     return next()
   }
-  // For expired but valid accessToken
-  const { payload: refresh } = expired && refreshToken ? verifyJWT(refreshToken) : { payload: null }
-  if (!refresh) return next()
-  // TODO Fake DB
-  const session = getSession(refresh.sessionId)
-  if (!session) return next()
-  const newAccessToken = signJWT(session, '15m')
-  res.cookie('accessToken', newAccessToken, {
-    maxAge: 30000, // minutes
-    httpOnly: true,
-  })
-  //@ts-ignore
-  req.user = verifyJWT(newAccessToken).payload
 
+  // Если accessToken протух и есть refreshToken, выдаем новую пару accessToken & refreshToken
+  if (expired && refreshToken) {
+    const tokens = await reIssueAccessToken(refreshToken)
+
+    if (tokens) {
+      res.cookie('accessToken', tokens.accessToken, accessTokenOptions)
+      res.cookie('refreshToken', refreshToken, refreshTokenOptions)
+
+      // @ts-ignore
+      req.user = verifyJWT(tokens.accessToken).payload
+
+      return next()
+    }
+  }
   return next()
 }
 
@@ -71,7 +56,7 @@ export function privateRoute(req: Request, res: Response, next: NextFunction) {
   } catch (error) {
     return res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'privateRoute controller'],
+      errorMessage: [error.message, 'privateRoute middleware'],
       data: null,
     })
   }
@@ -79,7 +64,8 @@ export function privateRoute(req: Request, res: Response, next: NextFunction) {
 
 export const adminRoute = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (res.locals.user && res.locals.user.isAdmin) {
+    //@ts-ignore
+    if (req.user && req.user.isAdmin) {
       next()
     } else {
       throw new Error('Not authorized, admin access only')

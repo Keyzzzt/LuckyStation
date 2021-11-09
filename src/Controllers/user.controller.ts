@@ -3,12 +3,11 @@
 import { Request, Response } from 'express'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findUser } from '@src/services/user.services'
-import { issueTokenPair } from '@src/middleware/issueTokenPair'
 
 export const getProfile = async (req: Request, res: Response) => {
   try {
     // @ts-ignore
-    const { _id } = req.user._id
+    const { _id } = req.user
     const user = await findUser({ _id }, 'id')
     if (!user) throw new Error('User not found')
 
@@ -40,7 +39,6 @@ export const updateProfile = async (req: Request, res: Response) => {
     }
     const updatedUser = await user.save()
     if (updatedUser) {
-      const { accessToken, refreshToken } = await issueTokenPair(updatedUser._id)
       res.status(200).json({
         resultCode: 1,
         errorMessage: [],
@@ -49,8 +47,6 @@ export const updateProfile = async (req: Request, res: Response) => {
           name: updatedUser.name,
           email: updatedUser.email,
           isAdmin: updatedUser.isAdmin,
-          accessToken,
-          refreshToken,
         },
       })
     } else {

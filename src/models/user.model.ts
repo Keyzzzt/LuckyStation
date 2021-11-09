@@ -10,8 +10,6 @@ export interface UserDocument extends Document {
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
-  refreshToken?: string
-  accessToken?: string
   createdAt: Date
   updatedAt: Date
   comparePassword(candidatePassword: string): Promise<boolean>
@@ -25,8 +23,6 @@ const UserSchema = new Schema<UserDocument>(
     logo: String,
     isAdmin: { type: Boolean, required: true, default: false },
     isSubscribed: { type: Boolean, required: true, default: false },
-    refreshToken: String,
-    accessToken: String,
   },
   {
     timestamps: true,
