@@ -2,13 +2,13 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 
-import { CookieOptions, Request, Response } from 'express'
+import { CookieOptions, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
+import { RequestCustom } from '@src/custom'
 import { getGoogleOAuthTokens, findAndUpdateUser, findUser, verifyUser, createUser } from '@src/services/user.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { signJWT, verifyJWT } from '@src/middleware/issueTokenPair'
-import { createSessionFakeDB, invalidateSessionFakeDB } from '@src/fakeDB'
-import { createSession, findSession, updateSession } from '@src/services/session.services'
+import { signJWT } from '@src/middleware/issueTokenPair'
+import { createSession, findSession, deleteSession } from '@src/services/session.services'
 
 export const accessTokenOptions: CookieOptions = {
   httpOnly: true,
@@ -20,11 +20,9 @@ export const accessTokenOptions: CookieOptions = {
 }
 export const refreshTokenOptions: CookieOptions = { ...accessTokenOptions, maxAge: 3.154e10 }
 
-// deserializeUser отработал
-export async function createSessionHandler(req: Request, res: Response) {
+export async function login(req: RequestCustom, res: Response) {
   try {
-    // @ts-ignore
-    if (req.user) throw new Error('User already has a session.')
+    if (req.user) throw new Error('You have already successfully logged in.')
     const { email, password } = req.body
 
     const user = await verifyUser({ email, password })
@@ -35,47 +33,45 @@ export async function createSessionHandler(req: Request, res: Response) {
 
     res.cookie('accessToken', accessToken, accessTokenOptions)
     res.cookie('refreshToken', refreshToken, refreshTokenOptions)
-    // @ts-ignore
+
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
-      // @ts-ignore
+      message: ['You have successfully logged in.'],
       data: user,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'createSession controller'],
+      message: [error.message, 'createSession controller'],
       data: null,
     })
   }
 }
 
-// deserializeUser отработал
-export async function getSessionController(req: Request, res: Response) {
+export async function auth(req: RequestCustom, res: Response) {
   try {
-    // @ts-ignore
-    const session = await findSession({ _id: req.user.sessionId, valid: true })
-    // @ts-ignore
+    // const session = await findSession({ _id: req.user.sessionId, valid: true })
+
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
-      // @ts-ignore
-      data: session,
+      message: [],
+      data: {
+        userId: req.user,
+      },
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'getSession controller'],
+      message: [error.message, 'getSession controller'],
       data: null,
     })
   }
 }
 
-export async function deleteSessionHandler(req: Request, res: Response) {
+export async function logout(req: RequestCustom, res: Response) {
   try {
-    // @ts-ignore
-    await updateSession({ _id: req.user.sessionId }, { valid: false })
+    const session = await deleteSession({ _id: req.sessionId })
+    console.log(session)
 
     res.cookie('accessToken', '', {
       maxAge: 0,
@@ -87,19 +83,19 @@ export async function deleteSessionHandler(req: Request, res: Response) {
     })
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: ['You have successfully logged out.'],
       data: null,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'deleteSession controller'],
+      message: [error.message, 'deleteSession controller'],
       data: null,
     })
   }
 }
 
-export async function googleOauth(req, res): Promise<void> {
+export async function googleOAuth(req: RequestCustom, res: Response): Promise<void> {
   try {
     // Get the code from query strings
     const code = req.query.code as string
@@ -124,27 +120,13 @@ export async function googleOauth(req, res): Promise<void> {
       },
       { upsert: true, new: true }
     )
+
     // Create a session
-    // TODO fakeDB, createSession создает объект session c полями id, email, name
-    // TODO Создать метод createSession, который будет создавать сессию в базе данных
-    // TODO Сделать сессию по _id пользователя а не с имейлом и менем как сейчас.
-    const session = createSessionFakeDB(user.email, user.name)
+    const session = await createSession(user._id, req.get('user-agent') || '')
 
     // Create access & refresh tokens
-    const accessToken = signJWT(
-      {
-        ...user,
-        session: session.sessionId, // TODO Взять из базы
-      },
-      '30m'
-    )
-    const refreshToken = signJWT(
-      {
-        ...user,
-        session: session.sessionId, // TODO Взять из базы
-      },
-      '1y'
-    )
+    const accessToken = signJWT({ ...user, session: session._id }, process.env.access_token_life)
+    const refreshToken = signJWT({ session: session._id }, process.env.refresh_token_life)
 
     // set cookies
     res.cookie('accessToken', accessToken, accessTokenOptions)
@@ -154,8 +136,8 @@ export async function googleOauth(req, res): Promise<void> {
     // TODO Может redirect?
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
-      data: session,
+      message: [],
+      data: user,
     })
     // redirect back to client
   } catch (error) {
@@ -167,12 +149,7 @@ export async function googleOauth(req, res): Promise<void> {
   }
 }
 
-type UserBody = {
-  name: string
-  email: string
-  password: string
-}
-export const commonRegistration = async (req: Request<object, object, UserBody, object>, res: Response) => {
+export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body
     const user = await findUser({ email }, 'email')
@@ -180,41 +157,24 @@ export const commonRegistration = async (req: Request<object, object, UserBody, 
 
     const createdUser = await createUser({ name, email, password })
     if (!createdUser) throw new Error('Server error')
-    // TODO:
-    const session = createSessionFakeDB(email, createdUser.name)
 
-    const accessToken = signJWT(
-      {
-        // id: user._id,
-        name: createdUser.name,
-        email: createdUser.email,
-        sessionId: session.sessionId, // TODO Взять из базы
-        // isAdmin: user.isAdmin,
-        // isSubscribed: user.isSubscribed,
-        // createdAt: user.createdAt,
-        // sessionId: session.sessionId,
-      },
-      process.env.access_token_life
-    )
-    const refreshToken = signJWT(
-      {
-        sessionId: session.sessionId, // TODO Взять из базы
-      },
-      process.env.refresh_token_life
-    )
+    const session = await createSession(createdUser._id, req.get('user-agent') || '')
+
+    const accessToken = signJWT({ ...createdUser, sessionId: session._id }, process.env.access_token_life)
+    const refreshToken = signJWT({ sessionId: session._id }, process.env.refresh_token_life)
 
     res.cookie('accessToken', accessToken, accessTokenOptions)
     res.cookie('refreshToken', refreshToken, refreshTokenOptions)
-    // @ts-ignore
+
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
-      data: session,
+      message: ['registration success'],
+      data: createdUser,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'commonRegistration controller'],
+      message: [error.message, 'commonRegistration controller'],
       data: null,
     })
   }

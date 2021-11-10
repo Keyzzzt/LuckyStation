@@ -1,3 +1,5 @@
+// TODO Заменить все Not authorized на ----> You are not authorized to access this application
+
 export const issueStatusCode = (code: string): number => {
   switch (code) {
     case 'Server error':
@@ -10,6 +12,7 @@ export const issueStatusCode = (code: string): number => {
     case 'Wrong credentials':
     case 'Not authorized, admin access only':
     case 'Not authorized':
+    case 'You are not authorized to access this application':
       return 401
     case 'Google account is not verified':
       return 403

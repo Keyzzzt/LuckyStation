@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response } from 'express'
-import { ID } from '@src/Types'
+import { RequestCustom } from '@src/custom'
 import { findProduct } from '@src/services/product.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 
-type CreateReviewBody = {
-  rating: number
-  comment: string
-}
-
-// @desc     Fetch all products
-// @route    GET /api/product
-// @access   Public
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const keyword = req.query.keyword
@@ -29,35 +21,32 @@ export const getProducts = async (req: Request, res: Response) => {
 
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: [],
       data: products,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'getProducts controller'],
+      message: [error.message, 'getProducts controller'],
       data: null,
     })
   }
 }
 
-// @desc     Fetch single product
-// @route    GET /api/product/:id
-// @access   Public
-export const getProductById = async (req: Request<ID>, res: Response) => {
+export const getProductById = async (req: Request, res: Response) => {
   try {
     const product = await findProduct(req.params.id, 'id')
     if (!product) throw new Error('Product not found')
 
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: [],
       data: product,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'getProductById controller'],
+      message: [error.message, 'getProductById controller'],
       data: null,
     })
   }
@@ -66,22 +55,19 @@ export const getProductById = async (req: Request<ID>, res: Response) => {
 // @desc     Create review
 // @route    POST /api/product/:id/review
 // @access   Private
-export const createReview = async (req: Request<ID, object, CreateReviewBody, object>, res: Response) => {
+export const createReview = async (req: RequestCustom, res: Response) => {
   try {
     const { rating, comment } = req.body
     const product = await findProduct(req.params.id, 'id')
     if (!product) throw new Error('Product not found')
 
-    // @ts-ignore
     const alreadyReviewed = product.reviews.find((r) => r.user._id.toString() === req.user._id.toString())
     if (alreadyReviewed) {
       throw new Error('Product already reviewed')
     } else {
       const review = {
-        // @ts-ignore
         name: req.user.name,
         rating: Number(rating),
-        // @ts-ignore
         user: req.user,
         comment,
       }
@@ -93,7 +79,7 @@ export const createReview = async (req: Request<ID, object, CreateReviewBody, ob
       if (result) {
         res.status(201).json({
           resultCode: 1,
-          errorMessage: [],
+          message: [],
           data: product,
         })
       } else {
@@ -103,7 +89,7 @@ export const createReview = async (req: Request<ID, object, CreateReviewBody, ob
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'createReview controller'],
+      message: [error.message, 'createReview controller'],
       data: null,
     })
   }

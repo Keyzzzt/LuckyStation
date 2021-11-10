@@ -41,16 +41,3 @@ export type ProductType = {
   reviews: ReviewType[]
   numReviews: number
 }
-// export type CommonErrorType = {
-//   errorMessage: string[]
-//   resultCode: 0
-//   data: null
-// }
-
-export type ID = {
-  id: string
-}
-
-export interface ResponseWithUser{
-  
-}

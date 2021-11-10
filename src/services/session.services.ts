@@ -33,8 +33,8 @@ export async function updateSession(query: FilterQuery<SessionDocument>, updateQ
 }
 
 export async function reIssueAccessToken(token) {
-  const { payload } = verifyJWT(token)
-  if (!payload || !get(payload, 'sessionId')) return false
+  const { payload, expired } = verifyJWT(token)
+  if (!payload || !get(payload, 'sessionId') || expired) return false
 
   const session = await findSession({ _id: payload.sessionId, valid: true })
 
@@ -46,4 +46,8 @@ export async function reIssueAccessToken(token) {
   const refreshToken = signJWT({ sessionId: session[0]._id }, process.env.refresh_token_life)
 
   return { accessToken, refreshToken }
+}
+
+export async function deleteSession(query: FilterQuery<SessionDocument>) {
+  return SessionModel.findOneAndDelete(query)
 }

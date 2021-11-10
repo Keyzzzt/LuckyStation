@@ -13,25 +13,19 @@ import {
   setOrderToDelivered,
   setOrderToNotDelivered,
 } from '@src/Controllers/admin.controller'
-import {
-  googleOauth,
-  createSessionHandler,
-  getSessionController,
-  deleteSessionHandler,
-  commonRegistration,
-} from '@src/Controllers/session.controller'
+import { googleOAuth, login, auth, logout, register } from '@src/Controllers/session.controller'
 import { privateRoute, adminRoute } from '@src/middleware/auth.middleware'
 import { getProfile, updateProfile } from '@src/Controllers/user.controller'
 import { createNewOrder, getOrderById, getOwnOrders } from '@src/Controllers/order.controller'
 import { getProducts, getProductById, createReview } from '@src/Controllers/product.controller'
 
 function routes(app: Express) {
-  // Sessions
-  app.get('/api/sessions', privateRoute, getSessionController)
-  app.post('/api/sessions', createSessionHandler, getSessionController)
-  app.post('/api/sessions/reg', commonRegistration)
-  app.delete('/api/sessions', privateRoute, deleteSessionHandler)
-  app.get('/api/sessions/oauth/google', googleOauth)
+  // Sessions //TODO Поменять адреса на auth вместо sessions
+  app.get('/api/sessions', privateRoute, auth)
+  app.post('/api/sessions', login, auth)
+  app.post('/api/auth/reg', register)
+  app.delete('/api/sessions', privateRoute, logout)
+  app.get('/api/sessions/oauth/google', googleOAuth)
 
   // Users
   app.get('/api/user/profile', privateRoute, getProfile)

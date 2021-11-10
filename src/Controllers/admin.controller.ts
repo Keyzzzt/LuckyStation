@@ -4,7 +4,6 @@ import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import { ProductModel } from '@src/models/product.model'
 import { OrderModel } from '@src/models/order.model'
-import { ID } from '@src/Types'
 import { findUser } from '@src/services/user.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findProduct } from '@src/services/product.services'
@@ -49,7 +48,7 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
 // @desc     Delete user by Id
 // @route    DELETE /api/user/:id
 // @access   Private & Admin
-export const deleteUserByAdmin = async (req: Request<ID>, res: Response) => {
+export const deleteUserByAdmin = async (req: Request, res: Response) => {
   try {
     const user = await findUser({ _id: req.params.id }, 'id')
     if (!user) throw new Error('User not found')
@@ -74,7 +73,7 @@ export const deleteUserByAdmin = async (req: Request<ID>, res: Response) => {
 // @desc     Get user by ID
 // @route    GET /api/user/:id
 // @access   Private & Admin
-export const getUserByAdmin = async (req: Request<ID>, res: Response) => {
+export const getUserByAdmin = async (req: Request, res: Response) => {
   try {
     const user = await findUser({ _id: req.params.id }, 'id')
     if (!user) throw new Error('User not found')
@@ -96,7 +95,7 @@ export const getUserByAdmin = async (req: Request<ID>, res: Response) => {
 // @desc     Change user profile by Admin
 // @route    PUT /api/user/:id
 // @access   Private & Admin
-export const updateUserProfileByAdmin = async (req: Request<ID, object, UpdateProfileBody, object>, res: Response) => {
+export const updateUserProfileByAdmin = async (req: Request, res: Response) => {
   try {
     const user = await findUser({ _id: req.params.id }, 'id')
     if (!user) throw new Error('User not found')
@@ -128,7 +127,7 @@ export const updateUserProfileByAdmin = async (req: Request<ID, object, UpdatePr
 // @desc     Delete a product
 // @route    DELETE /api/product/:id
 // @access   Private & Admin
-export const deleteProduct = async (req: Request<ID>, res: Response) => {
+export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const product = await findProduct(req.params.id, 'id')
     if (!product) throw new Error('Product not found')
@@ -155,7 +154,7 @@ export const deleteProduct = async (req: Request<ID>, res: Response) => {
 // @desc     Create a product
 // @route    POST /api/product
 // @access   Private & Admin
-export const createProduct = async (req: Request<object, object, CreateAndUpdateProductBody, object>, res: Response) => {
+export const createProduct = async (req: Request, res: Response) => {
   try {
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = new ProductModel({
@@ -194,7 +193,7 @@ export const createProduct = async (req: Request<object, object, CreateAndUpdate
 // @route    PUT /api/product/:id
 // @access   Private & Admin
 // TODO remove asyncHandler, add try catch
-export const updateProduct = asyncHandler(async (req: Request<ID, object, CreateAndUpdateProductBody, object>, res: Response) => {
+export const updateProduct = asyncHandler(async (req: Request, res: Response) => {
   const { name, price, image, brand, category, countInStock, description } = req.body
 
   const product = await findProduct(req.params.id, 'id')
@@ -250,7 +249,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 // @access   Private & Admin
 
 // TODO define body type for id, status, updateTime which will come from PayPal
-export const setOrderToPaid = async (req: Request<ID>, res: Response) => {
+export const setOrderToPaid = async (req: Request, res: Response) => {
   try {
     const { id, status, updateTime } = req.body
     const order = await findOrder(req.params.id, 'id')
@@ -290,7 +289,7 @@ export const setOrderToPaid = async (req: Request<ID>, res: Response) => {
 // @desc     Set order to - NOT PAID
 // @route    PUT /api/order/:id/pay
 // @access   Private & Admin
-export const setOrderToNotPaid = async (req: Request<ID>, res: Response) => {
+export const setOrderToNotPaid = async (req: Request, res: Response) => {
   try {
     const order = await findOrder(req.params.id, 'id')
     if (!order) throw new Error('Order not found')

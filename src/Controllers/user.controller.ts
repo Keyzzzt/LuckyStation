@@ -1,33 +1,32 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express'
+import { Response } from 'express'
+import { RequestCustom } from '@src/custom'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findUser } from '@src/services/user.services'
 
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = async (req: RequestCustom, res: Response) => {
   try {
-    // @ts-ignore
     const { _id } = req.user
     const user = await findUser({ _id }, 'id')
     if (!user) throw new Error('User not found')
 
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: [],
       data: user,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'getProfile controller'],
+      message: [error.message, 'getProfile controller'],
       data: null,
     })
   }
 }
 
-export const updateProfile = async (req: Request, res: Response) => {
+export const updateProfile = async (req: RequestCustom, res: Response) => {
   try {
-    // @ts-ignore
     const { _id } = req.user
     const user = await findUser({ _id }, 'id')
     if (!user) throw new Error('User not found')
@@ -41,7 +40,7 @@ export const updateProfile = async (req: Request, res: Response) => {
     if (updatedUser) {
       res.status(200).json({
         resultCode: 1,
-        errorMessage: [],
+        message: [],
         data: {
           _id: updatedUser._id,
           name: updatedUser.name,
@@ -55,7 +54,7 @@ export const updateProfile = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      errorMessage: [error.message, 'updateProfile controller'],
+      message: [error.message, 'updateProfile controller'],
       data: null,
     })
   }
