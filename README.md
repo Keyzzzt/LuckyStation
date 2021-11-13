@@ -2,8 +2,13 @@
 
 ### Endpoints:
 
-    GET /api/product       fetch all products
-    GET /api/product/:id   fetch single product
+    GET     /api/auth           Authorization
+    POST    /api/auth           Login
+    DELETE  /api/auth           Logout
+    POST    /api/auth/reg       Common registration
+    GET     /api/auth/google
+    GET     /api/product        Fetch all products
+    GET     /api/product/:id    Fetch single product
 
 ### deserializeUser
 

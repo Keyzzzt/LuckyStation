@@ -1,15 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import express, { Express } from 'express'
+import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import helmet from 'helmet'
 import path from 'path'
-import dotenv from 'dotenv'
 import { connectDB } from '@src/config/db'
 import routes from '@src/routes'
 import uploadRoutes from '@src/upload.routes'
 // import { notFound, errorHandler } from '@src/middleware/error.middleware'
-import { deserializeUser } from './middleware/auth.middleware'
 
 dotenv.config()
 connectDB()
@@ -26,7 +25,7 @@ app.use(
   })
 )
 app.use(helmet()) // Для безопасности
-app.use(deserializeUser)
+// app.use(deserializeUser)
 
 app.use('/api/upload', uploadRoutes)
 
@@ -42,3 +41,15 @@ app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 })
 routes(app)
+
+// TODO addEventListener от димыча
+
+// TODO Тесты
+
+// TODO Модель для значений изменений интрфейса и прочего админом.
+// TODO Узнать, необходимо ли при каждом запросе отправлять пользователя клиенту или нет
+// TODO Если пользователь перезагрузил страницу, необходимо перезаписать state на клиенте
+// TODO Узнать про разницу жизни cookies и токенов
+// TODO Создать объект для статистики и продумать что в нем хранить
+// TODO Пользователь должен иметь возможность залогиниться даже если уже залогинен, на случай угона токена. Найти по пользователю сессию - удалить и создать новую.
+// TODO Не админ может получить любой order если знает orderId. Знать ID не своего заказа он вроде не может. Но нужна защита от дурака.

@@ -56,7 +56,7 @@ export const adminRoute = async (req: RequestCustom, res: Response, next: NextFu
     if (req.user && req.user.isAdmin) {
       next()
     } else {
-      throw new Error('Not authorized, admin access only')
+      throw new Error('Admin only')
     }
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({

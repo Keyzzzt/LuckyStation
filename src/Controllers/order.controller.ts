@@ -8,29 +8,27 @@ import { findOrder, createOrder } from '@src/services/order.services'
 const createNewOrder = async (req: RequestCustom, res: Response) => {
   try {
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
-    if (orderItems && orderItems.length === 0) {
-      throw new Error('No products in order')
-    } else {
-      const order = await createOrder({
-        user: req.user._id,
-        orderItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        totalPrice,
+    if (orderItems && orderItems.length === 0) throw new Error('No products in order') // TODO узнать, прервет ли выполнение функции throw new Error
+
+    const order = await createOrder({
+      user: req.user._id,
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    })
+    const createdOrder = await order.save()
+    if (createdOrder) {
+      res.status(201).json({
+        resultCode: 1,
+        message: [],
+        data: createdOrder,
       })
-      const createdOrder = await order.save()
-      if (createdOrder) {
-        res.status(201).json({
-          resultCode: 1,
-          message: [],
-          data: createdOrder,
-        })
-      } else {
-        throw new Error('Server error')
-      }
+    } else {
+      throw new Error('Server error')
     }
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({

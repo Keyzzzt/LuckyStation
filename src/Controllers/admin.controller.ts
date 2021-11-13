@@ -9,21 +9,6 @@ import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findProduct } from '@src/services/product.services'
 import { findOrder } from '@src/services/order.services'
 
-type UpdateProfileBody = {
-  name: string
-  email: string
-  isAdmin: boolean
-}
-type CreateAndUpdateProductBody = {
-  name: string
-  price: number
-  image: string
-  brand: string
-  category: string
-  countInStock: number
-  description: string
-}
-
 // @desc     Get all users by Admin
 // @route    GET /api/user
 // @access   Private & Admin
@@ -249,6 +234,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
 // @access   Private & Admin
 
 // TODO define body type for id, status, updateTime which will come from PayPal
+// TODO Validation
 export const setOrderToPaid = async (req: Request, res: Response) => {
   try {
     const { id, status, updateTime } = req.body
