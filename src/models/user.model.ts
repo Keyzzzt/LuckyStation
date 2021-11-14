@@ -10,12 +10,10 @@ export interface UserDocument extends Document {
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
-  createdAt: Date
-  updatedAt: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
-const UserSchema = new Schema<UserDocument>(
+const UserSchema: Schema = new Schema<UserDocument>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },

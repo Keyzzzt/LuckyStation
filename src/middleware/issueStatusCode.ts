@@ -9,7 +9,6 @@ export const issueStatusCode = (code: string): number => {
     case 'Product not found':
     case 'Order not found':
       return 404
-    case 'Wrong credentials':
     case 'Admin only':
     case 'Not authorized':
     case 'You are not authorized to access this application':

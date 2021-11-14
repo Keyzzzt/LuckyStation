@@ -1,14 +1,19 @@
+/* eslint-disable consistent-return */
+/* eslint-disable eqeqeq */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 
 import { CookieOptions, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
+import { omit } from 'lodash'
 import { RequestCustom } from '@src/custom'
-import { getGoogleOAuthTokens, findAndUpdateUser, findUser, verifyUser, createUser } from '@src/services/user.services'
+import { getGoogleOAuthTokens, findAndUpdateUser, findUser, createUser } from '@src/services/user.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { signJWT } from '@src/middleware/issueTokenPair'
 import { createSession, findSession, deleteSession } from '@src/services/session.services'
+import { UserModel } from '@src/models/user.model'
+import { SessionModel } from '@src/models/session.model'
 
 export const accessTokenOptions: CookieOptions = {
   httpOnly: true,
@@ -16,16 +21,25 @@ export const accessTokenOptions: CookieOptions = {
   domain: 'localhost',
   path: '/',
   sameSite: 'lax',
+
   secure: false,
 }
 export const refreshTokenOptions: CookieOptions = { ...accessTokenOptions, maxAge: 3.154e10 }
 
 export async function login(req: RequestCustom, res: Response) {
   try {
-    if (req.user) throw new Error('You have already successfully logged in.')
     const { email, password } = req.body
+    // Проверить есть ли такой пользователь по email
+    let user = await UserModel.findOne({ email })
+    if (!user) throw new Error('Wrong credentials')
 
-    const user = await verifyUser({ email, password })
+    // Проверить пароль
+    if (!(await user.comparePassword(password))) throw new Error('Wrong credentials')
+    user = omit(user.toJSON(), 'password', '__v', 'createdAt', 'updatedAt')
+
+    // Проверить есть ли у этого пользователя сессия, если да - удалить.
+    await SessionModel.findOneAndDelete({ user: user._id })
+
     const session = await createSession(user._id, req.get('user-agent') || '')
 
     const accessToken = signJWT({ ...user, sessionId: session._id }, process.env.access_token_life)
@@ -34,15 +48,15 @@ export async function login(req: RequestCustom, res: Response) {
     res.cookie('accessToken', accessToken, accessTokenOptions)
     res.cookie('refreshToken', refreshToken, refreshTokenOptions)
 
-    res.status(200).json({
+    return res.status(200).json({
       resultCode: 1,
       message: ['You have successfully logged in.'],
-      data: user,
+      data: { user },
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      message: [error.message, 'createSession controller'],
+      message: [error.message, 'login controller'],
       data: null,
     })
   }
@@ -50,19 +64,20 @@ export async function login(req: RequestCustom, res: Response) {
 
 export async function auth(req: RequestCustom, res: Response) {
   try {
-    // const session = await findSession({ _id: req.user.sessionId, valid: true })
+    const session = await SessionModel.findOne({ user: req.user._id })
+    if (!session) throw new Error('Not authorized')
 
     res.status(200).json({
       resultCode: 1,
       message: [],
       data: {
-        userId: req.user,
+        user: req.user,
       },
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      message: [error.message, 'getSession controller'],
+      message: [error.message, 'auth controller'],
       data: null,
     })
   }
@@ -89,7 +104,7 @@ export async function logout(req: RequestCustom, res: Response) {
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      message: [error.message, 'deleteSession controller'],
+      message: [error.message, 'logout controller'],
       data: null,
     })
   }
@@ -174,7 +189,7 @@ export const register = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
-      message: [error.message, 'commonRegistration controller'],
+      message: [error.message, 'register controller'],
       data: null,
     })
   }

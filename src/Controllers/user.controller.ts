@@ -3,12 +3,11 @@
 import { Response } from 'express'
 import { RequestCustom } from '@src/custom'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { findUser } from '@src/services/user.services'
+import { UserModel } from '@src/models/user.model'
 
 export const getProfile = async (req: RequestCustom, res: Response) => {
   try {
-    const { _id } = req.user
-    const user = await findUser({ _id }, 'id')
+    const user = await UserModel.findById(req.user._id)
     if (!user) throw new Error('User not found')
 
     res.status(200).json({
@@ -27,8 +26,8 @@ export const getProfile = async (req: RequestCustom, res: Response) => {
 
 export const updateProfile = async (req: RequestCustom, res: Response) => {
   try {
-    const { _id } = req.user
-    const user = await findUser({ _id }, 'id')
+    const user = await UserModel.findById(req.user._id)
+
     if (!user) throw new Error('User not found')
 
     user.name = req.body.name || user.name

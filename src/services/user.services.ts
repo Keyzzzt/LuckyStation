@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import { FilterQuery, QueryOptions, UpdateQuery } from 'mongoose'
-import { omit } from 'lodash'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import qs from 'qs'
@@ -44,22 +43,6 @@ export async function createUser(input: CreateUserInput) {
   } catch (error) {
     throw new Error(error)
   }
-}
-
-export async function verifyUser({ email, password }: { email: string; password: string }) {
-  const user = await findUser({ email }, 'email')
-
-  if (!user) throw new Error('Wrong credentials')
-
-  if (await user.comparePassword(password)) {
-    return omit(user.toJSON(), 'password')
-  }
-  throw new Error('Wrong credentials')
-}
-
-// TODO NOT IMPLEMENTED
-export async function deleteAllUsers() {
-  return UserModel.deleteMany({})
 }
 
 interface GoogleTokens {

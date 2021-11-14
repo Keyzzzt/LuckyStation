@@ -6,7 +6,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import path from 'path'
 import { connectDB } from '@src/config/db'
-import routes from '@src/routes'
+import { routes } from '@src/routes'
 import uploadRoutes from '@src/upload.routes'
 // import { notFound, errorHandler } from '@src/middleware/error.middleware'
 
@@ -25,7 +25,6 @@ app.use(
   })
 )
 app.use(helmet()) // Для безопасности
-// app.use(deserializeUser)
 
 app.use('/api/upload', uploadRoutes)
 
@@ -38,13 +37,14 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 const PORT = Number(process.env.port)
 app.listen(PORT, () => {
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 })
+
 routes(app)
 
-// TODO addEventListener от димыча
+// TODO  После изменения профиля пользователя, нужно выписать ему новые токены, с новыми данными. Иначе неактуальные данные будут сидеть в токене
 
-// TODO Тесты
+// TODO addEventListener от димыча
 
 // TODO Модель для значений изменений интрфейса и прочего админом.
 // TODO Узнать, необходимо ли при каждом запросе отправлять пользователя клиенту или нет
