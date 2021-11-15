@@ -12,6 +12,7 @@ import {
   updateProduct,
   setOrderToDelivered,
   setOrderToNotDelivered,
+  createSurvey,
 } from '@src/Controllers/admin.controller'
 import { googleOAuth, login, auth, logout, register } from '@src/Controllers/session.controller'
 import { deserializeUser, privateRoute, adminRoute } from '@src/middleware/auth.middleware'
@@ -47,6 +48,8 @@ export function routes(app: Express) {
   app.post('/api/admin/product', validateDTO(createAndUpdateProductV), deserializeUser, privateRoute, adminRoute, createProduct)
   app.put('/api/admin/product/:id', validateDTO(createAndUpdateProductV), deserializeUser, privateRoute, adminRoute, updateProduct)
   app.delete('/api/admin/product/:id', deserializeUser, privateRoute, adminRoute, deleteProduct)
+
+  app.post('/api/admin/survey', deserializeUser, privateRoute, adminRoute, createSurvey)
 
   // Order
   app.post('/api/order', validateDTO(createNewOrderV), deserializeUser, privateRoute, createNewOrder)

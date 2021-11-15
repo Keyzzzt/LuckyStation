@@ -41,3 +41,9 @@ export type ProductType = {
   reviews: ReviewType[]
   numReviews: number
 }
+
+export type SurveyType = {
+  title: string
+  body: string
+  subject: string
+}

@@ -7,9 +7,11 @@ export interface UserDocument extends Document {
   name: string
   email: string
   password: string
+  googleId: string
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
+  credits: number
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
@@ -17,10 +19,12 @@ const UserSchema: Schema = new Schema<UserDocument>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
+    googleId: { type: String, default: '' },
     logo: String,
     isAdmin: { type: Boolean, required: true, default: false },
     isSubscribed: { type: Boolean, required: true, default: false },
+    credits: { type: Number, default: 0 },
   },
   {
     timestamps: true,

@@ -8,10 +8,10 @@ import { CookieOptions, Response, Request } from 'express'
 import jwt from 'jsonwebtoken'
 import { omit } from 'lodash'
 import { RequestCustom } from '@src/custom'
-import { getGoogleOAuthTokens, findAndUpdateUser, findUser, createUser } from '@src/services/user.services'
+import { getGoogleOAuthTokens, findAndUpdateUser, findUser, createUser, getGoogleUserProfile } from '@src/services/user.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { signJWT } from '@src/middleware/issueTokenPair'
-import { createSession, findSession, deleteSession } from '@src/services/session.services'
+import { createSession, deleteSession } from '@src/services/session.services'
 import { UserModel } from '@src/models/user.model'
 import { SessionModel } from '@src/models/session.model'
 
@@ -119,24 +119,41 @@ export async function googleOAuth(req: RequestCustom, res: Response): Promise<vo
     const { id_token, access_token } = await getGoogleOAuthTokens({ code })
 
     // get user with token
-    // TODO any
-    const googleUser: any = jwt.decode(id_token)
-    if (!googleUser.email_verified) {
-      throw new Error('Google account is not verified')
+    const profile = await getGoogleUserProfile({ id_token, access_token })
+
+    // const userWithSameEmail = await findAndUpdateUser(
+    //   { email: profile.email },
+    //   {
+    //     logo: profile.picture,
+    //     googleId: profile.id,
+    //   },
+    //   { upsert: true, new: true }
+    // )
+
+    const user = await UserModel.findOne({ googleId: profile.id })
+    if (!user) {
+      const newUser = await new UserModel({
+        name: profile.name,
+        email: profile.email,
+        googleId: profile.id,
+        logo: profile.picture,
+      }).save()
+      console.log(newUser)
+
+      const session = await createSession(newUser._id, req.get('user-agent') || '')
+
+      const accessToken = signJWT({ ...newUser, session: session._id }, process.env.access_token_life)
+      const refreshToken = signJWT({ session: session._id }, process.env.refresh_token_life)
+
+      res.cookie('accessToken', accessToken, accessTokenOptions)
+      res.cookie('refreshToken', refreshToken, refreshTokenOptions)
+
+      res.status(200).json({
+        resultCode: 1,
+        message: [],
+        user: newUser,
+      })
     }
-
-    // Upsert the user
-    const user = await findAndUpdateUser(
-      { email: googleUser.email },
-      {
-        email: googleUser.email,
-        name: googleUser.name,
-        logo: googleUser.picture,
-      },
-      { upsert: true, new: true }
-    )
-
-    // Create a session
     const session = await createSession(user._id, req.get('user-agent') || '')
 
     // Create access & refresh tokens
@@ -147,14 +164,53 @@ export async function googleOAuth(req: RequestCustom, res: Response): Promise<vo
     res.cookie('accessToken', accessToken, accessTokenOptions)
     res.cookie('refreshToken', refreshToken, refreshTokenOptions)
 
-    // @ts-ignore
-    // TODO Может redirect?
     res.status(200).json({
       resultCode: 1,
       message: [],
-      data: user,
+      user,
     })
-    // redirect back to client
+
+    // profile = {
+    //   id: '108069280870007074124',
+    //   email: 'keyzzzt@gmail.com',
+    //   verified_email: true,
+    //   name: 'Igor Ak',
+    //   given_name: 'Igor',
+    //   family_name: 'Ak',
+    //   picture: 'https://lh3.googleusercontent.com/a/AATXAJyS4BzYmUyqEh8Bna7-Y4qFsqR_C81f124MInMe6A=s96-c',
+    //   locale: 'en',
+    // }
+
+    // // Upsert the user
+    // const user = await findAndUpdateUser(
+    //   { email: googleUser.email },
+    //   {
+    //     email: googleUser.email,
+    //     name: googleUser.name,
+    //     logo: googleUser.picture,
+    //   },
+    //   { upsert: true, new: true }
+    // )
+
+    // Create a session
+    //   const session = await createSession(user._id, req.get('user-agent') || '')
+
+    // Create access & refresh tokens
+    //   const accessToken = signJWT({ ...user, session: session._id }, process.env.access_token_life)
+    //   const refreshToken = signJWT({ session: session._id }, process.env.refresh_token_life)
+
+    //   // set cookies
+    //   res.cookie('accessToken', accessToken, accessTokenOptions)
+    //   res.cookie('refreshToken', refreshToken, refreshTokenOptions)
+
+    //   // @ts-ignore
+    //   // TODO Может redirect?
+    //   res.status(200).json({
+    //     resultCode: 1,
+    //     message: [],
+    //     data: user,
+    //   })
+    //   // redirect back to client
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,

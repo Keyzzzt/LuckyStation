@@ -1,13 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
+import { Request, Response } from 'express'
+import { RequestCustom } from '@src/custom'
 import { ProductModel } from '@src/models/product.model'
 import { OrderModel } from '@src/models/order.model'
 import { findUser } from '@src/services/user.services'
 import { issueStatusCode } from '@src/middleware/issueStatusCode'
 import { findProduct } from '@src/services/product.services'
 import { findOrder } from '@src/services/order.services'
+import { SurveyModel } from '@src/models/survey.model'
+import { Mailer } from '@src/services/Mailer'
+import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
 
 // @desc     Get all users by Admin
 // @route    GET /api/user
@@ -363,6 +367,36 @@ export const setOrderToNotDelivered = async (req: Request, res: Response) => {
     res.status(issueStatusCode(error.message)).json({
       resultCode: 0,
       errorMessage: [error.message, 'setOrderToDelivered controller'],
+      data: null,
+    })
+  }
+}
+
+export async function createSurvey(req: RequestCustom, res: Response) {
+  try {
+    const { title, subject, body, recipients } = req.body
+
+    const survey = new SurveyModel({
+      title,
+      subject,
+      body,
+      recipients: recipients.split(',').map((email) => ({ email: email.trim() })),
+      user: req.user._id,
+      dateSent: Date.now(),
+    })
+
+    // Great place to send an email!
+    const mailer = new Mailer(survey, surveyTemplate(survey))
+    const response = await mailer.send()
+    res.status(201).json({
+      resultCode: 1,
+      errorMessage: [],
+      data: response,
+    })
+  } catch (error) {
+    res.status(issueStatusCode(error.message)).json({
+      resultCode: 0,
+      errorMessage: [error, 'survey controller'],
       data: null,
     })
   }

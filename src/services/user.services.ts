@@ -72,15 +72,15 @@ export async function getGoogleOAuthTokens({ code }: { code: string }): Promise<
 }
 
 // ? This function can be used for getting google user profile with request
-// export async function getGoogleUserProfile({ id_token, access_token }): Promise<GoogleUserProfile> {
-//   try {
-//     const res = await axios.get<GoogleUserProfile>(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
-//       headers: {
-//         Authorization: `Bearer ${id_token}`,
-//       },
-//     })
-//     return res.data
-//   } catch (error) {
-//     throw new Error(error.message)
-//   }
-// }
+export async function getGoogleUserProfile({ id_token, access_token }) {
+  try {
+    const res = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
+      headers: {
+        Authorization: `Bearer ${id_token}`,
+      },
+    })
+    return res.data
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
