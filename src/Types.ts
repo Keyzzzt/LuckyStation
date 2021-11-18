@@ -43,6 +43,7 @@ export type ProductType = {
 }
 
 export type SurveyType = {
+  id: string
   title: string
   body: string
   subject: string

@@ -8,6 +8,7 @@ export const issueStatusCode = (code: string): number => {
     case 'Users not found':
     case 'Product not found':
     case 'Order not found':
+    case 'No surveys found':
       return 404
     case 'Admin only':
     case 'Not authorized':

@@ -15,12 +15,14 @@ export interface Survey extends Document {
 export interface Recipient extends Document {
   email: string
   responded: boolean
+  response: string
 }
 
 // SubDocument collection
 const RecipientSchema: Schema = new Schema<Recipient>({
   email: String,
   responded: { type: Boolean, default: false },
+  response: String,
 })
 
 const SurveySchema: Schema = new Schema<Survey>(

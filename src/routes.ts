@@ -13,6 +13,8 @@ import {
   setOrderToDelivered,
   setOrderToNotDelivered,
   createSurvey,
+  getAllSurveys,
+  manageSendgridEvents,
 } from '@src/Controllers/admin.controller'
 import { googleOAuth, login, auth, logout, register } from '@src/Controllers/session.controller'
 import { deserializeUser, privateRoute, adminRoute } from '@src/middleware/auth.middleware'
@@ -49,7 +51,12 @@ export function routes(app: Express) {
   app.put('/api/admin/product/:id', validateDTO(createAndUpdateProductV), deserializeUser, privateRoute, adminRoute, updateProduct)
   app.delete('/api/admin/product/:id', deserializeUser, privateRoute, adminRoute, deleteProduct)
 
+  app.get('/api/admin/survey', deserializeUser, privateRoute, adminRoute, getAllSurveys)
   app.post('/api/admin/survey', deserializeUser, privateRoute, adminRoute, createSurvey)
+  app.post('/api/admin/survey/webhook', manageSendgridEvents)
+  app.get('/api/survey/:surveyId/:choice', (req, res) => {
+    res.send('Thanks')
+  })
 
   // Order
   app.post('/api/order', validateDTO(createNewOrderV), deserializeUser, privateRoute, createNewOrder)

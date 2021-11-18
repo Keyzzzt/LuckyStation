@@ -10,6 +10,10 @@
     GET     /api/product        Fetch all products
     GET     /api/product/:id    Fetch single product
 
+### Для получения информации от sendgrid
+
+    В параллельном терминале запускаем yarn tunnel
+
 ### deserializeUser
 
     deserializeUser при КАЖДОМ запросе проверяет наличие JWT в куках.

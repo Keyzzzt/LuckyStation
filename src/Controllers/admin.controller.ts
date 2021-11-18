@@ -2,6 +2,9 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler'
 import { Request, Response } from 'express'
+import _ from 'lodash'
+import { URL } from 'url'
+import { Path } from 'path-parser'
 import { RequestCustom } from '@src/custom'
 import { ProductModel } from '@src/models/product.model'
 import { OrderModel } from '@src/models/order.model'
@@ -387,11 +390,13 @@ export async function createSurvey(req: RequestCustom, res: Response) {
 
     // Great place to send an email!
     const mailer = new Mailer(survey, surveyTemplate(survey))
-    const response = await mailer.send()
+    await mailer.send()
+    await survey.save()
+
     res.status(201).json({
       resultCode: 1,
       errorMessage: [],
-      data: response,
+      // data: survey,
     })
   } catch (error) {
     res.status(issueStatusCode(error.message)).json({
@@ -400,4 +405,58 @@ export async function createSurvey(req: RequestCustom, res: Response) {
       data: null,
     })
   }
+}
+
+export async function getAllSurveys(req: RequestCustom, res: Response) {
+  try {
+    const surveys = await SurveyModel.find({})
+    if (!surveys) throw new Error('No surveys found')
+    res.status(201).json({
+      resultCode: 1,
+      errorMessage: [],
+      data: surveys,
+    })
+  } catch (error) {
+    res.status(issueStatusCode(error.message)).json({
+      resultCode: 0,
+      errorMessage: [error, 'getAllSurveys controller'],
+      data: null,
+    })
+  }
+}
+
+export async function manageSendgridEvents(req, res) {
+  // TODO: Заменить Path на модуль qs и удалить parth-parser
+  const p = new Path('/api/survey/:surveyId/:choice')
+  _.chain(req.body)
+    .map(({ url, email }) => {
+      const match = p.test(new URL(url).pathname)
+      if (match) {
+        return {
+          email,
+          surveyId: match.surveyId,
+          choice: match.choice,
+        }
+      }
+    })
+    .compact()
+    .uniqBy('email', 'surveyId')
+    .each(({ surveyId, email, choice }) => {
+      SurveyModel.updateOne(
+        {
+          _id: surveyId,
+          recipients: {
+            $elemMatch: { email, responded: false },
+          },
+        },
+        {
+          $inc: { [choice]: 1 },
+          $set: { 'recipients.$.responded': true, 'recipients.$.response': choice },
+          lastResponded: new Date(),
+        }
+      ).exec()
+    })
+    .value()
+
+  res.send('OK')
 }
