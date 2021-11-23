@@ -11,6 +11,8 @@ export interface UserDocument extends Document {
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
+  isActivated: boolean
+  activationLink: string
   credits: number
   comparePassword(candidatePassword: string): Promise<boolean>
 }
@@ -24,6 +26,8 @@ const UserSchema: Schema = new Schema<UserDocument>(
     logo: String,
     isAdmin: { type: Boolean, required: true, default: false },
     isSubscribed: { type: Boolean, required: true, default: false },
+    isActivated: { type: Boolean, default: false },
+    activationLink: { type: String },
     credits: { type: Number, default: 0 },
   },
   {
@@ -32,7 +36,7 @@ const UserSchema: Schema = new Schema<UserDocument>(
 )
 
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  return await bcrypt.compare(candidatePassword, this.password) // TODO Проверить без await-
+  return bcrypt.compare(candidatePassword, this.password) // TODO Проверить без await-
 }
 
 UserSchema.pre('save', async function (next) {

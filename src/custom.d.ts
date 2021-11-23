@@ -1,7 +1,7 @@
 import { Request } from 'express'
 
 type User = {
-  _id: string
+  id: string
   name: string
   email: string
   isAdmin: boolean

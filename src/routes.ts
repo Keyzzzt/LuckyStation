@@ -16,29 +16,29 @@ import {
   getAllSurveys,
   manageSendgridEvents,
 } from '@src/Controllers/admin.controller'
-import { googleOAuth, login, auth, logout, register } from '@src/Controllers/session.controller'
+import { login, logout, register, activate, refresh, googleOAuth } from '@src/Controllers/auth.controller'
 import { deserializeUser, privateRoute, adminRoute } from '@src/middleware/auth.middleware'
 import { getProfile, updateProfile } from '@src/Controllers/user.controller'
 import { createNewOrder, getOrderById, getOwnOrders } from '@src/Controllers/order.controller'
 import { getProducts, getProductById, createReview } from '@src/Controllers/product.controller'
-import { validateDTO, loginV, regV, updateProfileByUserOrAdminV, createAndUpdateProductV, createNewOrderV, createReviewV } from '@src/validateDTO'
 
 export function routes(app: Express) {
-  // // Sessions
-  app.get('/api/auth', deserializeUser, auth)
-  app.post('/api/auth', validateDTO(loginV), login)
-  app.post('/api/auth/reg', validateDTO(regV), register)
-  app.delete('/api/auth', deserializeUser, privateRoute, logout)
+  // Authorization
+  app.post('/api/login', login) // OK
+  app.post('/api/registration', register) // OK
+  app.post('/api/logout', logout) // OK
   app.get('/api/auth/google', googleOAuth)
+  app.get('/api/activate/:link', activate)
+  app.get('/api/refresh', refresh)
 
   // Users
   app.get('/api/user/profile', deserializeUser, privateRoute, getProfile)
-  app.put('/api/user/profile', validateDTO(updateProfileByUserOrAdminV), deserializeUser, privateRoute, updateProfile)
+  app.put('/api/user/profile', deserializeUser, privateRoute, updateProfile)
 
   // Admin
   app.get('/api/admin/user', deserializeUser, privateRoute, adminRoute, getAllUsersByAdmin)
   app.get('/api/admin/user/:id', deserializeUser, privateRoute, adminRoute, getUserByAdmin)
-  app.put('/api/admin/user/:id', validateDTO(updateProfileByUserOrAdminV), deserializeUser, privateRoute, adminRoute, updateUserProfileByAdmin)
+  app.put('/api/admin/user/:id', deserializeUser, privateRoute, adminRoute, updateUserProfileByAdmin)
   app.delete('/api/admin/user/:id', deserializeUser, privateRoute, adminRoute, deleteUserByAdmin)
 
   app.get('/api/admin/order', deserializeUser, privateRoute, adminRoute, getAllOrders)
@@ -47,8 +47,8 @@ export function routes(app: Express) {
   app.get('/api/admin/order/:id/delivered', deserializeUser, privateRoute, adminRoute, setOrderToDelivered)
   app.delete('/api/admin/order/:id/delivered', deserializeUser, privateRoute, adminRoute, setOrderToNotDelivered)
 
-  app.post('/api/admin/product', validateDTO(createAndUpdateProductV), deserializeUser, privateRoute, adminRoute, createProduct)
-  app.put('/api/admin/product/:id', validateDTO(createAndUpdateProductV), deserializeUser, privateRoute, adminRoute, updateProduct)
+  app.post('/api/admin/product', deserializeUser, privateRoute, adminRoute, createProduct)
+  app.put('/api/admin/product/:id', deserializeUser, privateRoute, adminRoute, updateProduct)
   app.delete('/api/admin/product/:id', deserializeUser, privateRoute, adminRoute, deleteProduct)
 
   app.get('/api/admin/survey', deserializeUser, privateRoute, adminRoute, getAllSurveys)
@@ -59,12 +59,12 @@ export function routes(app: Express) {
   })
 
   // Order
-  app.post('/api/order', validateDTO(createNewOrderV), deserializeUser, privateRoute, createNewOrder)
+  app.post('/api/order', deserializeUser, privateRoute, createNewOrder)
   app.get('/api/order/myorders', deserializeUser, privateRoute, getOwnOrders)
   app.get('/api/order/:id', deserializeUser, privateRoute, getOrderById)
 
   // Product
   app.get('/api/product', getProducts)
-  app.post('/api/product/:id/review', validateDTO(createReviewV), deserializeUser, privateRoute, createReview)
+  app.post('/api/product/:id/review', deserializeUser, privateRoute, createReview)
   app.get('/api/product/:id', getProductById)
 }

@@ -1,159 +1,125 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
-import asyncHandler from 'express-async-handler'
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import _ from 'lodash'
 import { URL } from 'url'
 import { Path } from 'path-parser'
 import { RequestCustom } from '@src/custom'
 import { ProductModel } from '@src/models/product.model'
 import { OrderModel } from '@src/models/order.model'
-import { findUser } from '@src/services/user.services'
-import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { findProduct } from '@src/services/product.services'
-import { findOrder } from '@src/services/order.services'
 import { SurveyModel } from '@src/models/survey.model'
 import { Mailer } from '@src/services/Mailer'
 import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
+import { ApiError } from '@src/exceptions/api.error'
+import { UserModel } from '@src/models/user.model'
 
 // @desc     Get all users by Admin
 // @route    GET /api/user
 // @access   Private & Admin
-export const getAllUsersByAdmin = async (req: Request, res: Response) => {
+export const getAllUsersByAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const users = await findUser({}, 'all')
-    if (!users) throw new Error('User not found')
+    const users = await UserModel.find({})
+    if (!users) throw ApiError.BadRequest('User not found')
+
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: '',
       data: users,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'login controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
 // @desc     Delete user by Id
 // @route    DELETE /api/user/:id
 // @access   Private & Admin
-export const deleteUserByAdmin = async (req: Request, res: Response) => {
+export const deleteUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await findUser({ _id: req.params.id }, 'id')
-    if (!user) throw new Error('User not found')
-    const removedUser = await user.remove()
+    const user = await UserModel.findById(req.params.id)
+    if (!user) throw ApiError.BadRequest('User not found')
+
+    await user.remove()
+
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
-      data: null,
+      message: 'User successfully removed!',
     })
-    if (!removedUser) {
-      throw new Error('Server error')
-    }
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'deleteUserByAdmin controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
 // @desc     Get user by ID
 // @route    GET /api/user/:id
 // @access   Private & Admin
-export const getUserByAdmin = async (req: Request, res: Response) => {
+export const getUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await findUser({ _id: req.params.id }, 'id')
-    if (!user) throw new Error('User not found')
+    const user = await UserModel.findById(req.params.id)
+    if (!user) throw ApiError.BadRequest('User not found')
 
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: '',
       data: user,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getUserByAdmin controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
 // @desc     Change user profile by Admin
 // @route    PUT /api/user/:id
 // @access   Private & Admin
-export const updateUserProfileByAdmin = async (req: Request, res: Response) => {
+export const updateUserProfileByAdmin = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await findUser({ _id: req.params.id }, 'id')
-    if (!user) throw new Error('User not found')
+    const user = await UserModel.findById(req.params.id)
+    if (!user) throw ApiError.BadRequest('User not found')
 
     user.name = req.body.name || user.name
     user.email = req.body.email || user.email
     user.isAdmin = req.body.isAdmin
 
-    const updatedUser = await user.save()
+    await user.save()
 
-    if (updatedUser) {
-      res.status(200).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: updatedUser,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'updateUserProfileByAdmin controller'],
-      data: null,
+    res.status(200).json({
+      resultCode: 1,
+      message: 'User successfully updated!',
+      data: user,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Delete a product
 // @route    DELETE /api/product/:id
 // @access   Private & Admin
-export const deleteProduct = async (req: Request, res: Response) => {
+export const deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const product = await findProduct(req.params.id, 'id')
-    if (!product) throw new Error('Product not found')
+    const product = await ProductModel.findById(req.params.id)
+    if (!product) throw ApiError.BadRequest('Product not found')
 
-    const result = await product.remove()
-    if (result) {
-      res.status(200).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: null,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'deleteProduct controller'],
-      data: null,
+    await product.remove()
+    res.status(200).json({
+      resultCode: 1,
+      message: 'Product removed!',
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Create a product
 // @route    POST /api/product
 // @access   Private & Admin
-export const createProduct = async (req: Request, res: Response) => {
+export const createProduct = async (req: RequestCustom, res: Response, next: NextFunction) => {
   try {
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = new ProductModel({
       name,
       price,
-      // @ts-ignore
-      user: req.user._id,
+      user: req.user.id,
       image,
       brand,
       category,
@@ -161,37 +127,27 @@ export const createProduct = async (req: Request, res: Response) => {
       description,
     })
 
-    const createdProduct = await product.save()
+    product.save()
 
-    if (createdProduct) {
-      res.status(201).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: createdProduct,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'createProduct controller'],
-      data: null,
+    res.status(201).json({
+      resultCode: 1,
+      message: 'Product created!',
+      data: product,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Update a product
 // @route    PUT /api/product/:id
 // @access   Private & Admin
-// TODO remove asyncHandler, add try catch
-export const updateProduct = asyncHandler(async (req: Request, res: Response) => {
-  const { name, price, image, brand, category, countInStock, description } = req.body
+export const updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { name, price, image, brand, category, countInStock, description } = req.body
+    const product = await ProductModel.findById(req.params.id)
+    if (!product) throw ApiError.BadRequest('Product not found')
 
-  const product = await findProduct(req.params.id, 'id')
-  if (!product) throw new Error('Product not found')
-
-  if (product) {
     product.name = name
     product.price = price
     product.image = image
@@ -200,53 +156,44 @@ export const updateProduct = asyncHandler(async (req: Request, res: Response) =>
     product.countInStock = countInStock
     product.description = description
 
-    const createdProduct = await product.save()
+    await product.save()
+
     res.status(201).json({
       resultCode: 1,
-      errorMessage: [],
-      data: createdProduct,
+      message: 'Product updated!',
+      data: product,
     })
-  } else {
-    res.status(404).json({
-      resultCode: 0,
-      errorMessage: ['Product not found'],
-      data: null,
-    })
+  } catch (error) {
+    next(error.message)
   }
-})
+}
 
 // @desc     Get all orders
 // @route    GET /api/order
 // @access   Private & Admin
-export const getAllOrders = async (req: Request, res: Response) => {
+export const getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const orders = await findOrder({}, 'all')
-    if (!orders || orders.length === 0) throw new Error('Order not found')
+    const orders = await OrderModel.find({})
+    if (!orders || orders.length === 0) throw ApiError.BadRequest('Orders not found')
     res.status(200).json({
       resultCode: 1,
-      errorMessage: [],
+      message: '',
       data: orders,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getAllOrders controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
 // @desc     Update order to paid
 // @route    GET /api/order/:id/pay
 // @access   Private & Admin
-
-// TODO define body type for id, status, updateTime which will come from PayPal
-// TODO Validation
-export const setOrderToPaid = async (req: Request, res: Response) => {
+// TODO Тут нужно будет колдовать
+export const setOrderToPaid = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id, status, updateTime } = req.body
-    const order = await findOrder(req.params.id, 'id')
-    if (!order) throw new Error('Order not found')
+    const order = await OrderModel.findById(req.params.id)
+    if (!order) throw ApiError.BadRequest('Order not found')
 
     order.isPaid = true
     order.paidAt = Date.now()
@@ -259,33 +206,25 @@ export const setOrderToPaid = async (req: Request, res: Response) => {
       emailAddress: 'Set to req.body.payer.email_address',
     }
 
-    const updatedOrder = await order.save()
+    await order.save()
 
-    if (updatedOrder) {
-      res.status(201).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: updatedOrder,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'setOrderToPaid controller'],
-      data: null,
+    res.status(201).json({
+      resultCode: 1,
+      message: '',
+      data: order,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Set order to - NOT PAID
 // @route    PUT /api/order/:id/pay
 // @access   Private & Admin
-export const setOrderToNotPaid = async (req: Request, res: Response) => {
+export const setOrderToNotPaid = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const order = await findOrder(req.params.id, 'id')
-    if (!order) throw new Error('Order not found')
+    const order = await OrderModel.findById(req.params.id)
+    if (!order) throw ApiError.BadRequest('Order not found')
 
     order.isPaid = false
     order.paidAt = undefined
@@ -296,86 +235,62 @@ export const setOrderToNotPaid = async (req: Request, res: Response) => {
       emailAddress: '',
     }
 
-    const updatedOrder = await order.save()
-    if (updatedOrder) {
-      res.status(201).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: updatedOrder,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'setOrderToNotPaid controller'],
-      data: null,
+    await order.save()
+    res.status(201).json({
+      resultCode: 1,
+      message: '',
+      data: order,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Set order to delivered
 // @route    GET /api/order/:id/delivered
 // @access   Private & Admin
-export const setOrderToDelivered = async (req: Request, res: Response) => {
+export const setOrderToDelivered = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const order = await findOrder(req.params.id, 'id')
-    if (!order) throw new Error('Order not found')
+    const order = await OrderModel.findById(req.params.id)
+    if (!order) throw ApiError.BadRequest('Order not found')
 
     order.isDelivered = true
     order.deliveredAt = Date.now()
-    const updatedOrder = await order.save()
+    await order.save()
 
-    if (updatedOrder) {
-      res.status(201).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: updatedOrder,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'setOrderToDelivered controller'],
-      data: null,
+    res.status(201).json({
+      resultCode: 1,
+      message: '',
+      data: order,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
 // @desc     Set order to NOT delivered
 // @route    PUT /api/order/:id/delivered
 // @access   Private & Admin
-export const setOrderToNotDelivered = async (req: Request, res: Response) => {
+export const setOrderToNotDelivered = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = await OrderModel.findById(req.params.id)
-    if (!order) throw new Error('Order not found')
+    if (!order) throw ApiError.BadRequest('Order not found')
 
     order.isDelivered = false
     order.deliveredAt = undefined
-    const updatedOrder = await order.save()
+    await order.save()
 
-    if (updatedOrder) {
-      res.status(201).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: updatedOrder,
-      })
-    } else {
-      throw new Error('Server error')
-    }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'setOrderToDelivered controller'],
-      data: null,
+    res.status(201).json({
+      resultCode: 1,
+      message: '',
+      data: order,
     })
+  } catch (error) {
+    next(error.message)
   }
 }
 
-export async function createSurvey(req: RequestCustom, res: Response) {
+export async function createSurvey(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const { title, subject, body, recipients } = req.body
 
@@ -384,7 +299,7 @@ export async function createSurvey(req: RequestCustom, res: Response) {
       subject,
       body,
       recipients: recipients.split(',').map((email) => ({ email: email.trim() })),
-      user: req.user._id,
+      user: req.user.id,
       dateSent: Date.now(),
     })
 
@@ -395,38 +310,33 @@ export async function createSurvey(req: RequestCustom, res: Response) {
 
     res.status(201).json({
       resultCode: 1,
-      errorMessage: [],
+      message: '',
       // data: survey,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error, 'survey controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
-export async function getAllSurveys(req: RequestCustom, res: Response) {
+export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const surveys = await SurveyModel.find({})
-    if (!surveys) throw new Error('No surveys found')
+    const surveys = await SurveyModel.find({}).select('-recipients')
+    if (!surveys) throw ApiError.BadRequest('Surveys not found')
     res.status(201).json({
       resultCode: 1,
-      errorMessage: [],
+      message: '',
       data: surveys,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error, 'getAllSurveys controller'],
-      data: null,
-    })
+    next(error.message)
   }
 }
 
+// TODO: getSurveyById
+
 export async function manageSendgridEvents(req, res) {
   // TODO: Заменить Path на модуль qs и удалить parth-parser
+  // TODO: response
   const p = new Path('/api/survey/:surveyId/:choice')
   _.chain(req.body)
     .map(({ url, email }) => {
