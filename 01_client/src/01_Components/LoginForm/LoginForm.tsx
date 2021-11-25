@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { loginUserThunk, logoutUserThunk, registerUserThunk } from '../../03_Reducers/userReducers'
-import { API } from '../../06_Services/API'
 import s from './loginForm.module.scss'
 
 export const LoginForm: React.FC = () => {

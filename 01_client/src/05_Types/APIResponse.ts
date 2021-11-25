@@ -1,12 +1,10 @@
-import { IUser } from '../IUser'
+import { IUser } from './01_Base'
 
 export interface AuthResponse {
+  data: IUser
   resultCode: number
   message: string
   accessToken: string
-  data: {
-    user: IUser
-  }
 }
 
 export interface registerResponse {

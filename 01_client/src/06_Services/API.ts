@@ -1,7 +1,6 @@
 import $api, { API_URL } from '../04_Utils/axiosSetup'
 import axios, { AxiosResponse } from 'axios'
-import { AuthResponse, logoutResponse, registerResponse } from '../05_Models/response/AuthResponse'
-import { type } from 'os'
+import { AuthResponse, logoutResponse, registerResponse } from '../05_Types/APIResponse'
 
 export const API = {
   auth: {
@@ -12,7 +11,7 @@ export const API = {
       return $api.post<registerResponse>('/registration', { name, email, password })
     },
     logout: async (): Promise<AxiosResponse<logoutResponse>> => {
-      return $api.post('/logout')
+      return $api.post<logoutResponse>('/logout')
     },
     authenticate: async (): Promise<AxiosResponse<AuthResponse>> => {
       return axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true })

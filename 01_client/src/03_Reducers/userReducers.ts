@@ -1,23 +1,10 @@
+import { AuthResponse } from '../05_Types/APIResponse'
 import { API } from '../06_Services/API'
-import {
-  AUTH_FAIL,
-  AUTH_REQUEST,
-  AUTH_SUCCESS,
-  LOGIN_FAIL,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGOUT_FAIL,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  REGISTER_FAIL,
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-} from '../constants'
-import { BaseThunkType, InferActionTypes } from '../Types'
+import { BaseThunkType, InferActionTypes } from '../05_Types/01_Base'
 
+type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
-type ThunkType = BaseThunkType<ActionType>
 
 const initialState = {
   id: null as string | null,
@@ -32,53 +19,47 @@ const initialState = {
 
 export const authReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case LOGIN_REQUEST:
-    case REGISTER_REQUEST:
-    case LOGOUT_REQUEST:
-    case AUTH_REQUEST:
+    case 'LOGIN_REQUEST':
+    case 'REGISTER_REQUEST':
+    case 'LOGOUT_REQUEST':
+    case 'AUTH_REQUEST':
       return { ...state, loading: true }
-    case LOGIN_SUCCESS:
-    case AUTH_SUCCESS:
-      return { ...state, loading: false, isAuth: true, ...action.payload.data, message: action.payload.message }
-    case REGISTER_SUCCESS:
-      return { ...state, loading: false, message: action.payload }
-    case LOGOUT_SUCCESS:
-      return {
-        id: null,
-        email: null,
-        name: null,
-        isActivated: false,
-        isAdmin: false,
-        isAuth: false,
-        loading: false,
-        message: action.payload,
-      }
 
-    case LOGIN_FAIL:
-    case REGISTER_FAIL:
-    case AUTH_FAIL:
-      return { id: null, email: null, name: null, isActivated: false, isAdmin: false, isAuth: false, loading: false, message: action.payload }
+    case 'LOGIN_SUCCESS':
+    case 'AUTH_SUCCESS':
+      return { ...state, loading: false, isAuth: true, ...action.payload.data, message: action.payload.message }
+
+    case 'REGISTER_SUCCESS':
+      return { ...state, loading: false, message: action.payload }
+
+    case 'LOGOUT_SUCCESS':
+      return { ...initialState, message: action.payload }
+
+    case 'LOGIN_FAIL':
+    case 'REGISTER_FAIL':
+    case 'AUTH_FAIL':
+      return { ...initialState, message: action.payload }
     default:
       return state
   }
 }
 
 const actions = {
-  loginRequestAC: () => ({ type: LOGIN_REQUEST }),
-  loginSuccessAC: (data: {}) => ({ type: LOGIN_SUCCESS, payload: data } as any),
-  loginFailAC: (errMessage: string) => ({ type: LOGIN_FAIL, payload: errMessage }),
+  loginRequestAC: () => ({ type: 'LOGIN_REQUEST' as const }),
+  loginSuccessAC: (data: AuthResponse) => ({ type: 'LOGIN_SUCCESS' as const, payload: data }),
+  loginFailAC: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
 
-  registerRequestAC: () => ({ type: REGISTER_REQUEST }),
-  registerSuccessAC: (message: string) => ({ type: REGISTER_SUCCESS, payload: message }),
-  registerFailAC: (errMessage: string) => ({ type: REGISTER_FAIL, payload: errMessage }),
+  registerRequestAC: () => ({ type: 'REGISTER_REQUEST' as const }),
+  registerSuccessAC: (message: string) => ({ type: 'REGISTER_SUCCESS' as const, payload: message }),
+  registerFailAC: (errMessage: string) => ({ type: 'REGISTER_FAIL' as const, payload: errMessage }),
 
-  logoutRequestAC: () => ({ type: LOGOUT_REQUEST }),
-  logoutSuccessAC: (message: string) => ({ type: LOGOUT_SUCCESS, payload: message }),
-  logoutFailAC: (errMessage: string) => ({ type: LOGOUT_FAIL, payload: errMessage }),
+  logoutRequestAC: () => ({ type: 'LOGOUT_REQUEST' as const }),
+  logoutSuccessAC: (message: string) => ({ type: 'LOGOUT_SUCCESS' as const, payload: message }),
+  logoutFailAC: (errMessage: string) => ({ type: 'LOGOUT_FAIL' as const, payload: errMessage }),
 
-  authenticateRequestAC: () => ({ type: AUTH_REQUEST }),
-  authenticateSuccessAC: (data: any) => ({ type: AUTH_SUCCESS, payload: data }),
-  authenticateFailAC: (errMessage: string) => ({ type: AUTH_FAIL, payload: errMessage }),
+  authenticateRequestAC: () => ({ type: 'AUTH_REQUEST' as const }),
+  authenticateSuccessAC: (data: AuthResponse) => ({ type: 'AUTH_SUCCESS' as const, payload: data }),
+  authenticateFailAC: (errMessage: string) => ({ type: 'AUTH_FAIL' as const, payload: errMessage }),
 }
 
 export const loginUserThunk =
@@ -140,6 +121,6 @@ export const authenticate = (): ThunkType => async (dispatch, getState) => {
     }
   } catch (error: any) {
     console.log(error)
-    dispatch(actions.authenticateFailAC(error.message as string))
+    dispatch(actions.authenticateFailAC(error.message))
   }
 }
