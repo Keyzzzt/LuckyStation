@@ -1,7 +1,7 @@
 import { IUser } from './01_Base'
 
 export interface AuthResponse {
-  data: IUser
+  user: IUser
   resultCode: number
   message: string
   accessToken: string

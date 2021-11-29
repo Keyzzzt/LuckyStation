@@ -10,7 +10,6 @@ export const useTypedSelector: TypedUseSelectorHook<StateType> = useSelector
 export interface IUser {
   id: string
   email: string
-  name: string
   isActivated: boolean
   isAdmin: boolean
 }

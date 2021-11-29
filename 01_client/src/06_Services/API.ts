@@ -7,8 +7,8 @@ export const API = {
     login: async (email: string, password: string): Promise<AxiosResponse<AuthResponse>> => {
       return $api.post<AuthResponse>('/login', { email, password })
     },
-    registration: async (name: string, email: string, password: string): Promise<AxiosResponse<registerResponse>> => {
-      return $api.post<registerResponse>('/registration', { name, email, password })
+    registration: async (email: string, password: string): Promise<AxiosResponse<registerResponse>> => {
+      return $api.post<registerResponse>('/registration', { email, password })
     },
     logout: async (): Promise<AxiosResponse<logoutResponse>> => {
       return $api.post<logoutResponse>('/logout')
@@ -16,13 +16,10 @@ export const API = {
     authenticate: async (): Promise<AxiosResponse<AuthResponse>> => {
       return axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true })
     },
-    googleOauth: async (): Promise<AxiosResponse<AuthResponse>> => {
-      return axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true })
-    },
   },
   user: {
-    getProfile: async (): Promise<AxiosResponse<{}>> => {
-      return $api.get<{}>('/user/profile')
+    getProfile: async (): Promise<AxiosResponse<AuthResponse>> => {
+      return $api.get<AuthResponse>('/user/profile')
     },
   },
 }
