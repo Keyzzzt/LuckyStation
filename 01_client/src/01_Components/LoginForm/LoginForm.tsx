@@ -1,7 +1,6 @@
-import axios from 'axios'
 import { useState } from 'react'
-import { getGoogleOAuthURL } from '../../04_Utils/googleOauthURL'
 import { useActions } from '../../04_Utils/hooks'
+import { useTypedSelector } from '../../05_Types/01_Base'
 import s from './loginForm.module.scss'
 
 export const LoginForm: React.FC = () => {
@@ -9,6 +8,7 @@ export const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('123')
 
   const { loginUserThunk, registerUserThunk, logoutUserThunk } = useActions()
+  const { isAuth } = useTypedSelector((state) => state.auth)
 
   const loginHandler = () => {
     loginUserThunk(email, password)
@@ -31,7 +31,7 @@ export const LoginForm: React.FC = () => {
         <input onChange={(e) => setPassword(e.target.value)} type="password" value={password} placeholder="Password" />
         <input onClick={registerHandler} type="button" value="Register" />
       </div>
-      <input onClick={logoutHandler} type="button" value="Logout" />
+      {isAuth && <input onClick={logoutHandler} type="button" value="Logout" />}
 
       <a href="http://localhost:5000/api/auth/google/redirect">GoogleWithProxy</a>
     </div>

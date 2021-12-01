@@ -13,3 +13,10 @@ export interface IUser {
   isActivated: boolean
   isAdmin: boolean
 }
+
+export interface IValErrMsg {
+  location: string
+  msg: string
+  param: string
+  value: string
+}

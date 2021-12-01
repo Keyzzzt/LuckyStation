@@ -1,7 +1,6 @@
 import { AuthResponse } from '../05_Types/APIResponse'
 import { API } from '../06_Services/API'
-import { BaseThunkType, InferActionTypes } from '../05_Types/01_Base'
-import { getCookie } from '../04_Utils/getCookie'
+import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -14,8 +13,7 @@ const initialState = {
   isAdmin: false,
   isAuth: false,
   loading: false,
-  message: '',
-  error: '',
+  error: null as string | null, // TODO: Сделать массивом строк?
 }
 
 export const authReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -24,22 +22,22 @@ export const authReducer = (state = initialState, action: ActionType): InitialSt
     case 'REGISTER_REQUEST':
     case 'LOGOUT_REQUEST':
     case 'AUTH_REQUEST':
-      return { ...state, loading: true }
+      return { ...state, loading: true, error: null }
 
     case 'LOGIN_SUCCESS':
     case 'AUTH_SUCCESS':
-      return { ...state, loading: false, isAuth: true, ...action.payload.user, message: action.payload.message, error: '' }
+      return { ...state, loading: false, isAuth: true, ...action.payload, error: null }
 
     case 'REGISTER_SUCCESS':
-      return { ...state, loading: false, message: action.payload }
+      return { ...state, loading: false, error: null }
 
     case 'LOGOUT_SUCCESS':
-      return { ...initialState, message: action.payload }
+      return { ...initialState, loading: false, error: null }
 
     case 'LOGIN_FAIL':
     case 'REGISTER_FAIL':
     case 'AUTH_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, loading: false, error: action.payload }
     default:
       return state
   }
@@ -47,19 +45,19 @@ export const authReducer = (state = initialState, action: ActionType): InitialSt
 
 export const actions = {
   loginRequestAC: () => ({ type: 'LOGIN_REQUEST' as const }),
-  loginSuccessAC: (data: AuthResponse) => ({ type: 'LOGIN_SUCCESS' as const, payload: data }),
+  loginSuccessAC: (data: AuthResponse) => ({ type: 'LOGIN_SUCCESS' as const, payload: data.user }),
   loginFailAC: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
 
   registerRequestAC: () => ({ type: 'REGISTER_REQUEST' as const }),
-  registerSuccessAC: (message: string) => ({ type: 'REGISTER_SUCCESS' as const, payload: message }),
+  registerSuccessAC: () => ({ type: 'REGISTER_SUCCESS' as const }),
   registerFailAC: (errMessage: string) => ({ type: 'REGISTER_FAIL' as const, payload: errMessage }),
 
   logoutRequestAC: () => ({ type: 'LOGOUT_REQUEST' as const }),
-  logoutSuccessAC: (message: string) => ({ type: 'LOGOUT_SUCCESS' as const, payload: message }),
+  logoutSuccessAC: () => ({ type: 'LOGOUT_SUCCESS' as const }),
   logoutFailAC: (errMessage: string) => ({ type: 'LOGOUT_FAIL' as const, payload: errMessage }),
 
   authenticateRequestAC: () => ({ type: 'AUTH_REQUEST' as const }),
-  authenticateSuccessAC: (data: AuthResponse) => ({ type: 'AUTH_SUCCESS' as const, payload: data }),
+  authenticateSuccessAC: (data: AuthResponse) => ({ type: 'AUTH_SUCCESS' as const, payload: data.user }),
   authenticateFailAC: (errMessage: string) => ({ type: 'AUTH_FAIL' as const, payload: errMessage }),
 }
 
@@ -70,14 +68,16 @@ export const userThunk = {
       try {
         dispatch(actions.loginRequestAC())
         const { data } = await API.auth.login(email, password)
-        if (data.resultCode === 1) {
-          dispatch(actions.loginSuccessAC(data))
-          localStorage.setItem('token', data.accessToken)
-        } else {
-          dispatch(actions.loginFailAC(data.message))
-        }
+        dispatch(actions.loginSuccessAC(data))
+        localStorage.setItem('token', data.accessToken)
       } catch (error: any) {
-        console.log(error)
+        const { errors, message }: { errors: IValErrMsg[]; message: string } = error.response.data
+        if (errors.length > 0) {
+          const errMsg = errors.map((e) => e.msg).join('; ')
+          dispatch(actions.loginFailAC(errMsg))
+          return
+        }
+        dispatch(actions.loginFailAC(message))
       }
     },
   registerUserThunk:
@@ -85,21 +85,23 @@ export const userThunk = {
     async (dispatch, getState) => {
       try {
         dispatch(actions.registerRequestAC())
-        const { data } = await API.auth.registration(email, password)
-        if (data.resultCode === 1) {
-          dispatch(actions.registerSuccessAC(data.message))
-        }
+        await API.auth.registration(email, password)
+        dispatch(actions.registerSuccessAC())
       } catch (error: any) {
-        dispatch(actions.registerFailAC(error.message))
-        console.log(error)
+        const { errors, message }: { errors: IValErrMsg[]; message: string } = error.response.data
+        if (errors.length > 0) {
+          const errMsg = errors.map((e) => e.msg).join('; ')
+          dispatch(actions.registerFailAC(errMsg))
+          return
+        }
+        dispatch(actions.registerFailAC(message))
       }
     },
   logoutUserThunk: (): ThunkType => async (dispatch, getState) => {
     try {
       dispatch(actions.logoutRequestAC())
-      const { data } = await API.auth.logout()
-
-      dispatch(actions.logoutSuccessAC(data.message))
+      await API.auth.logout()
+      dispatch(actions.logoutSuccessAC())
       localStorage.removeItem('token')
     } catch (error: any) {
       dispatch(actions.logoutFailAC(error.message))
@@ -109,11 +111,9 @@ export const userThunk = {
     try {
       dispatch(actions.authenticateRequestAC())
       const { data } = await API.auth.authenticate()
-      console.log(data)
       dispatch(actions.authenticateSuccessAC(data))
       localStorage.setItem('token', data.accessToken)
     } catch (error: any) {
-      console.log(error)
       dispatch(actions.authenticateFailAC(error.message))
     }
   },
