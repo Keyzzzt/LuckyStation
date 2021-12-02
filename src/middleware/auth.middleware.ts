@@ -1,11 +1,6 @@
-/* eslint-disable consistent-return */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable spaced-comment */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable prefer-destructuring */
 import { NextFunction, Response } from 'express'
-import { RequestCustom, User } from '@src/custom'
-import { ApiError } from '@src/exceptions/api.error'
+import { RequestCustom } from '@src/custom'
+import { ApiError } from '@src/middleware/error.middleware'
 import { tokenService } from '@src/newServices/token.service'
 
 export async function deserializeUser(req: RequestCustom, res: Response, next: NextFunction) {
@@ -19,28 +14,28 @@ export async function deserializeUser(req: RequestCustom, res: Response, next: N
     const userData = tokenService.validateAccessToken(accessToken)
     if (!userData) next(ApiError.UnauthorizedError())
 
-    req.user = userData as User
+    req.user = userData
 
-    next()
+    return next()
   } catch (error) {
-    return next(ApiError.UnauthorizedError())
+    return next(error.message)
   }
 }
 
 export function privateRoute(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     if (!req.user) throw ApiError.UnauthorizedError()
-    next()
+    return next()
   } catch (error) {
-    return next(ApiError.UnauthorizedError())
+    return next(error.message)
   }
 }
 
 export const adminRoute = (req: RequestCustom, res: Response, next: NextFunction) => {
   try {
     if (!req.user.isAdmin) throw new Error('Admin only')
-    next()
+    return next()
   } catch (error) {
-    next(ApiError.UnauthorizedError())
+    return next(error.message)
   }
 }

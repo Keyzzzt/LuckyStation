@@ -1,10 +1,14 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import { CookieOptions, Response, Request, NextFunction } from 'express'
+import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
 import { userService } from '@src/newServices/user.service'
-import { getGoogleOAuthTokens, findAndUpdateUser, findUser, createUser, getGoogleUserProfile } from '@src/services/user.services'
+import { getGoogleOAuthTokens, getGoogleUserProfile } from '@src/services/user.services'
 import { UserModel } from '@src/models/user.model'
+import { ApiError } from '@src/middleware/error.middleware'
+import { tokenService } from '@src/newServices/token.service'
+import { getGoogleOAuthURL } from '@src/services/googleOAuthURL'
 
 export const cookieOpt: CookieOptions = {
   httpOnly: true,
@@ -12,70 +16,111 @@ export const cookieOpt: CookieOptions = {
   secure: false,
 }
 
-// TODO: refactor
-export async function googleOAuth(req: RequestCustom, res: Response): Promise<void> {
-  // try {
-  //   // Get the code from query strings
-  //   const code = req.query.code as string
-  //   // get the id and access token with the code from google api
-  //   const { id_token, access_token } = await getGoogleOAuthTokens({ code })
-  //   // get user with token
-  //   const profile = await getGoogleUserProfile({ id_token, access_token })
-  //   const user = await UserModel.findOne({ googleId: profile.id })
-  //   if (!user) {
-  //     const newUser = await new UserModel({
-  //       name: profile.name,
-  //       email: profile.email,
-  //       googleId: profile.id,
-  //       logo: profile.picture,
-  //     }).save()
-  //     const session = await createSession(newUser._id, req.get('user-agent') || '')
-  //     const accessToken = signJWT({ ...newUser, session: session._id }, process.env.access_token_life)
-  //     const refreshToken = signJWT({ session: session._id }, process.env.refresh_token_life)
-  //     res.cookie('accessToken', accessToken, accessTokenOptions)
-  //     res.cookie('refreshToken', refreshToken, refreshTokenOptions)
-  //     res.status(200).json({
-  //       resultCode: 1,
-  //       message: [],
-  //       user: newUser,
-  //     })
-  //   }
-  //   const session = await createSession(user._id, req.get('user-agent') || '')
-  //   // Create access & refresh tokens
-  //   const accessToken = signJWT({ ...user, session: session._id }, process.env.access_token_life)
-  //   const refreshToken = signJWT({ session: session._id }, process.env.refresh_token_life)
-  //   // set cookies
-  //   res.cookie('accessToken', accessToken, accessTokenOptions)
-  //   res.cookie('refreshToken', refreshToken, refreshTokenOptions)
-  //   res.status(200).json({
-  //     resultCode: 1,
-  //     message: [],
-  //     user,
-  //   })
-  // } catch (error) {
-  //   res.status(issueStatusCode(error.message)).json({
-  //     resultCode: 0,
-  //     errorMessage: [error.message, 'googleOauth controller'],
-  //     data: null,
-  //   })
-  // }
+export function googleOAuthRedirect(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    res.redirect(getGoogleOAuthURL())
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function googleOAuth(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const code = req.query.code as string
+    const { id_token, access_token } = await getGoogleOAuthTokens({ code })
+    const googleProfile = await getGoogleUserProfile({ id_token, access_token })
+
+    const user = await UserModel.findOne({ email: googleProfile.email })
+
+    if (user && user.googleId === googleProfile.id) {
+      const tokens = tokenService.generateTokens({
+        id: user._id,
+        email: user.email,
+        isActivated: user.isActivated,
+        isAdmin: user.isAdmin,
+      })
+      tokenService.saveToken(user._id, tokens.refreshToken)
+      res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+      return res.redirect('http://localhost:3000')
+    }
+    if (user && user.isActivated && googleProfile.verified_email) {
+      user.googleId = googleProfile.id
+      const tokens = tokenService.generateTokens({
+        id: user._id,
+        email: user.email,
+        isActivated: user.isActivated,
+        isAdmin: user.isAdmin,
+      })
+      tokenService.saveToken(user._id, tokens.refreshToken)
+      res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+      return res.redirect('http://localhost:3000')
+    }
+    if (user && !user.isActivated && googleProfile.verified_email) {
+      await user.remove()
+      // TODO: Отправить мейл об удалении неактивированного аккаунта. Ссылку на активирование сделать невалидной.
+      const createdUser = await UserModel.create({
+        email: googleProfile.email,
+        googleId: googleProfile.id,
+        isActivated: true,
+      })
+      const tokens = tokenService.generateTokens({
+        id: createdUser._id,
+        email: googleProfile.email,
+        isActivated: true,
+        isAdmin: createdUser.isAdmin,
+      })
+      tokenService.saveToken(createdUser._id, tokens.refreshToken)
+      res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+      return res.redirect('http://localhost:3000')
+    }
+    if (!user) {
+      const createdUser = await UserModel.create({
+        email: googleProfile.email,
+        googleId: googleProfile.id,
+        isActivated: true,
+      })
+      const tokens = tokenService.generateTokens({
+        id: createdUser._id,
+        email: googleProfile.email,
+        isActivated: true,
+        isAdmin: createdUser.isAdmin,
+      })
+      tokenService.saveToken(user._id, tokens.refreshToken)
+      res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+      return res.redirect('http://localhost:3000')
+    }
+  } catch (error) {
+    return next(error)
+  }
 }
 
 export async function register(req: Request, res: Response, next: NextFunction) {
+  // TODO: Проверить если есть с имейлом от регистрации с Google
   try {
-    const { name, email, password } = req.body
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
 
-    const { data, token } = await userService.register(name, email, password)
+    const { email, password } = req.body
+    const refreshToken = await userService.register(email, password)
+    res.cookie('refreshToken', refreshToken, cookieOpt)
 
-    res.cookie('refreshToken', token.refreshToken, cookieOpt)
-
-    return res.status(200).json(data)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error)
   }
 }
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const { email, password } = req.body
     const data = await userService.login(email, password)
     res.cookie('refreshToken', data.refreshToken, cookieOpt)
@@ -90,9 +135,9 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const { refreshToken } = req.cookies
-    const data = await userService.logout(refreshToken)
+    await tokenService.removeToken(refreshToken)
     res.clearCookie('refreshToken')
-    return res.status(200).json(data)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error)
   }
@@ -114,6 +159,7 @@ export async function refresh(req: Request, res: Response, next: NextFunction) {
     const data = await userService.refresh(refreshToken)
 
     res.cookie('refreshToken', data.refreshToken, cookieOpt)
+    delete data.refreshToken
 
     return res.status(200).json(data)
   } catch (error) {

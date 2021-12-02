@@ -2,6 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction, Request, Response } from 'express'
 import _ from 'lodash'
+import { validationResult } from 'express-validator'
 import { URL } from 'url'
 import { Path } from 'path-parser'
 import { RequestCustom } from '@src/custom'
@@ -10,57 +11,53 @@ import { OrderModel } from '@src/models/order.model'
 import { SurveyModel } from '@src/models/survey.model'
 import { Mailer } from '@src/services/Mailer'
 import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
-import { ApiError } from '@src/exceptions/api.error'
+import { ApiError } from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
+import { TokenModel } from '@src/models/TokenModel'
 
-// @desc     Get all users by Admin
+// @desc     Get all users
 // @route    GET /api/user
 // @access   Private & Admin
-export const getAllUsersByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await UserModel.find({})
-    if (!users) throw ApiError.BadRequest('User not found')
+    if (!users) {
+      throw ApiError.BadRequest('Users not found')
+    }
 
-    res.status(200).json({
-      resultCode: 1,
-      message: '',
+    return res.status(200).json({
       data: users,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
-// @desc     Delete user by Id
+// @desc     Delete user by ID
 // @route    DELETE /api/user/:id
 // @access   Private & Admin
-export const deleteUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await UserModel.findById(req.params.id)
-    if (!user) throw ApiError.BadRequest('User not found')
+    const { id } = req.params
+    await UserModel.deleteOne({ id })
+    await TokenModel.deleteOne({ user: id })
 
-    await user.remove()
-
-    res.status(200).json({
-      resultCode: 1,
-      message: 'User successfully removed!',
-    })
+    return res.sendStatus(200)
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
-// @desc     Get user by ID
+// @desc     Get user by its ID
 // @route    GET /api/user/:id
 // @access   Private & Admin
-export const getUserByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = await UserModel.findById(req.params.id)
-    if (!user) throw ApiError.BadRequest('User not found')
-
+    if (!user) {
+      throw ApiError.BadRequest('User not found')
+    }
     res.status(200).json({
-      resultCode: 1,
-      message: '',
       data: user,
     })
   } catch (error) {
@@ -68,53 +65,61 @@ export const getUserByAdmin = async (req: Request, res: Response, next: NextFunc
   }
 }
 
-// @desc     Change user profile by Admin
+// @desc     Change user profile by its ID
 // @route    PUT /api/user/:id
 // @access   Private & Admin
-export const updateUserProfileByAdmin = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const user = await UserModel.findById(req.params.id)
     if (!user) throw ApiError.BadRequest('User not found')
 
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    user.isAdmin = req.body.isAdmin
+    const { email, isAdmin } = req.body
+
+    user.email = email || user.email
+    user.isAdmin = isAdmin
 
     await user.save()
 
-    res.status(200).json({
-      resultCode: 1,
-      message: 'User successfully updated!',
+    return res.status(200).json({
       data: user,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
-// @desc     Delete a product
+// @desc     Delete a product by its ID
 // @route    DELETE /api/product/:id
 // @access   Private & Admin
 export const deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const product = await ProductModel.findById(req.params.id)
-    if (!product) throw ApiError.BadRequest('Product not found')
+    if (!product) {
+      throw ApiError.BadRequest('Product not found')
+    }
 
     await product.remove()
-    res.status(200).json({
-      resultCode: 1,
-      message: 'Product removed!',
-    })
+    return res.sendStatus(200)
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
-// @desc     Create a product
+// @desc     Create new product
 // @route    POST /api/product
 // @access   Private & Admin
 export const createProduct = async (req: RequestCustom, res: Response, next: NextFunction) => {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = new ProductModel({
       name,
@@ -127,15 +132,13 @@ export const createProduct = async (req: RequestCustom, res: Response, next: Nex
       description,
     })
 
-    product.save()
+    await product.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: 'Product created!',
+    return res.status(201).json({
       data: product,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -144,9 +147,16 @@ export const createProduct = async (req: RequestCustom, res: Response, next: Nex
 // @access   Private & Admin
 export const updateProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = await ProductModel.findById(req.params.id)
-    if (!product) throw ApiError.BadRequest('Product not found')
+    if (!product) {
+      throw ApiError.BadRequest('Product not found')
+    }
 
     product.name = name
     product.price = price
@@ -158,13 +168,11 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
 
     await product.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: 'Product updated!',
+    return res.status(201).json({
       data: product,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -174,14 +182,14 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
 export const getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const orders = await OrderModel.find({})
-    if (!orders || orders.length === 0) throw ApiError.BadRequest('Orders not found')
-    res.status(200).json({
-      resultCode: 1,
-      message: '',
+    if (!orders || orders.length === 0) {
+      throw ApiError.BadRequest('Orders not found')
+    }
+    return res.status(200).json({
       data: orders,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -191,9 +199,15 @@ export const getAllOrders = async (req: Request, res: Response, next: NextFuncti
 // TODO Тут нужно будет колдовать
 export const setOrderToPaid = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // TODO: Validate
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+
     const { id, status, updateTime } = req.body
     const order = await OrderModel.findById(req.params.id)
-    if (!order) throw ApiError.BadRequest('Order not found')
+    if (!order) {
+      throw ApiError.BadRequest('Order not found')
+    }
 
     order.isPaid = true
     order.paidAt = Date.now()
@@ -208,13 +222,11 @@ export const setOrderToPaid = async (req: Request, res: Response, next: NextFunc
 
     await order.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
+    return res.status(201).json({
       data: order,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -224,7 +236,9 @@ export const setOrderToPaid = async (req: Request, res: Response, next: NextFunc
 export const setOrderToNotPaid = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = await OrderModel.findById(req.params.id)
-    if (!order) throw ApiError.BadRequest('Order not found')
+    if (!order) {
+      throw ApiError.BadRequest('Order not found')
+    }
 
     order.isPaid = false
     order.paidAt = undefined
@@ -236,13 +250,11 @@ export const setOrderToNotPaid = async (req: Request, res: Response, next: NextF
     }
 
     await order.save()
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
+    return res.status(201).json({
       data: order,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -252,19 +264,19 @@ export const setOrderToNotPaid = async (req: Request, res: Response, next: NextF
 export const setOrderToDelivered = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = await OrderModel.findById(req.params.id)
-    if (!order) throw ApiError.BadRequest('Order not found')
+    if (!order) {
+      throw ApiError.BadRequest('Order not found')
+    }
 
     order.isDelivered = true
     order.deliveredAt = Date.now()
     await order.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
+    return res.status(201).json({
       data: order,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
@@ -274,24 +286,29 @@ export const setOrderToDelivered = async (req: Request, res: Response, next: Nex
 export const setOrderToNotDelivered = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const order = await OrderModel.findById(req.params.id)
-    if (!order) throw ApiError.BadRequest('Order not found')
+    if (!order) {
+      throw ApiError.BadRequest('Order not found')
+    }
 
     order.isDelivered = false
     order.deliveredAt = undefined
     await order.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
+    return res.status(201).json({
       data: order,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
 export async function createSurvey(req: RequestCustom, res: Response, next: NextFunction) {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const { title, subject, body, recipients } = req.body
 
     const survey = new SurveyModel({
@@ -303,70 +320,80 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
       dateSent: Date.now(),
     })
 
-    // Great place to send an email!
     const mailer = new Mailer(survey, surveyTemplate(survey))
     await mailer.send()
     await survey.save()
 
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
-      // data: survey,
-    })
+    return res.sendStatus(201)
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const surveys = await SurveyModel.find({}).select('-recipients')
-    if (!surveys) throw ApiError.BadRequest('Surveys not found')
-    res.status(201).json({
-      resultCode: 1,
-      message: '',
+    if (!surveys) {
+      throw ApiError.BadRequest('Surveys not found')
+    }
+    return res.status(201).json({
       data: surveys,
     })
   } catch (error) {
-    next(error.message)
+    return next(error.message)
   }
 }
 
-// TODO: getSurveyById
+export async function getSurveyById(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const survey = await SurveyModel.findById(req.params.id).select('-recipients')
+    if (!survey) {
+      throw ApiError.BadRequest('Survey not found')
+    }
+    return res.status(201).json({
+      data: survey,
+    })
+  } catch (error) {
+    return next(error.message)
+  }
+}
 
-export async function manageSendgridEvents(req, res) {
+export async function manageSendgridEvents(req: RequestCustom, res: Response, next: NextFunction) {
   // TODO: Заменить Path на модуль qs и удалить parth-parser
-  // TODO: response
-  const p = new Path('/api/survey/:surveyId/:choice')
-  _.chain(req.body)
-    .map(({ url, email }) => {
-      const match = p.test(new URL(url).pathname)
-      if (match) {
-        return {
-          email,
-          surveyId: match.surveyId,
-          choice: match.choice,
+  try {
+    const p = new Path('/api/survey/:surveyId/:choice')
+    _.chain(req.body)
+      .map(({ url, email }) => {
+        const match = p.test(new URL(url).pathname)
+        if (match) {
+          return {
+            email,
+            surveyId: match.surveyId,
+            choice: match.choice,
+          }
         }
-      }
-    })
-    .compact()
-    .uniqBy('email', 'surveyId')
-    .each(({ surveyId, email, choice }) => {
-      SurveyModel.updateOne(
-        {
-          _id: surveyId,
-          recipients: {
-            $elemMatch: { email, responded: false },
+      })
+      .compact()
+      .uniqBy('email', 'surveyId')
+      .each(({ surveyId, email, choice }) => {
+        SurveyModel.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email, responded: false },
+            },
           },
-        },
-        {
-          $inc: { [choice]: 1 },
-          $set: { 'recipients.$.responded': true, 'recipients.$.response': choice },
-          lastResponded: new Date(),
-        }
-      ).exec()
-    })
-    .value()
+          {
+            $inc: { [choice]: 1 },
+            $set: { 'recipients.$.responded': true, 'recipients.$.response': choice },
+            lastResponded: new Date(),
+          }
+        ).exec()
+      })
+      .value()
 
-  res.send('OK')
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
 }

@@ -1,6 +1,32 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
+import { UserDoc } from './user.model'
 
-const ReviewSchema = new Schema(
+export interface ReviewDoc extends Document {
+  user: UserDoc['id']
+  comment: string
+  rating: number
+}
+
+export type ReviewType = {
+  user: string
+  comment: string
+  rating: number
+}
+
+export interface ProductDoc extends Document {
+  user: UserDoc['id']
+  name: string
+  image: string
+  brand: string
+  category: string
+  description: string
+  rating: number
+  reviews: ReviewType[]
+  numReviews: number
+  price: number
+  countInStock: number
+}
+const ReviewSchema = new Schema<ReviewDoc>(
   {
     rating: {
       type: Number,
@@ -21,7 +47,7 @@ const ReviewSchema = new Schema(
   }
 )
 
-const ProductSchema = new Schema(
+const ProductSchema = new Schema<ProductDoc>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -75,4 +101,4 @@ const ProductSchema = new Schema(
   }
 )
 
-export const ProductModel = model('Product', ProductSchema)
+export const ProductModel = model<ProductDoc>('Product', ProductSchema)

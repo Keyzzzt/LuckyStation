@@ -9,7 +9,7 @@ import { connectDB } from '@src/config/db'
 import { routes } from '@src/routes'
 import uploadRoutes from '@src/upload.routes'
 import { errorHandler } from '@src/middleware/error.middleware'
-import { deserializeUser } from './middleware/auth.middleware'
+// import { deserializeUser } from './middleware/auth.middleware'
 
 dotenv.config()
 
@@ -26,15 +26,8 @@ app.use(
 )
 // app.use(deserializeUser)
 app.use(helmet()) // Для безопасности
-
 app.use('/api/upload', uploadRoutes)
-
-// const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
-
-// Глобальные middleware, которые будут использованы при каждом эндпоинте
-// app.use(notFound)
-// app.use(errorHandler)
 
 const PORT = Number(process.env.port)
 
@@ -48,11 +41,11 @@ async function start() {
     console.log(error)
   }
 }
-start()
 
+start()
 routes(app)
 app.use(errorHandler)
 
 // TODO:  После изменения профиля пользователя, нужно выписать ему новые токены, с новыми данными. Иначе неактуальные данные будут сидеть в токене
-
 // TODO: Не админ может получить любой order если знает orderId. Знать ID не своего заказа он вроде не может. Но нужна защита от дурака.
+// TODO: Убрать возможность поменять имейл на фронте, и исключить возможность попытки смены имейла на бэкенде.

@@ -1,6 +1,43 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
+import { ProductDoc } from './product.model'
+import { UserDoc } from './user.model'
 
-const OrderSchema = new Schema(
+interface ShippingAddress {
+  address: string
+  city: string
+  postalCode: string
+  country: string
+}
+interface PaymentResult {
+  id: string
+  status: string
+  updateTime: string
+  emailAddress: string
+}
+export interface OrderItemDoc extends Document {
+  name: string
+  quantity: number
+  image: string
+  price: number
+  product: ProductDoc['id']
+}
+export interface OrderDoc extends Document {
+  user: UserDoc['id']
+  orderItems: OrderItemDoc[]
+  shippingAddress: ShippingAddress
+  paymentMethod: string
+  paymentResult: PaymentResult
+  itemsPrice: number
+  taxPrice: number
+  shippingPrice: number
+  totalPrice: number
+  isPaid: boolean
+  paidAt: Date | number
+  isDelivered: boolean
+  deliveredAt: Date | number
+}
+
+const OrderSchema = new Schema<OrderDoc>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -71,7 +108,6 @@ const OrderSchema = new Schema(
     },
     deliveredAt: {
       type: Date,
-      default: undefined,
     },
   },
   {
@@ -79,4 +115,4 @@ const OrderSchema = new Schema(
   }
 )
 
-export const OrderModel = model('Order', OrderSchema)
+export const OrderModel = model<OrderDoc>('Order', OrderSchema)

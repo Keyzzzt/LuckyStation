@@ -1,3 +1,5 @@
+import { ProductDoc } from '@src/models/product.model'
+
 /* eslint-disable camelcase */
 type ReviewType = {
   name: string
@@ -47,4 +49,23 @@ export type SurveyType = {
   title: string
   body: string
   subject: string
+}
+
+export type OrderType = {
+  name: string
+  quantity: number
+  image: string
+  price: number
+  product: ProductDoc['id']
+}
+
+export interface IGoogleProfile {
+  id: string
+  email: string
+  verified_email: boolean
+  name: string
+  given_name: string
+  family_name: string
+  picture: string
+  locale: string
 }

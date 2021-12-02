@@ -2,9 +2,9 @@
 /* eslint-disable no-unused-vars */
 import { Schema, model, Document } from 'mongoose'
 import bcrypt from 'bcryptjs'
+import { NextFunction } from 'express'
 
-export interface UserDocument extends Document {
-  name: string
+export interface UserDoc extends Document {
   email: string
   password: string
   googleId: string
@@ -17,9 +17,8 @@ export interface UserDocument extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
-const UserSchema: Schema = new Schema<UserDocument>(
+const UserSchema: Schema = new Schema<UserDoc>(
   {
-    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String },
     googleId: { type: String, default: '' },
@@ -36,10 +35,10 @@ const UserSchema: Schema = new Schema<UserDocument>(
 )
 
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  return bcrypt.compare(candidatePassword, this.password) // TODO Проверить без await-
+  return bcrypt.compare(candidatePassword, this.password)
 }
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next: NextFunction) {
   if (!this.isModified('password')) {
     return next()
   }
@@ -49,9 +48,4 @@ UserSchema.pre('save', async function (next) {
   return next()
 })
 
-// Virtual method example
-UserSchema.virtual('nameAndEmail').get(function (this: UserDocument) {
-  return `${this.name} ${this.email}`
-})
-
-export const UserModel = model<UserDocument>('User', UserSchema)
+export const UserModel = model<UserDoc>('User', UserSchema)

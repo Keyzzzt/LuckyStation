@@ -75,5 +75,5 @@
     "coverage"
   ],
   "include": [
-    "src", "fakeDB.ts", "default.ts", "custom.d.ts"  ]
+    "src", "fakeDB.ts", "default.ts", "custom.d.ts", "01_client/src/setupProxy.js"  ]
 }

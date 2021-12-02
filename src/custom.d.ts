@@ -1,19 +1,6 @@
 import { Request } from 'express'
-
-type User = {
-  id: string
-  name: string
-  email: string
-  isAdmin: boolean
-  isSubscribed: boolean
-  createdAt: string
-  updatedAt: string
-  sessionId: string
-  iat: number
-  exp: number
-}
+import { PayloadType } from './newServices/token.service'
 
 export interface RequestCustom extends Request {
-  user: User
-  sessionId: string
+  user: PayloadType
 }

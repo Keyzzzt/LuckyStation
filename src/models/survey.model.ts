@@ -1,31 +1,31 @@
-import { Schema, model, Document } from 'mongoose'
-import { UserDocument } from './user.model'
+import { Schema, model, Document, SchemaDefinitionProperty } from 'mongoose'
+import { UserDoc } from './user.model'
 
-export interface Survey extends Document {
-  user: UserDocument['id']
+export interface SurveyDoc extends Document {
+  user: UserDoc['id']
   title: string
   body: string
   subject: string
   recipients: string[]
   yes: number
   no: number
-  dateSent: Date
-  lastResponded: Date
+  dateSent: SchemaDefinitionProperty<Schema.Types.Date>
+  lastResponded: SchemaDefinitionProperty<Schema.Types.Date>
 }
-export interface Recipient extends Document {
+export interface RecipientDoc extends Document {
   email: string
   responded: boolean
   response: string
 }
 
 // SubDocument collection
-const RecipientSchema: Schema = new Schema<Recipient>({
+const RecipientSchema: Schema = new Schema<RecipientDoc>({
   email: String,
   responded: { type: Boolean, default: false },
   response: String,
 })
 
-const SurveySchema: Schema = new Schema<Survey>(
+const SurveySchema: Schema = new Schema<SurveyDoc>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'UserModel' },
     title: { type: String, required: true },
@@ -42,4 +42,4 @@ const SurveySchema: Schema = new Schema<Survey>(
   }
 )
 
-export const SurveyModel = model<Survey>('Survey', SurveySchema)
+export const SurveyModel = model<SurveyDoc>('Survey', SurveySchema)
