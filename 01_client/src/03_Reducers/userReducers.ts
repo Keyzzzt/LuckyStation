@@ -12,6 +12,8 @@ const initialState = {
   isActivated: false,
   isAdmin: false,
   isAuth: false,
+  isSubscribed: false,
+  favorite: [] as string[],
   loading: false,
   error: null as string | null, // TODO: Сделать массивом строк?
 }

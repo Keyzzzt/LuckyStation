@@ -7,24 +7,17 @@ import { RequestCustom } from '@src/custom'
 import { ApiError } from '@src/middleware/error.middleware'
 import { OrderModel } from '@src/models/order.model'
 
-export const createNewOrder = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export async function createNewOrder(req: RequestCustom, res: Response, next: NextFunction) {
+  // FIXME: Если пользователь купил незарегистрированный то нужно в user записать из поля name, которое ждем с фронта
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    const {
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    } = req.body
+    const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
     if (orderItems && orderItems.length === 0) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.BadRequest('Product list is empty'))
     }
 
     const order = await OrderModel.create({
@@ -45,11 +38,11 @@ export const createNewOrder = async (req: RequestCustom, res: Response, next: Ne
   }
 }
 
-export const getOrderById = async (req: Request, res: Response, next: NextFunction) => {
+export async function getOrderById(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.NotFound('Order not found'))
     }
 
     return res.status(200).json({
@@ -60,15 +53,10 @@ export const getOrderById = async (req: Request, res: Response, next: NextFuncti
   }
 }
 
-export const getOwnOrders = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export async function getOwnOrders(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const orders = await OrderModel.find({ user: req.user.id })
-    if (!orders || orders.length === 0) {
-      throw ApiError.BadRequest('Orders not found')
-    }
-
     return res.status(200).json({
-      data: orders,
+      data: req.paginatedResponse,
     })
   } catch (error) {
     return next(error.message)

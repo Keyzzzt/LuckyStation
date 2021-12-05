@@ -16,9 +16,12 @@ export class ApiError extends Error {
   static BadRequest(message, errors = []) {
     return new ApiError(400, message, errors)
   }
+
+  static NotFound(message, errors = []) {
+    return new ApiError(404, message, errors)
+  }
 }
 
-// Без next не будет выполено!!!
 export function errorHandler(err, req, res, next) {
   if (err instanceof ApiError) {
     return res.status(err.status).json({ error: err.message, errors: err.errors })

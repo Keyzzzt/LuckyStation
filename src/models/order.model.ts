@@ -22,7 +22,7 @@ export interface OrderItemDoc extends Document {
   product: ProductDoc['id']
 }
 export interface OrderDoc extends Document {
-  user: UserDoc['id']
+  user: UserDoc['id'] | string // Если незарегистрированный пользователь, пишем сюда имя.
   orderItems: OrderItemDoc[]
   shippingAddress: ShippingAddress
   paymentMethod: string

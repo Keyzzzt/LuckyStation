@@ -1,7 +1,8 @@
 import express, { Router } from 'express'
 import multer from 'multer'
 import path from 'path'
-import { privateRoute, adminRoute } from '@src/middleware/auth.middleware'
+import { privateRoute, adminRoute } from '@src/middleware'
+import { RequestCustom } from './custom'
 
 const router: Router = express.Router()
 
@@ -22,7 +23,7 @@ function checkFileType(file, cb) {
   if (extname && mimetype) {
     return cb(null, true)
   }
-  cb('Images only!')
+  return cb('Images only!')
 }
 
 const upload = multer({
@@ -32,7 +33,7 @@ const upload = multer({
   },
 })
 
-router.post('/', privateRoute, adminRoute, upload.single('image'), (req: any, res) => {
+router.post('/', privateRoute, adminRoute, upload.single('image'), (req: RequestCustom, res) => {
   res.send(`/${req.file.path}`)
 })
 

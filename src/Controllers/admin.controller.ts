@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 import { NextFunction, Request, Response } from 'express'
@@ -16,17 +18,12 @@ import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
 
 // @desc     Get all users
-// @route    GET /api/user
+// @route    GET /api/admin/user
 // @access   Private & Admin
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export async function getAllUsers(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const users = await UserModel.find({})
-    if (!users) {
-      throw ApiError.BadRequest('Users not found')
-    }
-
     return res.status(200).json({
-      data: users,
+      data: req.paginatedResponse,
     })
   } catch (error) {
     return next(error.message)
@@ -36,7 +33,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 // @desc     Delete user by ID
 // @route    DELETE /api/user/:id
 // @access   Private & Admin
-export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params
     await UserModel.deleteOne({ id })
@@ -51,11 +48,11 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 // @desc     Get user by its ID
 // @route    GET /api/user/:id
 // @access   Private & Admin
-export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
     const user = await UserModel.findById(req.params.id)
     if (!user) {
-      throw ApiError.BadRequest('User not found')
+      return next(ApiError.NotFound('User not found'))
     }
     res.status(200).json({
       data: user,
@@ -68,7 +65,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 // @desc     Change user profile by its ID
 // @route    PUT /api/user/:id
 // @access   Private & Admin
-export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+export async function updateUserProfile(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -76,7 +73,9 @@ export const updateUserProfile = async (req: Request, res: Response, next: NextF
     }
 
     const user = await UserModel.findById(req.params.id)
-    if (!user) throw ApiError.BadRequest('User not found')
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
+    }
 
     const { email, isAdmin } = req.body
 
@@ -96,11 +95,11 @@ export const updateUserProfile = async (req: Request, res: Response, next: NextF
 // @desc     Delete a product by its ID
 // @route    DELETE /api/product/:id
 // @access   Private & Admin
-export const deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
+export async function deleteProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
-      throw ApiError.BadRequest('Product not found')
+      return next(ApiError.NotFound('Product not found'))
     }
 
     await product.remove()
@@ -113,7 +112,7 @@ export const deleteProduct = async (req: Request, res: Response, next: NextFunct
 // @desc     Create new product
 // @route    POST /api/product
 // @access   Private & Admin
-export const createProduct = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -145,7 +144,7 @@ export const createProduct = async (req: RequestCustom, res: Response, next: Nex
 // @desc     Update a product
 // @route    PUT /api/product/:id
 // @access   Private & Admin
-export const updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+export async function updateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -155,7 +154,7 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
     const { name, price, image, brand, category, countInStock, description } = req.body
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
-      throw ApiError.BadRequest('Product not found')
+      return next(ApiError.BadRequest('Product not found'))
     }
 
     product.name = name
@@ -179,14 +178,10 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
 // @desc     Get all orders
 // @route    GET /api/order
 // @access   Private & Admin
-export const getAllOrders = async (req: Request, res: Response, next: NextFunction) => {
+export async function getAllOrders(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const orders = await OrderModel.find({})
-    if (!orders || orders.length === 0) {
-      throw ApiError.BadRequest('Orders not found')
-    }
     return res.status(200).json({
-      data: orders,
+      data: req.paginatedResponse,
     })
   } catch (error) {
     return next(error.message)
@@ -197,7 +192,7 @@ export const getAllOrders = async (req: Request, res: Response, next: NextFuncti
 // @route    GET /api/order/:id/pay
 // @access   Private & Admin
 // TODO Тут нужно будет колдовать
-export const setOrderToPaid = async (req: Request, res: Response, next: NextFunction) => {
+export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
   try {
     // TODO: Validate
     // const errors = validationResult(req)
@@ -206,7 +201,7 @@ export const setOrderToPaid = async (req: Request, res: Response, next: NextFunc
     const { id, status, updateTime } = req.body
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.NotFound('Order not found'))
     }
 
     order.isPaid = true
@@ -233,11 +228,11 @@ export const setOrderToPaid = async (req: Request, res: Response, next: NextFunc
 // @desc     Set order to - NOT PAID
 // @route    PUT /api/order/:id/pay
 // @access   Private & Admin
-export const setOrderToNotPaid = async (req: Request, res: Response, next: NextFunction) => {
+export async function setOrderToNotPaid(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.NotFound('Order not found'))
     }
 
     order.isPaid = false
@@ -261,11 +256,11 @@ export const setOrderToNotPaid = async (req: Request, res: Response, next: NextF
 // @desc     Set order to delivered
 // @route    GET /api/order/:id/delivered
 // @access   Private & Admin
-export const setOrderToDelivered = async (req: Request, res: Response, next: NextFunction) => {
+export async function setOrderToDelivered(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.NotFound('Order not found'))
     }
 
     order.isDelivered = true
@@ -283,11 +278,11 @@ export const setOrderToDelivered = async (req: Request, res: Response, next: Nex
 // @desc     Set order to NOT delivered
 // @route    PUT /api/order/:id/delivered
 // @access   Private & Admin
-export const setOrderToNotDelivered = async (req: Request, res: Response, next: NextFunction) => {
+export async function setOrderToNotDelivered(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
-      throw ApiError.BadRequest('Order not found')
+      return next(ApiError.NotFound('Order not found'))
     }
 
     order.isDelivered = false
@@ -332,12 +327,8 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
 
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const surveys = await SurveyModel.find({}).select('-recipients')
-    if (!surveys) {
-      throw ApiError.BadRequest('Surveys not found')
-    }
     return res.status(201).json({
-      data: surveys,
+      data: req.paginatedResponse,
     })
   } catch (error) {
     return next(error.message)
@@ -348,7 +339,7 @@ export async function getSurveyById(req: RequestCustom, res: Response, next: Nex
   try {
     const survey = await SurveyModel.findById(req.params.id).select('-recipients')
     if (!survey) {
-      throw ApiError.BadRequest('Survey not found')
+      return next(ApiError.NotFound('Survey not found'))
     }
     return res.status(201).json({
       data: survey,
@@ -393,6 +384,43 @@ export async function manageSendgridEvents(req: RequestCustom, res: Response, ne
       .value()
 
     return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function getAllSubscribers(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // TODO:
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function allUsersEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // TODO:
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function subscribersEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // TODO:
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function usersThatBoughtProductEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // TODO:
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function getReviewsList(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // TODO:
   } catch (error) {
     return next(error.message)
   }

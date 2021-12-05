@@ -4,8 +4,8 @@ import { useTypedSelector } from '../../05_Types/01_Base'
 import s from './loginForm.module.scss'
 
 export const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState('tallinnn@hotmail.com')
-  const [password, setPassword] = useState('123')
+  const [email, setEmail] = useState('a@a.com')
+  const [password, setPassword] = useState('zzxxccVV11!')
 
   const { loginUserThunk, registerUserThunk, logoutUserThunk } = useActions()
   const { isAuth } = useTypedSelector((state) => state.auth)

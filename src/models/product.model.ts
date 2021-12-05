@@ -25,6 +25,8 @@ export interface ProductDoc extends Document {
   numReviews: number
   price: number
   countInStock: number
+  countInFavorite: number
+  countViewed: number
 }
 const ReviewSchema = new Schema<ReviewDoc>(
   {
@@ -93,6 +95,14 @@ const ProductSchema = new Schema<ProductDoc>(
     countInStock: {
       type: Number,
       required: true,
+      default: 0,
+    },
+    countInFavorite: {
+      type: Number,
+      default: 0,
+    },
+    countViewed: {
+      type: Number,
       default: 0,
     },
   },

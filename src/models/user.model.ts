@@ -1,8 +1,8 @@
 /* eslint-disable func-names */
 /* eslint-disable no-unused-vars */
-import { Schema, model, Document } from 'mongoose'
-import bcrypt from 'bcryptjs'
 import { NextFunction } from 'express'
+import bcrypt from 'bcryptjs'
+import { Schema, model, Document } from 'mongoose'
 
 export interface UserDoc extends Document {
   email: string
@@ -14,6 +14,7 @@ export interface UserDoc extends Document {
   isActivated: boolean
   activationLink: string
   credits: number
+  favorite: string[]
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
@@ -28,6 +29,7 @@ const UserSchema: Schema = new Schema<UserDoc>(
     isActivated: { type: Boolean, default: false },
     activationLink: { type: String },
     credits: { type: Number, default: 0 },
+    favorite: [String],
   },
   {
     timestamps: true,
