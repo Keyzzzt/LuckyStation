@@ -1,46 +1,46 @@
-import './App.css'
 import { useEffect } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { LoginForm } from './01_Components/LoginForm/LoginForm'
-import { useSelector } from 'react-redux'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { StateType } from './store'
-import Loader from './01_Components/Loader/Loader'
-import { useActions } from './04_Utils/hooks'
-import { MainScreen } from './01_Components/MainScreen'
-import { getCookie } from './04_Utils/getCookie'
-import { Pagination } from './01_Components/TEST Components/Pagination/Pagination'
-import { InfiniteScroll } from './01_Components/TEST Components/InfiniteScroll/InfiniteScroll'
+// import { getCookie } from './04_Utils/getCookie'
+import Loader from './01_Components/02_Chunks/Loader/Loader'
+import { userThunk } from './03_Reducers/userReducers'
+import { Header } from './01_Components/02_Chunks/01_Header/Header'
+import { Layout } from './01_Components/01_Screens/Layout/Layout'
+import { Home } from './01_Components/01_Screens/Home/Home'
+import { Login } from './01_Components/01_Screens/Login/Login'
+import { Contact } from './01_Components/01_Screens/Contact/Contact'
+import { CTA } from './01_Components/01_Screens/CTA/CTA'
 
 const App = () => {
   const { isAuth, email, loading, error } = useSelector((state: StateType) => state.auth)
-  const token = getCookie('accessToken')
+  // const token = getCookie('accessToken')
 
-  const { authenticateThunk } = useActions()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    authenticateThunk()
-  }, [])
+    dispatch(userThunk.authenticate())
+  }, [dispatch])
   return (
-    <div>
+    <Layout>
       {loading ? (
         <Loader />
       ) : (
         <>
-          <Router>
-            <div>{isAuth ? email : 'Please log in'}</div>
-            <div>{error && error}</div>
-
-            <Switch>
-              <Route exact path="/" render={() => <LoginForm />} />
-              <Route exact path="/main" render={() => <MainScreen />} />
-              <Route exact path="/pagination" render={() => <Pagination />} />
-              <Route exact path="/autoloader" render={() => <InfiniteScroll />} />
-            </Switch>
-          </Router>
+          {/* <div>{isAuth ? email : 'Please log in'}</div>
+            <div style={{ color: 'red' }}>{error && error}</div> */}
+          <Switch>
+            <Route exact path="/" render={() => <Home />} />
+            <Route path="/login" render={() => <Login />} />
+            <Route path="/contact" render={() => <Contact />} />
+            <Route path="/cta" render={() => <CTA />} />
+          </Switch>
         </>
       )}
-    </div>
+    </Layout>
   )
 }
+
+// TODO: Тест приложения при отключенном API.
 
 export default App

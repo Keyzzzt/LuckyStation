@@ -1,23 +1,23 @@
 import { useState } from 'react'
-import { useActions } from '../../04_Utils/hooks'
-import { useTypedSelector } from '../../05_Types/01_Base'
-import s from './loginForm.module.scss'
+import { useDispatch } from 'react-redux'
+import { userThunk } from '../../../03_Reducers/userReducers'
+import { useTypedSelector } from '../../../05_Types/01_Base'
+import s from './Login.module.scss'
 
-export const LoginForm: React.FC = () => {
+export const Login: React.FC = () => {
   const [email, setEmail] = useState('a@a.com')
   const [password, setPassword] = useState('zzxxccVV11!')
-
-  const { loginUserThunk, registerUserThunk, logoutUserThunk } = useActions()
+  const dispatch = useDispatch()
   const { isAuth } = useTypedSelector((state) => state.auth)
 
   const loginHandler = () => {
-    loginUserThunk(email, password)
+    dispatch(userThunk.login(email, password))
   }
   const registerHandler = () => {
-    registerUserThunk(email, password)
+    dispatch(userThunk.register(email, password))
   }
   const logoutHandler = () => {
-    logoutUserThunk()
+    dispatch(userThunk.logout())
   }
   return (
     <div className={s.container}>

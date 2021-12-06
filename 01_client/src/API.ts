@@ -1,6 +1,6 @@
-import $api, { API_URL } from '../04_Utils/axiosSetup'
+import $api, { API_URL } from './04_Utils/axiosSetup'
 import axios, { AxiosResponse } from 'axios'
-import { AuthResponse, logoutResponse, registerResponse } from '../05_Types/APIResponse'
+import { AuthResponse, logoutResponse, registerResponse } from './05_Types/APIResponse'
 
 export const API = {
   auth: {

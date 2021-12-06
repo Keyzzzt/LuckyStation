@@ -1,5 +1,5 @@
 import { AuthResponse } from '../05_Types/APIResponse'
-import { API } from '../06_Services/API'
+import { API } from '../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -64,7 +64,7 @@ export const actions = {
 }
 
 export const userThunk = {
-  loginUserThunk:
+  login:
     (email: string, password: string): ThunkType =>
     async (dispatch, getState) => {
       try {
@@ -72,51 +72,59 @@ export const userThunk = {
         const { data } = await API.auth.login(email, password)
         dispatch(actions.loginSuccessAC(data))
         localStorage.setItem('token', data.accessToken)
-      } catch (error: any) {
-        const { errors, message }: { errors: IValErrMsg[]; message: string } = error.response.data
+      } catch (err: any) {
+        const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
         if (errors.length > 0) {
           const errMsg = errors.map((e) => e.msg).join('; ')
           dispatch(actions.loginFailAC(errMsg))
           return
         }
-        dispatch(actions.loginFailAC(message))
+        dispatch(actions.loginFailAC(error))
       }
     },
-  registerUserThunk:
+  register:
     (email: string, password: string): ThunkType =>
     async (dispatch, getState) => {
       try {
         dispatch(actions.registerRequestAC())
         await API.auth.registration(email, password)
         dispatch(actions.registerSuccessAC())
-      } catch (error: any) {
-        const { errors, message }: { errors: IValErrMsg[]; message: string } = error.response.data
+      } catch (err: any) {
+        const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+
         if (errors.length > 0) {
-          const errMsg = errors.map((e) => e.msg).join('; ')
+          const errMsg = errors.map((e) => e.msg).join('; ') //FIXME: WTF
           dispatch(actions.registerFailAC(errMsg))
           return
         }
-        dispatch(actions.registerFailAC(message))
+        dispatch(actions.registerFailAC(error))
       }
     },
-  logoutUserThunk: (): ThunkType => async (dispatch, getState) => {
+  logout: (): ThunkType => async (dispatch, getState) => {
     try {
       dispatch(actions.logoutRequestAC())
       await API.auth.logout()
       dispatch(actions.logoutSuccessAC())
       localStorage.removeItem('token')
-    } catch (error: any) {
-      dispatch(actions.logoutFailAC(error.message))
+    } catch (err: any) {
+      dispatch(actions.logoutFailAC(err.message))
     }
   },
-  authenticateThunk: (): ThunkType => async (dispatch, getState) => {
+  authenticate: (): ThunkType => async (dispatch, getState) => {
     try {
       dispatch(actions.authenticateRequestAC())
       const { data } = await API.auth.authenticate()
       dispatch(actions.authenticateSuccessAC(data))
       localStorage.setItem('token', data.accessToken)
-    } catch (error: any) {
-      dispatch(actions.authenticateFailAC(error.message))
+    } catch (err: any) {
+      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+
+      if (errors.length > 0) {
+        const errMsg = errors.map((e) => e.msg).join('; ') //FIXME: WTF
+        dispatch(actions.registerFailAC(errMsg))
+        return
+      }
+      dispatch(actions.registerFailAC(error))
     }
   },
 }
