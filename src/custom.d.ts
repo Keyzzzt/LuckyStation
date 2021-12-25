@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { PayloadType } from './newServices/token.service'
+import { PayloadType } from './types'
 
 export interface RequestCustom extends Request {
   user: PayloadType

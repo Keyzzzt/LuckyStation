@@ -38,16 +38,15 @@ export async function createNewOrder(req: RequestCustom, res: Response, next: Ne
   }
 }
 
+// Frontend DONE
 export async function getOrderById(req: Request, res: Response, next: NextFunction) {
   try {
-    const order = await OrderModel.findById(req.params.id)
+    const order = await OrderModel.findById(req.params.id).select('-__v')
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
     }
 
-    return res.status(200).json({
-      data: order,
-    })
+    return res.status(200).json(order)
   } catch (error) {
     return next(error.message)
   }

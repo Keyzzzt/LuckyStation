@@ -1,0 +1,38 @@
+@import './../../../02_Styles/variables.scss';
+.col {
+  background: #fff;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  border: 1px solid #777;
+  border-radius: 15px;
+  width: calc(100% - 30px);
+}
+
+.col img {
+  border-radius: 10px;
+  width: 100%;
+}
+
+.brand,
+.name,
+.price,
+.buy {
+  text-align: center;
+}
+
+/* Mobile */
+@media screen and (min-width: 769px) {
+  .col {
+    width: calc(50% - 30px);
+  }
+}
+@media screen and (min-width: 993px) {
+  .col {
+    width: calc(25% - 30px);
+  }
+}
+@media screen and (min-width: 1201px) {
+}

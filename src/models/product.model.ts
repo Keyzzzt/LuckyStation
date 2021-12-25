@@ -22,6 +22,9 @@ export interface ProductDoc extends Document {
   description: string
   rating: number
   reviews: ReviewType[]
+  colors: string[]
+  sizes: number[]
+  isNewProduct: boolean
   numReviews: number
   price: number
   countInStock: number
@@ -60,14 +63,18 @@ const ProductSchema = new Schema<ProductDoc>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
     brand: {
       type: String,
       required: true,
     },
+    colors: [String],
+    sizes: [Number],
+    isNewProduct: Boolean,
+    image: {
+      type: String,
+      required: true,
+    },
+
     category: {
       type: String,
       required: true,

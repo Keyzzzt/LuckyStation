@@ -1,6 +1,7 @@
 import styles from './Footer.module.scss'
 import { Link } from 'react-router-dom'
 import { FaYoutube, FaInstagram, FaTwitter, FaSnapchatGhost, FaFacebook } from 'react-icons/fa'
+import { useTypedSelector } from '../../../05_Types/01_Base'
 const footerColumns = [
   {
     id: 1,
@@ -27,17 +28,20 @@ const footerColumns = [
 const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
 export const Footer = () => {
+  const { auth } = useTypedSelector((state) => state)
   return (
     <div className={styles.container}>
       <footer className={styles.footer}>
-        <div className={styles.footer__newsletter}>
-          <h4 className={styles.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
-          <span>Unsubscribe at any time</span>
-          <div className={styles.footer__newsletter__form}>
-            <input className={styles.input} type="email" placeholder="Your Email" />
-            <button>Subscribe</button>
+        {!auth.isSubscribed && (
+          <div className={styles.footer__newsletter}>
+            <h4 className={styles.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
+            <span>Unsubscribe at any time</span>
+            <div className={styles.footer__newsletter__form}>
+              <input className={styles.input} type="email" placeholder="Your Email" />
+              <button>Subscribe</button>
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles.footer__content}>
           {footerColumns.map(({ id, headline, links }) => (
             <div key={id} className={styles.footer__content__col}>

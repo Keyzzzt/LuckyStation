@@ -1,0 +1,94 @@
+@import '../../../../02_Styles/variables.scss';
+
+.customerslist {
+  flex: 2;
+  height: 100%;
+  border-radius: $borderRadius;
+  padding: 32px;
+  &.light_mode {
+    background: $D-light;
+    border: 1px solid $D-dividerLineDark;
+  }
+  &.dark_mode {
+    background: $D-lightBlack;
+    border: 1px solid $D-dividerLineLight;
+  }
+
+  &__header {
+    display: flex;
+    margin-bottom: 24px;
+
+    &__title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: $letter-spacing;
+      line-height: 25px;
+      &.light_mode {
+        color: $D-dark;
+      }
+      &.dark_mode {
+        color: $D-light;
+      }
+    }
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+
+    &__item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+      &__img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        margin-right: 12px;
+
+        .img {
+          border-radius: 50%;
+          width: 100%;
+          height: auto;
+        }
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+
+        span {
+          letter-spacing: $letter-spacing;
+
+          &.dark_mode {
+            color: $D-light;
+          }
+        }
+
+        .name {
+          font-size: 1rem;
+          line-height: 20px;
+          margin-bottom: 8px;
+          font-weight: 800;
+          &.light_mode {
+            color: $D-dark;
+          }
+          &.dark_mode {
+            color: $D-light;
+          }
+        }
+
+        .email {
+          line-height: 17px;
+          font-size: 14px;
+
+          &.light_mode {
+            color: $D-dark;
+          }
+          &.dark_mode {
+            color: $D-light;
+          }
+        }
+      }
+    }
+  }
+}

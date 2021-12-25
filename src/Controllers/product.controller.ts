@@ -7,50 +7,25 @@ import { RequestCustom } from '@src/custom'
 import { ProductModel, ReviewType } from '@src/models/product.model'
 import { ApiError } from '@src/middleware/error.middleware'
 
+// Frontend DONE
 export async function getProducts(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(200).json({
-      data: req.paginatedResponse,
-    })
+    return res.status(200).json(req.paginatedResponse)
   } catch (error) {
     return next(error.message)
   }
 }
 
+// Frontend DONE
 export async function getProductById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const product = await ProductModel.findById(req.params.id)
+    const product = await await ProductModel.findById(req.params.id).select('-__v')
     if (!product) {
       return next(ApiError.NotFound('Product not found'))
     }
     product.countViewed += 1
     await product.save()
-
-    const productToCustomer = {
-      productId: product._id,
-      productName: product.name,
-      productImage: product.image,
-      productBrand: product.brand,
-      productCategory: product.category,
-      productDescription: product.description,
-      productRating: product.rating,
-      productReviewsCount: product.numReviews,
-      productPrice: product.price,
-      productInStock: product.countInStock,
-      productReviews: product.reviews,
-    }
-
-    let response
-
-    if (req.user && req.user.isAdmin) {
-      response = product
-    } else {
-      response = productToCustomer
-    }
-
-    return res.status(200).json({
-      data: response,
-    })
+    return res.status(200).json(product)
   } catch (error) {
     return next(error.message)
   }

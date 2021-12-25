@@ -85,9 +85,9 @@ export const paginatedResult = (model, flag) => {
         }
       }
       if (flag === 'own') {
-        response.items = await model.find({ user: req.user.id }).select('-password -__v').limit(limit).skip(startIndex).exec()
+        response.items = await model.find({ user: req.user.id }).select('-password -__v -activationLink').limit(limit).skip(startIndex).exec()
         if (!response.items || response.items.length === 0) {
-          return next(ApiError.NotFound('Items not found'))
+          return next(ApiError.NotFound('Not found'))
         }
 
         req.paginatedResponse = response
@@ -96,12 +96,12 @@ export const paginatedResult = (model, flag) => {
 
       response.items = await model
         .find({ ...keyword })
-        .select('-password -__v -recipients')
+        .select('-password -__v -recipients -activationLink -googleId -logo -isSubscribed -credits -favorite -createdAt -updatedAt')
         .limit(limit)
         .skip(startIndex)
         .exec()
       if (!response.items || response.items.length === 0) {
-        return next(ApiError.NotFound('Items not found'))
+        return next(ApiError.NotFound('Not found'))
       }
 
       req.paginatedResponse = response

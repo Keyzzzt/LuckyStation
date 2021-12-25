@@ -17,22 +17,16 @@ import { ApiError } from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
 
-// @desc     Get all users
-// @route    GET /api/admin/user
-// @access   Private & Admin
+// Frontend DONE
 export async function getAllUsers(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(200).json({
-      data: req.paginatedResponse,
-    })
+    return res.status(200).json(req.paginatedResponse)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// @desc     Delete user by ID
-// @route    DELETE /api/user/:id
-// @access   Private & Admin
+// Frontend DONE
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params
@@ -45,26 +39,20 @@ export async function deleteUser(req: Request, res: Response, next: NextFunction
   }
 }
 
-// @desc     Get user by its ID
-// @route    GET /api/user/:id
-// @access   Private & Admin
+// Frontend DONE
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await UserModel.findById(req.params.id)
+    const user = await await UserModel.findById(req.params.id).select('-password -__v -activationLink -googleId')
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
-    res.status(200).json({
-      data: user,
-    })
+    res.status(200).json(user)
   } catch (error) {
     next(error.message)
   }
 }
 
-// @desc     Change user profile by its ID
-// @route    PUT /api/user/:id
-// @access   Private & Admin
+// Frontend DONE
 export async function updateUserProfile(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -92,9 +80,7 @@ export async function updateUserProfile(req: Request, res: Response, next: NextF
   }
 }
 
-// @desc     Delete a product by its ID
-// @route    DELETE /api/product/:id
-// @access   Private & Admin
+// Frontend DONE
 export async function deleteProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const product = await ProductModel.findById(req.params.id)
@@ -109,9 +95,7 @@ export async function deleteProduct(req: Request, res: Response, next: NextFunct
   }
 }
 
-// @desc     Create new product
-// @route    POST /api/product
-// @access   Private & Admin
+// TODO:
 export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -119,7 +103,8 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    const { name, price, image, brand, category, countInStock, description } = req.body
+    // TODO: Validate colors, sizes, isNewProduct, rating
+    const { name, price, image, brand, category, countInStock, description, colors, sizes, isNewProduct, rating } = req.body
     const product = new ProductModel({
       name,
       price,
@@ -129,6 +114,10 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       category,
       countInStock,
       description,
+      colors,
+      sizes,
+      isNewProduct,
+      rating,
     })
 
     await product.save()
@@ -141,9 +130,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
   }
 }
 
-// @desc     Update a product
-// @route    PUT /api/product/:id
-// @access   Private & Admin
+// TODO:
 export async function updateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -175,22 +162,16 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
   }
 }
 
-// @desc     Get all orders
-// @route    GET /api/order
-// @access   Private & Admin
+// Frontend DONE
 export async function getAllOrders(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(200).json({
-      data: req.paginatedResponse,
-    })
+    return res.status(200).json(req.paginatedResponse)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// @desc     Update order to paid
-// @route    GET /api/order/:id/pay
-// @access   Private & Admin
+// TODO:
 // TODO Тут нужно будет колдовать
 export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
   try {
@@ -225,9 +206,7 @@ export async function setOrderToPaid(req: Request, res: Response, next: NextFunc
   }
 }
 
-// @desc     Set order to - NOT PAID
-// @route    PUT /api/order/:id/pay
-// @access   Private & Admin
+// TODO:
 export async function setOrderToNotPaid(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
@@ -253,9 +232,7 @@ export async function setOrderToNotPaid(req: Request, res: Response, next: NextF
   }
 }
 
-// @desc     Set order to delivered
-// @route    GET /api/order/:id/delivered
-// @access   Private & Admin
+// TODO:
 export async function setOrderToDelivered(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
@@ -275,9 +252,7 @@ export async function setOrderToDelivered(req: Request, res: Response, next: Nex
   }
 }
 
-// @desc     Set order to NOT delivered
-// @route    PUT /api/order/:id/delivered
-// @access   Private & Admin
+// TODO:
 export async function setOrderToNotDelivered(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
@@ -297,6 +272,7 @@ export async function setOrderToNotDelivered(req: Request, res: Response, next: 
   }
 }
 
+// TODO:
 export async function createSurvey(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -325,6 +301,7 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
   }
 }
 
+// TODO:
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     return res.status(201).json({
@@ -335,6 +312,7 @@ export async function getAllSurveys(req: RequestCustom, res: Response, next: Nex
   }
 }
 
+// TODO:
 export async function getSurveyById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const survey = await SurveyModel.findById(req.params.id).select('-recipients')
@@ -349,6 +327,7 @@ export async function getSurveyById(req: RequestCustom, res: Response, next: Nex
   }
 }
 
+// TODO:
 export async function manageSendgridEvents(req: RequestCustom, res: Response, next: NextFunction) {
   // TODO: Заменить Path на модуль qs и удалить parth-parser
   try {

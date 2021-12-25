@@ -1,0 +1,109 @@
+@import '../../../../02_Styles/variables.scss';
+
+.earnings {
+  width: 100%;
+  min-width: 900px;
+  padding: 32px;
+  border-radius: $borderRadius;
+
+  &.light_mode {
+    background: $D-light;
+    border: 1px solid $D-dividerLineDark;
+  }
+  &.dark_mode {
+    background: $D-dark;
+    border: 1px solid $D-dividerLineLight;
+  }
+
+  &__headline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    &__title {
+      font-size: 20px;
+      line-height: 25px;
+      font-weight: 700;
+      letter-spacing: $letter-spacing;
+
+      &.light_mode {
+        color: $D-dark;
+      }
+      &.dark_mode {
+        color: $D-light;
+      }
+    }
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+
+    .legend {
+      display: flex;
+      margin-right: 48px;
+
+      &__item {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-right: 24px;
+        }
+        span {
+          font-weight: 700;
+          font-size: 1rem;
+          letter-spacing: $letter-spacing;
+          &.light_mode {
+            color: $D-dark;
+          }
+          &.dark_mode {
+            color: $D-light;
+          }
+        }
+        div {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+        }
+        div.green {
+          margin-right: 12px;
+          background: $D-green;
+        }
+        div.orange {
+          margin-right: 12px;
+          background: $D-orange;
+        }
+      }
+    }
+    .filter {
+      cursor: pointer;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      border-radius: $borderRadius;
+      span {
+        margin-right: 4px;
+      }
+      &.light_mode {
+        background: $D-lightGrey;
+        span {
+          color: $D-dark;
+        }
+      }
+      &.dark_mode {
+        background: $D-dark;
+        span {
+          color: $D-light;
+        }
+      }
+    }
+  }
+
+  &__chart {
+    display: flex;
+    height: 350px;
+  }
+}

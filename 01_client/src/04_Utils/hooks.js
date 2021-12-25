@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { userThunk } from '../03_Reducers/userReducers'
+import { authThunk } from '../03_Reducers/authReducer'
 import axios from 'axios'
+import { useLocation } from 'react-router'
 
 /**
  *! ===============================================================================================================================
  * @useActions
  ** Хук позволяет в целевой компоненте просто вызывать thunk без передачи его в dispatch
  ** Мы экономим только на строке const dispatch = useDispatch() в каждой компоненте.
- ** Но должны деструктуризировать const { loginUserThunk, registerUserThunk, logoutUserThunk } = useActions() + вызывать.
+ ** Но должны деструктуризировать const {  } = useActions() + вызывать.
  ** Спорный хук который не используется в этом приложении, но нужно его знать если встречу в чужом коде.
  */
 const actions = {
-  ...userThunk,
+  ...authThunk,
 }
 export const useActions = () => {
   const dispatch = useDispatch()
@@ -70,8 +71,38 @@ export function useAutoFetch(query, page) {
 
 /**
  *! ===============================================================================================================================
- *  @use
- **
- **
- **
+ *  @useWindowSize
  */
+export function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined,
+    height: undefined,
+  })
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+    window.addEventListener('resize', handleResize)
+    handleResize()
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowSize
+}
+
+/**
+ *! ===============================================================================================================================
+ *  @useScrollToTop
+ */
+
+export function useScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}

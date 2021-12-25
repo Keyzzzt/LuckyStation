@@ -155,6 +155,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     utils.saveToken(user._id, tokens.refreshToken)
     res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
 
+    console.log(user)
+
     return res.status(200).json({
       accessToken: tokens.accessToken,
       user: {
@@ -164,6 +166,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         isAdmin: user.isAdmin,
         isSubscribed: user.isSubscribed,
         favorite: user.favorite,
+        logo: user.logo,
       },
     })
   } catch (error) {

@@ -10,7 +10,6 @@ import { routes } from '@src/routes'
 import uploadRoutes from '@src/upload.routes'
 import { errorHandler } from '@src/middleware/error.middleware'
 import { deserializeUser } from './middleware'
-// import { deserializeUser } from './middleware/auth.middleware'
 
 dotenv.config()
 

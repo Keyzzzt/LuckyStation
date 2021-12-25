@@ -19,6 +19,7 @@ export function routes(app) {
   app.get('/api/activate/:link', Auth.activate)
   app.get('/api/refresh', Auth.refresh)
 
+  // ADMIN
   app.get('/api/admin/user/:page/:limit', privateRoute, adminRoute, paginatedResult(UserModel, null), Admin.getAllUsers)
   app.get('/api/admin/user/:id', privateRoute, adminRoute, Admin.getUser)
   app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.updateUserProfile)

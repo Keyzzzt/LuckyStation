@@ -1,0 +1,232 @@
+@import './../../../02_Styles/variables.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  @include breakpoint(1200) {
+    width: 90vw;
+    margin: 0 auto;
+  }
+}
+
+.title {
+  color: $titleColor;
+  font-size: $titleSize;
+}
+.text {
+  color: $textColor;
+  font-size: $textSize;
+  padding: 10px 0;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include breakpoint(1200) {
+    flex-direction: row;
+    margin-top: 100px;
+  }
+}
+
+.leftSide {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  padding: 100px;
+  border: 1px solid $titleColor;
+  @include breakpoint(1200) {
+    height: 700px;
+  }
+
+  .leftSideBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    transition: 1.5s;
+  }
+
+  .brand {
+    position: absolute;
+    top: 85px;
+    left: 15px;
+    font-size: 5rem;
+    text-transform: uppercase;
+    line-height: 0.9;
+    color: #fff;
+    font-weight: 700;
+    opacity: 0.1;
+  }
+
+  .logo {
+    position: absolute;
+    width: 100px;
+    left: 25px;
+    top: 20px;
+  }
+
+  .share {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    // background-color: rgba(255, 255, 255, 0.4);
+    // width: 30px;
+    // height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 100;
+    transition: 0.5s;
+    & i {
+      line-height: 30px;
+    }
+    // &:hover {
+    //   transform: scale(1.1);
+    // }
+  }
+}
+.productImage {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  right: 10px;
+  transition: 1s;
+}
+.rightSide {
+  width: 100%;
+  font-size: 1.3rem;
+  background-color: #fff;
+  z-index: 1;
+  padding: 35px 40px;
+  border: 1px solid $titleColor;
+  @include breakpoint(1200) {
+    height: 700px;
+  }
+
+  .productName,
+  .productDescription,
+  .colorContainer,
+  .sizeContainer {
+    border-bottom: 1px solid #dadada;
+    padding: 10px 0;
+  }
+
+  .productName {
+    padding: 0 0 10px 0;
+    font-weight: 700;
+    & div {
+      display: flex;
+      align-items: center;
+      & .big {
+        margin-right: 10px;
+        font-size: 2rem;
+        color: #333;
+        line-height: 1;
+      }
+      & .new {
+        background-color: $D-red;
+        text-transform: uppercase;
+        color: #fff;
+        padding: 3px 10px;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+    }
+    & .small {
+      font-weight: 500;
+      color: #444;
+      margin-top: 3px;
+      text-transform: capitalize;
+    }
+  }
+}
+
+.colorContainer {
+  padding: 10px 0;
+
+  .colors {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+  }
+  .color {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin: 0 10px;
+    border: 5px solid;
+    // cursor: pointer;
+    transition: 0.5s;
+    &.active {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.2);
+    }
+  }
+}
+
+.sizeContainer {
+  padding: 10px 0;
+  margin-bottom: 10px;
+  .sizes {
+    padding: 8px 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .size {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background-color: #eee;
+    margin: 10px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 1rem;
+    font-weight: 500;
+    // cursor: pointer;
+    transition: 0.3s;
+    &.active {
+      background-color: $D-red;
+      color: #fff;
+    }
+  }
+}
+
+.buyPrice {
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .buy {
+    padding: 0.7rem 1rem;
+    text-decoration: none;
+    background-color: $D-red;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing;
+    font-size: $textSize;
+    transition: 0.5s;
+    // &:hover {
+    //   transform: scale(1.05);
+    // }
+    & i {
+      display: none;
+    }
+  }
+  .price {
+    color: $D-red;
+    display: flex;
+    align-items: flex-start;
+
+    & h1 {
+      font-size: $titleSize;
+      font-weight: 600;
+      line-height: 1;
+    }
+  }
+}

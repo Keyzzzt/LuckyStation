@@ -7,13 +7,6 @@ export type InferActionTypes<T> = T extends { [key: string]: (...args: any[]) =>
 export type BaseThunkType<A extends Action, R = Promise<void>> = ThunkAction<R, StateType, any, A>
 export const useTypedSelector: TypedUseSelectorHook<StateType> = useSelector
 
-export interface IUser {
-  id: string
-  email: string
-  isActivated: boolean
-  isAdmin: boolean
-}
-
 export interface IValErrMsg {
   location: string
   msg: string
