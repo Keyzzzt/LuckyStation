@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
-import styles from './ChartContainer.module.css'
+// import styles from './ChartContainer.module.css'
 import { Chart, registerables } from 'chart.js'
 import { addData } from '../../../../04_Utils/utils'
 
@@ -31,7 +31,7 @@ const data = {
 export const ChartContainer: React.FC = () => {
   const { config } = useTypedSelector((state) => state)
   const chartRef = useRef()
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  // const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     const canvasId = document.getElementById('myCanvas')

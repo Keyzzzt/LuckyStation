@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { authThunk } from './03_Reducers/authReducer'
 import { Home } from './01_Components/01_Screens/Home/Home'
 import { Login } from './01_Components/01_Screens/Login/Login'
 import { CartScreen } from './01_Components/01_Screens/CartScreen/CartScreen'
@@ -11,12 +10,13 @@ import { Header } from './01_Components/02_Chunks/Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
 import { ProductScreen } from './01_Components/01_Screens/ProductScreen/ProductScreen'
 import { ProfileScreen } from './01_Components/01_Screens/ProfileScreen/ProfileScreen'
+import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(authThunk.authenticate())
+    dispatch(authenticateThunk())
   }, [dispatch])
   return (
     <div>

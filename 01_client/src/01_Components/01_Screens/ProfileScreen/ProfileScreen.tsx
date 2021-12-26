@@ -1,23 +1,17 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { userInfoThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import styles from './ProfileScreen.module.scss'
 
 export const ProfileScreen: React.FC = () => {
   const history = useHistory()
-  const dispatch = useDispatch()
   const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { isAuth, id } = useTypedSelector((state) => state.auth)
 
   useEffect(() => {
-    if (!isAuth) {
+    if (!userInfo) {
       history.push('/login')
-    } else {
-      dispatch(userInfoThunk(id!))
     }
-  }, [history, isAuth])
+  }, [history, userInfo])
   return (
     <div className={styles.container}>
       <div className={styles.profile}>

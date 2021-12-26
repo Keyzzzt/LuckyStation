@@ -28,11 +28,11 @@ const footerColumns = [
 const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
 export const Footer = () => {
-  const { auth } = useTypedSelector((state) => state)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
   return (
     <div className={styles.container}>
       <footer className={styles.footer}>
-        {!auth.isSubscribed && (
+        {!userInfo?.isSubscribed && (
           <div className={styles.footer__newsletter}>
             <h4 className={styles.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
             <span>Unsubscribe at any time</span>

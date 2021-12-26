@@ -11,7 +11,6 @@ import { productListReducer } from './03_Reducers/product/productListReducer'
 import { userDeleteReducer } from './03_Reducers/user/userDeleteReducer'
 import { userInfoReducer } from './03_Reducers/user/userInfoReducer'
 import { userListReducer } from './03_Reducers/user/userListReducer'
-import { userLogoutReducer } from './03_Reducers/user/userLogoutReducer'
 import { userRegisterReducer } from './03_Reducers/user/userRegisterReducer'
 import { userUpdateProfileByAdminReducer } from './03_Reducers/user/userUpdateProfileByAdmin'
 
@@ -20,7 +19,6 @@ const rootReducer = combineReducers({
   userRegister: userRegisterReducer,
   userInfo: userInfoReducer,
   userList: userListReducer,
-  userLogout: userLogoutReducer,
   userDelete: userDeleteReducer,
   userUpdateProfileByAdmin: userUpdateProfileByAdminReducer,
   productInfo: productInfoReducer,
@@ -33,6 +31,7 @@ const rootReducer = combineReducers({
 })
 
 // @ts-ignore
+// TODO: Переместить в редюсер
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
 const initialState = {
   cart: { cartItems: cartItemsFromStorage },

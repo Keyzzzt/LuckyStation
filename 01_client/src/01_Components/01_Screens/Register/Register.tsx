@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import styles from './Register.module.scss'
 
 export const Register: React.FC = () => {
@@ -12,13 +11,13 @@ export const Register: React.FC = () => {
   const [email, setEmail] = useState('a@a.com')
   const [password, setPassword] = useState('zzxxccVV11!')
   const [confirmPassword, setConfirmPassword] = useState('zzxxccVV11!')
-  const { auth } = useTypedSelector((state) => state)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
 
   useEffect(() => {
-    if (auth.isAuth) {
+    if (userInfo) {
       history.push('/')
     }
-  }, [history, auth.isAuth])
+  }, [history, userInfo])
 
   const submitHandler = (e: any) => {
     e.preventDefault()

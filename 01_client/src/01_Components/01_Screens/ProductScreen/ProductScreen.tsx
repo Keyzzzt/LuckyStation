@@ -16,6 +16,7 @@ export const ProductScreen: React.FC = () => {
   useEffect(() => {
     // @ts-ignore
     dispatch(productInfoThunk(params.productId))
-  }, [dispatch])
+    // @ts-ignore
+  }, [dispatch, params.productId])
   return <div className={styles.container}>{loading ? <Loader /> : error ? <ErrorMessage message={error} /> : <ProductInfo {...productInfo} />}</div>
 }

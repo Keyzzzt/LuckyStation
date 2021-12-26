@@ -13,7 +13,7 @@ const totalCards = [
 ]
 
 export const Totals: React.FC = () => {
-  const { config, auth } = useTypedSelector((state) => state)
+  const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (
     <div className={styles.totals}>

@@ -20,13 +20,14 @@ $api.interceptors.response.use(
   async (err) => {
     const originalRequest = err.config
     if (err.response.status === 401 && err.config && !err.config._isRetry) {
+      alert('Interceptor - 401')
       originalRequest._isRetry = true
       try {
         const { data } = await axios.get<LoginResponse>(`${API_URL}/refresh`, { withCredentials: true })
         localStorage.setItem('token', data.accessToken)
         return $api.request(originalRequest)
       } catch (error) {
-        console.log('Not Authorized')
+        alert('Interceptor - Not Authorized')
       }
     }
     throw err

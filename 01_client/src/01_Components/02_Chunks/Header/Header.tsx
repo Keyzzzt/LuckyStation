@@ -5,16 +5,15 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { Link, useHistory } from 'react-router-dom'
 import { useWindowSize } from '../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { actions } from '../../../03_Reducers/authReducer'
 import { useDispatch } from 'react-redux'
-import { logoutThunk } from '../../../03_Reducers/user/userLogoutReducer'
+import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
 
 export const Header = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const { auth } = useTypedSelector((state) => state)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
 
   const size = useWindowSize()
 
@@ -34,7 +33,6 @@ export const Header = () => {
   const logoutHandler = () => {
     toggleMenuHandler()
     dispatch(logoutThunk())
-    dispatch(actions.authenticateResetAC())
   }
   return (
     <header className={styles.header}>
@@ -56,20 +54,20 @@ export const Header = () => {
                 Cart
               </Link>
             </li>
-            {auth.isAuth && <li onClick={logoutHandler}>Logout</li>}
-            {auth.isAuth && (
+            {userInfo && <li onClick={logoutHandler}>Logout</li>}
+            {userInfo && (
               <li>
                 <Link to="/profile">Profile</Link>
               </li>
             )}
-            {!auth.isAuth && (
+            {!userInfo && (
               <li>
                 <Link to="/login" onClick={toggleMenuHandler}>
                   Login
                 </Link>
               </li>
             )}
-            {!auth.isAuth && (
+            {!userInfo && (
               <li>
                 <Link to="/register" onClick={toggleMenuHandler}>
                   Register
@@ -77,7 +75,7 @@ export const Header = () => {
               </li>
             )}
           </ul>
-          {auth.isAdmin && <button onClick={dashboardHandler}>Dashboard</button>}
+          {userInfo?.isAdmin && <button onClick={dashboardHandler}>Dashboard</button>}
         </nav>
         <div className={styles.header__content__toggle}>
           {menuOpen ? <AiOutlineClose onClick={toggleMenuHandler} /> : <BiMenuAltRight onClick={toggleMenuHandler} />}

@@ -15,37 +15,65 @@ const initialState = {
 export const userInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'USER_INFO_REQUEST':
-      return { ...state, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'USER_INFO_SUCCESS':
-      return { loading: false, error: null, userInfo: action.payload }
+      return { ...initialState, userInfo: action.payload }
     case 'USER_INFO_FAIL':
-      return { userInfo: null, loading: false, error: action.payload }
-
+      return { ...initialState, error: action.payload }
+    case 'LOGOUT_SUCCESS':
+      return { ...initialState }
     default:
       return state
   }
 }
 
 export const actions = {
-  getSingleUserRequestAC: () => ({ type: 'USER_INFO_REQUEST' as const }),
-  getSingleUserSuccessAC: (data: User) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
-  getSingleUserFailAC: (errMessage: string) => ({ type: 'USER_INFO_FAIL' as const, payload: errMessage }),
+  userInfoRequestAC: () => ({ type: 'USER_INFO_REQUEST' as const }),
+  userInfoSuccessAC: (data: User) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
+  userInfoFailAC: (errMessage: string) => ({ type: 'USER_INFO_FAIL' as const, payload: errMessage }),
+
+  logoutSuccessAC: () => ({ type: 'LOGOUT_SUCCESS' as const }),
+  logoutFailAC: (errMessage: string) => ({ type: 'LOGOUT_FAIL' as const, payload: errMessage }),
 }
 
 export function userInfoThunk(userId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.getSingleUserRequestAC())
+      dispatch(actions.userInfoRequestAC())
       const { data } = await API.admin.getSingleUser(userId)
-      dispatch(actions.getSingleUserSuccessAC(data))
+      dispatch(actions.userInfoSuccessAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.getSingleUserFailAC(errMsg))
+        dispatch(actions.userInfoFailAC(errMsg))
         return
       }
-      dispatch(actions.getSingleUserFailAC(error))
+      dispatch(actions.userInfoFailAC(error))
+    }
+  }
+}
+
+export function logoutThunk(): ThunkType {
+  return async function (dispatch) {
+    try {
+      await API.auth.logout()
+      dispatch(actions.logoutSuccessAC())
+      localStorage.removeItem('token')
+    } catch (err: any) {
+      alert('Logout Fail')
+    }
+  }
+}
+
+export function authenticateThunk(): ThunkType {
+  return async function (dispatch) {
+    try {
+      const { data } = await API.auth.authenticate()
+      dispatch(userInfoThunk(data.id))
+      localStorage.setItem('token', data.accessToken)
+    } catch (err: any) {
+      console.log('Authentication failed, please log in.')
     }
   }
 }

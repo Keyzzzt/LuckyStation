@@ -1,4 +1,4 @@
-import { API } from '../API'
+// import { API } from '../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -40,13 +40,13 @@ export const configThunk = {
       // await API.config.setColorTheme() // TODO:
       dispatch(actions.toggleColorThemeSuccessAC())
     } catch (err: any) {
-      //   const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
-      //   if (errors.length > 0) {
-      //     const errMsg = errors.map((e) => e.msg).join('; ')
-      //     dispatch(actions.toggleColorThemeFailAC(errMsg))
-      //     return
-      //   }
-      dispatch(actions.toggleColorThemeFailAC(err))
+      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      if (errors.length > 0) {
+        const errMsg = errors.map((e) => e.msg).join('; ')
+        dispatch(actions.toggleColorThemeFailAC(errMsg))
+        return
+      }
+      dispatch(actions.toggleColorThemeFailAC(error))
     }
   },
 }

@@ -1,9 +1,3 @@
-export interface LoginUser {
-  id: string
-  email: string
-  isActivated: boolean
-  isAdmin: boolean
-}
 export type User = {
   _id: string
   email: string
@@ -26,7 +20,7 @@ export type UserTypeForList = {
 
 export interface LoginResponse {
   accessToken: string
-  user: LoginUser
+  id: string
 }
 
 export type Product = {

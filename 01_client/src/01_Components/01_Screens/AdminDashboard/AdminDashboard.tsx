@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { getSingleOrderThunk } from '../../../03_Reducers/order/orderInfoReducer'
-import { orderListThunk } from '../../../03_Reducers/order/orderListReducer'
-import { productDeleteThunk } from '../../../03_Reducers/product/productDeleteReducer'
-import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
-import { productListThunk } from '../../../03_Reducers/product/productListReducer'
-import { userInfoThunk } from '../../../03_Reducers/user/userInfoReducer'
-import { getUsersListThunk } from '../../../03_Reducers/user/userListReducer'
-import { userDeleteThunk } from '../../../03_Reducers/user/userDeleteReducer'
-import { updateProfileByAdminThunk } from '../../../03_Reducers/user/userUpdateProfileByAdmin'
+// import { useDispatch } from 'react-redux'
+// import { getSingleOrderThunk } from '../../../03_Reducers/order/orderInfoReducer'
+// import { orderListThunk } from '../../../03_Reducers/order/orderListReducer'
+// import { productDeleteThunk } from '../../../03_Reducers/product/productDeleteReducer'
+// import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
+// import { productListThunk } from '../../../03_Reducers/product/productListReducer'
+// import { userInfoThunk } from '../../../03_Reducers/user/userInfoReducer'
+// import { getUsersListThunk } from '../../../03_Reducers/user/userListReducer'
+// import { userDeleteThunk } from '../../../03_Reducers/user/userDeleteReducer'
+// import { updateProfileByAdminThunk } from '../../../03_Reducers/user/userUpdateProfileByAdmin'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import styles from './AdminDashboard.module.scss'
 import { CustomersList } from './CustomersList/CustomersList'
@@ -17,11 +17,9 @@ import { Earnings } from './Earnings/Earnings'
 import { ProductSales } from './ProductSales/ProductSales'
 import { Totals } from './Totals/Totals'
 
-const updateProfile = {}
-
 export const AdminDashboard: React.FC = () => {
   const { config } = useTypedSelector((state) => state)
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { ToggleSwitch } from '../../../02_Chunks/ToggleSwitch/ToggleSwitch'
 import styles from './DashboardHeader.module.scss'
 
 export const DashboardHeader = () => {
-  const { config, auth } = useTypedSelector((state) => state)
+  const { config, userInfo } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   const iconFill = config.colorTheme === 'light' ? '#929292' : '#fff'
 
@@ -26,7 +26,7 @@ export const DashboardHeader = () => {
       </div>
       <div className={`${styles.header__content__divider} ${themeClass}`} />
       <div className={styles.header__content__profile}>
-        <span className={`${styles.profile__name} ${themeClass}`}>{auth.email}</span>
+        <span className={`${styles.profile__name} ${themeClass}`}>{userInfo.userInfo?.email}</span>
         <ToggleSwitch toggle={configThunk.toggleColorTheme()} />
         <div className={styles.profile__img}>
           <img src={'https://i.pinimg.com/originals/6b/aa/98/6baa98cc1c3f4d76e989701746e322dd.png'} alt="Profile" />

@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { authThunk } from '../../../03_Reducers/authReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import styles from './Login.module.scss'
 
 export const Login: React.FC = () => {
@@ -11,13 +10,13 @@ export const Login: React.FC = () => {
   const dispatch = useDispatch()
   const [email, setEmail] = useState('a123@a.com')
   const [password, setPassword] = useState('zzxxccVV11!')
-  const { isAuth } = useTypedSelector((state) => state.auth)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
 
   useEffect(() => {
-    if (isAuth) {
+    if (userInfo) {
       history.push('/')
     }
-  }, [history, isAuth])
+  }, [history, userInfo])
 
   const submitHandler = (e: any) => {
     e.preventDefault()
