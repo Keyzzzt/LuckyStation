@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { TotalCostSVG } from '../../../02_Chunks/svg/TotalCostSVG'
 import { TotalProfitSVG } from '../../../02_Chunks/svg/TotalProfitSVG'
@@ -12,7 +12,7 @@ const totalCards = [
   { id: 3, title: 'Total cost', total: '$400', icon: <TotalCostSVG fillColor={iconFill} /> },
 ]
 
-export const Totals: React.FC = () => {
+export const Totals: FC = () => {
   const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (

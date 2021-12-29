@@ -1,10 +1,10 @@
-import React from 'react'
+import { FC } from 'react'
 import styles from './ErrorMessage.module.scss'
 
 type Props = {
-  message: string
+  message: string | null
 }
 
-export const ErrorMessage: React.FC<Props> = ({ message }) => {
+export const ErrorMessage: FC<Props> = ({ message }) => {
   return <div className={styles.container}>{message}</div>
 }

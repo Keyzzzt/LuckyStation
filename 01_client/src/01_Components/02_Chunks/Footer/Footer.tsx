@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import styles from './Footer.module.scss'
 import { Link } from 'react-router-dom'
 import { FaYoutube, FaInstagram, FaTwitter, FaSnapchatGhost, FaFacebook } from 'react-icons/fa'
@@ -27,7 +28,7 @@ const footerColumns = [
 
 const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
-export const Footer = () => {
+export const Footer: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   return (
     <div className={styles.container}>

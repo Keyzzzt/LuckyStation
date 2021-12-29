@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 import { configThunk } from '../../../../03_Reducers/configReducer'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { NotificationSVG } from '../../../02_Chunks/svg/NotificationSVG'
@@ -6,7 +6,7 @@ import { SearchSVG } from '../../../02_Chunks/svg/SearchSVG'
 import { ToggleSwitch } from '../../../02_Chunks/ToggleSwitch/ToggleSwitch'
 import styles from './DashboardHeader.module.scss'
 
-export const DashboardHeader = () => {
+export const DashboardHeader: FC = () => {
   const { config, userInfo } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   const iconFill = config.colorTheme === 'light' ? '#929292' : '#fff'

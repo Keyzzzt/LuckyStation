@@ -6,27 +6,19 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  id: null as string | null,
-  email: null as string | null,
-  logo: null as string | null,
-  isActivated: false,
-  isAdmin: false,
-  isAuth: false,
-  isSubscribed: false,
-  favorite: [] as string[],
+  success: false,
   loading: false,
-  error: null as string | null, // TODO: Сделать массивом строк?
+  error: '',
 }
 
-// TODO: Разделить на редюсеры
 export const userRegisterReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'REGISTER_REQUEST':
-      return { ...state, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'REGISTER_SUCCESS':
-      return { ...state, loading: false, error: null }
+      return { ...initialState, success: true }
     case 'REGISTER_FAIL':
-      return { ...initialState, loading: false, error: action.payload }
+      return { ...initialState, error: action.payload }
     default:
       return state
   }

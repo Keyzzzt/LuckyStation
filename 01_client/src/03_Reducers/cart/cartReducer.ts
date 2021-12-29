@@ -6,10 +6,23 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
+type Address = {
+  address: string
+  country: string
+  city: string
+  postalCode: string
+}
+
 const initialState = {
   cartItems: [] as Product[],
+  shippingAddress: {} as Address,
+  paymentMethod: 'PayPal',
   loading: false,
   error: null as string | null,
+  itemsPrice: 0 as number,
+  shippingPrice: 0 as number,
+  taxPrice: 0 as number,
+  totalPrice: 0 as number,
 }
 
 export const cartReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -27,6 +40,10 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
       return { ...state, cartItems: state.cartItems.filter((n) => n._id !== action.payload) }
     case 'CART_FAIL':
       return { ...state, error: action.payload }
+    case 'SAVE_SHIPPING_ADDRESS':
+      return { ...state, shippingAddress: action.payload }
+    case 'SAVE_PAYMENT_METHOD':
+      return { ...state, paymentMethod: action.payload }
     default:
       return state
   }
@@ -36,6 +53,8 @@ export const actions = {
   cartAddAC: (product: Product) => ({ type: 'CART_ADD' as const, payload: product }),
   cartRemoveAC: (productId: string) => ({ type: 'CART_REMOVE' as const, payload: productId }),
   cartFailAC: (error: string) => ({ type: 'CART_FAIL' as const, payload: error }),
+  saveSippingAddressAC: (address: any) => ({ type: 'SAVE_SHIPPING_ADDRESS' as const, payload: address }),
+  savePaymentMethodAC: (paymentMethod: any) => ({ type: 'SAVE_PAYMENT_METHOD' as const, payload: paymentMethod }),
 }
 
 export function addToCartThunk(productId: string, qty: number): ThunkType {
@@ -72,5 +91,18 @@ export function removeFromCartThunk(productId: string): ThunkType {
       }
       dispatch(actions.cartFailAC(error))
     }
+  }
+}
+export function saveAddressThunk(address: any): ThunkType {
+  return async (dispatch) => {
+    dispatch(actions.saveSippingAddressAC(address))
+    localStorage.setItem('shippingAddress', JSON.stringify(address))
+  }
+}
+
+export function savePaymentMethodThunk(method: string): ThunkType {
+  return async (dispatch) => {
+    dispatch(actions.savePaymentMethodAC(method))
+    localStorage.setItem('paymentMethod', method)
   }
 }

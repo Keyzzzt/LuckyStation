@@ -1,13 +1,13 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Order } from '../../05_Types/APIResponse'
+import { OrderFromAPI } from '../../05_Types/APIResponse'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  orderList: null as null | Order[],
+  orderList: null as null | OrderFromAPI[],
   loading: false,
   error: null as string | null,
 }
@@ -29,7 +29,7 @@ export const orderListReducer = (state = initialState, action: ActionType): Init
 
 export const actions = {
   getOrdersRequestAC: () => ({ type: 'ORDER_LIST_REQUEST' as const }),
-  getOrdersSuccessAC: (data: Order[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
+  getOrdersSuccessAC: (data: OrderFromAPI[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
   getOrdersFailAC: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
 }
 

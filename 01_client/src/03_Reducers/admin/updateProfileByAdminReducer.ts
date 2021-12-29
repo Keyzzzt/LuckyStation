@@ -8,10 +8,10 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: null as string | null, // TODO: Сделать массивом строк?
+  error: '',
 }
 
-export const userUpdateProfileByAdminReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const updateProfileByAdminReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'UPDATE_PROFILE_BY_ADMIN_REQUEST':
       return { ...initialState, loading: true }
@@ -34,11 +34,12 @@ export const actions = {
 }
 
 export function updateProfileByAdminThunk(userId: string, formData: any): ThunkType {
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
     try {
       dispatch(actions.updateProfileByAdminRequestAC())
       await API.admin.updateProfileByAdmin(userId, formData)
       dispatch(actions.updateProfileByAdminSuccessAC())
+      dispatch(actions.updateProfileByAdminResetAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {

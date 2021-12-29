@@ -8,19 +8,18 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: null as string | null, // TODO: Сделать массивом строк?
+  error: '',
 }
 
 export const userDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'USER_DELETE_REQUEST':
-      return { loading: true, success: false, error: null }
+      return { ...initialState, loading: true }
     case 'USER_DELETE_SUCCESS':
-      return { loading: false, success: true, error: null }
+      return { ...initialState, success: true }
     case 'USER_DELETE_FAIL':
-      return { loading: false, success: false, error: action.payload }
-    case 'USER_DELETE_RESET':
-      return { loading: false, success: false, error: null }
+      return { ...initialState, error: action.payload }
+
     default:
       return state
   }
@@ -30,7 +29,6 @@ export const actions = {
   deleteUserRequestAC: () => ({ type: 'USER_DELETE_REQUEST' as const }),
   deleteUserSuccessAC: () => ({ type: 'USER_DELETE_SUCCESS' as const }),
   deleteUserFailAC: (errMessage: string) => ({ type: 'USER_DELETE_FAIL' as const, payload: errMessage }),
-  deleteUserResetAC: () => ({ type: 'USER_DELETE_RESET' as const }),
 }
 
 export function userDeleteThunk(userId: string): ThunkType {

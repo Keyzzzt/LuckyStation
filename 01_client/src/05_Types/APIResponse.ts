@@ -12,7 +12,7 @@ export type User = {
 }
 
 export type UserTypeForList = {
-  id: string
+  _id: string
   email: string
   isAdmin: boolean
   isActivated: boolean
@@ -51,10 +51,10 @@ type OrderProductInfo = {
   image: string
   price: number
   product: string
-  is: string
+  id: string
 }
 
-export type Order = {
+export type OrderFromAPI = {
   _id: string
   user: string
   isDelivered: boolean
@@ -73,6 +73,22 @@ export type Order = {
   totalPrice: number
   updatedAt: Date
   createdAt: Date
+  paidAt?: Date
+}
+
+export type OrderToAPI = {
+  orderItems: any[]
+  shippingAddress: {
+    address: string
+    city: string
+    postalCode: string
+    country: string
+  }
+  itemsPrice: number
+  paymentMethod: string
+  shippingPrice: number
+  taxPrice: number
+  totalPrice: number
 }
 
 export interface GetAllUsersResponse {
@@ -96,7 +112,7 @@ export interface GetAllOrdersResponse {
     page: number
     limit: number
   }
-  items: Order[]
+  items: OrderFromAPI[]
 }
 
 export interface GetAllProductsResponse {

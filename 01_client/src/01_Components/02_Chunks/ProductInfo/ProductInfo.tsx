@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 import styles from './ProductInfo.module.scss'
 import logo from '../../../img/logo.png'
-import black from '../../../img/black.png'
 import { Rating } from '../Rating/Rating'
 import { useHistory, useParams } from 'react-router'
 
@@ -22,7 +21,7 @@ type Props = {
   reviews?: string[]
 }
 
-export const ProductInfo: React.FC<Props> = ({
+export const ProductInfo: FC<Props> = ({
   isNewProduct,
   colors,
   sizes,
@@ -67,7 +66,7 @@ export const ProductInfo: React.FC<Props> = ({
           <a href="#" className={styles.share}>
             <i className="fas fa-share-alt" />
           </a>
-          <img src={black} alt="" className={styles.productImage} />
+          <img src={image} alt="" className={styles.productImage} />
         </div>
         <div className={styles.rightSide}>
           <div className={styles.productName}>

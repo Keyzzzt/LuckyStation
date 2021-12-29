@@ -1,0 +1,19 @@
+@import './../../../02_Styles/variables.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+input[type='submit'] {
+  padding: 10px 20px;
+  margin: 20px;
+  cursor: pointer;
+}
+
+input[type='radio'] {
+  padding: 10px 20px;
+  margin: 20px;
+  cursor: pointer;
+}

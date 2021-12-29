@@ -1,6 +1,15 @@
 import $api, { API_URL } from './04_Utils/axiosSetup'
 import axios, { AxiosResponse } from 'axios'
-import { LoginResponse, GetAllUsersResponse, Product, Order, User, GetAllOrdersResponse, GetAllProductsResponse } from './05_Types/APIResponse'
+import {
+  LoginResponse,
+  GetAllUsersResponse,
+  Product,
+  OrderFromAPI,
+  User,
+  GetAllOrdersResponse,
+  GetAllProductsResponse,
+  OrderToAPI,
+} from './05_Types/APIResponse'
 
 export const API = {
   auth: {
@@ -21,6 +30,12 @@ export const API = {
     getProfile: async (): Promise<AxiosResponse<any>> => {
       return $api.get<any>('/user/profile')
     },
+    updateOwnProfile: async (formData: any): Promise<AxiosResponse<any>> => {
+      return $api.put<any>(`/user/profile`, formData)
+    },
+    myOrders: async (page: number, limit: number): Promise<AxiosResponse<any>> => {
+      return $api.get<any>(`/order/myorders/${page}/${limit}`)
+    },
   },
   config: {
     setColorTheme: async (): Promise<AxiosResponse<any>> => {
@@ -28,8 +43,16 @@ export const API = {
       return $api.get<any>('/config/theme')
     },
   },
+  order: {
+    createOrder: async (newOrder: OrderToAPI): Promise<AxiosResponse<OrderFromAPI>> => {
+      return $api.post<OrderFromAPI>('/order', newOrder)
+    },
+    payOrder: async (orderId: string, paymentResult: any): Promise<AxiosResponse<any>> => {
+      return $api.post<any>(`/order/${orderId}/pay`, paymentResult)
+    },
+  },
   admin: {
-    getSingleUser: async (userId: string): Promise<AxiosResponse<User>> => {
+    getUser: async (userId: string): Promise<AxiosResponse<User>> => {
       return $api.get<User>(`admin/user/${userId}`)
     },
     getUsers: async (page: number, limit: number): Promise<AxiosResponse<GetAllUsersResponse>> => {
@@ -50,8 +73,8 @@ export const API = {
     deleteProduct: async (productId: string): Promise<AxiosResponse<any>> => {
       return $api.delete<any>(`admin/product/${productId}`)
     },
-    getSingleOrder: async (orderId: string): Promise<AxiosResponse<Order>> => {
-      return $api.get<Order>(`order/${orderId}`)
+    getSingleOrder: async (orderId: string): Promise<AxiosResponse<OrderFromAPI>> => {
+      return $api.get<OrderFromAPI>(`order/${orderId}`)
     },
     getOrders: async (page: number, limit: number): Promise<AxiosResponse<GetAllOrdersResponse>> => {
       return $api.get<GetAllOrdersResponse>(`admin/order/${page}/${limit}`)

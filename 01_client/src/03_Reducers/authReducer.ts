@@ -41,7 +41,7 @@ export const authThunk = {
 
         dispatch(actions.loginSuccessAC())
         localStorage.setItem('token', data.accessToken)
-        dispatch(userInfoThunk(data.id))
+        dispatch(userInfoThunk())
       } catch (err: any) {
         const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
         if (errors.length > 0) {

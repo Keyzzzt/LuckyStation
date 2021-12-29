@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import styles from './Home.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
 import { productListThunk } from '../../../03_Reducers/product/productListReducer'
-// import { Link } from 'react-router-dom'
 import { ProductCard } from '../../02_Chunks/ProductCard/ProductCard'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 
-export const Home: React.FC = () => {
+export const Home: FC = () => {
   const { loading, error, products } = useTypedSelector((state) => state.productList)
   const dispatch = useDispatch()
 

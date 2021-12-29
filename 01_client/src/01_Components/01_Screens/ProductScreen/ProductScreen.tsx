@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import styles from './ProductScreen.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
@@ -8,15 +8,13 @@ import { ProductInfo } from '../../02_Chunks/ProductInfo/ProductInfo'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
 import { useParams } from 'react-router'
 
-export const ProductScreen: React.FC = () => {
-  const params = useParams()
+export const ProductScreen: FC = () => {
+  const params = useParams<{ productId: string }>()
   const { loading, error, productInfo } = useTypedSelector((state) => state.productInfo)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // @ts-ignore
     dispatch(productInfoThunk(params.productId))
-    // @ts-ignore
   }, [dispatch, params.productId])
   return <div className={styles.container}>{loading ? <Loader /> : error ? <ErrorMessage message={error} /> : <ProductInfo {...productInfo} />}</div>
 }

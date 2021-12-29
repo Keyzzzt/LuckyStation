@@ -20,7 +20,7 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
       return { ...initialState, userInfo: action.payload }
     case 'USER_INFO_FAIL':
       return { ...initialState, error: action.payload }
-    case 'LOGOUT_SUCCESS':
+    case 'USER_INFO_RESET':
       return { ...initialState }
     default:
       return state
@@ -31,16 +31,17 @@ export const actions = {
   userInfoRequestAC: () => ({ type: 'USER_INFO_REQUEST' as const }),
   userInfoSuccessAC: (data: User) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
   userInfoFailAC: (errMessage: string) => ({ type: 'USER_INFO_FAIL' as const, payload: errMessage }),
+  userInfoResetAC: () => ({ type: 'USER_INFO_RESET' as const }),
 
   logoutSuccessAC: () => ({ type: 'LOGOUT_SUCCESS' as const }),
   logoutFailAC: (errMessage: string) => ({ type: 'LOGOUT_FAIL' as const, payload: errMessage }),
 }
 
-export function userInfoThunk(userId: string): ThunkType {
+export function userInfoThunk(): ThunkType {
   return async function (dispatch) {
     try {
       dispatch(actions.userInfoRequestAC())
-      const { data } = await API.admin.getSingleUser(userId)
+      const { data } = await API.user.getProfile()
       dispatch(actions.userInfoSuccessAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
@@ -58,6 +59,7 @@ export function logoutThunk(): ThunkType {
   return async function (dispatch) {
     try {
       await API.auth.logout()
+      dispatch(actions.userInfoResetAC())
       dispatch(actions.logoutSuccessAC())
       localStorage.removeItem('token')
     } catch (err: any) {
@@ -70,7 +72,7 @@ export function authenticateThunk(): ThunkType {
   return async function (dispatch) {
     try {
       const { data } = await API.auth.authenticate()
-      dispatch(userInfoThunk(data.id))
+      dispatch(userInfoThunk())
       localStorage.setItem('token', data.accessToken)
     } catch (err: any) {
       console.log('Authentication failed, please log in.')

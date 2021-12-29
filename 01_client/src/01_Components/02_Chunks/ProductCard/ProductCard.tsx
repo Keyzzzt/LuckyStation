@@ -1,4 +1,4 @@
-import React from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './ProductCard.module.scss'
 
@@ -9,7 +9,7 @@ type Props = {
   _id: string
 }
 
-export const ProductCard: React.FC<Props> = ({ brand, name, price, _id }) => {
+export const ProductCard: FC<Props> = ({ brand, name, price, _id }) => {
   return (
     <div className={styles.col}>
       <Link to={`/product/${_id}`}>

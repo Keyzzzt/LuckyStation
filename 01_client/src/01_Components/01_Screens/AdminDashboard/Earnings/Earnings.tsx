@@ -1,10 +1,10 @@
-import React from 'react'
+import { FC } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { ArrowDownSVG } from '../../../02_Chunks/svg/ArrowdownSVG'
 import { ChartContainer } from '../ChartContainer/ChartContainer'
 import styles from './Earnings.module.scss'
 
-export const Earnings = () => {
+export const Earnings: FC = () => {
   const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   const fill = config.colorTheme === 'light' ? '#929292' : '#fff'

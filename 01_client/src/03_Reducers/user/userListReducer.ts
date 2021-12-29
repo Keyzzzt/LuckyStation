@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   users: null as null | UserTypeForList[],
   loading: false,
-  error: null as string | null, // TODO: Сделать массивом строк?
+  error: null as string | null,
 }
 
 export const userListReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -31,7 +31,7 @@ export const actions = {
   getUsersFailAC: (errMessage: string) => ({ type: 'USER_LIST_FAIL' as const, payload: errMessage }),
 }
 
-export function getUsersListThunk(page: number, limit: number): ThunkType {
+export function usersListThunk(page: number, limit: number): ThunkType {
   return async function (dispatch, getState) {
     try {
       dispatch(actions.getUsersRequestAC())

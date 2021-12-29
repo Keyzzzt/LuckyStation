@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import styles from './ToggleSwitch.module.scss'
 
-export const ToggleSwitch: React.FC<any> = ({ toggle }) => {
+export const ToggleSwitch: FC<any> = ({ toggle }) => {
   const [switchOn, setSwitchOn] = useState(false)
   const switchOnClass = switchOn ? styles.on : ''
   const dispatch = useDispatch()

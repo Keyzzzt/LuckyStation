@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import styles from './CartScreen.module.scss'
 import { useDispatch } from 'react-redux'
 import { useLocation, useParams } from 'react-router'
@@ -6,8 +6,8 @@ import { Link, useHistory } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 
-export const CartScreen: React.FC = () => {
-  const { productId }: { productId: string } = useParams()
+export const CartScreen: FC = () => {
+  const { productId } = useParams<{ productId: string }>()
   const { search } = useLocation()
   const history = useHistory()
   const dispatch = useDispatch()
@@ -18,7 +18,7 @@ export const CartScreen: React.FC = () => {
     dispatch(removeFromCartThunk(productId))
   }
   const checkOutHandler = () => {
-    history.push('/chekout')
+    history.push('/login?redirect=shipping')
   }
 
   useEffect(() => {
