@@ -15,7 +15,7 @@ export const PlaceOrderScreen: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const addDecimals = (num: any) => {
+  const addDecimals = (num: number) => {
     return +(Math.round(num * 100) / 100).toFixed(2)
   }
   cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.qty!, 0))

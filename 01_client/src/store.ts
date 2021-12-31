@@ -7,7 +7,7 @@ import { orderCreateReducer } from './03_Reducers/order/orderCreateReducer'
 import { orderInfoReducer } from './03_Reducers/order/orderInfoReducer'
 import { orderListReducer } from './03_Reducers/order/orderListReducer'
 import { orderPayReducer } from './03_Reducers/order/orderPayReducer'
-import { productDeleteReducer } from './03_Reducers/product/productDeleteReducer'
+import { productDeleteReducer } from './03_Reducers/admin/productDeleteReducer'
 import { productInfoReducer } from './03_Reducers/product/productInfoReducer'
 import { productListReducer } from './03_Reducers/product/productListReducer'
 import { myOrdersReducer } from './03_Reducers/user/myOrdersReducer'
@@ -18,6 +18,9 @@ import { userRegisterReducer } from './03_Reducers/user/userRegisterReducer'
 import { userUpdateOwnProfileReducer } from './03_Reducers/user/userUpdateOwnProfileReducer'
 import { updateProfileByAdminReducer } from './03_Reducers/admin/updateProfileByAdminReducer'
 import { getUserReducer } from './03_Reducers/admin/getUserReducer'
+import { createProductReducer } from './03_Reducers/admin/createProductReducer'
+import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
+import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -31,10 +34,13 @@ const rootReducer = combineReducers({
   productInfo: productInfoReducer,
   productList: productListReducer,
   productDelete: productDeleteReducer,
+  updateProduct: updateProductReducer,
+  createProduct: createProductReducer,
   orderInfo: orderInfoReducer,
   orderList: orderListReducer,
   orderCreate: orderCreateReducer,
   orderPay: orderPayReducer,
+  orderManage: orderManageReducer,
   myOrders: myOrdersReducer,
   cart: cartReducer,
   config: configReducer,

@@ -6,6 +6,7 @@ import { productListThunk } from '../../../03_Reducers/product/productListReduce
 import { ProductCard } from '../../02_Chunks/ProductCard/ProductCard'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
+import { v4 as uuidv4 } from 'uuid'
 
 export const Home: FC = () => {
   const { loading, error, products } = useTypedSelector((state) => state.productList)
@@ -24,7 +25,7 @@ export const Home: FC = () => {
           <div className={styles.row}>
             {products &&
               products.map((product) => (
-                <ProductCard key={product._id} name={product.name} _id={product._id} brand={product.brand} price={product.price} />
+                <ProductCard key={uuidv4()} name={product.name} _id={product._id} brand={product.brand} price={product.price} />
               ))}
           </div>
         </div>

@@ -99,12 +99,7 @@ export async function refresh(refreshToken: string) {
   await saveToken(user._id, tokens.refreshToken)
   return {
     ...tokens,
-    user: {
-      id: user._id,
-      email: user.email,
-      isActivated: user.isActivated,
-      isAdmin: user.isAdmin,
-    },
+    id: user._id,
   }
 }
 

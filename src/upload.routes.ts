@@ -1,7 +1,7 @@
-import express, { Router } from 'express'
+import express, { Response, Router } from 'express'
 import multer from 'multer'
 import path from 'path'
-import { privateRoute, adminRoute } from '@src/middleware'
+import { privateRoute, adminRoute, deserializeUser } from '@src/middleware'
 import { RequestCustom } from './custom'
 
 const router: Router = express.Router()
@@ -33,8 +33,8 @@ const upload = multer({
   },
 })
 
-router.post('/', privateRoute, adminRoute, upload.single('image'), (req: RequestCustom, res) => {
-  res.send(`/${req.file.path}`)
+router.post('/', deserializeUser, privateRoute, adminRoute, upload.single('image'), (req: RequestCustom, res: Response) => {
+  res.send(`/${req.file.path.replace('\\', '/')}`)
 })
 
 export default router

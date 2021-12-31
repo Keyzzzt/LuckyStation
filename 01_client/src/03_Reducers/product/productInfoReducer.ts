@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   productInfo: null as null | Product,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const productInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -22,6 +22,8 @@ export const productInfoReducer = (state = initialState, action: ActionType): In
 
     case 'PRODUCT_INFO_FAIL':
       return { ...initialState, error: action.payload }
+    case 'PRODUCT_INFO_RESET':
+      return { ...initialState }
 
     default:
       return state
@@ -29,25 +31,26 @@ export const productInfoReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  getProductRequestAC: () => ({ type: 'PRODUCT_INFO_REQUEST' as const }),
-  getProductSuccessAC: (product: Product) => ({ type: 'PRODUCT_INFO_SUCCESS' as const, payload: product }),
-  getProductFailAC: (errMessage: string) => ({ type: 'PRODUCT_INFO_FAIL' as const, payload: errMessage }),
+  productInfoRequestAC: () => ({ type: 'PRODUCT_INFO_REQUEST' as const }),
+  productInfoSuccessAC: (product: Product) => ({ type: 'PRODUCT_INFO_SUCCESS' as const, payload: product }),
+  productInfoFailAC: (errMessage: string) => ({ type: 'PRODUCT_INFO_FAIL' as const, payload: errMessage }),
+  productInfoResetAC: () => ({ type: 'PRODUCT_INFO_RESET' as const }),
 }
 
 export function productInfoThunk(productId: string): ThunkType {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
-      dispatch(actions.getProductRequestAC())
+      dispatch(actions.productInfoRequestAC())
       const { data } = await API.admin.getSingleProduct(productId)
-      dispatch(actions.getProductSuccessAC(data))
+      dispatch(actions.productInfoSuccessAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.getProductFailAC(errMsg))
+        dispatch(actions.productInfoFailAC(errMsg))
         return
       }
-      dispatch(actions.getProductFailAC(error))
+      dispatch(actions.productInfoFailAC(error))
     }
   }
 }

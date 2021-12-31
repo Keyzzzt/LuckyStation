@@ -3,10 +3,11 @@ import { NextFunction, Response } from 'express'
 import { RequestCustom } from '@src/custom'
 import { ApiError } from '@src/middleware/error.middleware'
 import * as utils from '@src/utils'
-import { GetAllUsers } from './types'
 
 export async function deserializeUser(req: RequestCustom, res: Response, next: NextFunction) {
   try {
+    console.log('Deserialize')
+
     const authHeader = req.headers.authorization
     if (!authHeader) {
       return next()
@@ -35,6 +36,7 @@ export function privateRoute(req: RequestCustom, res: Response, next: NextFuncti
     if (!req.user) {
       return next(ApiError.UnauthorizedError())
     }
+    console.log('User is logged In')
     return next()
   } catch (error) {
     return next(error.message)
@@ -44,8 +46,10 @@ export function privateRoute(req: RequestCustom, res: Response, next: NextFuncti
 export const adminRoute = (req: RequestCustom, res: Response, next: NextFunction) => {
   try {
     if (!req.user.isAdmin) {
+      console.log('User is NOT Admin')
       return next(ApiError.UnauthorizedError())
     }
+    console.log('User is Admin')
     return next()
   } catch (error) {
     return next(error.message)
@@ -70,7 +74,7 @@ export const paginatedResult = (model, flag) => {
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
 
-      const response = {} as GetAllUsers
+      const response = {} as any
 
       if (endIndex < (await model.countDocuments().exec())) {
         response.next = {

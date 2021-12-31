@@ -3,6 +3,8 @@ import styles from './ProductInfo.module.scss'
 import logo from '../../../img/logo.png'
 import { Rating } from '../Rating/Rating'
 import { useHistory, useParams } from 'react-router'
+import { v4 as uuidv4 } from 'uuid'
+import img from '../../../../../uploads/image-1640962208232.jpg'
 
 type Props = {
   isNewProduct?: boolean
@@ -40,9 +42,8 @@ export const ProductInfo: FC<Props> = ({
   const [color, setColor] = useState('#eb5757')
   const [size, setSize] = useState(0)
   const [qty, setQty] = useState(1)
-  const params = useParams()
+  const params = useParams<{ productId: string }>()
   const history = useHistory()
-  //TODO: Если размер один, то загнать его в size
 
   const colorHandler = (color: string) => {
     setColor(color)
@@ -50,10 +51,7 @@ export const ProductInfo: FC<Props> = ({
   const sizeHandler = (size: number) => {
     setSize(size)
   }
-  console.log(params)
-
   const addToCartHandler = () => {
-    // @ts-ignore
     history.push(`/cart/${params.productId}?qty=${qty}`)
   }
   return (
@@ -77,7 +75,7 @@ export const ProductInfo: FC<Props> = ({
             <h3 className={styles.small}>{name}</h3>
           </div>
           {colors && colors.length > 0 && (
-            <div className={styles.colorContainer}>
+            <div key={uuidv4()} className={styles.colorContainer}>
               <h3 className={styles.title}>Color</h3>
               <div className={styles.colors}>
                 {colors.map((c, i) => (
@@ -98,7 +96,7 @@ export const ProductInfo: FC<Props> = ({
               <h3 className={styles.title}>Size</h3>
               <div className={styles.sizes}>
                 {sizes.map((s, i) => (
-                  <span key={i} onClick={() => sizeHandler(s)} className={`${styles.size} ${size === s ? styles.active : ''}`}>
+                  <span key={uuidv4()} onClick={() => sizeHandler(s)} className={`${styles.size} ${size === s ? styles.active : ''}`}>
                     {s}
                   </span>
                 ))}
@@ -114,7 +112,7 @@ export const ProductInfo: FC<Props> = ({
             <div className={styles.quantity}>
               <select value={qty} onChange={(e) => setQty(Number(e.target.value))}>
                 {[...Array(countInStock).keys()].map((n) => (
-                  <option key={id} value={n + 1}>
+                  <option key={uuidv4()} value={n + 1}>
                     {n + 1}
                   </option>
                 ))}

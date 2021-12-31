@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
@@ -22,7 +22,7 @@ export const Register: FC = () => {
     }
   }, [history, userInfo])
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (password === confirmPassword) {
       dispatch(registerThunk(email, password, confirmPassword))

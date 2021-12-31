@@ -26,7 +26,6 @@ export interface LoginResponse {
 export type Product = {
   brand: string
   category: string
-  colors: string[]
   countInFavorite: number
   countInStock: number
   countViewed: number
@@ -40,7 +39,6 @@ export type Product = {
   qty?: number
   rating: number
   reviews: [] // TODO
-  sizes: number[]
   updatedAt: Date
   user: string
   _id: string

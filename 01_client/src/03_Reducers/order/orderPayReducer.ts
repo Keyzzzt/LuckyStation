@@ -1,5 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { actions as cartActions } from '../cart/cartReducer'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -39,6 +40,10 @@ export function payOrderThunk(orderId: string, paymentResult: any): ThunkType {
       dispatch(actions.orderPayRequestAC())
       await API.order.payOrder(orderId, paymentResult)
       dispatch(actions.orderPaySuccessAC())
+      //FIXME: Нужно обнулить корзину
+      // localStorage.removeItem('cartItems')
+      //@ts-ignore
+      // dispatch(cartActions.cartResetAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {

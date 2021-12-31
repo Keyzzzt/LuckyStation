@@ -29,9 +29,11 @@ export async function getAllUsers(req: RequestCustom, res: Response, next: NextF
 // Frontend DONE
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { id } = req.params
-    await UserModel.deleteOne({ id })
-    await TokenModel.deleteOne({ user: id })
+    const { _id } = req.params
+
+    await UserModel.deleteOne({ _id })
+
+    await TokenModel.deleteOne({ user: _id })
 
     return res.sendStatus(200)
   } catch (error) {
@@ -65,16 +67,13 @@ export async function updateUserProfile(req: Request, res: Response, next: NextF
       return next(ApiError.NotFound('User not found'))
     }
 
-    const { email, isAdmin } = req.body
+    const { isAdmin } = req.body
 
-    user.email = email || user.email
     user.isAdmin = isAdmin
 
     await user.save()
 
-    return res.status(200).json({
-      data: user,
-    })
+    return res.status(200).json(user)
   } catch (error) {
     return next(error.message)
   }
@@ -98,13 +97,15 @@ export async function deleteProduct(req: Request, res: Response, next: NextFunct
 // TODO:
 export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
+    console.log(req.body)
+
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    // TODO: Validate colors, sizes, isNewProduct, rating
-    const { name, price, image, brand, category, countInStock, description, colors, sizes, isNewProduct, rating } = req.body
+    // TODO:  isNewProduct
+    const { name, price, image, brand, category, countInStock, description, isNewProduct } = req.body
     const product = new ProductModel({
       name,
       price,
@@ -114,17 +115,12 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       category,
       countInStock,
       description,
-      colors,
-      sizes,
       isNewProduct,
-      rating,
     })
 
     await product.save()
 
-    return res.status(201).json({
-      data: product,
-    })
+    return res.status(201).json(product)
   } catch (error) {
     return next(error.message)
   }
@@ -154,9 +150,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
 
     await product.save()
 
-    return res.status(201).json({
-      data: product,
-    })
+    return res.status(201).json(product)
   } catch (error) {
     return next(error.message)
   }
@@ -171,15 +165,8 @@ export async function getAllOrders(req: RequestCustom, res: Response, next: Next
   }
 }
 
-// TODO:
-// TODO Тут нужно будет колдовать
 export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
   try {
-    // TODO: Validate
-    // const errors = validationResult(req)
-    // if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-
-    const { id, status, updateTime } = req.body
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
@@ -187,20 +174,15 @@ export async function setOrderToPaid(req: Request, res: Response, next: NextFunc
 
     order.isPaid = true
     order.paidAt = Date.now()
-
-    // THis stuff coming from paypal - frontend
     order.paymentResult = {
-      id,
-      status,
-      updateTime,
-      emailAddress: 'Set to req.body.payer.email_address',
+      id: '',
+      status: '',
+      updateTime: '',
+      emailAddress: '',
     }
 
     await order.save()
-
-    return res.status(201).json({
-      data: order,
-    })
+    return res.status(201).json(200)
   } catch (error) {
     return next(error.message)
   }
@@ -224,9 +206,7 @@ export async function setOrderToNotPaid(req: Request, res: Response, next: NextF
     }
 
     await order.save()
-    return res.status(201).json({
-      data: order,
-    })
+    return res.status(201).json(200)
   } catch (error) {
     return next(error.message)
   }
@@ -235,6 +215,7 @@ export async function setOrderToNotPaid(req: Request, res: Response, next: NextF
 // TODO:
 export async function setOrderToDelivered(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log(req.params.id)
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
@@ -244,9 +225,7 @@ export async function setOrderToDelivered(req: Request, res: Response, next: Nex
     order.deliveredAt = Date.now()
     await order.save()
 
-    return res.status(201).json({
-      data: order,
-    })
+    return res.status(201).json(200)
   } catch (error) {
     return next(error.message)
   }
@@ -264,9 +243,7 @@ export async function setOrderToNotDelivered(req: Request, res: Response, next: 
     order.deliveredAt = undefined
     await order.save()
 
-    return res.status(201).json({
-      data: order,
-    })
+    return res.status(201).json(200)
   } catch (error) {
     return next(error.message)
   }
@@ -304,9 +281,7 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
 // TODO:
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(201).json({
-      data: req.paginatedResponse,
-    })
+    return res.status(201).json(req.paginatedResponse)
   } catch (error) {
     return next(error.message)
   }
@@ -319,9 +294,7 @@ export async function getSurveyById(req: RequestCustom, res: Response, next: Nex
     if (!survey) {
       return next(ApiError.NotFound('Survey not found'))
     }
-    return res.status(201).json({
-      data: survey,
-    })
+    return res.status(201).json(survey)
   } catch (error) {
     return next(error.message)
   }

@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
-import styles from './ChartContainer.module.css'
+// import styles from './ChartContainer.module.css'
 import { Chart, registerables } from 'chart.js'
 import { addData } from '../../../../04_Utils/utils'
 

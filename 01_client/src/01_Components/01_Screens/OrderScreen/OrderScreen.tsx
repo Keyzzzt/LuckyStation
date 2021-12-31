@@ -6,19 +6,21 @@ import { useParams } from 'react-router'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import Loader from '../../02_Chunks/Loader/Loader'
-import { getSingleOrderThunk } from '../../../03_Reducers/order/orderInfoReducer'
+import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
+
+//TODO orderpay
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
+const { v4: uuidv4 } = require('uuid')
 
 export const OrderScreen: FC = () => {
   const { orderInfo, loading, error } = useTypedSelector((state) => state.orderInfo)
-  const { success: successPay, loading: loadingPay, error: errorPay } = useTypedSelector((state) => state.orderPay)
+  const { success: successPay, loading: loadingPay } = useTypedSelector((state) => state.orderPay)
   const [sdkReady, setSdkReady] = useState(false)
   const dispatch = useDispatch()
   const params = useParams<{ orderId: string }>()
   const successPaymentHandler = (paymentResult: any) => {
-    console.log(paymentResult)
     dispatch(payOrderThunk(orderInfo?._id!, paymentResult))
   }
 
@@ -34,11 +36,10 @@ export const OrderScreen: FC = () => {
       }
       document.body.appendChild(script)
     }
-    dispatch(getSingleOrderThunk(params.orderId))
+    dispatch(orderInfoThunk(params.orderId))
     if (successPay) {
       dispatch(actions.orderPayResetAC())
     } else if (!orderInfo?.isPaid) {
-      //@ts-ignore
       if (!window.paypal) {
         addPayPalScript()
       } else {
@@ -55,7 +56,7 @@ export const OrderScreen: FC = () => {
       <div>
         <div>Order Items</div>
         {orderInfo?.orderItems.map((item) => (
-          <div key={item.id}>
+          <div key={uuidv4()}>
             <div>Name: {item.name}</div>
             <div>
               <img src={item.image} alt="Product" />

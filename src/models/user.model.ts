@@ -15,6 +15,8 @@ export interface UserDoc extends Document {
   activationLink: string
   credits: number
   favorite: string[]
+  createdAt?: Date
+  updatedAt?: Date
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 

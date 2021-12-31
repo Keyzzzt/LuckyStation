@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { authThunk } from '../../../03_Reducers/authReducer'
@@ -13,18 +13,17 @@ export const Login: FC = () => {
   const [email, setEmail] = useState('a@a.com')
   const [password, setPassword] = useState('zzxxccVV11!')
   const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { error, loading, success } = useTypedSelector((state) => state.auth)
+  const { error } = useTypedSelector((state) => state.auth)
 
-  //TODO: Понять как это работает
   const redirect = location.search ? location.search.split('=')[1] : '/'
 
   useEffect(() => {
     if (userInfo) {
       history.push(redirect)
     }
-  }, [history, userInfo])
+  }, [history, userInfo, redirect])
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(authThunk.login(email, password))
   }

@@ -7,11 +7,13 @@ import { DashboardHeader } from './DashboardHeader/DashboardHeader'
 import { Earnings } from './Earnings/Earnings'
 import { ProductSales } from './ProductSales/ProductSales'
 import { Totals } from './Totals/Totals'
-import { useScrollToTop } from '../../../04_Utils/hooks'
+// import { useScrollToTop } from '../../../04_Utils/hooks'
 import { ProductsList } from './ProductsList/ProductsList'
+import { OrderList } from './OrderList/OrderList'
+import { useScrollToTop } from '../../../04_Utils/hooks'
 
 export const AdminDashboard: FC = () => {
-  // useScrollToTop()
+  useScrollToTop()
   const { config } = useTypedSelector((state) => state)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const history = useHistory()
@@ -29,6 +31,7 @@ export const AdminDashboard: FC = () => {
     <div className={`${styles.scroll} ${themeClass}`}>
       <div className={`${styles.container} ${themeClass}`}>
         <div className={`${styles.dashboard}`}>
+          <OrderList />
           <DashboardHeader />
           <Totals />
           <Earnings />

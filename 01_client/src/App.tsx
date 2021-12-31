@@ -17,6 +17,8 @@ import { PlaceOrderScreen } from './01_Components/01_Screens/PlaceOrderScreen/Pl
 import { OrderScreen } from './01_Components/01_Screens/OrderScreen/OrderScreen'
 import { UserEditScreen } from './01_Components/01_Screens/UserEditScreen/UserEditScreen'
 import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/ProductEditScreen/ProductEditScreen'
+import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
+import { ProductCreateScreen } from './01_Components/01_Screens/AdminDashboard/ProductCreateScreen/ProductCreateScreen'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -38,9 +40,11 @@ const App = () => {
         <Route path="/shipping" render={() => <ShippingScreen />} />
         <Route path="/payment" render={() => <PaymentScreen />} />
         <Route path="/placeorder" render={() => <PlaceOrderScreen />} />
-        <Route path="/order/:orderId" render={() => <OrderScreen />} />
         <Route path="/user/:userId/edit" render={() => <UserEditScreen />} exact />
         <Route path="/product/:productId/edit" render={() => <ProductEditScreen />} />
+        <Route path="/order/:orderId/edit" render={() => <OrderEditScreen />} exact />
+        <Route path="/create" render={() => <ProductCreateScreen />} />
+        <Route path="/order/:orderId" render={() => <OrderScreen />} />
       </Switch>
       <Footer />
     </div>
@@ -48,6 +52,7 @@ const App = () => {
 }
 
 // TODO: Тест приложения при отключенном API.
-// TODO: После subscribe не обновляется фронтенд
+// TODO: Нужно реализовать некий принцип брони, чтобы 2 покупателя не купили последний оставшийся продукт.
+// TODO: https://www.udemy.com/course/mern-ecommerce/learn/lecture/22498996#questions/12904054
 
 export default App

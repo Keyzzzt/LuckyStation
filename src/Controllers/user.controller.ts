@@ -11,23 +11,12 @@ import { ProductModel } from '@src/models/product.model'
 
 export async function getProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const user = await UserModel.findById(req.user.id).select('-password')
+    const user = await await UserModel.findById(req.user.id).select('-password -__v -activationLink -googleId')
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
 
-    return res.status(200).json({
-      data: {
-        user: {
-          id: user._id,
-          email: user.email,
-          isActivated: user.isActivated,
-          isAdmin: user.isAdmin,
-          isSubscribed: user.isSubscribed,
-          favorite: user.favorite,
-        },
-      },
-    })
+    return res.status(200).json(user)
   } catch (error) {
     return next(error.message)
   }
@@ -52,10 +41,10 @@ export async function updateProfile(req: RequestCustom, res: Response, next: Nex
       return next(ApiError.BadRequest('Wrong password'))
     }
 
-    if (newPassword && newPassword !== confirmNewPassword) {
+    if (newPassword !== confirmNewPassword) {
       return next(ApiError.BadRequest('Passwords do not match'))
     }
-    user.password = req.body.password
+    user.password = req.body.newPassword
 
     await user.save()
     const tokens = utils.generateTokens({
@@ -119,6 +108,14 @@ export async function removeFromFavorite(req: RequestCustom, res: Response, next
     user.save()
 
     return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function getPayPalClientId(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    return res.send(process.env.PAYPAL_CLIENT_ID)
   } catch (error) {
     return next(error.message)
   }

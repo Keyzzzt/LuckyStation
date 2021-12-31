@@ -8,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: null as string | null, // TODO: Сделать массивом строк?
+  error: '',
 }
 
 export const productDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -36,7 +36,7 @@ export const actions = {
 }
 
 export function productDeleteThunk(productId: string): ThunkType {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     try {
       dispatch(actions.productDeleteRequestAC())
       await API.admin.deleteProduct(productId)

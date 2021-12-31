@@ -17,12 +17,12 @@ const initialState = {
   cartItems: [] as Product[],
   shippingAddress: {} as Address,
   paymentMethod: 'PayPal',
-  loading: false,
-  error: null as string | null,
   itemsPrice: 0 as number,
   shippingPrice: 0 as number,
   taxPrice: 0 as number,
   totalPrice: 0 as number,
+  loading: false,
+  error: '',
 }
 
 export const cartReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -35,7 +35,6 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
       } else {
         return { ...state, cartItems: [...state.cartItems, item] }
       }
-
     case 'CART_REMOVE':
       return { ...state, cartItems: state.cartItems.filter((n) => n._id !== action.payload) }
     case 'CART_FAIL':
@@ -44,6 +43,8 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
       return { ...state, shippingAddress: action.payload }
     case 'SAVE_PAYMENT_METHOD':
       return { ...state, paymentMethod: action.payload }
+    case 'CART_RESET':
+      return { ...initialState }
     default:
       return state
   }
@@ -52,6 +53,7 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
 export const actions = {
   cartAddAC: (product: Product) => ({ type: 'CART_ADD' as const, payload: product }),
   cartRemoveAC: (productId: string) => ({ type: 'CART_REMOVE' as const, payload: productId }),
+  cartResetAC: () => ({ type: 'CART_RESET' as const }),
   cartFailAC: (error: string) => ({ type: 'CART_FAIL' as const, payload: error }),
   saveSippingAddressAC: (address: any) => ({ type: 'SAVE_SHIPPING_ADDRESS' as const, payload: address }),
   savePaymentMethodAC: (paymentMethod: any) => ({ type: 'SAVE_PAYMENT_METHOD' as const, payload: paymentMethod }),
@@ -62,8 +64,6 @@ export function addToCartThunk(productId: string, qty: number): ThunkType {
     try {
       const { data } = await API.admin.getSingleProduct(productId)
       data.qty = qty
-      console.log(data)
-
       dispatch(actions.cartAddAC(data))
       localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
     } catch (err: any) {
