@@ -1,9 +1,46 @@
-import mongoose from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
+import { ProductDoc } from './product.model'
+import { UserDoc } from './user.model'
 
-const OrderSchema = new mongoose.Schema(
+interface ShippingAddress {
+  address: string
+  city: string
+  postalCode: string
+  country: string
+}
+interface PaymentResult {
+  id: string
+  status: string
+  updateTime: string
+  emailAddress: string
+}
+export interface OrderItemDoc extends Document {
+  name: string
+  quantity: number
+  image: string
+  price: number
+  product: ProductDoc['id']
+}
+export interface OrderDoc extends Document {
+  user: UserDoc['id'] | string // Если незарегистрированный пользователь, пишем сюда имя.
+  orderItems: OrderItemDoc[]
+  shippingAddress: ShippingAddress
+  paymentMethod: string
+  paymentResult: PaymentResult
+  itemsPrice: number
+  taxPrice: number
+  shippingPrice: number
+  totalPrice: number
+  isPaid: boolean
+  paidAt: Date | number
+  isDelivered: boolean
+  deliveredAt: Date | number
+}
+
+const OrderSchema = new Schema<OrderDoc>(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'User',
     },
@@ -14,7 +51,7 @@ const OrderSchema = new mongoose.Schema(
         image: { type: String, required: true },
         price: { type: Number, required: true },
         product: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           required: true,
           ref: 'Product',
         },
@@ -35,6 +72,11 @@ const OrderSchema = new mongoose.Schema(
       status: { type: String },
       updateTime: { type: String },
       emailAddress: { type: String },
+    },
+    itemsPrice: {
+      type: Number,
+      required: true,
+      default: 0.0,
     },
     taxPrice: {
       type: Number,
@@ -66,7 +108,6 @@ const OrderSchema = new mongoose.Schema(
     },
     deliveredAt: {
       type: Date,
-      default: undefined,
     },
   },
   {
@@ -74,4 +115,4 @@ const OrderSchema = new mongoose.Schema(
   }
 )
 
-export const OrderModel = mongoose.model('Order', OrderSchema)
+export const OrderModel = model<OrderDoc>('Order', OrderSchema)

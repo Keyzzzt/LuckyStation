@@ -1,66 +1,125 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express'
-import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { findUser } from '@src/services/user.services'
-import { issueTokenPair } from '@src/middleware/issueTokenPair'
+import { Response, NextFunction } from 'express'
+import { validationResult } from 'express-validator'
+import { RequestCustom } from '@src/custom'
+import { UserModel } from '@src/models/user.model'
+import { cookieOpt } from '@src/Controllers/auth.controller'
+import { ApiError } from '@src/middleware/error.middleware'
+import * as utils from '@src/utils'
+import { ProductModel } from '@src/models/product.model'
 
-export const getProfile = async (req: Request, res: Response) => {
+export async function getProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    // @ts-ignore
-    const { _id } = req.user._id
-    const user = await findUser({ _id }, 'id')
-    if (!user) throw new Error('User not found')
+    const user = await UserModel.findById(req.user.id).select('-password')
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
+    }
 
-    res.status(200).json({
-      resultCode: 1,
-      errorMessage: [],
-      data: user,
+    return res.status(200).json({
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          isActivated: user.isActivated,
+          isAdmin: user.isAdmin,
+          isSubscribed: user.isSubscribed,
+          favorite: user.favorite,
+        },
+      },
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getProfile controller'],
-      data: null,
-    })
+    return next(error.message)
   }
 }
 
-export const updateProfile = async (req: Request, res: Response) => {
+export async function updateProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    // @ts-ignore
-    const { _id } = req.user
-    const user = await findUser({ _id }, 'id')
-    if (!user) throw new Error('User not found')
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
 
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    if (req.body.password) {
-      user.password = req.body.password
+    // @ts-ignore
+    const user = await UserModel.findById(req.user.id)
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
     }
-    const updatedUser = await user.save()
-    if (updatedUser) {
-      const { accessToken, refreshToken } = await issueTokenPair(updatedUser._id)
-      res.status(200).json({
-        resultCode: 1,
-        errorMessage: [],
-        data: {
-          _id: updatedUser._id,
-          name: updatedUser.name,
-          email: updatedUser.email,
-          isAdmin: updatedUser.isAdmin,
-          accessToken,
-          refreshToken,
-        },
-      })
-    } else {
-      throw new Error('Server error')
+
+    const { oldPassword, newPassword, confirmNewPassword } = req.body
+
+    if (!(await user.comparePassword(oldPassword))) {
+      return next(ApiError.BadRequest('Wrong password'))
     }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'updateProfile controller'],
-      data: null,
+
+    if (newPassword && newPassword !== confirmNewPassword) {
+      return next(ApiError.BadRequest('Passwords do not match'))
+    }
+    user.password = req.body.password
+
+    await user.save()
+    const tokens = utils.generateTokens({
+      id: user._id,
+      email: user.email,
+      isActivated: user.isActivated,
+      isAdmin: user.isAdmin,
     })
+    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+    return res.status(200).json({
+      accessToken: tokens.accessToken,
+      data: {
+        user: {
+          id: user._id,
+          email: user.email,
+          isActivated: user.isActivated,
+          isAdmin: user.isAdmin,
+        },
+      },
+    })
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function addToFavorite(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const user = await UserModel.findById(req.user.id).select('-password')
+    const product = await ProductModel.findById(req.params.id)
+
+    if (!user && !product) {
+      return next(ApiError.NotFound('User or product not found'))
+    }
+    const isFavorite = user.favorite.find((item) => item === req.params.id)
+
+    if (isFavorite) {
+      return next(ApiError.BadRequest('Product already in favorite list.'))
+    }
+    user.favorite.push(req.params.id)
+    // FIXME: Отправить инструкции базе, а не делать инкремент тут
+    product.countInFavorite += 1
+    await user.save()
+    await product.save()
+
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function removeFromFavorite(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const user = await UserModel.findById(req.user.id).select('-password')
+
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
+    }
+    user.favorite = user.favorite.filter((item) => item !== req.params.id)
+
+    user.save()
+
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
   }
 }

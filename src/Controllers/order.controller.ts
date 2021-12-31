@@ -1,107 +1,63 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable prettier/prettier */
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express'
-import { ID } from '@src/Types'
-import { issueStatusCode } from '@src/middleware/issueStatusCode'
-import { findOrder, createOrder } from '@src/services/order.services'
-import { request } from 'https'
+import { Request, Response, NextFunction } from 'express'
+import { validationResult } from 'express-validator'
+import { RequestCustom } from '@src/custom'
+import { ApiError } from '@src/middleware/error.middleware'
+import { OrderModel } from '@src/models/order.model'
 
-// TODO Define OrderType
-
-type CreateOrderBody = {
-  orderItems: any[]
-  shippingAddress: string
-  paymentMethod: string
-  itemsPrice: number
-  taxPrice: number
-  shippingPrice: number
-  totalPrice: number
-}
-
-// @desc     Create new order
-// @route    POST /api/order
-// @access   Private
-const createNewOrder = async (req: Request<object, object, CreateOrderBody, object>, res: Response) => {
+export async function createNewOrder(req: RequestCustom, res: Response, next: NextFunction) {
+  // FIXME: Если пользователь купил незарегистрированный то нужно в user записать из поля name, которое ждем с фронта
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
     if (orderItems && orderItems.length === 0) {
-      throw new Error('No products in order')
-    } else {
-      const order = await createOrder({
-        // @ts-ignore
-        user: req.user._id,
-        orderItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        totalPrice,
-      })
-      const createdOrder = await order.save()
-      if (createdOrder) {
-        res.status(201).json({
-          resultCode: 1,
-          errorMessage: [],
-          data: createdOrder,
-        })
-      } else {
-        throw new Error('Server error')
-      }
+      return next(ApiError.BadRequest('Product list is empty'))
     }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'createNewOrder controller'],
-      data: null,
+
+    const order = await OrderModel.create({
+      user: req.user.id,
+      orderItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
     })
-  }
-}
-
-// @desc     Get an order by ID
-// @route    GET /api/order/:id
-// @access   Private
-const getOrderById = async (req: Request<ID>, res: Response) => {
-  try {
-    const order = await findOrder(req.params.id, 'id')
-    if (!order) throw new Error('Order not found')
-
-    res.status(200).json({
-      resultCode: 1,
-      errorMessage: [],
+    return res.status(201).json({
       data: order,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getOrderById controller'],
-      data: null,
-    })
+    return next(error.message)
   }
 }
 
-// @desc     Get own orders
-// @route    GET /api/order/myorders
-// @access   Private
-const getOwnOrders = async (req: Request, res: Response) => {
+// Frontend DONE
+export async function getOrderById(req: Request, res: Response, next: NextFunction) {
   try {
-    // @ts-ignore
-    const orders = await findOrder({ user: req.user._id }, 'all')
-    if (!orders || orders.length === 0) throw new Error('Orders not found')
+    const order = await OrderModel.findById(req.params.id).select('-__v')
+    if (!order) {
+      return next(ApiError.NotFound('Order not found'))
+    }
 
-    res.status(200).json({
-      resultCode: 1,
-      errorMessage: [],
-      data: orders,
+    return res.status(200).json(order)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function getOwnOrders(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    return res.status(200).json({
+      data: req.paginatedResponse,
     })
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getOwnOrders controller'],
-      data: null,
-    })
+    return next(error.message)
   }
 }
-
-export { createNewOrder, getOrderById, getOwnOrders }

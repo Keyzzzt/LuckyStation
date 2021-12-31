@@ -1,0 +1,27 @@
+@import './../../../02_Styles/variables.scss';
+
+.switch {
+  width: 56px;
+  height: 24px;
+  border-radius: 50px;
+  background: $D-bg;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  &.on {
+    background: $D-green;
+  }
+  &.on &__thumb {
+    left: 56px - 20px - 2px;
+  }
+  &__thumb {
+    background: $D-light;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
+    transition: left 0.3s ease;
+  }
+}

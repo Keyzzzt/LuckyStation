@@ -1,0 +1,23 @@
+@import './../../../02_Styles/variables.scss';
+
+.container {
+  display: flex;
+}
+
+img {
+  width: 200px;
+}
+
+.cart {
+  background: red;
+  flex: 2;
+}
+.cart2 {
+  background-color: aquamarine;
+  flex: 1;
+}
+
+.cart3 {
+  background-color: sandybrown;
+  flex: 1;
+}

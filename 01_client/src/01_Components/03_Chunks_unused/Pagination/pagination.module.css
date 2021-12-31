@@ -1,0 +1,21 @@
+.container{
+    display: inline-flex;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.button {
+    padding: 10px 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    border-right: 1px solid #ccc;
+    background-color: #eee;
+}
+.button:last-child {
+    border-right: none;
+}
+.button:hover {
+    background: #ddd;
+}

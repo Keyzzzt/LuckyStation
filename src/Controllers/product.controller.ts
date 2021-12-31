@@ -1,110 +1,74 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
-import { Request, Response } from 'express'
-import { ID } from '@src/Types'
-import { findProduct } from '@src/services/product.services'
-import { issueStatusCode } from '@src/middleware/issueStatusCode'
+import { NextFunction, Response } from 'express'
+import { validationResult } from 'express-validator'
+import { RequestCustom } from '@src/custom'
+import { ProductModel, ReviewType } from '@src/models/product.model'
+import { ApiError } from '@src/middleware/error.middleware'
 
-type CreateReviewBody = {
-  rating: number
-  comment: string
-}
-
-// @desc     Fetch all products
-// @route    GET /api/product
-// @access   Public
-export const getProducts = async (req: Request, res: Response) => {
+// Frontend DONE
+export async function getProducts(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const keyword = req.query.keyword
-      ? {
-          name: {
-            $regex: req.query.keyword,
-            $options: 'i',
-          },
-        }
-      : {}
-
-    const products = await findProduct({ ...keyword }, 'all')
-    if (!products || products.length === 0) throw new Error('Products not found')
-
-    res.status(200).json({
-      resultCode: 1,
-      errorMessage: [],
-      data: products,
-    })
+    return res.status(200).json(req.paginatedResponse)
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getProducts controller'],
-      data: null,
-    })
+    return next(error.message)
   }
 }
 
-// @desc     Fetch single product
-// @route    GET /api/product/:id
-// @access   Public
-export const getProductById = async (req: Request<ID>, res: Response) => {
+// Frontend DONE
+export async function getProductById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const product = await findProduct(req.params.id, 'id')
-    if (!product) throw new Error('Product not found')
-
-    res.status(200).json({
-      resultCode: 1,
-      errorMessage: [],
-      data: product,
-    })
+    const product = await await ProductModel.findById(req.params.id).select('-__v')
+    if (!product) {
+      return next(ApiError.NotFound('Product not found'))
+    }
+    product.countViewed += 1
+    await product.save()
+    return res.status(200).json(product)
   } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'getProductById controller'],
-      data: null,
-    })
+    return next(error.message)
   }
 }
 
 // @desc     Create review
 // @route    POST /api/product/:id/review
 // @access   Private
-export const createReview = async (req: Request<ID, object, CreateReviewBody, object>, res: Response) => {
+export async function createReview(req: RequestCustom, res: Response, next: NextFunction) {
   try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+
     const { rating, comment } = req.body
-    const product = await findProduct(req.params.id, 'id')
-    if (!product) throw new Error('Product not found')
 
-    // @ts-ignore
-    const alreadyReviewed = product.reviews.find((r) => r.user._id.toString() === req.user._id.toString())
-    if (alreadyReviewed) {
-      throw new Error('Product already reviewed')
-    } else {
-      const review = {
-        // @ts-ignore
-        name: req.user.name,
-        rating: Number(rating),
-        // @ts-ignore
-        user: req.user,
-        comment,
-      }
-
-      product.reviews.push(review)
-      product.numReviews = product.reviews.length
-      product.rating = product.reviews.reduce((acc, elem) => elem.rating + acc, 0) / product.reviews.length
-      const result = await product.save()
-      if (result) {
-        res.status(201).json({
-          resultCode: 1,
-          errorMessage: [],
-          data: product,
-        })
-      } else {
-        throw new Error('Server error')
-      }
+    // FIXME: check if rating not between 1 and
+    const product = await ProductModel.findById(req.params.id)
+    if (!product) {
+      return next(ApiError.NotFound('Product not found'))
     }
-  } catch (error) {
-    res.status(issueStatusCode(error.message)).json({
-      resultCode: 0,
-      errorMessage: [error.message, 'createReview controller'],
-      data: null,
+
+    const alreadyReviewed = product.reviews.find(
+      // @ts-ignore
+      (r) => r.user._id.toString() === req.user.id.toString()
+    )
+    if (alreadyReviewed) {
+      return next(ApiError.BadRequest('Product already reviewed'))
+    }
+
+    const review: ReviewType = {
+      rating: Number(rating),
+      user: req.user.id,
+      comment,
+    }
+
+    product.reviews.push(review)
+    product.numReviews = product.reviews.length
+    product.rating = product.reviews.reduce((acc, elem) => elem.rating + acc, 0) / product.reviews.length
+    await product.save()
+    return res.status(201).json({
+      data: product,
     })
+  } catch (error) {
+    return next(error.message)
   }
 }

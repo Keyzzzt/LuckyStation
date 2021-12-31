@@ -1,11 +1,38 @@
-import mongoose from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
+import { UserDoc } from './user.model'
 
-const ReviewSchema = new mongoose.Schema(
+export interface ReviewDoc extends Document {
+  user: UserDoc['id']
+  comment: string
+  rating: number
+}
+
+export type ReviewType = {
+  user: string
+  comment: string
+  rating: number
+}
+
+export interface ProductDoc extends Document {
+  user: UserDoc['id']
+  name: string
+  image: string
+  brand: string
+  category: string
+  description: string
+  rating: number
+  reviews: ReviewType[]
+  colors: string[]
+  sizes: number[]
+  isNewProduct: boolean
+  numReviews: number
+  price: number
+  countInStock: number
+  countInFavorite: number
+  countViewed: number
+}
+const ReviewSchema = new Schema<ReviewDoc>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     rating: {
       type: Number,
       required: true,
@@ -15,7 +42,7 @@ const ReviewSchema = new mongoose.Schema(
       required: true,
     },
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'User',
     },
@@ -25,10 +52,10 @@ const ReviewSchema = new mongoose.Schema(
   }
 )
 
-const ProductSchema = new mongoose.Schema(
+const ProductSchema = new Schema<ProductDoc>(
   {
     user: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
       ref: 'User',
     },
@@ -36,14 +63,18 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
-    },
     brand: {
       type: String,
       required: true,
     },
+    colors: [String],
+    sizes: [Number],
+    isNewProduct: Boolean,
+    image: {
+      type: String,
+      required: true,
+    },
+
     category: {
       type: String,
       required: true,
@@ -73,10 +104,18 @@ const ProductSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    countInFavorite: {
+      type: Number,
+      default: 0,
+    },
+    countViewed: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 )
 
-export const ProductModel = mongoose.model('Product', ProductSchema)
+export const ProductModel = model<ProductDoc>('Product', ProductSchema)

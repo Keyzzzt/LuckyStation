@@ -1,32 +1,35 @@
 /* eslint-disable func-names */
 /* eslint-disable no-unused-vars */
-import { Schema, model, Document } from 'mongoose'
+import { NextFunction } from 'express'
 import bcrypt from 'bcryptjs'
+import { Schema, model, Document } from 'mongoose'
 
-export interface UserDocument extends Document {
-  name: string
+export interface UserDoc extends Document {
   email: string
   password: string
+  googleId: string
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
-  refreshToken?: string
-  accessToken?: string
-  createdAt: Date
-  updatedAt: Date
+  isActivated: boolean
+  activationLink: string
+  credits: number
+  favorite: string[]
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
-const UserSchema = new Schema<UserDocument>(
+const UserSchema: Schema = new Schema<UserDoc>(
   {
-    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    logo: String,
+    password: { type: String },
+    googleId: { type: String, default: '' },
+    logo: { type: String, default: '' },
     isAdmin: { type: Boolean, required: true, default: false },
     isSubscribed: { type: Boolean, required: true, default: false },
-    refreshToken: String,
-    accessToken: String,
+    isActivated: { type: Boolean, default: false },
+    activationLink: { type: String },
+    credits: { type: Number, default: 0 },
+    favorite: [String],
   },
   {
     timestamps: true,
@@ -34,10 +37,10 @@ const UserSchema = new Schema<UserDocument>(
 )
 
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  return await bcrypt.compare(candidatePassword, this.password) // TODO Проверить без await-
+  return bcrypt.compare(candidatePassword, this.password)
 }
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function (next: NextFunction) {
   if (!this.isModified('password')) {
     return next()
   }
@@ -47,9 +50,4 @@ UserSchema.pre('save', async function (next) {
   return next()
 })
 
-// Virtual method example
-UserSchema.virtual('nameAndEmail').get(function (this: UserDocument) {
-  return `${this.name} ${this.email}`
-})
-
-export const UserModel = model<UserDocument>('User', UserSchema)
+export const UserModel = model<UserDoc>('User', UserSchema)

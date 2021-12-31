@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&display=swap');
+
+$Roboto: 'Roboto', sans-serif;
+// $Mulish: 'Mulish', sans-serif;
+$textSize: 1rem;
+$titleSize: 1.3rem;
+$textColor: #26323f;
+$titleColor: #161c24;
+$card-main: #f84848;
+
+// colors
+$dark: rgb(29, 29, 29);
+$light: #fff;
+$primary: rgb(162, 162, 246);
+$bg: #fff;
+
+// Dashboard dark mode colors
+$D-bg: #e5e5e5;
+$D-dark: #161c24;
+$D-dividerLineDark: #3c4752;
+$D-lightBlack: #212b36;
+$D-lightBlack2: #26323f;
+
+// Dashboard light mode colors
+$D-red: #eb5757;
+$D-orange: #f2994a;
+$D-green: #33c863;
+$D-darkGreen: #026338;
+$D-darkGrey: #929292;
+$D-lightGrey: #fafafa;
+$D-light: #fff;
+$D-black: #252733;
+$D-dividerLineLight: #dddfe5;
+
+// app bar
+$D-appBarWidth: 15.875rem;
+
+// spacing
+$spacing-sm: 12px;
+$spacing-md: 24px;
+$spacing-lg: 32px;
+$spacing-xl: 64px;
+
+$letter-spacing: 0.4px;
+
+// border-radius
+$borderRadius: 12px;
+
+// header height
+$headerHeight: 100px;
+
+@mixin breakpoint($point) {
+  @if $point == 1400 {
+    @media (min-width: 1400px) {
+      @content;
+    }
+  } @else if $point == 1200 {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if $point == 992 {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $point == 768 {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point == 576 {
+    @media (min-width: 576px) {
+      @content;
+    }
+  }
+}
+
+// Product Card Content

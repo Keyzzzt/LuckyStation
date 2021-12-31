@@ -1,0 +1,28 @@
+@import './../../../02_Styles/variables.scss';
+
+.container {
+  margin: 0 auto;
+  max-width: 540px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+@media screen and (min-width: 769px) {
+  .container {
+    max-width: 720px;
+  }
+}
+@media screen and (min-width: 993px) {
+  .container {
+    max-width: 960px;
+  }
+}
+@media screen and (min-width: 1201px) {
+  .container {
+    max-width: 1140px;
+  }
+}

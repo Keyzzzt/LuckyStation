@@ -1,0 +1,66 @@
+@import '../../../../02_Styles/variables.scss';
+
+.totals {
+  display: flex;
+  justify-content: space-between;
+  margin: 40px 0;
+  min-width: 900px;
+
+  &__card {
+    display: flex;
+    flex: 1;
+    padding: 32px;
+    border-radius: $borderRadius;
+    &:not(:last-child) {
+      margin-right: 40px;
+    }
+    &.light_mode {
+      color: $D-dark;
+      border: 1px solid $D-dividerLineDark;
+    }
+    &.dark_mode {
+      color: $D-light;
+      border: 1px solid $D-dividerLineLight;
+    }
+    &__icon {
+      padding: 10px;
+      margin-right: 24px;
+      border-radius: $borderRadius;
+      background: linear-gradient(180deg, #e8ffef 0%, #c1f8d2 100%);
+
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &__info {
+      display: flex;
+      flex-direction: column;
+      font-weight: 700;
+      .title {
+        font-size: 1rem;
+        line-height: 28px;
+        letter-spacing: $letter-spacing;
+        &.light_mode {
+          color: $D-dark;
+        }
+        &.dark_mode {
+          color: $D-light;
+        }
+      }
+      .total {
+        font-size: 32px;
+        &.light_mode {
+          color: $D-dark;
+        }
+        &.dark_mode {
+          color: $D-light;
+        }
+      }
+    }
+  }
+}
