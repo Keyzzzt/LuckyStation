@@ -1,16 +1,20 @@
 import { FC, useEffect } from 'react'
 import styles from './OrderList.module.scss'
+import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { Link } from 'react-router-dom'
-import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
-import { actions } from '../../../../03_Reducers/product/productInfoReducer'
 import { orderListThunk } from '../../../../03_Reducers/order/orderListReducer'
+import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 const { v4: uuidv4 } = require('uuid')
 
 export const OrderList: FC = () => {
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const history = useHistory()
+  useIsAdminRedirect(userInfo, history)
+
   const dispatch = useDispatch()
   const { config } = useTypedSelector((state) => state)
   const { orders, loading, error } = useTypedSelector((state) => state.orderList)

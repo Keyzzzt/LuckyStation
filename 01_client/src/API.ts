@@ -36,6 +36,9 @@ export const API = {
     myOrders: async (page: number, limit: number): Promise<AxiosResponse<any>> => {
       return $api.get<any>(`/order/myorders/${page}/${limit}`)
     },
+    createReview: async (productId: string, review: any): Promise<void> => {
+      return $api.post(`/product/${productId}/review`, { ...review })
+    },
   },
   config: {
     setColorTheme: async (): Promise<AxiosResponse<any>> => {
@@ -67,8 +70,8 @@ export const API = {
     getSingleProduct: async (productId: string): Promise<AxiosResponse<Product>> => {
       return $api.get<Product>(`product/${productId}`)
     },
-    getProducts: async (page: number, limit: number): Promise<AxiosResponse<GetAllProductsResponse>> => {
-      return $api.get<GetAllProductsResponse>(`product/${page}/${limit}`)
+    getProducts: async (keyword: string, page: number, limit: number): Promise<AxiosResponse<GetAllProductsResponse>> => {
+      return $api.get<GetAllProductsResponse>(`product/${page}/${limit}?keyword=${keyword}`)
     },
     deleteProduct: async (productId: string): Promise<AxiosResponse<any>> => {
       return $api.delete<any>(`admin/product/${productId}`)
@@ -86,16 +89,19 @@ export const API = {
       return $api.get<GetAllOrdersResponse>(`admin/order/${page}/${limit}`)
     },
     setToDelivered: async (orderId: string): Promise<void> => {
-      return $api.get(`admin/order/${orderId}/delivered`)
+      return $api.post(`admin/order/${orderId}/delivered`)
     },
     setToNotDelivered: async (orderId: string): Promise<void> => {
       return $api.delete(`admin/order/${orderId}/delivered`)
     },
     setToPaid: async (orderId: string): Promise<void> => {
-      return $api.get(`admin/order/${orderId}/paid`)
+      return $api.post(`admin/order/${orderId}/pay`)
     },
     setToNotPaid: async (orderId: string): Promise<void> => {
-      return $api.delete(`admin/order/${orderId}/paid`)
+      return $api.delete(`admin/order/${orderId}/pay`)
+    },
+    deleteOrder: async (orderId: string): Promise<void> => {
+      return $api.delete(`admin/order/${orderId}/delete`)
     },
   },
 }

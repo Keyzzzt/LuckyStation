@@ -5,22 +5,23 @@ import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import Loader from '../../../02_Chunks/Loader/Loader'
 // import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useScrollToTop } from '../../../../04_Utils/hooks'
+import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
 import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
+import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 
 export const ProductCreateScreen: FC = () => {
-  useScrollToTop()
-  const dispatch = useDispatch()
   const history = useHistory()
   const { userInfo } = useTypedSelector((state) => state.userInfo)
+  useIsAdminRedirect(userInfo, history)
+
+  useScrollToTop()
+  const dispatch = useDispatch()
 
   const [brand, setBrand] = useState('Phillips')
-  const [name, setName] = useState('Fidelio')
+  const [name, setName] = useState('Fidelity')
   const [category, setCategory] = useState('Audio')
-  const [description, setDescription] = useState(
-    'What if you could always be in the perfect place to listen to the music you love? Exquisitely tuned drivers, excellent Active Noise Cancelling and the right fit combine to create the perfect listening environment. Wherever you are. See all benefits'
-  )
+  const [description, setDescription] = useState('What if you could always be in the perfect place to listen to the music you love? ')
   const [price, setPrice] = useState('99')
   const [image, setImage] = useState('')
   const [uploading, setUploading] = useState(false)
@@ -42,7 +43,7 @@ export const ProductCreateScreen: FC = () => {
   }
 
   const saveToLocalStorage = () => {
-    // TODO
+    // TODO нужно ли сохранять в localStorage ???
   }
 
   const uploadImageHandler = async (e: any) => {
@@ -63,10 +64,6 @@ export const ProductCreateScreen: FC = () => {
       console.log(error)
       setUploading(false)
     }
-  }
-
-  const returnHandler = () => {
-    history.push('/dashboard')
   }
 
   const stringToArray = (str: string) => {
@@ -106,7 +103,7 @@ export const ProductCreateScreen: FC = () => {
 
   return (
     <div className={styles.container}>
-      <button onClick={returnHandler}>Back</button>
+      <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={clearHandler}>Clear</button>
       <button onClick={saveToLocalStorage}>Save locally</button>
 

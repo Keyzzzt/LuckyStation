@@ -1,58 +1,59 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import styles from './OrderEditScreen.module.scss'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useScrollToTop } from '../../../../04_Utils/hooks'
+import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
-import { setToDeliveredThunk, setToPaidThunk } from '../../../../03_Reducers/order/orderManageReducer'
+import { deleteOrderThunk, deliveredThunk, notDeliveredThunk, notPaidThunk, paidThunk } from '../../../../03_Reducers/order/orderManageReducer'
+import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 const { v4: uuidv4 } = require('uuid')
 
 export const OrderEditScreen: FC = () => {
-  useScrollToTop()
   const history = useHistory()
-  const dispatch = useDispatch()
   const { userInfo } = useTypedSelector((state) => state.userInfo)
+  useIsAdminRedirect(userInfo, history)
+
+  useScrollToTop()
+  const dispatch = useDispatch()
   const { orderId } = useParams<{ orderId: string }>()
   const { orderInfo, error, loading } = useTypedSelector((state) => state.orderInfo)
+  const { successDelivered, successNotDelivered, successPaid, successNotPaid, successDelete, manageOrderError } = useTypedSelector(
+    (state) => state.orderManage
+  )
 
-  if (!userInfo) {
-    history.push('/login?redirect=dashboard')
-  }
-  if (userInfo && !userInfo.isAdmin) {
-    history.push('/')
-  }
-
-  const deleteHandler = (id: string, name: string) => {
-    // if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-    //   dispatch(productDeleteThunk(id))
-    //   alert(`${name} has been removed`)
-    //   history.push('/dashboard')
-    // }
-    // return
-  }
-
-  const returnHandler = () => {
-    history.push('/dashboard')
+  type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
+  const manageOrderHandler = (action: ActionType) => {
+    action === 'delivered' && dispatch(deliveredThunk(orderId))
+    action === 'notDelivered' && dispatch(notDeliveredThunk(orderId))
+    action === 'paid' && dispatch(paidThunk(orderId))
+    action === 'notPaid' && dispatch(notPaidThunk(orderId))
+    action === 'delete' &&
+      (() => {
+        if (window.confirm('Are you sure you want to delete?')) {
+          dispatch(deleteOrderThunk(orderId))
+          history.push('/dashboard')
+          return
+        }
+        return
+      })()
   }
 
-  const setToDeliveredHandler = () => {
-    dispatch(setToDeliveredThunk(orderId))
-  }
-  const setToPaidHandler = () => {
-    dispatch(setToPaidThunk(orderId))
-  }
   useEffect(() => {
-    dispatch(orderInfoThunk(orderId))
-  }, [dispatch])
-
+    if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
+      dispatch(orderInfoThunk(orderId))
+    }
+  }, [dispatch, successDelivered, successNotDelivered, successPaid, successNotPaid, orderId, successDelete])
   return (
     <div className={styles.container}>
+      <RedirectButton path="/dashboard">Back</RedirectButton>
+      <button onClick={() => manageOrderHandler('delete')}>Delete</button>
       {loading && <Loader />}
       {error && <ErrorMessage message={error} />}
+      {manageOrderError && <ErrorMessage message={manageOrderError} />}
 
       <div>
         <div>Order Items</div>
@@ -77,14 +78,30 @@ export const OrderEditScreen: FC = () => {
           {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}
         </div>
         <div>Created at: {orderInfo?.createdAt}</div>
-        <div onClick={setToPaidHandler}>
-          {orderInfo?.isPaid ? <div style={{ backgroundColor: 'green' }}>Paid</div> : <div style={{ backgroundColor: 'red' }}>NOT Paid</div>}
-        </div>
-        <div onClick={setToDeliveredHandler}>
-          {orderInfo?.isDelivered ? (
-            <div style={{ backgroundColor: 'green' }}>Delivered</div>
+        <div>
+          {orderInfo?.isPaid ? (
+            <div>
+              <div style={{ backgroundColor: 'green' }}>Paid</div>
+              <button onClick={() => manageOrderHandler('notPaid')}>Set to not paid</button>
+            </div>
           ) : (
-            <div style={{ backgroundColor: 'red' }}>NOT Delivered</div>
+            <div>
+              <div style={{ backgroundColor: 'red' }}>NOT Paid</div>
+              <button onClick={() => manageOrderHandler('paid')}>Set to paid</button>
+            </div>
+          )}
+        </div>
+        <div>
+          {orderInfo?.isDelivered ? (
+            <div>
+              <div style={{ backgroundColor: 'green' }}>Delivered</div>
+              <button onClick={() => manageOrderHandler('notDelivered')}>Set to not delivered</button>
+            </div>
+          ) : (
+            <div>
+              <div style={{ backgroundColor: 'red' }}>NOT Delivered</div>
+              <button onClick={() => manageOrderHandler('delivered')}>Set to delivered</button>
+            </div>
           )}
         </div>
         {orderInfo?.paidAt && <div>Paid at: {orderInfo?.paidAt}</div>}

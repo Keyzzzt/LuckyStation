@@ -5,18 +5,21 @@ import { useParams } from 'react-router'
 import { Link, useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useScrollToTop } from '../../../../04_Utils/hooks'
+import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
 import { productInfoThunk } from '../../../../03_Reducers/product/productInfoReducer'
 import { productDeleteThunk } from '../../../../03_Reducers/admin/productDeleteReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { updateProductThunk } from '../../../../03_Reducers/admin/updateProductReducer'
+import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 
 export const ProductEditScreen: FC = () => {
+  const history = useHistory()
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  useIsAdminRedirect(userInfo, history)
+
   useScrollToTop()
   const dispatch = useDispatch()
-  const history = useHistory()
   const { productId } = useParams<{ productId: string }>()
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const { productInfo, error, loading } = useTypedSelector((state) => state.productInfo)
   const { success, loading: loadingUpdate } = useTypedSelector((state) => state.updateProduct)
 
@@ -27,13 +30,6 @@ export const ProductEditScreen: FC = () => {
   const [price, setPrice] = useState(productInfo?.price)
   const [countInStock, setCountInStock] = useState(productInfo?.countInStock)
 
-  if (!userInfo) {
-    history.push('/login?redirect=dashboard')
-  }
-  if (userInfo && !userInfo.isAdmin) {
-    history.push('/')
-  }
-
   const deleteHandler = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       dispatch(productDeleteThunk(id))
@@ -42,11 +38,6 @@ export const ProductEditScreen: FC = () => {
     }
     return
   }
-
-  const returnHandler = () => {
-    history.push('/dashboard')
-  }
-
   const updateHandler = () => {
     dispatch(
       updateProductThunk(productInfo?._id!, {
@@ -79,7 +70,7 @@ export const ProductEditScreen: FC = () => {
       {loadingUpdate && <Loader />}
       {error && <ErrorMessage message={error} />}
       {success && <ErrorMessage message="Product successfully updated" />}
-      <button onClick={returnHandler}>Back</button>
+      <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={updateHandler}>Update</button>
       <button onClick={() => deleteHandler(productId, productInfo?.name!)}>Delete</button>
       <div>

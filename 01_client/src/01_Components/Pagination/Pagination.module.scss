@@ -1,0 +1,56 @@
+@import '../../02_Styles/newVariables.scss';
+
+// Блоку не задаем внешние отступы, чтобы уго можно было переиспользовать
+// Блоки можно вкладывать друг в друга
+// Элемент всегда наследуется от блока
+// Элемент можно вкладывать в другой элемент, но название класса всегда начинаем с блока см. ниже:
+// Нельзя - имяБлока__имяЭлемента__имяЭлемента
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  .list {
+    display: flex;
+    background-color: $light;
+    padding: 8px;
+    border-radius: 50px;
+    & i {
+      margin: 0 20px;
+    }
+    & li {
+      line-height: 45px;
+      text-align: center;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    & li.dots {
+      font-size: 1.1rem;
+      cursor: default;
+    }
+    & li.numb {
+      height: 45px;
+      width: 45px;
+      cursor: pointer;
+      border-radius: 50px;
+      margin: 0 3px;
+    }
+    & li.prev {
+      border-radius: 25px 5px 5px 25px;
+      cursor: pointer;
+      padding: 0 20px 0 0;
+    }
+    & li.next {
+      border-radius: 5px 25px 25px 5px;
+      cursor: pointer;
+      padding: 0 0 0 20px;
+    }
+    & li.btn:hover,
+    & li.numb:hover,
+    & li.active {
+      background: $main;
+      color: $light;
+    }
+  }
+}

@@ -3,15 +3,17 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     overflow: hidden;
+    margin: 20px;
 }
 
-.button {
+.paginationItem {
     padding: 10px 16px;
     outline: none;
     border: none;
     cursor: pointer;
     border-right: 1px solid #ccc;
     background-color: #eee;
+    margin: 0;
 }
 .button:last-child {
     border-right: none;

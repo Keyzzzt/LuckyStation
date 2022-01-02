@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react'
+import { useHistory } from 'react-router'
 import styles from './ProductsList.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
@@ -7,16 +8,21 @@ import Loader from '../../../02_Chunks/Loader/Loader'
 import { Link } from 'react-router-dom'
 import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
 import { actions } from '../../../../03_Reducers/product/productInfoReducer'
+import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 const { v4: uuidv4 } = require('uuid')
 
 export const ProductsList: FC = () => {
+  const history = useHistory()
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  useIsAdminRedirect(userInfo, history)
+
   const dispatch = useDispatch()
   const { config } = useTypedSelector((state) => state)
   const { products, loading, error } = useTypedSelector((state) => state.productList)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
-    dispatch(productListThunk(1, 100))
+    dispatch(productListThunk('', 1, 100))
     dispatch(actions.productInfoResetAC())
   }, [dispatch])
   return (

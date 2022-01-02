@@ -21,6 +21,7 @@ import { getUserReducer } from './03_Reducers/admin/getUserReducer'
 import { createProductReducer } from './03_Reducers/admin/createProductReducer'
 import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
 import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
+import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -34,6 +35,7 @@ const rootReducer = combineReducers({
   productInfo: productInfoReducer,
   productList: productListReducer,
   productDelete: productDeleteReducer,
+  productReview: productReviewReducer,
   updateProduct: updateProductReducer,
   createProduct: createProductReducer,
   orderInfo: orderInfoReducer,

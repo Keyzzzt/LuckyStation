@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { actions as myOrdersActions } from '../../../03_Reducers/user/myOrdersReducer'
 import { actions as orderInfoActions } from '../../../03_Reducers/order/orderInfoReducer'
+import { Search } from '../Search/Search'
 
 export const Header: FC = () => {
   const history = useHistory()
@@ -49,6 +50,9 @@ export const Header: FC = () => {
 
         <nav className={`${styles.header__content__nav} ${menuOpen && size.width! < 768 ? styles.isMenu : ''}`}>
           <ul>
+            <li>
+              <Search />
+            </li>
             <li>
               <Link to="/" onClick={toggleMenuHandler}>
                 Home

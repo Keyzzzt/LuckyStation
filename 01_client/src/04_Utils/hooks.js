@@ -106,3 +106,19 @@ export function useScrollToTop() {
   }, [pathname])
   return null
 }
+
+/**
+ *! ===============================================================================================================================
+ *  @useIsAdminRedirect
+ */
+
+export function useIsAdminRedirect(userInfo, history) {
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login?redirect=dashboard')
+    }
+    if (userInfo && !userInfo.isAdmin) {
+      history.push('/')
+    }
+  }, [userInfo, history])
+}

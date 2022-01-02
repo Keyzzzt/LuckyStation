@@ -15,10 +15,10 @@ import { ShippingScreen } from './01_Components/01_Screens/ShippingScreen/Shippi
 import { PaymentScreen } from './01_Components/01_Screens/PaymentScreen/PaymentScreen'
 import { PlaceOrderScreen } from './01_Components/01_Screens/PlaceOrderScreen/PlaceOrderScreen'
 import { OrderScreen } from './01_Components/01_Screens/OrderScreen/OrderScreen'
-import { UserEditScreen } from './01_Components/01_Screens/UserEditScreen/UserEditScreen'
 import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/ProductEditScreen/ProductEditScreen'
-import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
 import { ProductCreateScreen } from './01_Components/01_Screens/AdminDashboard/ProductCreateScreen/ProductCreateScreen'
+import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
+import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,7 +30,6 @@ const App = () => {
     <div>
       <Header />
       <Switch>
-        <Route exact path="/" render={() => <Home />} />
         <Route path="/login" render={() => <Login />} />
         <Route path="/profile" render={() => <ProfileScreen />} />
         <Route path="/cart/:productId?" render={() => <CartScreen />} />
@@ -45,6 +44,9 @@ const App = () => {
         <Route path="/order/:orderId/edit" render={() => <OrderEditScreen />} exact />
         <Route path="/create" render={() => <ProductCreateScreen />} />
         <Route path="/order/:orderId" render={() => <OrderScreen />} />
+        <Route exact path="/:keyword?/:page?/:limit?" render={() => <Home />} />
+        <Route exact path="/:page/:limit" render={() => <Home />} />
+        <Route exact path="/" render={() => <Home />} />
       </Switch>
       <Footer />
     </div>

@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+
+$main: #09c;
+$light: #fff;
+$grey: #c2c2c2;
+$dark: #000;
+
+@mixin breakpoint($point) {
+  @if $point == 1400 {
+    @media (min-width: 1400px) {
+      @content;
+    }
+  } @else if $point == 1200 {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if $point == 992 {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $point == 768 {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point == 576 {
+    @media (min-width: 576px) {
+      @content;
+    }
+  }
+}
