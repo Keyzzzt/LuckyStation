@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { useParams } from 'react-router'
 import { Pagination } from '../../Pagination/Pagination'
 import { PriceRange } from '../../02_Chunks/PriceRange/PriceRange'
+import { Tags } from '../../02_Chunks/Tags/Tags'
 // import { PaginationV2 } from '../../03_Chunks_unused/PaginationV2/PaginationV2'
 type Params = {
   page: string
@@ -43,6 +44,7 @@ export const Home: FC = () => {
 
       <Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />
       <PriceRange />
+      <Tags />
     </section>
   )
 }

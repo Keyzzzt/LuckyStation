@@ -5,42 +5,29 @@ import { useHistory } from 'react-router-dom'
 export const PriceRange: FC = () => {
   const [min, setMin] = useState<number>(0)
   const [max, setMax] = useState<number>(10000)
+  const [slider, setSlider] = useState('')
   const history = useHistory()
   const inputMin = useRef(null)
   const inputMax = useRef(null)
-  const priceGap = 1000
+  const gap = 1000
 
   // @ts-ignore
-  const percentMin = (min! / inputMin?.current?.max) * 100
+  const percentMin = (min / inputMin?.current?.max!) * 100
   // @ts-ignore
-  const percentMax = 100 - (max! / inputMax?.current?.max) * 100
+  const percentMax = 100 - (max / inputMax?.current?.max) * 100
 
-  // if (max! - min! < priceGap) {
-  //   //@ts-ignore
-  //   inputMin.current.max = max - priceGap
-  // }
-
-  const setMinHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (max - min < priceGap && max <= 10000) {
-      setMax(min + priceGap)
-    } else if (min <= max - priceGap) {
-      setMin(+e.currentTarget.value)
+  if (max - min < gap) {
+    if (slider === 'min') {
+      setMin(max - gap)
     } else {
-      return
-    }
-  }
-  const setMaxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (max - min < priceGap && min >= 0) {
-      setMin(max - priceGap)
-    } else if (max >= min + priceGap) {
-      setMax(+e.currentTarget.value)
-    } else {
-      return
+      setMax(min + gap)
     }
   }
 
-  // max - min < priceGap ? max - priceGap : min
-  // max - min < priceGap ? min + priceGap : max
+  const rangeHandler = (e: ChangeEvent<HTMLInputElement>, slider: string) => {
+    setSlider(slider)
+    slider === 'min' ? setMin(+e.target.value) : setMax(+e.target.value)
+  }
   return (
     <div className={styles.priceRange}>
       <div className={styles.priceRange__header}>
@@ -62,8 +49,8 @@ export const PriceRange: FC = () => {
         <div className={styles.priceRange__progress} style={{ left: `${percentMin}%`, right: `${percentMax}%` }}></div>
       </div>
       <div className={styles.rangeInput}>
-        <input ref={inputMin} onChange={setMinHandler} className={styles.rangeInput__min} type="range" min="0" max="10000" value={min} />
-        <input ref={inputMax} onChange={setMaxHandler} className={styles.rangeInput__min} type="range" min="0" max="10000" value={max} />
+        <input data-min ref={inputMin} onChange={(e) => rangeHandler(e, 'min')} className={styles.rangeInput__min} type="range" min="0" max="10000" value={min} />
+        <input ref={inputMax} onChange={(e) => rangeHandler(e, 'max')} className={styles.rangeInput__min} type="range" min="0" max="10000" value={max} />
       </div>
     </div>
   )

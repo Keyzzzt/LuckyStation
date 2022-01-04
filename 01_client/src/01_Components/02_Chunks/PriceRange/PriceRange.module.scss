@@ -5,13 +5,12 @@ body {
 }
 .priceRange {
   background-color: $light;
-  border-radius: 10px;
+  border-radius: $bRadius10;
   width: 400px;
-  margin: 0 auto;
   padding: 20px 25px 40px;
   &__header {
     & h2 {
-      font-weight: 600;
+      font-weight: $fw600;
       font-size: 1.2rem;
     }
     & p {
@@ -44,7 +43,7 @@ body {
       font-size: 1.1rem;
       margin-left: 12px;
       text-align: center;
-      border-radius: 5px;
+      border-radius: $bRadius5;
       border: 1px solid $dark;
       -moz-appearance: textfield;
     }

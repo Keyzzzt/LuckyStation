@@ -5,6 +5,14 @@ $light: #fff;
 $grey: #c2c2c2;
 $dark: #000;
 
+$bRadius10: 10px;
+$bRadius5: 5px;
+
+$fz1and2: 1.2rem;
+$fz1: 1rem;
+
+$fw600: 600;
+
 @mixin breakpoint($point) {
   @if $point == 1400 {
     @media (min-width: 1400px) {
