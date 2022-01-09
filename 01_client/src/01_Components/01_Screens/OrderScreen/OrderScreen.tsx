@@ -12,7 +12,7 @@ import $api from '../../../04_Utils/axiosSetup'
 //TODO orderpay
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
-const { v4: uuidv4 } = require('uuid')
+import { getRandom } from '../../../04_Utils/utils'
 
 export const OrderScreen: FC = () => {
   const { orderInfo, loading, error } = useTypedSelector((state) => state.orderInfo)
@@ -56,7 +56,7 @@ export const OrderScreen: FC = () => {
       <div>
         <div>Order Items</div>
         {orderInfo?.orderItems.map((item) => (
-          <div key={uuidv4()}>
+          <div key={getRandom()}>
             <div>Name: {item.name}</div>
             <div>
               <img src={item.image} alt="Product" />
@@ -71,10 +71,7 @@ export const OrderScreen: FC = () => {
         <div>Tax price: {orderInfo?.taxPrice}</div>
         <div>Shipping price: {orderInfo?.shippingPrice}</div>
         <div>Total price: {orderInfo?.totalPrice}</div>
-        <div>
-          Shipping address:{' '}
-          {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}
-        </div>
+        <div>Shipping address: {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}</div>
         <div>Created at: {orderInfo?.createdAt}</div>
         <div>{orderInfo?.isPaid ? 'Paid' : 'Not paid'}</div>
         <div>{orderInfo?.isDelivered ? 'Delivered' : 'Not delivered'}</div>

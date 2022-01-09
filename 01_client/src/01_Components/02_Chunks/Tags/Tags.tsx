@@ -1,19 +1,32 @@
 import { FC, useState } from 'react'
 import styles from './Tags.module.scss'
 
-// TODO Данный компонент можно расширить использованием клавишь enter/esc добавить/отменить написанное.
-
-export const Tags: FC = () => {
+// TODO Добавить клавиши enter/esc
+type Props = {
+  totalTagsCount?: number
+}
+export const Tags: FC<Props> = ({ totalTagsCount = 10 }) => {
   const [tags, setTags] = useState<string[]>([])
-  const [tagsCount, setTagsCount] = useState(10)
+  const [tagsCount, setTagsCount] = useState(totalTagsCount)
   const [tagText, setTagText] = useState('')
-  console.log(tagText)
 
   const addTagHandler = () => {
     if (tagText === '') return
-    setTags([...tags, tagText])
+    let newTags = tagText.replace(/\s+/g, '')
+    let newTagsArr = newTags.split(',').filter((item) => item.length > 0)
+
+    const removedDuplicates = newTagsArr.filter((value) => !tags.includes(value))
+
+    if (tags.length + removedDuplicates.length > 10) {
+      const sliced = removedDuplicates.reverse().slice(tags.length + removedDuplicates.length - 10)
+      setTags([...tags, ...sliced])
+      setTagsCount(0)
+      setTagText('')
+      return
+    }
+    setTags([...tags, ...removedDuplicates])
     setTagText('')
-    setTagsCount((prev) => prev - 1)
+    setTagsCount((prev) => prev - removedDuplicates.length)
   }
 
   const removeTagHandler = (tagIndex: number) => {
@@ -31,7 +44,7 @@ export const Tags: FC = () => {
   }
 
   return (
-    <div className={styles.tags}>
+    <div className={styles.container}>
       <div className={styles.title}>
         <i className="fas fa-tags" />
         <h2>Tags</h2>

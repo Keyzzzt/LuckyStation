@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
 import { actions } from '../../../../03_Reducers/product/productInfoReducer'
 import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
-const { v4: uuidv4 } = require('uuid')
+import { getRandom } from '../../../../04_Utils/utils'
 
 export const ProductsList: FC = () => {
   const history = useHistory()
@@ -39,7 +39,7 @@ export const ProductsList: FC = () => {
       </div>
       <div className={styles.list}>
         {products?.map((product) => (
-          <div key={uuidv4()} className={styles.list__item}>
+          <div key={getRandom()} className={styles.list__item}>
             <div className={styles.info}>
               <Link to={`/product/${product._id}/edit`} className={`${styles.name} ${themeClass}`}>
                 {product._id}

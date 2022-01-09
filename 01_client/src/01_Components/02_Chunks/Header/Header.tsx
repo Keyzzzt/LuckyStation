@@ -1,7 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import styles from './Header.module.scss'
-import { BiMenuAltRight } from 'react-icons/bi'
-import { AiOutlineClose } from 'react-icons/ai'
 import { Link, useHistory } from 'react-router-dom'
 import { useWindowSize } from '../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -88,7 +86,15 @@ export const Header: FC = () => {
           {userInfo?.isAdmin && <button onClick={dashboardHandler}>Dashboard</button>}
         </nav>
         <div className={styles.header__content__toggle}>
-          {menuOpen ? <AiOutlineClose onClick={toggleMenuHandler} /> : <BiMenuAltRight onClick={toggleMenuHandler} />}
+          {menuOpen ? (
+            <div className={styles.temp1} onClick={toggleMenuHandler}>
+              Close
+            </div>
+          ) : (
+            <div onClick={toggleMenuHandler} className={styles.temp2}>
+              Open
+            </div>
+          )}
         </div>
       </div>
     </header>

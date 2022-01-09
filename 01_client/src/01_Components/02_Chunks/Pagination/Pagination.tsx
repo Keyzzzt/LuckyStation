@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState } from 'react'
-import { useTypedSelector } from '../../05_Types/01_Base'
+import { getRandom } from '../../../04_Utils/utils'
+import { useTypedSelector } from '../../../05_Types/01_Base'
 import styles from './Pagination.module.scss'
-import { v4 as uuidv4 } from 'uuid'
 
 type Props = {
   limit: number
@@ -12,7 +13,7 @@ type Props = {
 
 export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandler }) => {
   const [activePage, setActivePage] = useState(1)
-  const { next, prev, totalPages, products } = useTypedSelector((state) => state.productList)
+  const { totalPages, products } = useTypedSelector((state) => state.productList)
 
   const pagesCount = []
   for (let i = 1; i <= totalPages; i++) {
@@ -42,7 +43,7 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
           )}
           {pagesCount.map((pageNumber) =>
             pageNumber < activePage + 4 && pageNumber > activePage - 4 ? (
-              <li className={`${styles.numb} ${pageNumber === activePage && styles.active}`} onClick={() => changePageHandler(pageNumber)} key={uuidv4()}>
+              <li className={`${styles.numb} ${pageNumber === activePage && styles.active}`} onClick={() => changePageHandler(pageNumber)} key={getRandom()}>
                 <span>{pageNumber}</span>
               </li>
             ) : null

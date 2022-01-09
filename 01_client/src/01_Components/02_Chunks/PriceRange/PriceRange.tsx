@@ -1,12 +1,12 @@
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import styles from './PriceRange.module.scss'
-import { useHistory } from 'react-router-dom'
+// import { useHistory } from 'react-router-dom'
 
 export const PriceRange: FC = () => {
   const [min, setMin] = useState<number>(0)
   const [max, setMax] = useState<number>(10000)
   const [slider, setSlider] = useState('')
-  const history = useHistory()
+  // const history = useHistory()
   const inputMin = useRef(null)
   const inputMax = useRef(null)
   const gap = 1000

@@ -10,7 +10,7 @@ import Loader from '../../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
 import { deleteOrderThunk, deliveredThunk, notDeliveredThunk, notPaidThunk, paidThunk } from '../../../../03_Reducers/order/orderManageReducer'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
-const { v4: uuidv4 } = require('uuid')
+import { getRandom } from '../../../../04_Utils/utils'
 
 export const OrderEditScreen: FC = () => {
   const history = useHistory()
@@ -21,9 +21,7 @@ export const OrderEditScreen: FC = () => {
   const dispatch = useDispatch()
   const { orderId } = useParams<{ orderId: string }>()
   const { orderInfo, error, loading } = useTypedSelector((state) => state.orderInfo)
-  const { successDelivered, successNotDelivered, successPaid, successNotPaid, successDelete, manageOrderError } = useTypedSelector(
-    (state) => state.orderManage
-  )
+  const { successDelivered, successNotDelivered, successPaid, successNotPaid, successDelete, manageOrderError } = useTypedSelector((state) => state.orderManage)
 
   type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
   const manageOrderHandler = (action: ActionType) => {
@@ -46,6 +44,7 @@ export const OrderEditScreen: FC = () => {
     if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
       dispatch(orderInfoThunk(orderId))
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, successDelivered, successNotDelivered, successPaid, successNotPaid, orderId, successDelete])
   return (
     <div className={styles.container}>
@@ -58,7 +57,7 @@ export const OrderEditScreen: FC = () => {
       <div>
         <div>Order Items</div>
         {orderInfo?.orderItems.map((item) => (
-          <div key={uuidv4()}>
+          <div key={getRandom()}>
             <div>Name: {item.name}</div>
             <div>
               <img src={item.image} alt="Product" />
@@ -73,10 +72,7 @@ export const OrderEditScreen: FC = () => {
         <div>Tax price: {orderInfo?.taxPrice}</div>
         <div>Shipping price: {orderInfo?.shippingPrice}</div>
         <div>Total price: {orderInfo?.totalPrice}</div>
-        <div>
-          Shipping address:{' '}
-          {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}
-        </div>
+        <div>Shipping address: {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}</div>
         <div>Created at: {orderInfo?.createdAt}</div>
         <div>
           {orderInfo?.isPaid ? (

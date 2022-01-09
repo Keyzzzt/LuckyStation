@@ -8,7 +8,7 @@ import Loader from '../../../02_Chunks/Loader/Loader'
 import { Link } from 'react-router-dom'
 import { orderListThunk } from '../../../../03_Reducers/order/orderListReducer'
 import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
-const { v4: uuidv4 } = require('uuid')
+import { getRandom } from '../../../../04_Utils/utils'
 
 export const OrderList: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
@@ -33,7 +33,7 @@ export const OrderList: FC = () => {
 
       <div className={styles.list}>
         {orders?.map((order) => (
-          <div key={uuidv4()} className={styles.list__item}>
+          <div key={getRandom()} className={styles.list__item}>
             <div className={styles.info}>
               <Link to={`/order/${order._id}/edit`} className={`${styles.name} ${themeClass}`}>
                 {order._id}

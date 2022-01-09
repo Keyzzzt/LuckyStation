@@ -9,17 +9,19 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const authReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'LOGIN_REQUEST':
-      return { success: false, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'LOGIN_SUCCESS':
-      return { success: true, loading: false, error: null }
+      return { ...initialState, success: true }
     case 'LOGIN_FAIL':
-      return { success: false, loading: false, error: action.payload }
+      return { ...initialState, error: action.payload }
+    case 'LOGIN_RESET':
+      return { ...initialState }
     default:
       return state
   }
@@ -29,6 +31,7 @@ export const actions = {
   loginRequestAC: () => ({ type: 'LOGIN_REQUEST' as const }),
   loginSuccessAC: () => ({ type: 'LOGIN_SUCCESS' as const }),
   loginFailAC: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
+  loginResetAC: () => ({ type: 'LOGIN_RESET' as const }),
 }
 
 export const authThunk = {

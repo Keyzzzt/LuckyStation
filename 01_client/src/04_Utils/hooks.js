@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { authThunk } from '../03_Reducers/authReducer'
@@ -11,7 +11,7 @@ import { useLocation } from 'react-router'
  ** Хук позволяет в целевой компоненте просто вызывать thunk без передачи его в dispatch
  ** Мы экономим только на строке const dispatch = useDispatch() в каждой компоненте.
  ** Но должны деструктуризировать const {  } = useActions() + вызывать.
- ** Спорный хук который не используется в этом приложении, но нужно его знать если встречу в чужом коде.
+ ** Спорный хук который не используется в этом приложении, но нужно его знать.
  */
 const actions = {
   ...authThunk,
@@ -26,7 +26,7 @@ export const useActions = () => {
  *  @useAutoFetch
  ** Хук запрашивает API при изменении входящих query & page
  ** В связке с компонетом InfiniteScroll получаем подгрузку новой порции данных с сервера, при прокрутке до последнего элемента.
- ** hasMore - параметр, который останавливает подгрузку если равен false.
+ ** hasMore - параметр, который останавливает подгрузку если равен false, в моем api это отсутствие поля next в ответе
  */
 export function useAutoFetch(query, page) {
   const [loading, setLoading] = useState(true)
@@ -96,7 +96,7 @@ export function useWindowSize() {
 
 /**
  *! ===============================================================================================================================
- *  @useScrollToTop
+ *  @useScrollToTop - скролит страницу наверх
  */
 
 export function useScrollToTop() {
@@ -109,7 +109,9 @@ export function useScrollToTop() {
 
 /**
  *! ===============================================================================================================================
- *  @useIsAdminRedirect
+ *  @useIsAdminRedirect - проверяет является ли пользователь админом, если нет:
+ * Залогиненного пользователя редиректит на главную
+ * Не залогиненного редиректит на страницу логина
  */
 
 export function useIsAdminRedirect(userInfo, history) {
@@ -121,4 +123,85 @@ export function useIsAdminRedirect(userInfo, history) {
       history.push('/')
     }
   }, [userInfo, history])
+}
+
+/**
+ *! ===============================================================================================================================
+ *  @useSelectByFilter - сортирует массив на основе filter, возвращает отсортированный массив
+ */
+export const useSelectByFilter = (items, filter) => {
+  const sortedItems = useMemo(() => {
+    // console.log('getSortedPosts')
+
+    if (filter.sort) {
+      //@ts-ignore
+      return [...items].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
+    }
+    return items
+  }, [filter.sort, items])
+  return sortedItems
+}
+
+/**
+ *! ===============================================================================================================================
+ *  @useSelectByFilter - сортирует массив на основе filter, и применяет к отсортированному массиву поиск из query
+ */
+export const useSelectByFilterAndQuery = (items, filter, query) => {
+  const sortedItems = useSelectByFilter(items, filter)
+  const sortedAndSearchedItems = useMemo(() => {
+    return sortedItems.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+  }, [query, sortedItems])
+  return sortedAndSearchedItems
+}
+
+/**
+ *! ===============================================================================================================================
+ *  @useFetch - замудренный способ подгурзки данных. Хотя, нам не нужно диспачить в этом случае Loading и error... и держать их в state,
+ * не нужно и обнулять ошибку в глобальном state
+ */
+// Создаем хук
+export const useFetch = (callback) => {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = ['']
+  const fetching = async (...args) => {
+    try {
+      setLoading(true)
+      await callback(...args)
+    } catch (e) {
+      setError(e.error)
+    } finally {
+      setLoading(false)
+    }
+  }
+  return [fetching, loading, error]
+}
+// Использование
+
+// const [data, setData] = useState([])
+
+// const [fetching, loading, error] = useFetch(() => {
+//   const { data } = axios.get('some api')
+//   setData(data)
+// })
+
+// useEffect(() => {
+//   fetching()
+// }, [])
+
+/**
+ *! ===============================================================================================================================
+ *  @useInput -
+ */
+
+const useInput = (initialValue) => {
+  const [value, setValue] = useState(initialValue)
+  const [isDirty, setIsDirty] = useState(false)
+
+  const onChange = (e) => {
+    setValue(e.target.value)
+  }
+  const onBlur = () => {
+    setIsDirty(true)
+  }
+  return { value, onChange, onBlur }
 }

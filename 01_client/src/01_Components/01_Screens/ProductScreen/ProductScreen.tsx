@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, FormEvent, useEffect, useState } from 'react'
 import styles from './ProductScreen.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -5,10 +6,10 @@ import { useDispatch } from 'react-redux'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
 import { useHistory, useParams } from 'react-router'
 import { Rating } from '../../02_Chunks/Rating/Rating'
-import { v4 as uuidv4 } from 'uuid'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import { productReviewThunk } from '../../../03_Reducers/product/productReviewReducer'
+import { getRandom } from '../../../04_Utils/utils'
 
 export const ProductScreen: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
@@ -35,6 +36,7 @@ export const ProductScreen: FC = () => {
     if (!productInfo || productId !== productInfo._id || successReview) {
       dispatch(productInfoThunk(productId))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, productId, successReview])
   return (
     <div className={styles.container}>
@@ -69,7 +71,7 @@ export const ProductScreen: FC = () => {
             <div className={styles.quantity}>
               <select value={qty} onChange={(e) => setQty(Number(e.target.value))}>
                 {[...Array(productInfo?.countInStock).keys()].map((n) => (
-                  <option key={uuidv4()} value={n + 1}>
+                  <option key={getRandom()} value={n + 1}>
                     {n + 1}
                   </option>
                 ))}

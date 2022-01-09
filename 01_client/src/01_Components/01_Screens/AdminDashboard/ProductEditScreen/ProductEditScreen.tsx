@@ -54,6 +54,7 @@ export const ProductEditScreen: FC = () => {
   }
   useEffect(() => {
     dispatch(productInfoThunk(productId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch])
   useEffect(() => {
     setName(productInfo?.name)

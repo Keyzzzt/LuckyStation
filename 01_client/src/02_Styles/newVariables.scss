@@ -1,17 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
 
 $main: #09c;
+$hover: #f2994a;
 $light: #fff;
 $grey: #c2c2c2;
 $dark: #000;
+$error: #eb5757;
+$success: #33c863;
 
 $bRadius10: 10px;
 $bRadius5: 5px;
 
-$fz1and2: 1.2rem;
+$fz1comma2: 1.2rem;
 $fz1: 1rem;
+$fz2: 2rem;
+$fz3: 3rem;
 
 $fw600: 600;
+
+$m10: 10px;
+$m20: 20px;
 
 @mixin breakpoint($point) {
   @if $point == 1400 {

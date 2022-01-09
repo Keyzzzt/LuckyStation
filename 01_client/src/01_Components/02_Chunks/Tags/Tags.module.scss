@@ -1,15 +1,14 @@
 @import '../../../02_Styles/newVariables.scss';
-.tags {
+.container {
   width: 400px;
   background-color: $light;
   border-radius: $bRadius10;
   padding: 18px 25px 20px;
-  margin: 20px; // delete
   .title {
     display: flex;
     align-items: center;
     h2 {
-      font-size: $fz1and2;
+      font-size: $fz1comma2;
       font-weight: $fw600;
       margin: 6px 0 6px 6px;
     }
@@ -28,7 +27,6 @@
 
       input {
         flex: 1;
-        outline: none;
         padding: 5px;
         border: none;
         font-size: $fz1;

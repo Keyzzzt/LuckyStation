@@ -1,10 +1,8 @@
 import { useEffect } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Redirect, Switch, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Home } from './01_Components/01_Screens/Home/Home'
-import { Login } from './01_Components/01_Screens/Login/Login'
 import { CartScreen } from './01_Components/01_Screens/CartScreen/CartScreen'
-import { Register } from './01_Components/01_Screens/Register/Register'
 import { AdminDashboard } from './01_Components/01_Screens/AdminDashboard/AdminDashboard'
 import { Header } from './01_Components/02_Chunks/Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
@@ -19,6 +17,10 @@ import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/Pro
 import { ProductCreateScreen } from './01_Components/01_Screens/AdminDashboard/ProductCreateScreen/ProductCreateScreen'
 import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
 import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
+import { Login } from './01_Components/02_Chunks/Login/Login'
+import { Register } from './01_Components/02_Chunks/Register/Register'
+import { Ulbi } from './01_Components/01_Screens/Ulbi/Ulbi'
+import { RestorePassword } from './01_Components/02_Chunks/RestorePassword/RestorePassword'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -30,6 +32,7 @@ const App = () => {
     <div>
       <Header />
       <Switch>
+        <Route exact path="/ulbi" render={() => <Ulbi />} />
         <Route path="/login" render={() => <Login />} />
         <Route path="/profile" render={() => <ProfileScreen />} />
         <Route path="/cart/:productId?" render={() => <CartScreen />} />
@@ -43,10 +46,12 @@ const App = () => {
         <Route path="/product/:productId/edit" render={() => <ProductEditScreen />} />
         <Route path="/order/:orderId/edit" render={() => <OrderEditScreen />} exact />
         <Route path="/create" render={() => <ProductCreateScreen />} />
+        <Route path="/restore" render={() => <RestorePassword />} />
         <Route path="/order/:orderId" render={() => <OrderScreen />} />
         <Route exact path="/:keyword?/:page?/:limit?" render={() => <Home />} />
         <Route exact path="/:page/:limit" render={() => <Home />} />
         <Route exact path="/" render={() => <Home />} />
+        <Redirect to="/" />
       </Switch>
       <Footer />
     </div>
@@ -56,5 +61,8 @@ const App = () => {
 // TODO: Тест приложения при отключенном API.
 // TODO: Нужно реализовать некий принцип брони, чтобы 2 покупателя не купили последний оставшийся продукт.
 // TODO: https://www.udemy.com/course/mern-ecommerce/learn/lecture/22498996#questions/12904054
+// TODO Попробовать реализовать useFetch хук. https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 1:50
+// TODO сделать роуты для админа недоступными для остальных по типу как у Ulbi https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 2:33
+// TODO расставить везде вопросы user?.info?.profile?.name
 
 export default App

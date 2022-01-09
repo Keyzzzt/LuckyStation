@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { actions as cartActions } from '../cart/cartReducer'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
