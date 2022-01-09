@@ -191,11 +191,16 @@ export const useFetch = (callback) => {
 /**
  *! ===============================================================================================================================
  *  @useInput -
+ * @useValidation - Связка для формы, на сайте не использую, поскольку пока не дорос, НЕ ДОДЕЛАНЫ!!!
+ * @Видео - https://www.youtube.com/watch?v=BGKbJ2aXCog
  */
 
-const useInput = (initialValue) => {
+//
+
+export const useInput = (initialValue, validations) => {
   const [value, setValue] = useState(initialValue)
   const [isDirty, setIsDirty] = useState(false)
+  const valid = useValidation(value, validations)
 
   const onChange = (e) => {
     setValue(e.target.value)
@@ -203,5 +208,28 @@ const useInput = (initialValue) => {
   const onBlur = () => {
     setIsDirty(true)
   }
-  return { value, onChange, onBlur }
+  return { value, onChange, onBlur, isDirty, ...valid }
+}
+
+export const useValidation = (value, validations) => {
+  const [minLengthError, setMinLengthError] = useState(true)
+  const [isEmpty, setIsEmpty] = useState(true)
+  useEffect(() => {
+    for (const validation in validations) {
+      switch (validation) {
+        case 'minLength':
+          value.length < validations[validation] ? setMinLengthError(true) : setMinLengthError(false)
+          break
+        case 'isEmpty':
+          value ? setIsEmpty(false) : setIsEmpty(true)
+          break
+        default:
+          break
+      }
+    }
+    return {
+      minLengthError,
+      isEmpty,
+    }
+  }, [value])
 }

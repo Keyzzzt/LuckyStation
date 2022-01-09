@@ -18,9 +18,9 @@ import { ProductCreateScreen } from './01_Components/01_Screens/AdminDashboard/P
 import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
 import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
 import { Login } from './01_Components/02_Chunks/Login/Login'
-import { Register } from './01_Components/02_Chunks/Register/Register'
 import { Ulbi } from './01_Components/01_Screens/Ulbi/Ulbi'
-import { RestorePassword } from './01_Components/02_Chunks/RestorePassword/RestorePassword'
+import { RestorePassword } from './01_Components/02_Chunks/Login/RestorePassword'
+import { Register } from './01_Components/02_Chunks/Login/Register'
 
 const App = () => {
   const dispatch = useDispatch()
