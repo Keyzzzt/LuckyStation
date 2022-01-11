@@ -36,7 +36,7 @@ export const actions = {
   orderInfoResetAC: () => ({ type: 'ORDER_INFO_RESET' as const }),
 }
 
-export function getSingleOrderThunk(orderId: string): ThunkType {
+export function orderInfoThunk(orderId: string): ThunkType {
   return async function (dispatch, getState) {
     try {
       dispatch(actions.orderInfoRequestAC())

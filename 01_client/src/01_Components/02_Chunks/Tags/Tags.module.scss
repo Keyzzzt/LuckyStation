@@ -1,0 +1,66 @@
+@import '../../../02_Styles/newVariables.scss';
+.container {
+  width: 400px;
+  background-color: $light;
+  border-radius: $bRadius10;
+  padding: 18px 25px 20px;
+  .title {
+    display: flex;
+    align-items: center;
+    h2 {
+      font-size: $fz1comma2;
+      font-weight: $fw600;
+      margin: 6px 0 6px 6px;
+    }
+  }
+  .content {
+    p {
+      font-size: $fz1;
+    }
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 7px;
+      margin: 12px 0;
+      border: 1px solid $grey;
+      border-radius: $bRadius5;
+
+      input {
+        flex: 1;
+        padding: 5px;
+        border: none;
+        font-size: $fz1;
+      }
+
+      li {
+        display: flex;
+        align-items: center;
+        background-color: $grey;
+        padding: 3px;
+        margin: 3px;
+        border-radius: $bRadius5;
+        font-size: 0.5rem;
+
+        i {
+          margin-left: 3px;
+          font-size: 1rem;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      border: none;
+      outline: none;
+      padding: 10px 15px;
+      border-radius: $bRadius5;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  }
+}

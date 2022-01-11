@@ -1,0 +1,23 @@
+@import './../../../02_Styles/variables.scss';
+
+.container {
+  margin: 0 auto;
+  max-width: 540px;
+  min-height: 75vh;
+  position: relative;
+  .item {
+    padding: 20px;
+    border: 1px solid #000;
+    margin: 20px;
+  }
+  .itemItem {
+    display: flex;
+    justify-content: space-between;
+  }
+  .delete {
+    padding: 5px;
+    border: 1px solid #000;
+    cursor: pointer;
+    color: red;
+  }
+}

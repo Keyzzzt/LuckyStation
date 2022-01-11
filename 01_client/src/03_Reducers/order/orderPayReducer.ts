@@ -39,6 +39,10 @@ export function payOrderThunk(orderId: string, paymentResult: any): ThunkType {
       dispatch(actions.orderPayRequestAC())
       await API.order.payOrder(orderId, paymentResult)
       dispatch(actions.orderPaySuccessAC())
+      //FIXME: Нужно обнулить корзину
+      // localStorage.removeItem('cartItems')
+      //@ts-ignore
+      // dispatch(cartActions.cartResetAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import { myOrdersThunk } from '../../../03_Reducers/user/myOrdersReducer'
@@ -14,14 +14,13 @@ export const ProfileScreen: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const { orders, error: meyOrdersErr } = useTypedSelector((state) => state.myOrders)
   const { loading, success, error } = useTypedSelector((state) => state.userUpdateOwnProfile)
-  // const { email, logo, isSubscribed, credits, favorite, createdAt, updatedAt } = userInfo
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
   const [message, setMessage] = useState('')
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (newPassword !== confirmNewPassword) {
       setMessage('Passwords do not match')
@@ -42,7 +41,8 @@ export const ProfileScreen: FC = () => {
     } else {
       dispatch(myOrdersThunk(1, 5))
     }
-  }, [history, userInfo])
+  }, [history, userInfo, dispatch])
+
   return (
     <div className={styles.container}>
       <div className={styles.profile}>

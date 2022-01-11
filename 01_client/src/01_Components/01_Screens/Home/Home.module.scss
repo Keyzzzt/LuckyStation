@@ -3,6 +3,8 @@
 .container {
   margin: 0 auto;
   max-width: 540px;
+  min-height: 75vh;
+  position: relative;
 }
 
 .row {

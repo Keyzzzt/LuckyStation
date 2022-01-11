@@ -1,5 +1,7 @@
 import { FC } from 'react'
+import { useHistory } from 'react-router'
 import { configThunk } from '../../../../03_Reducers/configReducer'
+import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { NotificationSVG } from '../../../02_Chunks/svg/NotificationSVG'
 import { SearchSVG } from '../../../02_Chunks/svg/SearchSVG'
@@ -7,7 +9,11 @@ import { ToggleSwitch } from '../../../02_Chunks/ToggleSwitch/ToggleSwitch'
 import styles from './DashboardHeader.module.scss'
 
 export const DashboardHeader: FC = () => {
-  const { config, userInfo } = useTypedSelector((state) => state)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const history = useHistory()
+  useIsAdminRedirect(userInfo, history)
+
+  const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   const iconFill = config.colorTheme === 'light' ? '#929292' : '#fff'
 
@@ -26,7 +32,7 @@ export const DashboardHeader: FC = () => {
       </div>
       <div className={`${styles.header__content__divider} ${themeClass}`} />
       <div className={styles.header__content__profile}>
-        <span className={`${styles.profile__name} ${themeClass}`}>{userInfo.userInfo?.email}</span>
+        <span className={`${styles.profile__name} ${themeClass}`}>{userInfo?.email}</span>
         <ToggleSwitch toggle={configThunk.toggleColorTheme()} />
         <div className={styles.profile__img}>
           <img src={'https://i.pinimg.com/originals/6b/aa/98/6baa98cc1c3f4d76e989701746e322dd.png'} alt="Profile" />

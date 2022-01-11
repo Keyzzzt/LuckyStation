@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import styles from './Footer.module.scss'
 import { Link } from 'react-router-dom'
-import { FaYoutube, FaInstagram, FaTwitter, FaSnapchatGhost, FaFacebook } from 'react-icons/fa'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 const footerColumns = [
   {
@@ -26,7 +25,7 @@ const footerColumns = [
   },
 ]
 
-const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
+// const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
 export const Footer: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
@@ -61,11 +60,11 @@ export const Footer: FC = () => {
           <Link to="/">Logo</Link>
           <span className={styles.footer__base__year}>Station&nbsp;&copy;&nbsp;{new Date().getFullYear()}</span>
           <ul className={styles.footer__base__socials}>
-            {socials.map((socialIcon, i) => (
+            {/* {socials.map((socialIcon, i) => (
               <li key={i + 1}>
                 <a href="/">{socialIcon}</a>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
       </footer>

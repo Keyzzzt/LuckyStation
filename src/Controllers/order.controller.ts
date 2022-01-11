@@ -17,7 +17,7 @@ export async function createNewOrder(req: RequestCustom, res: Response, next: Ne
 
     const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
     if (orderItems && orderItems.length === 0) {
-      return next(ApiError.BadRequest('Product list is empty'))
+      return next(ApiError.BadRequest('No products in order!'))
     }
 
     const order = await OrderModel.create({
@@ -30,9 +30,7 @@ export async function createNewOrder(req: RequestCustom, res: Response, next: Ne
       shippingPrice,
       totalPrice,
     })
-    return res.status(201).json({
-      data: order,
-    })
+    return res.status(201).json(order._id)
   } catch (error) {
     return next(error.message)
   }
@@ -54,9 +52,37 @@ export async function getOrderById(req: Request, res: Response, next: NextFuncti
 
 export async function getOwnOrders(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(200).json({
-      data: req.paginatedResponse,
-    })
+    return res.status(200).json(req.paginatedResponse)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
+  try {
+    // TODO: Validate
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+
+    const { id, status, updateTime } = req.body
+    const order = await OrderModel.findById(req.params.id)
+    if (!order) {
+      return next(ApiError.NotFound('Order not found'))
+    }
+
+    order.isPaid = true
+    order.paidAt = Date.now()
+
+    order.paymentResult = {
+      id,
+      status,
+      updateTime,
+      emailAddress: req.body.payer.email_address,
+    }
+
+    const updated = await order.save()
+
+    return res.status(201).json(updated)
   } catch (error) {
     return next(error.message)
   }

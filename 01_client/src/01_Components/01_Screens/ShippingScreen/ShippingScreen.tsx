@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FormEvent, FC, useState } from 'react'
 import styles from './ShippingScreen.module.scss'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -15,7 +15,7 @@ export const ShippingScreen: FC = () => {
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
   const [country, setCountry] = useState(shippingAddress.country)
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(
       saveAddressThunk({

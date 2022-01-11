@@ -5,6 +5,7 @@ import { useLocation, useParams } from 'react-router'
 import { Link, useHistory } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
+import { getRandom } from '../../../04_Utils/utils'
 
 export const CartScreen: FC = () => {
   const { productId } = useParams<{ productId: string }>()
@@ -37,8 +38,8 @@ export const CartScreen: FC = () => {
           </div>
         ) : (
           <div>
-            {cartItems.map((item) => (
-              <div key={item._id}>
+            {cartItems.map((item, i) => (
+              <div key={getRandom()}>
                 <Link to={`/product/${item._id}`}>
                   <img src={item.image} alt="" />
                 </Link>
@@ -47,10 +48,9 @@ export const CartScreen: FC = () => {
                 </div>
                 <div>Price: {item.price}</div>
                 <div>
-                  {/* FIXME item.qty! */}
                   <select value={item.qty} onChange={(e) => dispatch(addToCartThunk(item._id, Number(e.target.value)))}>
                     {[...Array(item.countInStock).keys()].map((n) => (
-                      <option key={item._id} value={n + 1}>
+                      <option key={getRandom()} value={n + 1}>
                         {n + 1}
                       </option>
                     ))}

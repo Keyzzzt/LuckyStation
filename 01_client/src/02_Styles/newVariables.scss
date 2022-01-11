@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+
+$main: #09c;
+$hover: #f2994a;
+$light: #fff;
+$grey: #c2c2c2;
+$dark: #000;
+$error: #eb5757;
+$success: #33c863;
+
+$bRadius10: 10px;
+$bRadius5: 5px;
+
+$fz1comma2: 1.2rem;
+$fz1: 1rem;
+$fz2: 2rem;
+$fz3: 3rem;
+
+$fw600: 600;
+
+$m10: 10px;
+$m20: 20px;
+
+@mixin breakpoint($point) {
+  @if $point == 1400 {
+    @media (min-width: 1400px) {
+      @content;
+    }
+  } @else if $point == 1200 {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if $point == 992 {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $point == 768 {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point == 576 {
+    @media (min-width: 576px) {
+      @content;
+    }
+  }
+}

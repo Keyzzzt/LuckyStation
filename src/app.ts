@@ -17,17 +17,18 @@ export const app: Express = express()
 
 app.use(cookieParser())
 app.use(express.json())
-app.use(express.urlencoded({ extended: false })) // TODO: Узнать зачем это
+app.use(express.urlencoded({ extended: false }))
 app.use(
   cors({
     credentials: true,
     origin: 'http://localhost:3000',
   })
 )
-// app.use(deserializeUser)
-app.use(helmet()) // Для безопасности
+
+app.use(helmet())
 app.use('/api/upload', uploadRoutes)
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')))
 
 const PORT = Number(process.env.port)
 

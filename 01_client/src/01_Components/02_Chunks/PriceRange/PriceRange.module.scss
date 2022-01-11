@@ -1,0 +1,96 @@
+@import '../../../02_Styles/newVariables.scss';
+
+body {
+  background-color: aqua;
+}
+.priceRange {
+  background-color: $light;
+  border-radius: $bRadius10;
+  width: 400px;
+  padding: 20px 25px 40px;
+  &__header {
+    & h2 {
+      font-weight: $fw600;
+      font-size: 1.2rem;
+    }
+    & p {
+      font-size: 1rem;
+      margin-top: 5px;
+    }
+  }
+
+  &__priceInput {
+    display: flex;
+    margin: 30px 0;
+    align-items: center;
+    & .separator {
+      width: 130px;
+      display: flex;
+      justify-content: center;
+      font-size: 1rem;
+    }
+  }
+  &__field {
+    height: 45px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    & input {
+      width: 100%;
+      height: 100%;
+      font-size: 1.1rem;
+      margin-left: 12px;
+      text-align: center;
+      border-radius: $bRadius5;
+      border: 1px solid $dark;
+      -moz-appearance: textfield;
+    }
+    & input::-webkit-outer-spin-button,
+    & input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+  }
+  &__slider {
+    height: 5px;
+    background-color: $grey;
+    border-radius: 50px;
+    position: relative;
+  }
+  &__progress {
+    position: absolute;
+
+    height: 5px;
+    background-color: $main;
+    border-radius: 50px;
+  }
+}
+.rangeInput {
+  position: relative;
+  & input {
+    position: absolute;
+    top: -5px;
+    height: 5px;
+    width: 100%;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+  }
+}
+input[type='range']::-webkit-slider-thumb {
+  height: 17px;
+  width: 17px;
+  background: $main;
+  border-radius: 50px;
+  -webkit-appearance: none;
+  pointer-events: auto;
+}
+input[type='range']::-moz-range-thumb {
+  border: none;
+  height: 17px;
+  width: 17px;
+  background: $main;
+  border-radius: 50px;
+  -moz-appearance: none;
+  pointer-events: auto;
+}

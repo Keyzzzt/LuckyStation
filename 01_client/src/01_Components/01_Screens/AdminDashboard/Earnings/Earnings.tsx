@@ -1,13 +1,22 @@
 import { FC } from 'react'
+import { useHistory } from 'react-router'
+import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { ArrowDownSVG } from '../../../02_Chunks/svg/ArrowdownSVG'
 import { ChartContainer } from '../ChartContainer/ChartContainer'
 import styles from './Earnings.module.scss'
 
 export const Earnings: FC = () => {
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const history = useHistory()
+  useIsAdminRedirect(userInfo, history)
+
   const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   const fill = config.colorTheme === 'light' ? '#929292' : '#fff'
+
+  // useIsAdminRedirect()
+
   return (
     <div className={`${styles.earnings} ${themeClass}`}>
       <div className={styles.earnings__headline}>

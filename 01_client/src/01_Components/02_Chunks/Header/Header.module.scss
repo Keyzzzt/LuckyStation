@@ -25,7 +25,6 @@
     &__logo {
       font-size: 2rem;
       font-weight: bold;
-      text-decoration: none;
       color: $light;
     }
 
@@ -74,7 +73,6 @@
             }
           }
           a {
-            text-decoration: none;
             color: inherit;
             padding: 0.75rem 1.25rem;
             border-radius: $borderRadius;
@@ -131,4 +129,13 @@
       }
     }
   }
+}
+
+.temp1,
+.temp2 {
+  background-color: #fff;
+}
+
+.temp2 {
+  background-color: red;
 }

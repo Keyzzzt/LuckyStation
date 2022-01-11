@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react'
+import { useHistory } from 'react-router'
 import styles from './ProductsList.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
@@ -6,18 +7,24 @@ import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { Link } from 'react-router-dom'
 import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
+import { actions } from '../../../../03_Reducers/product/productInfoReducer'
+import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
+import { getRandom } from '../../../../04_Utils/utils'
 
 export const ProductsList: FC = () => {
+  const history = useHistory()
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  useIsAdminRedirect(userInfo, history)
+
   const dispatch = useDispatch()
   const { config } = useTypedSelector((state) => state)
   const { products, loading, error } = useTypedSelector((state) => state.productList)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
-    if (!products) {
-      dispatch(productListThunk(1, 100))
-    }
-  }, [dispatch, products])
+    dispatch(productListThunk('', 1, 100))
+    dispatch(actions.productInfoResetAC())
+  }, [dispatch])
   return (
     <div className={`${styles.customerslist} ${themeClass}`}>
       {error && <ErrorMessage message={error} />}
@@ -25,9 +32,14 @@ export const ProductsList: FC = () => {
       <div className={styles.customerslist__header}>
         <h2 className={`${styles.customerslist__header__title} ${themeClass}`}>Products</h2>
       </div>
+      <div>
+        <Link to="create">
+          <button>Create new product</button>
+        </Link>
+      </div>
       <div className={styles.list}>
         {products?.map((product) => (
-          <div key={product._id} className={styles.list__item}>
+          <div key={getRandom()} className={styles.list__item}>
             <div className={styles.info}>
               <Link to={`/product/${product._id}/edit`} className={`${styles.name} ${themeClass}`}>
                 {product._id}

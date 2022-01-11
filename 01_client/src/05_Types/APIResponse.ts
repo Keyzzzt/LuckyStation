@@ -23,10 +23,16 @@ export interface LoginResponse {
   id: string
 }
 
+type ReviewFromAPI = {
+  rating: number
+  comment: string
+  user: string
+  _id: string
+  name: string
+}
 export type Product = {
   brand: string
   category: string
-  colors: string[]
   countInFavorite: number
   countInStock: number
   countViewed: number
@@ -39,8 +45,7 @@ export type Product = {
   price: number
   qty?: number
   rating: number
-  reviews: [] // TODO
-  sizes: number[]
+  reviews: ReviewFromAPI[]
   updatedAt: Date
   user: string
   _id: string

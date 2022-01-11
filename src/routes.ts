@@ -23,7 +23,7 @@ export function routes(app) {
   app.get('/api/admin/user/:page/:limit', privateRoute, adminRoute, paginatedResult(UserModel, null), Admin.getAllUsers)
   app.get('/api/admin/user/:id', privateRoute, adminRoute, Admin.getUser)
   app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.updateUserProfile)
-  app.delete('/api/admin/user/:id', privateRoute, adminRoute, Admin.deleteUser)
+  app.delete('/api/admin/user/:_id', privateRoute, adminRoute, Admin.deleteUser)
 
   app.get('/api/admin/order/:page/:limit', privateRoute, adminRoute, paginatedResult(OrderModel, null), Admin.getAllOrders)
   app.get('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
@@ -51,8 +51,11 @@ export function routes(app) {
   app.post('/api/order', Validation.createOrder, Order.createNewOrder)
   app.get('/api/order/myorders/:page/:limit', privateRoute, paginatedResult(OrderModel, 'own'), Order.getOwnOrders)
   app.get('/api/order/:id', privateRoute, Order.getOrderById)
+  app.post('/api/order/:id/pay', privateRoute, Order.setOrderToPaid)
 
   app.get('/api/product/:page/:limit', paginatedResult(ProductModel, null), Product.getProducts)
   app.post('/api/product/:id/review', Validation.createReview, privateRoute, Product.createReview)
   app.get('/api/product/:id', Product.getProductById)
+
+  app.get('/api/config/paypal', User.getPayPalClientId)
 }

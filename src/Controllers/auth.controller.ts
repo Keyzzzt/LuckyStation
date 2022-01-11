@@ -14,6 +14,114 @@ export const cookieOpt: CookieOptions = {
   secure: false,
 }
 
+export async function register(req: Request, res: Response, next: NextFunction) {
+  // TODO: Проверить если есть с имейлом от регистрации с Google
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
+    const { email, password } = req.body
+    const user = await UserModel.findOne({ email })
+    if (user) {
+      return next(ApiError.BadRequest('User already exists'))
+    }
+
+    const activationLink = uuidv4()
+
+    const createdUser = await UserModel.create({ email, password, activationLink })
+
+    utils.sendActivationMail(email, `${process.env.SERVER_ROOT_URI}/api/activate/${activationLink}`)
+    const tokens = utils.generateTokens({
+      id: createdUser._id,
+      email,
+      isActivated: createdUser.isActivated,
+      isAdmin: createdUser.isAdmin,
+    })
+
+    utils.saveToken(createdUser._id, tokens.refreshToken)
+    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+    return res.sendStatus(201)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function login(req: Request, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
+    const { email, password } = req.body
+    const user = await UserModel.findOne({ email })
+    if (!user) {
+      return next(ApiError.NotFound('User not found. Have you activated your account?'))
+    }
+    if (!(await user.comparePassword(password))) {
+      return next(ApiError.BadRequest('User not found. Have you activated your account?'))
+    }
+    if (!user.isActivated) {
+      return next(ApiError.BadRequest(`User not found. Have you activated your account?`))
+    }
+    const tokens = utils.generateTokens({
+      id: user._id,
+      email,
+      isActivated: user.isActivated,
+      isAdmin: user.isAdmin,
+    })
+    utils.saveToken(user._id, tokens.refreshToken)
+    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+
+    return res.status(200).json({
+      accessToken: tokens.accessToken,
+      id: user._id,
+    })
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function logout(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { refreshToken } = req.cookies
+    await utils.removeToken(refreshToken)
+    res.clearCookie('refreshToken')
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function activate(req: Request, res: Response, next: NextFunction) {
+  try {
+    const activationLink = req.params.link
+    const user = await UserModel.findOne({ activationLink })
+    if (!user) {
+      return next(ApiError.BadRequest('Activation link is not valid.'))
+    }
+    user.isActivated = true
+    await user.save()
+    return res.redirect(process.env.CLIENT_URL)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function refresh(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { refreshToken } = req.cookies
+
+    const data = await utils.refresh(refreshToken)
+
+    res.cookie('refreshToken', data.refreshToken, cookieOpt)
+    delete data.refreshToken
+
+    return res.status(200).json(data)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
 export function googleOAuthRedirect(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     return res.redirect(utils.getGoogleOAuthURL())
@@ -89,124 +197,6 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
       return res.redirect('http://localhost:3000')
     }
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function register(req: Request, res: Response, next: NextFunction) {
-  // TODO: Проверить если есть с имейлом от регистрации с Google
-  try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
-
-    const { email, password } = req.body
-    const user = await UserModel.findOne({ email })
-    if (user) {
-      return next(ApiError.BadRequest('User already exists'))
-    }
-
-    const activationLink = uuidv4()
-
-    const createdUser = await UserModel.create({ email, password, activationLink })
-
-    utils.sendActivationMail(email, `${process.env.SERVER_ROOT_URI}/api/activate/${activationLink}`)
-    const tokens = utils.generateTokens({
-      id: createdUser._id,
-      email,
-      isActivated: createdUser.isActivated,
-      isAdmin: createdUser.isAdmin,
-    })
-
-    utils.saveToken(createdUser._id, tokens.refreshToken)
-    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
-
-    return res.sendStatus(201)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function login(req: Request, res: Response, next: NextFunction) {
-  try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
-
-    const { email, password } = req.body
-    // const data = await userService.login(email, password)
-    const user = await UserModel.findOne({ email })
-    if (!user) {
-      return next(ApiError.NotFound('User not found. Have you activated your account?'))
-    }
-    if (!(await user.comparePassword(password))) {
-      return next(ApiError.BadRequest('User not found. Have you activated your account?'))
-    }
-    if (!user.isActivated) {
-      return next(ApiError.BadRequest(`User not found. Have you activated your account?`))
-    }
-    const tokens = utils.generateTokens({
-      id: user._id,
-      email,
-      isActivated: user.isActivated,
-      isAdmin: user.isAdmin,
-    })
-    utils.saveToken(user._id, tokens.refreshToken)
-    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
-
-    console.log(user)
-
-    return res.status(200).json({
-      accessToken: tokens.accessToken,
-      user: {
-        id: user._id,
-        email,
-        isActivated: user.isActivated,
-        isAdmin: user.isAdmin,
-        isSubscribed: user.isSubscribed,
-        favorite: user.favorite,
-        logo: user.logo,
-      },
-    })
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function logout(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { refreshToken } = req.cookies
-    await utils.removeToken(refreshToken)
-    res.clearCookie('refreshToken')
-    return res.sendStatus(200)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function activate(req: Request, res: Response, next: NextFunction) {
-  try {
-    const activationLink = req.params.link
-    const user = await UserModel.findOne({ activationLink })
-    if (!user) {
-      return next(ApiError.BadRequest('Activation link is not valid.'))
-    }
-    user.isActivated = true
-    await user.save()
-    return res.redirect(process.env.CLIENT_URL)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function refresh(req: Request, res: Response, next: NextFunction) {
-  try {
-    const { refreshToken } = req.cookies
-
-    const data = await utils.refresh(refreshToken)
-
-    res.cookie('refreshToken', data.refreshToken, cookieOpt)
-    delete data.refreshToken
-
-    return res.status(200).json(data)
   } catch (error) {
     return next(error.message)
   }

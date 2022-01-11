@@ -7,9 +7,9 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  orderList: null as null | OrderFromAPI[],
+  orders: null as null | OrderFromAPI[],
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const orderListReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -17,7 +17,7 @@ export const orderListReducer = (state = initialState, action: ActionType): Init
     case 'ORDER_LIST_REQUEST':
       return { ...initialState, loading: true }
     case 'ORDER_LIST_SUCCESS':
-      return { ...initialState, orderList: action.payload }
+      return { ...initialState, orders: action.payload }
 
     case 'ORDER_LIST_FAIL':
       return { ...initialState, error: action.payload }
