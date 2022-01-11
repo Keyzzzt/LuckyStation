@@ -1,6 +1,5 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
-import { authReducer } from './03_Reducers/authReducer'
 import { cartReducer } from './03_Reducers/cart/cartReducer'
 import { configReducer } from './03_Reducers/configReducer'
 import { orderCreateReducer } from './03_Reducers/order/orderCreateReducer'
@@ -22,9 +21,11 @@ import { createProductReducer } from './03_Reducers/admin/createProductReducer'
 import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
 import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
 import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
+import { favoriteReducer } from './03_Reducers/product/favoriteReducer'
+import { loginReducer } from './03_Reducers/authReducer'
 
 const rootReducer = combineReducers({
-  auth: authReducer,
+  login: loginReducer,
   getUser: getUserReducer,
   userRegister: userRegisterReducer,
   userInfo: userInfoReducer,
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   orderManage: orderManageReducer,
   myOrders: myOrdersReducer,
   cart: cartReducer,
+  favorite: favoriteReducer,
   config: configReducer,
 })
 

@@ -9,17 +9,17 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   users: null as null | UserTypeForList[],
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const userListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'USER_LIST_REQUEST':
-      return { ...state, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'USER_LIST_SUCCESS':
-      return { ...state, loading: false, error: null, users: action.payload }
+      return { ...initialState, users: action.payload }
     case 'USER_LIST_FAIL':
-      return { ...initialState, loading: false, error: action.payload, users: null }
+      return { ...initialState, error: action.payload }
     default:
       return state
   }

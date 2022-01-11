@@ -12,7 +12,7 @@ const initialState = {
   loginFail: '',
 }
 
-export const authReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const loginReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'LOGIN_REQUEST':
       return { ...initialState, loginLoading: true }
@@ -34,25 +34,23 @@ export const actions = {
   loginResetAC: () => ({ type: 'LOGIN_RESET' as const }),
 }
 
-export const authThunk = {
-  login:
-    (email: string, password: string): ThunkType =>
-    async (dispatch) => {
-      try {
-        dispatch(actions.loginRequestAC())
-        const { data } = await API.auth.login(email, password)
+export function loginThunk(email: string, password: string): ThunkType {
+  return async function (dispatch) {
+    try {
+      dispatch(actions.loginRequestAC())
+      const { data } = await API.auth.login(email, password)
 
-        dispatch(actions.loginSuccessAC())
-        localStorage.setItem('token', data.accessToken)
-        dispatch(userInfoThunk())
-      } catch (err: any) {
-        const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
-        if (errors.length > 0) {
-          const errMsg = errors.map((e) => e.msg).join('; ')
-          dispatch(actions.loginFailAC(errMsg))
-          return
-        }
-        dispatch(actions.loginFailAC(error))
+      dispatch(actions.loginSuccessAC())
+      localStorage.setItem('token', data.accessToken)
+      dispatch(userInfoThunk())
+    } catch (err: any) {
+      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      if (errors.length > 0) {
+        const errMsg = errors.map((e) => e.msg).join('; ')
+        dispatch(actions.loginFailAC(errMsg))
+        return
       }
-    },
+      dispatch(actions.loginFailAC(error))
+    }
+  }
 }

@@ -10,7 +10,7 @@ const initialState = {
   order: '',
   success: false,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const orderCreateReducer = (state = initialState, action: ActionType): InitialStateType => {

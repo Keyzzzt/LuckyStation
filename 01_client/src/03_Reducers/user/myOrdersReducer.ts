@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   orders: [] as OrderFromAPI[],
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const myOrdersReducer = (state = initialState, action: ActionType): InitialStateType => {

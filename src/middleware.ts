@@ -6,8 +6,6 @@ import * as utils from '@src/utils'
 
 export async function deserializeUser(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    console.log('Deserialize')
-
     const authHeader = req.headers.authorization
     if (!authHeader) {
       return next()

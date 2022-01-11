@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   userInfo: null as null | User,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const userInfoReducer = (state = initialState, action: ActionType): InitialStateType => {

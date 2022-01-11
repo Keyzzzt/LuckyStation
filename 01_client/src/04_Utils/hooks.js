@@ -1,25 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { authThunk } from '../03_Reducers/authReducer'
 import axios from 'axios'
 import { useLocation } from 'react-router'
-
-/**
- *! ===============================================================================================================================
- * @useActions
- ** Хук позволяет в целевой компоненте просто вызывать thunk без передачи его в dispatch
- ** Мы экономим только на строке const dispatch = useDispatch() в каждой компоненте.
- ** Но должны деструктуризировать const {  } = useActions() + вызывать.
- ** Спорный хук который не используется в этом приложении, но нужно его знать.
- */
-const actions = {
-  ...authThunk,
-}
-export const useActions = () => {
-  const dispatch = useDispatch()
-  return bindActionCreators(actions, dispatch)
-}
 
 /**
  *! ===============================================================================================================================

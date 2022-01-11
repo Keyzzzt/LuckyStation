@@ -104,4 +104,13 @@ export const API = {
       return $api.delete(`admin/order/${orderId}/delete`)
     },
   },
+  product: {
+    toggleFavorite: async (productId: string, flag: string): Promise<void> => {
+      if (flag === 'add') {
+        return $api.post(`user/favorite/${productId}`)
+      } else {
+        return $api.delete(`user/favorite/${productId}`)
+      }
+    },
+  },
 }

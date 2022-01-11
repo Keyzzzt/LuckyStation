@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const userUpdateOwnProfileReducer = (state = initialState, action: ActionType): InitialStateType => {

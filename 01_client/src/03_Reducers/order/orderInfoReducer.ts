@@ -9,21 +9,19 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   orderInfo: null as null | OrderFromAPI,
   loading: false,
-  error: null as string | null,
+  error: '',
 }
 
 export const orderInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'ORDER_INFO_REQUEST':
-      return { ...state, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'ORDER_INFO_SUCCESS':
-      return { loading: false, error: null, orderInfo: action.payload }
-
+      return { ...initialState, orderInfo: action.payload }
     case 'ORDER_INFO_FAIL':
-      return { loading: false, error: action.payload, orderInfo: null }
+      return { ...initialState, error: action.payload }
     case 'ORDER_INFO_RESET':
       return { ...initialState }
-
     default:
       return state
   }
