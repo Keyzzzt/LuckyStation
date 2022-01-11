@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import Loader from '../Loader/Loader'
 import styles from './ProductCard.module.scss'
 
 type Props = {
@@ -9,20 +8,10 @@ type Props = {
   price: number
   _id: string
   isFavorite: boolean
-  favoriteHandler: (productId: string, flag: string) => void
-  favoriteLoading: boolean
+  favoriteHandler: (productId: string, flag: boolean) => void
 }
 
-export const ProductCard: FC<Props> = ({ brand, name, price, _id, isFavorite, favoriteHandler, favoriteLoading }) => {
-  // const [flag, setFlag] = useState<boolean>(isFavorite)
-  console.log(isFavorite)
-
-  const toggle = () => {
-    favoriteHandler(_id, 'add')
-    // setFlag((prev) => !prev)
-  }
-
-  useEffect(() => {}, [])
+export const ProductCard: FC<Props> = ({ brand, name, price, _id, isFavorite, favoriteHandler }) => {
   return (
     <div className={styles.col}>
       <Link to={`/product/${_id}`}>
@@ -35,8 +24,9 @@ export const ProductCard: FC<Props> = ({ brand, name, price, _id, isFavorite, fa
       <Link to={`/product/${_id}`} className={styles.buy}>
         Buy
       </Link>
-      <div style={{ position: 'relative' }}>
-        {favoriteLoading ? <Loader /> : !isFavorite ? <i onClick={toggle} className="far fa-heart" /> : <i className="fas fa-heart" />}
+
+      <div>
+        <i onClick={() => favoriteHandler(_id, isFavorite)} className={isFavorite ? 'fas fa-heart' : 'far fa-heart'} />
       </div>
     </div>
   )

@@ -7,12 +7,13 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, loginThunk } from '../../../03_Reducers/authReducer'
 import { CustomInput } from './CustomInput'
 import { GoogleLogin } from './GoogleLogin'
+import { isEmail } from '../../../04_Utils/utils'
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('a@a.com')
   const [emailDirty, setEmailDirty] = useState(false)
   const [emailError, setEmailError] = useState('Empty email')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('zzxxccVV11!')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty password')
   const { loginFail } = useTypedSelector((state) => state.login)
@@ -41,12 +42,11 @@ export const Login: FC = () => {
   const emailHandler = (e: ChangeEvent<HTMLInputElement>) => {
     resetLoginFail()
     setEmail(e.target.value)
-    let isEmail =
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    if (!e.target.value.toLocaleLowerCase().match(isEmail)) {
-      setEmailError('Invalid email')
-    } else {
+
+    if (isEmail(email)) {
       setEmailError('')
+    } else {
+      setEmailError('Invalid email')
     }
   }
 
@@ -69,6 +69,12 @@ export const Login: FC = () => {
       history.push(redirect)
     }
   }, [history, userInfo, redirect])
+
+  // Обнуляет ошибки если поля заполнены заранее
+  useEffect(() => {
+    email.length > 0 && setEmailError('')
+    password.length > 0 && setPasswordError('')
+  }, [])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

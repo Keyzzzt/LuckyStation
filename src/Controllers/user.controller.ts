@@ -21,6 +21,26 @@ export async function getProfile(req: RequestCustom, res: Response, next: NextFu
     return next(error.message)
   }
 }
+export async function subscribe(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+    const { email } = req.body
+    const user = await UserModel.findOne({ email })
+    if (user) {
+      user.isSubscribed = true
+      await user.save()
+    } else {
+      // Модель для не зарегистрированных пользователей
+    }
+
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
 
 export async function updateProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {

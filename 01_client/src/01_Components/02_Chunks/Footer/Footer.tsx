@@ -1,7 +1,11 @@
-import { FC } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import styles from './Footer.module.scss'
 import { Link } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
+import { isEmail } from '../../../04_Utils/utils'
+import e from 'express'
+import { useDispatch } from 'react-redux'
+import { subscribeThunk } from '../../../03_Reducers/user/userInfoReducer'
 const footerColumns = [
   {
     id: 1,
@@ -28,7 +32,19 @@ const footerColumns = [
 // const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
 export const Footer: FC = () => {
+  const [email, setEmail] = useState('')
   const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const dispatch = useDispatch()
+
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!isEmail(email)) {
+      alert('Please enter a valid email')
+      return
+    } else {
+      dispatch(subscribeThunk(email))
+    }
+  }
   return (
     <div className={styles.container}>
       <footer className={styles.footer}>
@@ -36,10 +52,10 @@ export const Footer: FC = () => {
           <div className={styles.footer__newsletter}>
             <h4 className={styles.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
             <span>Unsubscribe at any time</span>
-            <div className={styles.footer__newsletter__form}>
-              <input className={styles.input} type="email" placeholder="Your Email" />
-              <button>Subscribe</button>
-            </div>
+            <form onSubmit={submitHandler} className={styles.footer__newsletter__form}>
+              <input onChange={(e) => setEmail(e.target.value)} className={styles.input} type="text" placeholder="Your Email" value={email} />
+              <input type="submit" value="Subscribe" />
+            </form>
           </div>
         )}
         <div className={styles.footer__content}>

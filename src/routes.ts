@@ -47,6 +47,7 @@ export function routes(app) {
   app.put('/api/user/profile', Validation.updateProfileByUser, privateRoute, User.updateProfile)
   app.post('/api/user/favorite/:id', privateRoute, User.addToFavorite)
   app.delete('/api/user/favorite/:id', privateRoute, User.removeFromFavorite)
+  app.post('/api/user/subscription', Validation.subscribe, User.subscribe)
 
   app.post('/api/order', Validation.createOrder, Order.createNewOrder)
   app.get('/api/order/myorders/:page/:limit', privateRoute, paginatedResult(OrderModel, 'own'), Order.getOwnOrders)

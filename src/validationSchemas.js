@@ -10,6 +10,8 @@ export const auth = [
     minNumbers: 1,
   }),
 ]
+
+export const subscribe = [body('email', 'Invalid email').trim().isEmail()]
 export const updateProfileByUser = [
   // FIXME: Смены пароля может и не быть, но если newPassword / confirmNewPassword не пустые, то их нужно проверить.
   body('newPassword', 'Password should be at least 8 characters long, 1 lowercase, 1 uppercase, 1 number and 1 Special character').isStrongPassword({

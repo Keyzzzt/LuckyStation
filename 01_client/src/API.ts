@@ -39,6 +39,9 @@ export const API = {
     createReview: async (productId: string, review: any): Promise<void> => {
       return $api.post(`/product/${productId}/review`, { ...review })
     },
+    toggleSubscription: async (email: string): Promise<void> => {
+      return $api.post(`/user/subscription`, { email })
+    },
   },
   config: {
     setColorTheme: async (): Promise<AxiosResponse<any>> => {
@@ -105,8 +108,8 @@ export const API = {
     },
   },
   product: {
-    toggleFavorite: async (productId: string, flag: string): Promise<void> => {
-      if (flag === 'add') {
+    toggleFavorite: async (productId: string, isFavorite: boolean): Promise<void> => {
+      if (!isFavorite) {
         return $api.post(`user/favorite/${productId}`)
       } else {
         return $api.delete(`user/favorite/${productId}`)

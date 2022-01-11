@@ -12,8 +12,7 @@ import { PriceRange } from '../../02_Chunks/PriceRange/PriceRange'
 import { Tags } from '../../02_Chunks/Tags/Tags'
 import { AutoResizeTextArea } from '../../02_Chunks/AutoResizeTextArea/AutoResizeTextArea'
 import { getRandom } from '../../../04_Utils/utils'
-import { toggleFavoriteThunk } from '../../../03_Reducers/product/favoriteReducer'
-import { userInfoThunk } from '../../../03_Reducers/user/userInfoReducer'
+import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 
 type Params = {
   page: string
@@ -23,7 +22,6 @@ type Params = {
 
 export const Home: FC = () => {
   const { loading, error, products } = useTypedSelector((state) => state.productList)
-  const { favoriteSuccess, favoriteFail, favoriteLoading } = useTypedSelector((state) => state.favorite)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
@@ -33,13 +31,20 @@ export const Home: FC = () => {
   const setPageHandler = (page: number) => {
     dispatch(productListThunk(keyword, Number(page), Number(limit)))
   }
-  const favoriteHandler = (productId: string, flag: string) => {
-    dispatch(toggleFavoriteThunk(productId, flag))
-    userInfo?.favorite.push(productId)
+
+  const favoriteHandler = (productId: string, isFavorite: boolean) => {
+    dispatch(toggleFavoriteThunk(productId, isFavorite))
+    if (isFavorite) {
+      dispatch(actions.removeFromFavoriteAC(productId))
+    } else {
+      dispatch(actions.addToFavoriteAC(productId))
+    }
   }
+
   useEffect(() => {
     dispatch(productListThunk(keyword, Number(page), Number(limit)))
   }, [dispatch, keyword, page, limit])
+
   return (
     <section className={styles.products}>
       {error && <ErrorMessage message={error} />}
@@ -52,7 +57,6 @@ export const Home: FC = () => {
               const isFavorite = userInfo?.favorite?.find((x) => x === product._id) ? true : false
               return (
                 <ProductCard
-                  favoriteLoading={favoriteLoading}
                   key={getRandom()}
                   favoriteHandler={favoriteHandler}
                   isFavorite={isFavorite}
