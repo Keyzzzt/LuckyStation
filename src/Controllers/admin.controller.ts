@@ -16,6 +16,8 @@ import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
 import { ApiError } from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
+import * as utils from '@src/utils'
+import { StatisticModel } from '@src/models/statistic.model'
 
 // Frontend DONE
 export async function getAllUsers(req: RequestCustom, res: Response, next: NextFunction) {
@@ -27,12 +29,41 @@ export async function getAllUsers(req: RequestCustom, res: Response, next: NextF
 }
 
 // Frontend DONE
+export async function getStatistic(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // todo validation
+    const statistic = await StatisticModel.findOne({ name: 'Statistic' }).select('-__v -_id -name')
+    return res.status(200).json(statistic)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+// Frontend DONE
+export async function removeEmailFromList(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // todo validation
+    const { email } = req.body
+    const user = await UserModel.findOne({ email })
+    if (user) {
+      user.isSubscribed = false
+      await user.save()
+    }
+    await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'remove')
+    await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'remove')
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+// Frontend DONE
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { _id } = req.params
-
+    const user = await UserModel.findById(req.params.id)
+    await utils.handleEmailInStatistics(user.email, 'allSubscribersEmailList', 'remove')
     await UserModel.deleteOne({ _id })
-
     await TokenModel.deleteOne({ user: _id })
 
     return res.sendStatus(200)
@@ -300,7 +331,6 @@ export async function getSurveyById(req: RequestCustom, res: Response, next: Nex
   }
 }
 
-// TODO:
 export async function manageSendgridEvents(req: RequestCustom, res: Response, next: NextFunction) {
   // TODO: Заменить Path на модуль qs и удалить parth-parser
   try {

@@ -35,10 +35,16 @@ export function routes(app) {
   app.put('/api/admin/product/:id', Validation.createAndUpdateProduct, privateRoute, adminRoute, Admin.updateProduct)
   app.delete('/api/admin/product/:id', privateRoute, adminRoute, Admin.deleteProduct)
 
+  app.get('/api/admin/statistic', privateRoute, adminRoute, Admin.getStatistic)
+  app.put('/api/admin/statistic/email', privateRoute, adminRoute, Admin.removeEmailFromList)
+
   app.get('/api/admin/survey/:page/:limit', privateRoute, adminRoute, paginatedResult(SurveyModel, null), Admin.getAllSurveys)
   app.get('/api/admin/survey/:id', privateRoute, adminRoute, Admin.getSurveyById)
   app.post('/api/admin/survey', Validation.createSurvey, privateRoute, adminRoute, Admin.createSurvey)
   app.post('/api/admin/survey/webhook', Admin.manageSendgridEvents)
+  app.get('/api/survey/unsubscribe/:email', User.unSubscribe, (req, res) => {
+    res.send('Unsubscribed!')
+  })
   app.get('/api/survey/:surveyId/:choice', (req, res) => {
     res.send('Thanks')
   })
@@ -47,6 +53,7 @@ export function routes(app) {
   app.put('/api/user/profile', Validation.updateProfileByUser, privateRoute, User.updateProfile)
   app.post('/api/user/favorite/:id', privateRoute, User.addToFavorite)
   app.delete('/api/user/favorite/:id', privateRoute, User.removeFromFavorite)
+  app.post('/api/user/subscription', Validation.subscribe, User.subscribe)
   app.post('/api/user/subscription', Validation.subscribe, User.subscribe)
 
   app.post('/api/order', Validation.createOrder, Order.createNewOrder)

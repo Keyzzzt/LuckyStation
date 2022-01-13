@@ -11,6 +11,7 @@ import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
 import { IGoogleProfile } from './01_Types/Types'
 import { GoogleTokens, PayloadType } from './types'
+import { StatisticModel } from './models/statistic.model'
 
 dotenv.config()
 
@@ -146,6 +147,28 @@ export async function getGoogleUserProfile({ id_token, access_token }) {
       },
     })
     return res.data
+  } catch (error) {
+    throw new Error(error.message)
+  }
+}
+
+/**
+ ** Function adds/removes email in allUsersEmailList and allSubscribersEmailList arrays.
+ ** Function takes 3 parameters: email, field name: 'allUsersEmailList' or 'allSubscribersEmailList', action: 'add' or 'remove'.
+ */
+export async function handleEmailInStatistics(email: string, field: string, action: string) {
+  try {
+    const statistic = await StatisticModel.findOne({ name: /Statistic/i }, field).exec()
+    if (action === 'add') {
+      const isInList = statistic[field].find((x) => x.toLowerCase() === email.trim().toLowerCase())
+      if (!isInList) {
+        statistic[field].push(email.trim())
+      }
+    }
+    if (action === 'remove') {
+      statistic[field] = statistic[field].filter((x) => x !== email)
+    }
+    await statistic.save()
   } catch (error) {
     throw new Error(error.message)
   }

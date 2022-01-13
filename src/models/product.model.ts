@@ -1,8 +1,8 @@
 import { Schema, model, Document } from 'mongoose'
-import { UserDoc } from './user.model'
+import { UserDocType } from './user.model'
 
-export interface ReviewDoc extends Document {
-  user: UserDoc['id']
+export interface ReviewDocType extends Document {
+  user: UserDocType['id']
   comment: string
   rating: number
 }
@@ -13,8 +13,8 @@ export type ReviewType = {
   rating: number
 }
 
-export interface ProductDoc extends Document {
-  user: UserDoc['id']
+export interface ProductDocType extends Document {
+  user: UserDocType['id']
   name: string
   image: string
   brand: string
@@ -31,7 +31,7 @@ export interface ProductDoc extends Document {
   countInFavorite: number
   countViewed: number
 }
-const ReviewSchema = new Schema<ReviewDoc>(
+const ReviewSchema = new Schema<ReviewDocType>(
   {
     rating: {
       type: Number,
@@ -52,7 +52,7 @@ const ReviewSchema = new Schema<ReviewDoc>(
   }
 )
 
-const ProductSchema = new Schema<ProductDoc>(
+const ProductSchema = new Schema<ProductDocType>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -118,4 +118,4 @@ const ProductSchema = new Schema<ProductDoc>(
   }
 )
 
-export const ProductModel = model<ProductDoc>('Product', ProductSchema)
+export const ProductModel = model<ProductDocType>('Product', ProductSchema)

@@ -4,7 +4,7 @@ import { NextFunction } from 'express'
 import bcrypt from 'bcryptjs'
 import { Schema, model, Document } from 'mongoose'
 
-export interface UserDoc extends Document {
+export interface UserDocType extends Document {
   email: string
   password: string
   googleId: string
@@ -20,7 +20,7 @@ export interface UserDoc extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>
 }
 
-const UserSchema: Schema = new Schema<UserDoc>(
+const UserSchema: Schema = new Schema<UserDocType>(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String },
@@ -52,4 +52,4 @@ UserSchema.pre('save', async function (next: NextFunction) {
   return next()
 })
 
-export const UserModel = model<UserDoc>('User', UserSchema)
+export const UserModel = model<UserDocType>('User', UserSchema)

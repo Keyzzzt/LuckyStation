@@ -10,6 +10,7 @@ import { routes } from '@src/routes'
 import uploadRoutes from '@src/upload.routes'
 import { errorHandler } from '@src/middleware/error.middleware'
 import { deserializeUser } from './middleware'
+import { StatisticModel } from './models/statistic.model'
 
 dotenv.config()
 
@@ -38,6 +39,11 @@ async function start() {
     app.listen(PORT, () => {
       console.info(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
     })
+    const statisticModel = await StatisticModel.findOne({ name: 'Statistic' })
+    if (!statisticModel) {
+      const doc = new StatisticModel()
+      doc.save()
+    }
   } catch (error) {
     console.log(error)
   }

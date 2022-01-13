@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose'
-import { ProductDoc } from './product.model'
-import { UserDoc } from './user.model'
+import { ProductDocType } from './product.model'
+import { UserDocType } from './user.model'
 
 interface ShippingAddress {
   address: string
@@ -14,16 +14,16 @@ interface PaymentResult {
   updateTime: string
   emailAddress: string
 }
-export interface OrderItemDoc extends Document {
+export interface OrderItem extends Document {
   name: string
   quantity: number
   image: string
   price: number
-  product: ProductDoc['id']
+  product: ProductDocType['id']
 }
-export interface OrderDoc extends Document {
-  user: UserDoc['id'] | string // Если незарегистрированный пользователь, пишем сюда имя.
-  orderItems: OrderItemDoc[]
+export interface OrderDocType extends Document {
+  user: UserDocType['id'] | string // Если незарегистрированный пользователь, пишем сюда имя.
+  orderItems: OrderItem[]
   shippingAddress: ShippingAddress
   paymentMethod: string
   paymentResult: PaymentResult
@@ -37,7 +37,7 @@ export interface OrderDoc extends Document {
   deliveredAt: Date | number
 }
 
-const OrderSchema = new Schema<OrderDoc>(
+const OrderSchema = new Schema<OrderDocType>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -115,4 +115,4 @@ const OrderSchema = new Schema<OrderDoc>(
   }
 )
 
-export const OrderModel = model<OrderDoc>('Order', OrderSchema)
+export const OrderModel = model<OrderDocType>('Order', OrderSchema)

@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose'
 
-export interface AppConfig extends Document {
+export interface AppConfigDocType extends Document {
   adminColorTheme: string
   customersColorTheme: string
   darkThemeColors: string
@@ -8,7 +8,7 @@ export interface AppConfig extends Document {
   defaultLanguage: string
 }
 
-const AppConfigSchema: Schema = new Schema<AppConfig>(
+const AppConfigSchema: Schema = new Schema<AppConfigDocType>(
   {
     adminColorTheme: { type: String, default: 'light' },
     customersColorTheme: { type: String, default: 'light' },
@@ -20,4 +20,4 @@ const AppConfigSchema: Schema = new Schema<AppConfig>(
     timestamps: true,
   }
 )
-export const AppConfigModel = model<AppConfig>('AppConfig', AppConfigSchema)
+export const AppConfigModel = model<AppConfigDocType>('AppConfig', AppConfigSchema)

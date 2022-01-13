@@ -15,7 +15,6 @@ export const cookieOpt: CookieOptions = {
 }
 
 export async function register(req: Request, res: Response, next: NextFunction) {
-  // TODO: Проверить если есть с имейлом от регистрации с Google
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
@@ -27,6 +26,8 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     if (user) {
       return next(ApiError.BadRequest('User already exists'))
     }
+
+    await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
 
     const activationLink = uuidv4()
 
@@ -129,6 +130,13 @@ export function googleOAuthRedirect(req: RequestCustom, res: Response, next: Nex
     return next(error.error)
   }
 }
+
+/**
+ ** Если имейл и googleId совпадают - логиним
+ ** Если имейл совпадает, активирован, имейл гугл верифицирован - логиним с добавлением googleId
+ ** Если имейл совпадает, НЕ активирован, имейл гугл верифицирован - удаляем учетную запись - создаем новую с добавлением googleId
+ ** Нет пользовалеля - создаем нового с добавлением googleId
+ */
 export async function googleOAuth(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const code = req.query.code as string
@@ -164,7 +172,6 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
     }
     if (user && !user.isActivated && googleProfile.verified_email) {
       await user.remove()
-      // TODO: Отправить мейл об удалении неактивированного аккаунта. Ссылку на активирование сделать невалидной.
       const createdUser = await UserModel.create({
         email: googleProfile.email,
         googleId: googleProfile.id,
@@ -182,6 +189,8 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       return res.redirect('http://localhost:3000')
     }
     if (!user) {
+      await utils.handleEmailInStatistics(googleProfile.email, 'allUsersEmailList', 'add')
+
       const createdUser = await UserModel.create({
         email: googleProfile.email,
         googleId: googleProfile.id,

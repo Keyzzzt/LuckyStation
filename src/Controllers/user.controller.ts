@@ -27,7 +27,11 @@ export async function subscribe(req: RequestCustom, res: Response, next: NextFun
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
-    const { email } = req.body
+    const email = req.body.email.trim()
+
+    await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'add')
+    await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
+
     const user = await UserModel.findOne({ email })
     if (user) {
       user.isSubscribed = true
@@ -37,6 +41,22 @@ export async function subscribe(req: RequestCustom, res: Response, next: NextFun
     }
 
     return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function unSubscribe(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const email = req.params.email.trim()
+    await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'remove')
+    const user = await UserModel.findOne({ email })
+    if (user) {
+      user.isSubscribed = false
+      await user.save()
+    }
+
+    return next()
   } catch (error) {
     return next(error.message)
   }
@@ -105,7 +125,6 @@ export async function addToFavorite(req: RequestCustom, res: Response, next: Nex
       return next(ApiError.BadRequest('Product already in favorite list.'))
     }
     user.favorite.push(req.params.id)
-    // FIXME: Отправить инструкции базе, а не делать инкремент тут
     product.countInFavorite += 1
     await user.save()
     await product.save()

@@ -106,6 +106,12 @@ export const API = {
     deleteOrder: async (orderId: string): Promise<void> => {
       return $api.delete(`admin/order/${orderId}/delete`)
     },
+    getStatistic: async (): Promise<AxiosResponse<any>> => {
+      return $api.get<any>(`admin/statistic`)
+    },
+    removeEmailFromList: async (email: string): Promise<void> => {
+      return $api.put(`admin/statistic/email`, { email })
+    },
   },
   product: {
     toggleFavorite: async (productId: string, isFavorite: boolean): Promise<void> => {

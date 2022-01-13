@@ -2,7 +2,13 @@
 /* eslint-disable no-unused-vars */
 import { Schema, model, Document } from 'mongoose'
 
-export interface StatisticDoc extends Document {
+/**
+ *? allUsersEmailList - список имейлов - зарегистрированных, зарегистрировавшихся но не активированных, купивших товар без регистрации, подписавшихся на рассылку без регистрации, подписавшихся но отписавшихся потом.
+ *? allSubscribersEmailList - список имейлов подписавшихся (зарегистрированных и нет)
+ */
+
+export interface StatisticDocType extends Document {
+  name: string
   totalUsers: number
   totalSubscribed: number
   totalUnSubscribed: number
@@ -14,10 +20,13 @@ export interface StatisticDoc extends Document {
   totalYes: number
   totalNo: number
   allSearchQueries: string[]
+  allSubscribersEmailList: string[]
+  allUsersEmailList: string[]
 }
 
-const StatisticSchema: Schema = new Schema<StatisticDoc>(
+const StatisticSchema: Schema = new Schema<StatisticDocType>(
   {
+    name: { type: String, default: 'Statistic' },
     totalUsers: { type: Number, default: 0 },
     totalSubscribed: { type: Number, default: 0 },
     totalUnSubscribed: { type: Number, default: 0 },
@@ -29,9 +38,11 @@ const StatisticSchema: Schema = new Schema<StatisticDoc>(
     totalYes: { type: Number, default: 0 },
     totalNo: { type: Number, default: 0 },
     allSearchQueries: [String],
+    allSubscribersEmailList: [String],
+    allUsersEmailList: [String],
   },
   {
     timestamps: true,
   }
 )
-export const StatisticModel = model<StatisticDoc>('Statistic', StatisticSchema)
+export const StatisticModel = model<StatisticDocType>('Statistic', StatisticSchema)

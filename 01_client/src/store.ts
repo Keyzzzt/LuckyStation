@@ -22,6 +22,7 @@ import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
 import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
 import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
 import { loginReducer } from './03_Reducers/authReducer'
+import { statisticReducer } from './03_Reducers/Statistic/statisticReducer'
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -46,6 +47,7 @@ const rootReducer = combineReducers({
   myOrders: myOrdersReducer,
   cart: cartReducer,
   config: configReducer,
+  statistic: statisticReducer,
 })
 
 // @ts-ignore

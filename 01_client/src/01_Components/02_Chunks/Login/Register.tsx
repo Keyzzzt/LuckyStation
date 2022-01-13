@@ -12,13 +12,13 @@ import { GoogleLogin } from './GoogleLogin'
 //todo https://www.youtube.com/watch?v=yYq0rWESsNY - взять телефон отсюда
 
 export const Register: FC = () => {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('123@123.com')
   const [emailDirty, setEmailDirty] = useState(false)
   const [emailError, setEmailError] = useState('Empty field')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('123456')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty field')
-  const [confirm, setConfirm] = useState('')
+  const [confirm, setConfirm] = useState('123456')
   const [confirmDirty, setConfirmDirty] = useState(false)
   const [confirmError, setConfirmError] = useState('Empty field')
   const { userInfo } = useTypedSelector((state) => state.userInfo)
@@ -49,7 +49,8 @@ export const Register: FC = () => {
   const emailHandler = (e: ChangeEvent<HTMLInputElement>) => {
     registerReset()
     setEmail(e.target.value)
-    let isEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let isEmail =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     if (!e.target.value.toLocaleLowerCase().match(isEmail)) {
       setEmailError('Invalid email')
     } else {
@@ -90,6 +91,13 @@ export const Register: FC = () => {
     dispatch(registerThunk(email, password, confirm))
   }
 
+  // Обнуляет ошибки если поля заполнены заранее
+  useEffect(() => {
+    email.length > 0 && setEmailError('')
+    password.length > 0 && setPasswordError('')
+    confirm.length > 0 && setConfirmError('')
+  }, [])
+
   useEffect(() => {
     if (password !== confirm) {
       setConfirmError('Passwords do not match')
@@ -115,9 +123,36 @@ export const Register: FC = () => {
     <div className={styles.container}>
       <div className={styles.title}>Register</div>
       <form onSubmit={submitHandler}>
-        <CustomInput showError={showEmailError} blurHandler={blurHandler} onChangeHandler={emailHandler} value={email} error={emailError} type="email" placeholder="Email" name="email" />
-        <CustomInput showError={showPasswordError} blurHandler={blurHandler} onChangeHandler={passwordHandler} value={password} error={passwordError} type="password" placeholder="Password" name="password" />
-        <CustomInput showError={showConfirmError} blurHandler={blurHandler} onChangeHandler={passwordHandler} value={confirm} error={confirmError} type="password" placeholder="Confirm password" name="confirm" />
+        <CustomInput
+          showError={showEmailError}
+          blurHandler={blurHandler}
+          onChangeHandler={emailHandler}
+          value={email}
+          error={emailError}
+          type="email"
+          placeholder="Email"
+          name="email"
+        />
+        <CustomInput
+          showError={showPasswordError}
+          blurHandler={blurHandler}
+          onChangeHandler={passwordHandler}
+          value={password}
+          error={passwordError}
+          type="password"
+          placeholder="Password"
+          name="password"
+        />
+        <CustomInput
+          showError={showConfirmError}
+          blurHandler={blurHandler}
+          onChangeHandler={passwordHandler}
+          value={confirm}
+          error={confirmError}
+          type="password"
+          placeholder="Confirm password"
+          name="confirm"
+        />
         <input type="submit" value="Register" />
         {showLoginError && <div className={styles.errorText}>{registerFail}</div>}
       </form>

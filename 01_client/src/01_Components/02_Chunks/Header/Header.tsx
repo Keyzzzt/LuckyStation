@@ -75,13 +75,6 @@ export const Header: FC = () => {
                 </Link>
               </li>
             )}
-            {!userInfo && (
-              <li>
-                <Link to="/register" onClick={toggleMenuHandler}>
-                  Register
-                </Link>
-              </li>
-            )}
           </ul>
           {userInfo?.isAdmin && <button onClick={dashboardHandler}>Dashboard</button>}
         </nav>

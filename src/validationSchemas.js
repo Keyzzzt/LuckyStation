@@ -3,32 +3,14 @@ import { body } from 'express-validator'
 
 export const auth = [
   body('email', 'Invalid email or password').trim().isEmail().bail(),
-  body('password', 'Invalid email or password').isStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-  }),
+  body('password', 'Invalid email or password').trim().isLength({ min: 3, max: 33 }),
 ]
 
 export const subscribe = [body('email', 'Invalid email').trim().isEmail()]
 export const updateProfileByUser = [
   // FIXME: Смены пароля может и не быть, но если newPassword / confirmNewPassword не пустые, то их нужно проверить.
-  body('newPassword', 'Password should be at least 8 characters long, 1 lowercase, 1 uppercase, 1 number and 1 Special character').isStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-  }),
-  body(
-    'confirmNewPassword',
-    'Password should be at least 8 characters long, 1 lowercase, 1 uppercase, 1 number and 1 Special character'
-  ).isStrongPassword({
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-  }),
+  body('newPassword', 'Password should be between 3 and 33').trim().isLength({ min: 3, max: 33 }),
+  body('confirmNewPassword', 'Password should be between 3 and 33').trim().isLength({ min: 3, max: 33 }),
 ]
 
 // TODO:

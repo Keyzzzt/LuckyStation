@@ -1,8 +1,8 @@
 import { Schema, model, Document, SchemaDefinitionProperty } from 'mongoose'
-import { UserDoc } from './user.model'
+import { UserDocType } from './user.model'
 
-export interface SurveyDoc extends Document {
-  user: UserDoc['id']
+export interface SurveyDocType extends Document {
+  user: UserDocType['id']
   title: string
   body: string
   subject: string
@@ -25,7 +25,7 @@ const RecipientSchema: Schema = new Schema<RecipientDoc>({
   response: String,
 })
 
-const SurveySchema: Schema = new Schema<SurveyDoc>(
+const SurveySchema: Schema = new Schema<SurveyDocType>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'UserModel' },
     title: { type: String, required: true },
@@ -42,4 +42,4 @@ const SurveySchema: Schema = new Schema<SurveyDoc>(
   }
 )
 
-export const SurveyModel = model<SurveyDoc>('Survey', SurveySchema)
+export const SurveyModel = model<SurveyDocType>('Survey', SurveySchema)

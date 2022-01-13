@@ -1,10 +1,10 @@
 import { Schema, model, Document } from 'mongoose'
 
-export interface AccountingDoc extends Document {
+export interface AccountingDocType extends Document {
   totalSold: number
 }
 
-const AccountingSchema: Schema = new Schema<AccountingDoc>(
+const AccountingSchema: Schema = new Schema<AccountingDocType>(
   {
     totalSold: { type: Number, default: 0 },
   },
@@ -12,4 +12,5 @@ const AccountingSchema: Schema = new Schema<AccountingDoc>(
     timestamps: true,
   }
 )
-export const AccountingModel = model<AccountingDoc>('Accounting', AccountingSchema)
+
+export const AccountingModel = model<AccountingDocType>('Accounting', AccountingSchema)

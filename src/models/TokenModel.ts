@@ -1,12 +1,12 @@
 import { Schema, model, Document } from 'mongoose'
-import { UserDoc } from './user.model'
+import { UserDocType } from './user.model'
 
-export interface TokenDoc extends Document {
-  user: UserDoc['id']
+export interface TokenDocType extends Document {
+  user: UserDocType['id']
   refreshToken: string
 }
 
-const TokenSchema = new Schema<TokenDoc>(
+const TokenSchema = new Schema<TokenDocType>(
   {
     user: { type: Schema.Types.ObjectId, ref: 'UserModel' },
     refreshToken: { type: String, required: true },
@@ -16,4 +16,4 @@ const TokenSchema = new Schema<TokenDoc>(
   }
 )
 
-export const TokenModel = model<TokenDoc>('Token', TokenSchema)
+export const TokenModel = model<TokenDocType>('Token', TokenSchema)
