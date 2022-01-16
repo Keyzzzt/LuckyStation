@@ -9,23 +9,18 @@ import { userDeleteThunk } from '../../../../03_Reducers/user/userDeleteReducer'
 import { updateProfileByAdminThunk } from '../../../../03_Reducers/admin/updateProfileByAdminReducer'
 // import { actions } from '../../../03_Reducers/admin/getUserReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
+import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 
 export const UserEditScreen: FC = () => {
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const history = useHistory()
-  useIsAdminRedirect(userInfo, history)
 
   useScrollToTop()
   const dispatch = useDispatch()
   const { userId } = useParams<{ userId: string }>()
   const { success, loading, error } = useTypedSelector((state) => state.updateProfileByAdmin)
 
-  const { _id, email, logo, isAdmin, isSubscribed, isActivated, credits, favorite, createdAt, updatedAt } = useTypedSelector(
-    (state) => state.getUser.user
-  )
+  const { user, loading: loadingUser, fail: failUser } = useTypedSelector((state) => state.getUser)
   const [role, setRole] = useState(false)
 
   // TODO Проверить что происходит когда удалется залогиненный пользователь
@@ -38,42 +33,49 @@ export const UserEditScreen: FC = () => {
     return
   }
   const updateHandler = () => {
-    dispatch(updateProfileByAdminThunk(_id, { isAdmin: role }))
+    dispatch(updateProfileByAdminThunk(userId, { isAdmin: role }))
   }
   useEffect(() => {
     dispatch(getUserThunk(userId))
-  }, [dispatch, userId, success])
+  }, [userId])
 
   useEffect(() => {
-    setRole(() => isAdmin)
-  }, [userInfo, isAdmin])
+    if (!user) {
+      return
+    }
+    setRole(() => user.isAdmin)
+  }, [user])
 
   return (
     <div className={styles.container}>
-      {loading && <Loader />}
-      {error && <ErrorMessage message={error} />}
       <RedirectButton path="/dashboard">Back</RedirectButton>
-      <button onClick={updateHandler}>Update</button>
-      <button onClick={() => userDeleteHandler(_id, email)}>Delete User</button>
-      <div>ID: {_id}</div>
-      <div>Email: {email}</div>
-      <div>
-        <img src={logo} alt="Logo" />
-      </div>
-      <div>
-        <label htmlFor="role">{role ? 'Admin' : 'User'}</label>
+      {!user ? (
+        <Loader />
+      ) : (
+        <>
+          <button onClick={updateHandler}>Update</button>
+          <button onClick={() => userDeleteHandler(user._id, user.email)}>Delete User</button>
+          <div>ID: {user._id}</div>
+          <div>Email: {user.email}</div>
+          <div>
+            <img src={user.logo} alt="Logo" />
+          </div>
+          <div>
+            <label htmlFor="role">{role ? 'Admin' : 'User'}</label>
 
-        <input onChange={() => setRole((prev) => !prev)} type="checkBox" id="role" checked={role} />
-      </div>
-      {isActivated ? <div>Account is activated</div> : <div>Account not activated</div>}
-      {isSubscribed ? <div>Subscribed for newsletter</div> : <div>Not subscribed</div>}
-      <div>Credits: {credits}</div>
-      <div>
-        {favorite && favorite.map((item) => <div>{item}</div>)}
-        {favorite?.length === 0 && <div>Favorite list is empty</div>}
-      </div>
-      <div>Created at: {createdAt}</div>
-      <div>Updated at: {updatedAt}</div>
+            <input onChange={() => setRole((prev) => !prev)} type="checkBox" id="role" checked={role} />
+          </div>
+          {user.isActivated ? <div>Account is activated</div> : <div>Account not activated</div>}
+          {user.isSubscribed ? <div>Subscribed for newsletter</div> : <div>Not subscribed</div>}
+          <div>Credits: {user.credits}</div>
+          <div>
+            {user.favorite && user.favorite.map((item) => <div>{item}</div>)}
+            {user.favorite?.length === 0 && <div>Favorite list is empty</div>}
+          </div>
+          <div>Created at: {user.createdAt}</div>
+          <div>Updated at: {user.updatedAt}</div>
+        </>
+      )}
     </div>
   )
 }

@@ -5,10 +5,12 @@ import { User } from '../../05_Types/APIResponse'
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
+
+// todo set user to null
 export const initialState = {
-  user: {} as User,
+  user: null as null | User,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const getUserReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -18,7 +20,7 @@ export const getUserReducer = (state = initialState, action: ActionType): Initia
     case 'GET_USER_SUCCESS':
       return { ...initialState, user: action.payload }
     case 'GET_USER_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'GET_USER_RESET':
       return { ...initialState }
     default:

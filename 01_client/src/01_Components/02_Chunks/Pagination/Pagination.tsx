@@ -43,7 +43,11 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
           )}
           {pagesCount.map((pageNumber) =>
             pageNumber < activePage + 4 && pageNumber > activePage - 4 ? (
-              <li className={`${styles.numb} ${pageNumber === activePage && styles.active}`} onClick={() => changePageHandler(pageNumber)} key={getRandom()}>
+              <li
+                className={`${styles.numb} ${pageNumber === activePage && styles.active}`}
+                onClick={() => changePageHandler(pageNumber)}
+                key={getRandom()}
+              >
                 <span>{pageNumber}</span>
               </li>
             ) : null

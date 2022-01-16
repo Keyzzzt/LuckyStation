@@ -6,15 +6,13 @@ import { useDispatch } from 'react-redux'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
 import { useHistory, useParams } from 'react-router'
 import { Rating } from '../../02_Chunks/Rating/Rating'
-import Loader from '../../02_Chunks/Loader/Loader'
-import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import { productReviewThunk } from '../../../03_Reducers/product/productReviewReducer'
 import { getRandom } from '../../../04_Utils/utils'
 
 export const ProductScreen: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { loading, error, productInfo } = useTypedSelector((state) => state.productInfo)
-  const { successReview, loadingReview, errorReview } = useTypedSelector((state) => state.productReview)
+  const { loading, fail, productInfo } = useTypedSelector((state) => state.productInfo)
+  const { success: successReview, loading: loadingReview, fail: failReview } = useTypedSelector((state) => state.productReview)
   const history = useHistory()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
@@ -40,10 +38,6 @@ export const ProductScreen: FC = () => {
   }, [dispatch, productId, successReview])
   return (
     <div className={styles.container}>
-      {loadingReview && <Loader />}
-      {errorReview && <ErrorMessage message={errorReview} />}
-      {loading && <Loader />}
-      {error && <ErrorMessage message={error} />}
       <div className={styles.card}>
         <div className={styles.leftSide}>
           <div className={styles.leftSideBackground} />

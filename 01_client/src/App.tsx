@@ -1,60 +1,54 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Redirect, Switch, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { Home } from './01_Components/01_Screens/Home/Home'
-import { CartScreen } from './01_Components/01_Screens/CartScreen/CartScreen'
-import { AdminDashboard } from './01_Components/01_Screens/AdminDashboard/AdminDashboard'
 import { Header } from './01_Components/02_Chunks/Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
-import { ProductScreen } from './01_Components/01_Screens/ProductScreen/ProductScreen'
-import { ProfileScreen } from './01_Components/01_Screens/ProfileScreen/ProfileScreen'
 import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
-import { ShippingScreen } from './01_Components/01_Screens/ShippingScreen/ShippingScreen'
-import { PaymentScreen } from './01_Components/01_Screens/PaymentScreen/PaymentScreen'
-import { PlaceOrderScreen } from './01_Components/01_Screens/PlaceOrderScreen/PlaceOrderScreen'
-import { OrderScreen } from './01_Components/01_Screens/OrderScreen/OrderScreen'
-import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/ProductEditScreen/ProductEditScreen'
-import { ProductCreateScreen } from './01_Components/01_Screens/AdminDashboard/ProductCreateScreen/ProductCreateScreen'
-import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
-import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
-import { Login } from './01_Components/02_Chunks/Login/Login'
-import { Ulbi } from './01_Components/01_Screens/Ulbi/Ulbi'
-import { RestorePassword } from './01_Components/02_Chunks/Login/RestorePassword'
-import { Register } from './01_Components/02_Chunks/Login/Register'
+import { useTypedSelector } from './05_Types/01_Base'
+import { publicRotes, privateRotes, adminRoutes } from './routes'
 
 const App = () => {
   const dispatch = useDispatch()
+  // Получаем тут userInfo чтобы сделать header & footer чистыми компонентами
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const [isAuth, setIsAuth] = useState<boolean>(false)
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
+  // Аутентификация при каждом запуске / перезагрезку приложения
   useEffect(() => {
     dispatch(authenticateThunk())
-  }, [dispatch])
+  }, [])
+
+  useEffect(() => {
+    setIsAdmin(userInfo?.isAdmin ? true : false)
+    setIsAuth(userInfo ? true : false)
+  }, [userInfo])
+
   return (
-    <div>
-      <Header />
-      <Switch>
-        <Route exact path="/ulbi" render={() => <Ulbi />} />
-        <Route path="/login" render={() => <Login />} />
-        <Route path="/profile" render={() => <ProfileScreen />} />
-        <Route path="/cart/:productId?" render={() => <CartScreen />} />
-        <Route path="/register" render={() => <Register />} />
-        <Route path="/dashboard" render={() => <AdminDashboard />} />
-        <Route path="/product/:productId" render={() => <ProductScreen />} exact />
-        <Route path="/shipping" render={() => <ShippingScreen />} />
-        <Route path="/payment" render={() => <PaymentScreen />} />
-        <Route path="/placeorder" render={() => <PlaceOrderScreen />} />
-        <Route path="/user/:userId/edit" render={() => <UserEditScreen />} exact />
-        <Route path="/product/:productId/edit" render={() => <ProductEditScreen />} />
-        <Route path="/order/:orderId/edit" render={() => <OrderEditScreen />} exact />
-        <Route path="/create" render={() => <ProductCreateScreen />} />
-        <Route path="/restore" render={() => <RestorePassword />} />
-        <Route path="/order/:orderId" render={() => <OrderScreen />} />
-        <Route exact path="/:keyword?/:page?/:limit?" render={() => <Home />} />
-        <Route exact path="/:page/:limit" render={() => <Home />} />
-        <Route exact path="/" render={() => <Home />} />
-        <Redirect to="/" />
-      </Switch>
-      <Footer />
-    </div>
+    <>
+      <Header isAuth={isAuth} isAdmin={isAdmin} />
+
+      {publicRotes.map((route) => (
+        <Switch>
+          <Route path={route.path} component={route.component} exact={route.exact} />
+        </Switch>
+      ))}
+
+      {isAuth &&
+        privateRotes.map((route) => (
+          <Switch>
+            <Route path={route.path} component={route.component} exact={route.exact} />
+          </Switch>
+        ))}
+      {isAdmin &&
+        adminRoutes.map((route) => (
+          <Switch>
+            <Route path={route.path} component={route.component} exact={route.exact} />
+          </Switch>
+        ))}
+      <Redirect to="/" />
+      <Footer isSubscribed={userInfo?.isSubscribed ? true : false} />
+    </>
   )
 }
 
@@ -64,5 +58,7 @@ const App = () => {
 // TODO Попробовать реализовать useFetch хук. https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 1:50
 // TODO сделать роуты для админа недоступными для остальных по типу как у Ulbi https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 2:33
 // TODO расставить везде вопросы user?.info?.profile?.name
+// TODO Разобраться с "/:keyword?/:page?/:limit?"
+// TODO Понять где нужен reset редюсера где нет
 
 export default App

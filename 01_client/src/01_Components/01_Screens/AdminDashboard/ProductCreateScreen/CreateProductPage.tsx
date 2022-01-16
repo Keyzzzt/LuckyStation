@@ -1,19 +1,18 @@
-import { FC, useEffect, useState } from 'react'
-import styles from './ProductCreateScreen.module.scss'
+import styles from './CreateProductPage.module.scss'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import Loader from '../../../02_Chunks/Loader/Loader'
-// import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
+import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
+import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 
-export const ProductCreateScreen: FC = () => {
+export const CreateProductPage: FC = () => {
   const history = useHistory()
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-  useIsAdminRedirect(userInfo, history)
+  const { success, loading, fail } = useTypedSelector((state) => state.createProduct)
 
   useScrollToTop()
   const dispatch = useDispatch()
@@ -74,7 +73,7 @@ export const ProductCreateScreen: FC = () => {
       .map((item) => item.trim())
   }
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(
       createProductThunk({
@@ -93,13 +92,12 @@ export const ProductCreateScreen: FC = () => {
   }
 
   useEffect(() => {
-    if (!userInfo) {
-      history.push('/login?redirect=dashboard')
+    if (!success) {
+      return
     }
-    if (userInfo && !userInfo.isAdmin) {
-      history.push('/')
-    }
-  }, [history, userInfo])
+    history.push('/dashboard')
+    dispatch(actions.createProductResetAC())
+  }, [success])
 
   return (
     <div className={styles.container}>

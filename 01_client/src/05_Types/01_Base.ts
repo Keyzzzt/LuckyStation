@@ -13,3 +13,10 @@ export interface IValErrMsg {
   param: string
   value: string
 }
+
+export interface Survey {
+  title: string
+  subject: string
+  body: string
+  recipients: string
+}

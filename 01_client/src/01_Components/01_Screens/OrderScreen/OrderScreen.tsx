@@ -9,7 +9,7 @@ import Loader from '../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
 
-//TODO orderpay
+// todo remove any
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { getRandom } from '../../../04_Utils/utils'
@@ -36,7 +36,6 @@ export const OrderScreen: FC = () => {
       }
       document.body.appendChild(script)
     }
-    dispatch(orderInfoThunk(params.orderId))
     if (successPay) {
       dispatch(actions.orderPayResetAC())
     } else if (!orderInfo?.isPaid) {
@@ -46,7 +45,11 @@ export const OrderScreen: FC = () => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, params.orderId, orderInfo?.isPaid, successPay])
+  }, [orderInfo?.isPaid, successPay])
+
+  useEffect(() => {
+    dispatch(orderInfoThunk(params.orderId))
+  }, [params.orderId])
 
   return (
     <div className={styles.container}>
@@ -71,7 +74,10 @@ export const OrderScreen: FC = () => {
         <div>Tax price: {orderInfo?.taxPrice}</div>
         <div>Shipping price: {orderInfo?.shippingPrice}</div>
         <div>Total price: {orderInfo?.totalPrice}</div>
-        <div>Shipping address: {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}</div>
+        <div>
+          Shipping address:{' '}
+          {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}
+        </div>
         <div>Created at: {orderInfo?.createdAt}</div>
         <div>{orderInfo?.isPaid ? 'Paid' : 'Not paid'}</div>
         <div>{orderInfo?.isDelivered ? 'Delivered' : 'Not delivered'}</div>

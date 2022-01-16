@@ -6,6 +6,7 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 // TODO: Написать типы по умному
+// todo products : null as null | Product[],
 type PrevPage = {
   limit: number
   prevPage: number

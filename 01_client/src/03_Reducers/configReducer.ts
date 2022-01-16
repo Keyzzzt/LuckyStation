@@ -6,20 +6,20 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  loading: false,
-  error: null as null | string,
   colorTheme: 'light',
+  loading: false,
+  fail: '',
 }
-// TODO: Выгрузить все данные из ДБ
+
 export const configReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'TOGGLE_COLOR_THEME_REQUEST':
-      return { ...state, loading: true, error: null }
+      return { ...initialState, loading: true }
     case 'TOGGLE_COLOR_THEME_SUCCESS':
       const newColorTheme = state.colorTheme === 'light' ? 'dark' : 'light'
-      return { ...state, loading: false, error: null, colorTheme: newColorTheme }
+      return { ...initialState, colorTheme: newColorTheme }
     case 'TOGGLE_COLOR_THEME_FAIL':
-      return { ...initialState, loading: false, error: action.payload }
+      return { ...initialState, fail: action.payload }
     default:
       return state
   }

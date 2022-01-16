@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   productInfo: null as null | Product,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const productInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -21,7 +21,7 @@ export const productInfoReducer = (state = initialState, action: ActionType): In
       return { ...initialState, productInfo: action.payload }
 
     case 'PRODUCT_INFO_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'PRODUCT_INFO_RESET':
       return { ...initialState }
 

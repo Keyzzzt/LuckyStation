@@ -1,19 +1,18 @@
+import styles from './ProfileScreen.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { myOrdersThunk } from '../../../03_Reducers/user/myOrdersReducer'
 import { updateOwnProfileThunk } from '../../../03_Reducers/user/userUpdateOwnProfileReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import Loader from '../../02_Chunks/Loader/Loader'
-import styles from './ProfileScreen.module.scss'
 
 export const ProfileScreen: FC = () => {
-  const history = useHistory()
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const { orders, error: meyOrdersErr } = useTypedSelector((state) => state.myOrders)
-  const { loading, success, error } = useTypedSelector((state) => state.userUpdateOwnProfile)
+  const { loading, success, fail } = useTypedSelector((state) => state.userUpdateOwnProfile)
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -36,17 +35,13 @@ export const ProfileScreen: FC = () => {
   }
 
   useEffect(() => {
-    if (!userInfo) {
-      history.push('/login')
-    } else {
-      dispatch(myOrdersThunk(1, 5))
-    }
-  }, [history, userInfo, dispatch])
+    dispatch(myOrdersThunk(1, 5))
+  }, [])
 
   return (
     <div className={styles.container}>
       <div className={styles.profile}>
-        {error && <ErrorMessage message={error} />}
+        {fail && <ErrorMessage message={fail} />}
         {success && <ErrorMessage message={'Profile updated'} />}
         {loading && <Loader />}
         <div>

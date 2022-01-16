@@ -1,11 +1,9 @@
+import styles from './Totals.module.scss'
 import { FC } from 'react'
-import { useHistory } from 'react-router'
-import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { TotalCostSVG } from '../../../02_Chunks/svg/TotalCostSVG'
 import { TotalProfitSVG } from '../../../02_Chunks/svg/TotalProfitSVG'
 import { TotalSalesSVG } from '../../../02_Chunks/svg/TotalSalesSVG'
-import styles from './Totals.module.scss'
 
 const iconFill = '#33c863'
 const totalCards = [
@@ -15,10 +13,6 @@ const totalCards = [
 ]
 
 export const Totals: FC = () => {
-  const history = useHistory()
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-  useIsAdminRedirect(userInfo, history)
-
   const { config } = useTypedSelector((state) => state)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (

@@ -23,6 +23,10 @@ import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
 import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
 import { loginReducer } from './03_Reducers/authReducer'
 import { statisticReducer } from './03_Reducers/Statistic/statisticReducer'
+import { createSurveyReducer } from './03_Reducers/admin/survey reducers/createSurveyReducer'
+import { surveyListReducer } from './03_Reducers/admin/survey reducers/surveyListReducer'
+import { deleteSurveyReducer } from './03_Reducers/admin/survey reducers/deleteSurveyReducer'
+import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleSurveyReducer'
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -48,6 +52,10 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   config: configReducer,
   statistic: statisticReducer,
+  createSurvey: createSurveyReducer,
+  surveyList: surveyListReducer,
+  deleteSurvey: deleteSurveyReducer,
+  singleSurvey: singleSurveyReducer,
 })
 
 // @ts-ignore

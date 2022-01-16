@@ -1,6 +1,5 @@
-import { FC, useEffect } from 'react'
 import styles from './AdminDashboard.module.scss'
-import { useHistory } from 'react-router'
+import { FC, useEffect } from 'react'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 // import { UsersList } from './UsersList/UsersList'
 // import { DashboardHeader } from './DashboardHeader/DashboardHeader'
@@ -9,18 +8,17 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 // import { Totals } from './Totals/Totals'
 // import { ProductsList } from './ProductsList/ProductsList'
 // import { OrderList } from './OrderList/OrderList'
-import { useIsAdminRedirect, useScrollToTop } from '../../../04_Utils/hooks'
+import { useScrollToTop } from '../../../04_Utils/hooks'
 import { RemoveEmailFromList } from './RemoveEmailFromList/RemoveEmailFromList'
 import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
 import { useDispatch } from 'react-redux'
-import { SurveyScreen } from './SurveyScreen/SurveyScreen'
+import { CreateSurvey } from './Survey/CreateSurvey/CreateSurvey'
+import { useHistory } from 'react-router'
 
 export const AdminDashboard: FC = () => {
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const { statistic } = useTypedSelector((state) => state.statistic)
-  const history = useHistory()
   const dispatch = useDispatch()
-  useIsAdminRedirect(userInfo, history)
+  const history = useHistory()
 
   useScrollToTop()
   const { config } = useTypedSelector((state) => state)
@@ -32,9 +30,11 @@ export const AdminDashboard: FC = () => {
   return (
     <div className={`${styles.scroll} ${themeClass}`}>
       <div className={`${styles.container} ${themeClass}`}>
+        <button onClick={() => history.push('/dashboard/create')}>Create Product</button>
+        <button onClick={() => history.push('/dashboard/users')}>Users list</button>
         <div className={`${styles.dashboard}`}>
           <div className={`${styles.adminToolUnit}`}>
-            <SurveyScreen allEmails={statistic.allUsersEmailList} subscribedEmails={statistic.allSubscribersEmailList} />
+            <CreateSurvey allEmails={statistic.allUsersEmailList} subscribedEmails={statistic.allSubscribersEmailList} />
             <RemoveEmailFromList />
           </div>
         </div>

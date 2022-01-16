@@ -8,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const userDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -18,7 +18,7 @@ export const userDeleteReducer = (state = initialState, action: ActionType): Ini
     case 'USER_DELETE_SUCCESS':
       return { ...initialState, success: true }
     case 'USER_DELETE_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
 
     default:
       return state

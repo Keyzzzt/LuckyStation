@@ -9,7 +9,10 @@ import {
   GetAllOrdersResponse,
   GetAllProductsResponse,
   OrderToAPI,
+  SurveysList,
+  SurveyFromDB,
 } from './05_Types/APIResponse'
+import { Survey } from './05_Types/01_Base'
 
 export const API = {
   auth: {
@@ -110,7 +113,19 @@ export const API = {
       return $api.get<any>(`admin/statistic`)
     },
     removeEmailFromList: async (email: string): Promise<void> => {
-      return $api.put(`admin/statistic/email`, { email })
+      return $api.put('admin/statistic/email', { email })
+    },
+    createSurvey: async (survey: Survey): Promise<void> => {
+      return $api.post('admin/survey', { ...survey })
+    },
+    getSurveys: async (): Promise<AxiosResponse<SurveysList>> => {
+      return $api.get<SurveysList>(`admin/survey/1/15`)
+    },
+    getSingleSurvey: async (surveyID: string): Promise<AxiosResponse<SurveyFromDB>> => {
+      return $api.get<SurveyFromDB>(`admin/survey/${surveyID}`)
+    },
+    deleteSurvey: async (surveyId: string): Promise<void> => {
+      return $api.delete(`admin/survey/${surveyId}`)
     },
   },
   product: {

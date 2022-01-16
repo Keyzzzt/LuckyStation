@@ -1,5 +1,5 @@
-import { FormEvent, FC, useState } from 'react'
 import styles from './ShippingScreen.module.scss'
+import { FormEvent, FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { saveAddressThunk } from '../../../03_Reducers/cart/cartReducer'
@@ -8,12 +8,12 @@ import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 
 export const ShippingScreen: FC = () => {
   const { shippingAddress } = useTypedSelector((state) => state.cart)
-  const history = useHistory()
-  const dispatch = useDispatch()
   const [address, setAddress] = useState(shippingAddress.address)
   const [city, setCity] = useState(shippingAddress.city)
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
   const [country, setCountry] = useState(shippingAddress.country)
+  const history = useHistory()
+  const dispatch = useDispatch()
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

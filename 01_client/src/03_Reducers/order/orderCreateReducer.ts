@@ -7,8 +7,7 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  order: '',
-  success: false,
+  order: null as null | any,
   loading: false,
   error: '',
 }
@@ -18,7 +17,7 @@ export const orderCreateReducer = (state = initialState, action: ActionType): In
     case 'ORDER_CREATE_REQUEST':
       return { ...initialState, loading: true }
     case 'ORDER_CREATE_SUCCESS':
-      return { ...initialState, success: true, order: action.payload }
+      return { ...initialState, order: action.payload }
     case 'ORDER_CREATE_FAIL':
       return { ...initialState, error: action.payload }
     case 'ORDER_CREATE_RESET':

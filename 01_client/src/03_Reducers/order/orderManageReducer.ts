@@ -5,6 +5,8 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
+// todo decomposition
+
 const initialState = {
   successDelivered: false,
   successNotDelivered: false,

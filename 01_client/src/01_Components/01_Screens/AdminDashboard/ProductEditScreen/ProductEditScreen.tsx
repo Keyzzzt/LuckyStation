@@ -1,27 +1,23 @@
-import { FC, useEffect, useState } from 'react'
 import styles from './ProductEditScreen.module.scss'
+import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
 import { Link, useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
-import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
-import { useIsAdminRedirect, useScrollToTop } from '../../../../04_Utils/hooks'
+import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { productInfoThunk } from '../../../../03_Reducers/product/productInfoReducer'
 import { productDeleteThunk } from '../../../../03_Reducers/admin/productDeleteReducer'
-import Loader from '../../../02_Chunks/Loader/Loader'
 import { updateProductThunk } from '../../../../03_Reducers/admin/updateProductReducer'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 
 export const ProductEditScreen: FC = () => {
   const history = useHistory()
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-  useIsAdminRedirect(userInfo, history)
 
   useScrollToTop()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
-  const { productInfo, error, loading } = useTypedSelector((state) => state.productInfo)
-  const { success, loading: loadingUpdate } = useTypedSelector((state) => state.updateProduct)
+  const { productInfo, fail, loading } = useTypedSelector((state) => state.productInfo)
+  const { loading: loadingUpdate } = useTypedSelector((state) => state.updateProduct)
 
   const [name, setName] = useState(productInfo?.name)
   const [brand, setBrand] = useState(productInfo?.brand)
@@ -67,10 +63,6 @@ export const ProductEditScreen: FC = () => {
 
   return (
     <div className={styles.container}>
-      {loading && <Loader />}
-      {loadingUpdate && <Loader />}
-      {error && <ErrorMessage message={error} />}
-      {success && <ErrorMessage message="Product successfully updated" />}
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={updateHandler}>Update</button>
       <button onClick={() => deleteHandler(productId, productInfo?.name!)}>Delete</button>

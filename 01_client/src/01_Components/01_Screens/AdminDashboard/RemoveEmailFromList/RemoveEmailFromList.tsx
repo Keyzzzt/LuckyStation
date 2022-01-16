@@ -19,8 +19,9 @@ export const RemoveEmailFromList: FC = () => {
     setEmail('')
   }
   return (
-    <div className={`${styles.adminToolUnit}`}>
+    <div className={styles.container}>
       <div>
+        <div>This option used for remove email from data base, once you removed it you can't roll this back</div>
         <input onChange={(e) => setEmail(e.target.value)} type="text" value={email} />
         <button onClick={removeEmailHandler}>Remove</button>
       </div>

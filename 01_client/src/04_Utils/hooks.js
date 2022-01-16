@@ -95,16 +95,16 @@ export function useScrollToTop() {
  * Не залогиненного редиректит на страницу логина
  */
 
-export function useIsAdminRedirect(userInfo, history) {
-  useEffect(() => {
-    if (!userInfo) {
-      history.push('/login?redirect=dashboard')
-    }
-    if (userInfo && !userInfo.isAdmin) {
-      history.push('/')
-    }
-  }, [userInfo, history])
-}
+// export function useIsAdminRedirect(userInfo, history) {
+//   useEffect(() => {
+//     if (!userInfo) {
+//       history.push('/login?redirect=dashboard')
+//     }
+//     if (userInfo && !userInfo.isAdmin) {
+//       history.push('/')
+//     }
+//   }, [userInfo, history])
+// }
 
 /**
  *! ===============================================================================================================================

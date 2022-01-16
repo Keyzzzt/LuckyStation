@@ -8,9 +8,6 @@ import Loader from '../../02_Chunks/Loader/Loader'
 import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
 import { useParams } from 'react-router'
 import { Pagination } from '../../02_Chunks/Pagination/Pagination'
-import { PriceRange } from '../../02_Chunks/PriceRange/PriceRange'
-import { Tags } from '../../02_Chunks/Tags/Tags'
-import { AutoResizeTextArea } from '../../02_Chunks/AutoResizeTextArea/AutoResizeTextArea'
 import { getRandom } from '../../../04_Utils/utils'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 
@@ -20,13 +17,15 @@ type Params = {
   keyword: string
 }
 
+// TODO сломан поиск, реализовать не через get строку а через параметры, либо, если не надо делать запрос на сервер сразу сделать поиск на фронте
+
 export const Home: FC = () => {
   const { loading, error, products } = useTypedSelector((state) => state.productList)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
   page = page ? page : '1'
-  limit = limit ? limit : '100'
+  limit = limit ? limit : '4'
 
   const setPageHandler = (page: number) => {
     dispatch(productListThunk(keyword, Number(page), Number(limit)))
@@ -71,9 +70,6 @@ export const Home: FC = () => {
       </div>
 
       <Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />
-      <PriceRange />
-      <Tags />
-      <AutoResizeTextArea />
     </section>
   )
 }

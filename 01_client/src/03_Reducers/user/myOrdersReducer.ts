@@ -7,7 +7,7 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  orders: [] as OrderFromAPI[],
+  orders: null as null | OrderFromAPI[],
   loading: false,
   error: '',
 }

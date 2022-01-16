@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import styles from './Auth.module.scss'
-import { FormEvent, FC, useEffect, useState, ChangeEvent } from 'react'
+import { FormEvent, FC, useEffect, useState, ChangeEvent, FocusEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -16,7 +16,7 @@ export const Login: FC = () => {
   const [password, setPassword] = useState('zzxxccVV11!')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty password')
-  const { loginFail } = useTypedSelector((state) => state.login)
+  const { fail: loginFail } = useTypedSelector((state) => state.login)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const history = useHistory()
   const location = useLocation()
@@ -28,7 +28,7 @@ export const Login: FC = () => {
   const showPasswordError = passwordError && passwordDirty
   const showEmailError = emailError && emailDirty
 
-  const blurHandler = (e: any) => {
+  const blurHandler = (e: FocusEvent<HTMLInputElement>) => {
     e.target.name === 'email' && setEmailDirty(true)
     e.target.name === 'password' && setPasswordDirty(true)
   }

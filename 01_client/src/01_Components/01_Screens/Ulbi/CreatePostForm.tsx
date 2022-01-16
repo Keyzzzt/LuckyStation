@@ -1,13 +1,17 @@
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 // import styles from './Ulbi.module.scss'
 
-export const CreatePostForm: FC<any> = ({ create, setModalMode }) => {
+interface Props {
+  create: ({ id, name, date }: { id: string; name: string; date: string }) => void
+}
+
+export const CreatePostForm: FC<Props> = ({ create }) => {
   console.log('PostForm COMPONENT')
 
   const [id, setId] = useState('')
   const [name, setName] = useState('')
 
-  const submitHandler = (e: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     create({
       id,

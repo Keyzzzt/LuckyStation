@@ -1,9 +1,7 @@
 import { FC, FormEvent, useState } from 'react'
 import styles from './Footer.module.scss'
 import { Link } from 'react-router-dom'
-import { useTypedSelector } from '../../../05_Types/01_Base'
 import { isEmail } from '../../../04_Utils/utils'
-import e from 'express'
 import { useDispatch } from 'react-redux'
 import { subscribeThunk } from '../../../03_Reducers/user/userInfoReducer'
 const footerColumns = [
@@ -31,9 +29,12 @@ const footerColumns = [
 
 // const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
-export const Footer: FC = () => {
+interface Props {
+  isSubscribed: boolean
+}
+
+export const Footer: FC<Props> = ({ isSubscribed }) => {
   const [email, setEmail] = useState('')
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -48,7 +49,7 @@ export const Footer: FC = () => {
   return (
     <div className={styles.container}>
       <footer className={styles.footer}>
-        {!userInfo?.isSubscribed && (
+        {!isSubscribed && (
           <div className={styles.footer__newsletter}>
             <h4 className={styles.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
             <span>Unsubscribe at any time</span>

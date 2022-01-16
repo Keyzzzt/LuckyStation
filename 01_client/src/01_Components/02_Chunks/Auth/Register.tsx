@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import styles from './Auth.module.scss'
-import { FormEvent, FC, useEffect, useState, ChangeEvent } from 'react'
+import { FormEvent, FC, useEffect, useState, ChangeEvent, FocusEvent } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -34,7 +34,7 @@ export const Register: FC = () => {
   const showConfirmError = confirmError && confirmDirty
   const showEmailError = emailError && emailDirty
 
-  const blurHandler = (e: any) => {
+  const blurHandler = (e: FocusEvent<HTMLInputElement>) => {
     e.target.name === 'email' && setEmailDirty(true)
     e.target.name === 'password' && setPasswordDirty(true)
     e.target.name === 'confirm' && setConfirmDirty(true)

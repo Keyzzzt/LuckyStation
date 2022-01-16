@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const userUpdateOwnProfileReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -19,9 +19,9 @@ export const userUpdateOwnProfileReducer = (state = initialState, action: Action
     case 'UPDATE_OWN_PROFILE_SUCCESS':
       return { ...initialState, success: true }
     case 'UPDATE_OWN_PROFILE_FAIL':
-      return { ...initialState, error: action.payload }
-    // case 'UPDATE_OWN_PROFILE_RESET':
-    //   return { ...initialState }
+      return { ...initialState, fail: action.payload }
+    case 'UPDATE_OWN_PROFILE_RESET':
+      return { ...initialState }
     default:
       return state
   }
@@ -31,7 +31,7 @@ export const actions = {
   updateOwnProfileRequestAC: () => ({ type: 'UPDATE_OWN_PROFILE_REQUEST' as const }),
   updateOwnProfileSuccessAC: () => ({ type: 'UPDATE_OWN_PROFILE_SUCCESS' as const }),
   updateOwnProfileFailAC: (errMessage: string) => ({ type: 'UPDATE_OWN_PROFILE_FAIL' as const, payload: errMessage }),
-  // updateOwnProfileResetAC: () => ({ type: 'UPDATE_OWN_PROFILE_RESET' as const }),
+  updateOwnProfileResetAC: () => ({ type: 'UPDATE_OWN_PROFILE_RESET' as const }),
 }
 
 export function updateOwnProfileThunk(formData: any): ThunkType {

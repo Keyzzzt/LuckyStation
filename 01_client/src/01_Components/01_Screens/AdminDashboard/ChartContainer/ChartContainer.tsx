@@ -1,10 +1,9 @@
+import styles from './ChartContainer.module.css'
 import { FC, useEffect, useRef } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
-// import styles from './ChartContainer.module.css'
 import { Chart, registerables } from 'chart.js'
 import { addData } from '../../../../04_Utils/utils'
 import { useHistory } from 'react-router'
-import { useIsAdminRedirect } from '../../../../04_Utils/hooks'
 
 Chart.register(...registerables)
 const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -31,9 +30,7 @@ const data = {
 }
 
 export const ChartContainer: FC = () => {
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const history = useHistory()
-  useIsAdminRedirect(userInfo, history)
 
   const { config } = useTypedSelector((state) => state)
   const chartRef = useRef()

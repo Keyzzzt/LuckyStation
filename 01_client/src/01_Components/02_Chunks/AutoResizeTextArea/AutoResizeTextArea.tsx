@@ -1,13 +1,5 @@
-import { FC, useState } from 'react'
+import { FC, KeyboardEvent, useState } from 'react'
 import styles from './AutoResizeTextArea.module.scss'
-
-// FIXME:
-// FIXME:
-// FIXME:
-// FIXME:
-// FIXME:
-// FIXME:
-// FIXME:
 
 type Props = {
   placeholder?: string
@@ -15,11 +7,12 @@ type Props = {
 export const AutoResizeTextArea: FC<Props> = ({ placeholder = 'Type text here...' }) => {
   const [value, setValue] = useState('')
 
-  const resize = (e: any) => {
+  const resize = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     console.log(e.target)
 
     setValue('auto')
 
+    // @ts-ignore
     const height = e.target.scrollHeight
     setValue(height + 'px')
   }

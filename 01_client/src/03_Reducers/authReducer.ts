@@ -7,19 +7,19 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  loginSuccess: false,
-  loginLoading: false,
-  loginFail: '',
+  success: false,
+  loading: false,
+  fail: '',
 }
 
 export const loginReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'LOGIN_REQUEST':
-      return { ...initialState, loginLoading: true }
+      return { ...initialState, loading: true }
     case 'LOGIN_SUCCESS':
-      return { ...initialState, loginSuccess: true }
+      return { ...initialState, success: true }
     case 'LOGIN_FAIL':
-      return { ...initialState, loginFail: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'LOGIN_RESET':
       return { ...initialState }
     default:

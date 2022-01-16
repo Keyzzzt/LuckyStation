@@ -8,18 +8,18 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   statistic: {} as {} | any,
-  statisticLoading: false,
-  statisticFail: '',
+  loading: false,
+  fail: '',
 }
 
 export const statisticReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'STATISTIC_REQUEST':
-      return { ...initialState, statisticLoading: true }
+      return { ...initialState, loading: true }
     case 'STATISTIC_SUCCESS':
       return { ...initialState, statistic: action.payload }
     case 'STATISTIC_FAIL':
-      return { ...initialState, statisticFail: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'STATISTIC_RESET':
       return { ...initialState }
 

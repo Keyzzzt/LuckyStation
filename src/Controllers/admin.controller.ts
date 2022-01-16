@@ -128,8 +128,6 @@ export async function deleteProduct(req: Request, res: Response, next: NextFunct
 // TODO:
 export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    console.log(req.body)
-
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
@@ -151,7 +149,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
 
     await product.save()
 
-    return res.status(201).json(product)
+    return res.sendStatus(201)
   } catch (error) {
     return next(error.message)
   }
@@ -246,7 +244,6 @@ export async function setOrderToNotPaid(req: Request, res: Response, next: NextF
 // TODO:
 export async function setOrderToDelivered(req: Request, res: Response, next: NextFunction) {
   try {
-    console.log(req.params.id)
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
@@ -321,7 +318,7 @@ export async function getAllSurveys(req: RequestCustom, res: Response, next: Nex
 // TODO:
 export async function getSurveyById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const survey = await SurveyModel.findById(req.params.id).select('-recipients')
+    const survey = await SurveyModel.findById(req.params.id).select('-recipients -__v -createdAt -updatedAt')
     if (!survey) {
       return next(ApiError.NotFound('Survey not found'))
     }
@@ -365,6 +362,21 @@ export async function manageSendgridEvents(req: RequestCustom, res: Response, ne
       })
       .value()
 
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+// Frontend DONE
+export async function deleteSurvey(req: Request, res: Response, next: NextFunction) {
+  try {
+    const survey = await SurveyModel.findById(req.params.id)
+    if (!survey) {
+      return next(ApiError.NotFound('Survey not found'))
+    }
+
+    await survey.remove()
     return res.sendStatus(200)
   } catch (error) {
     return next(error.message)

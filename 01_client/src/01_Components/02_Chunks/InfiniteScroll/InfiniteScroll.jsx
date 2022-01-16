@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 import { useAutoFetch } from '../../../04_Utils/hooks'
-import Loader from '../../02_Chunks/Loader/Loader'
+import Loader from '../Loader/Loader'
 
 
 

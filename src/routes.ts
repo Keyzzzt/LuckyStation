@@ -40,6 +40,7 @@ export function routes(app) {
 
   app.get('/api/admin/survey/:page/:limit', privateRoute, adminRoute, paginatedResult(SurveyModel, null), Admin.getAllSurveys)
   app.get('/api/admin/survey/:id', privateRoute, adminRoute, Admin.getSurveyById)
+  app.delete('/api/admin/survey/:id', privateRoute, adminRoute, Admin.deleteSurvey)
   app.post('/api/admin/survey', Validation.createSurvey, privateRoute, adminRoute, Admin.createSurvey)
   app.post('/api/admin/survey/webhook', Admin.manageSendgridEvents)
   app.get('/api/survey/unsubscribe/:email', User.unSubscribe, (req, res) => {

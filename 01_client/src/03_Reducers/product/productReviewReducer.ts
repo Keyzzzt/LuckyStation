@@ -6,19 +6,19 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  successReview: false,
-  loadingReview: false,
-  errorReview: '',
+  success: false,
+  loading: false,
+  fail: '',
 }
 
 export const productReviewReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_REVIEW_REQUEST':
-      return { ...initialState, loadingReview: true }
+      return { ...initialState, success: true }
     case 'PRODUCT_REVIEW_SUCCESS':
-      return { ...initialState, successReview: true }
+      return { ...initialState, success: true }
     case 'PRODUCT_REVIEW_FAIL':
-      return { ...initialState, errorReview: action.payload }
+      return { ...initialState, fail: action.payload }
     default:
       return state
   }

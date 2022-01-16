@@ -7,7 +7,6 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   updatedProduct: null as null | any,
-  success: false,
   loading: false,
   error: '',
 }
@@ -17,7 +16,7 @@ export const updateProductReducer = (state = initialState, action: ActionType): 
     case 'UPDATE_PRODUCT_REQUEST':
       return { ...initialState, loading: true }
     case 'UPDATE_PRODUCT_SUCCESS':
-      return { ...initialState, success: true, updatedProduct: action.payload }
+      return { ...initialState, updatedProduct: action.payload }
     case 'UPDATE_PRODUCT_FAIL':
       return { ...initialState, error: action.payload }
     case 'UPDATE_PRODUCT_RESET':

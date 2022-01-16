@@ -1,10 +1,7 @@
 @import '../../../02_Styles/newVariables.scss';
 
-body {
-  background-color: aqua;
-}
 .priceRange {
-  background-color: $light;
+  background-color: $grey;
   border-radius: $bRadius10;
   width: 400px;
   padding: 20px 25px 40px;

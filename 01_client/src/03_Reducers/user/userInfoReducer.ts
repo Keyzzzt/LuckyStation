@@ -38,7 +38,6 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
         return { ...state, userInfo: { ...state.userInfo, isSubscribed: true } }
       } else {
         return { ...state }
-        //@ts-ignore
       }
     default:
       return state

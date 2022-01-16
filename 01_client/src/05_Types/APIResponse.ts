@@ -1,3 +1,5 @@
+import { Survey } from './01_Base'
+
 export type User = {
   _id: string
   email: string
@@ -130,4 +132,28 @@ export interface GetAllProductsResponse {
     limit: number
   }
   items: Product[]
+}
+
+export type SurveyFromDB = {
+  user: string
+  title: string
+  subject: string
+  body: string
+  recipients: string
+  _id: string
+  yes: number
+  no: number
+  dateSent: Date
+}
+export interface SurveysList {
+  totalPages: number
+  next?: {
+    page: number
+    limit: number
+  }
+  prev?: {
+    page: number
+    limit: number
+  }
+  items: SurveyFromDB[]
 }

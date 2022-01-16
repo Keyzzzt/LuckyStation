@@ -11,7 +11,7 @@ import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 
 export const PlaceOrderScreen: FC = () => {
   const { cart } = useTypedSelector((state) => state)
-  const { success, loading, error, order } = useTypedSelector((state) => state.orderCreate)
+  const { loading, error, order } = useTypedSelector((state) => state.orderCreate)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -44,11 +44,11 @@ export const PlaceOrderScreen: FC = () => {
   }
 
   useEffect(() => {
-    if (success) {
+    if (order) {
       history.push(`/order/${order}`)
       dispatch(actions.createOrderResetAC())
     }
-  }, [history, success, dispatch, order])
+  }, [history, order, dispatch])
 
   return (
     <div className={styles.container}>
