@@ -1,5 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { ReviewToAPI } from '../../05_Types/APIResponse'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -25,30 +26,25 @@ export const productReviewReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  productReviewRequestAC: () => ({ type: 'PRODUCT_REVIEW_REQUEST' as const }),
-  productReviewSuccessAC: () => ({ type: 'PRODUCT_REVIEW_SUCCESS' as const }),
-  productReviewFailAC: (errMessage: string) => ({ type: 'PRODUCT_REVIEW_FAIL' as const, payload: errMessage }),
-}
-
-export type ReviewToAPI = {
-  rating: number
-  comment: string
+  request: () => ({ type: 'PRODUCT_REVIEW_REQUEST' as const }),
+  success: () => ({ type: 'PRODUCT_REVIEW_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'PRODUCT_REVIEW_FAIL' as const, payload: errMessage }),
 }
 
 export function productReviewThunk(productId: string, review: ReviewToAPI): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.productReviewRequestAC())
+      dispatch(actions.request())
       await API.user.createReview(productId, review)
-      dispatch(actions.productReviewSuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.productReviewFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.productReviewFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

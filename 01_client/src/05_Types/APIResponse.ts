@@ -157,3 +157,8 @@ export interface SurveysList {
   }
   items: SurveyFromDB[]
 }
+
+export type ReviewToAPI = {
+  rating: number
+  comment: string
+}

@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { userInfoThunk } from './../user/userInfoReducer'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -11,6 +10,8 @@ const initialState = {
   loading: false,
   fail: '',
 }
+
+// todo разделить редюсеры
 
 export const statisticReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
@@ -24,6 +25,7 @@ export const statisticReducer = (state = initialState, action: ActionType): Init
       return { ...initialState }
 
     case 'REMOVE_EMAIL_SUCCESS':
+    case 'REMOVE_EMAIL_FAIL':
       return { ...initialState, statistic: { ...state.statistic } }
     default:
       return state
@@ -31,10 +33,10 @@ export const statisticReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  statisticRequestAC: () => ({ type: 'STATISTIC_REQUEST' as const }),
-  statisticSuccessAC: (statistic: any) => ({ type: 'STATISTIC_SUCCESS' as const, payload: statistic }),
-  statisticFailAC: (errMessage: string) => ({ type: 'STATISTIC_FAIL' as const, payload: errMessage }),
-  statisticResetAC: () => ({ type: 'STATISTIC_RESET' as const }),
+  request: () => ({ type: 'STATISTIC_REQUEST' as const }),
+  success: (statistic: any) => ({ type: 'STATISTIC_SUCCESS' as const, payload: statistic }),
+  fail: (errMessage: string) => ({ type: 'STATISTIC_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'STATISTIC_RESET' as const }),
 
   removeEmailSuccessAC: (email: any) => ({ type: 'REMOVE_EMAIL_SUCCESS' as const, payload: email }),
   removeEmailFailAC: (errMessage: string) => ({ type: 'REMOVE_EMAIL_FAIL' as const, payload: errMessage }),
@@ -43,17 +45,17 @@ export const actions = {
 export function statisticThunk(): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.statisticRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.getStatistic()
-      dispatch(actions.statisticSuccessAC(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.statisticFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.statisticFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }
@@ -61,7 +63,7 @@ export function statisticThunk(): ThunkType {
 export function removeEmailThunk(email: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.statisticRequestAC())
+      dispatch(actions.request())
       await API.admin.removeEmailFromList(email)
       dispatch(statisticThunk())
     } catch (err: any) {

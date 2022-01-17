@@ -17,6 +17,7 @@ export function routes(app) {
   app.get('/api/auth/google/redirect', Auth.googleOAuthRedirect)
   app.get('/api/auth/google', Auth.googleOAuth)
   app.get('/api/activate/:link', Auth.activate)
+  app.post('/api/recovery', Validation.emailOnly, Auth.passwordRecovery)
   app.get('/api/refresh', Auth.refresh)
 
   // ADMIN

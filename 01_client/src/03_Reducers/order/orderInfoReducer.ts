@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   orderInfo: null as null | OrderFromAPI,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const orderInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -19,7 +19,7 @@ export const orderInfoReducer = (state = initialState, action: ActionType): Init
     case 'ORDER_INFO_SUCCESS':
       return { ...initialState, orderInfo: action.payload }
     case 'ORDER_INFO_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'ORDER_INFO_RESET':
       return { ...initialState }
     default:
@@ -28,26 +28,26 @@ export const orderInfoReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  orderInfoRequestAC: () => ({ type: 'ORDER_INFO_REQUEST' as const }),
-  orderInfoSuccessAC: (data: OrderFromAPI) => ({ type: 'ORDER_INFO_SUCCESS' as const, payload: data }),
-  orderInfoFailAC: (errMessage: string) => ({ type: 'ORDER_INFO_FAIL' as const, payload: errMessage }),
-  orderInfoResetAC: () => ({ type: 'ORDER_INFO_RESET' as const }),
+  request: () => ({ type: 'ORDER_INFO_REQUEST' as const }),
+  success: (data: OrderFromAPI) => ({ type: 'ORDER_INFO_SUCCESS' as const, payload: data }),
+  fail: (errMessage: string) => ({ type: 'ORDER_INFO_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'ORDER_INFO_RESET' as const }),
 }
 
 export function orderInfoThunk(orderId: string): ThunkType {
   return async function (dispatch, getState) {
     try {
-      dispatch(actions.orderInfoRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.getSingleOrder(orderId)
-      dispatch(actions.orderInfoSuccessAC(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.orderInfoFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.orderInfoFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

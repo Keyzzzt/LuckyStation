@@ -55,10 +55,9 @@ const App = () => {
 // TODO: Тест приложения при отключенном API.
 // TODO: Нужно реализовать некий принцип брони, чтобы 2 покупателя не купили последний оставшийся продукт.
 // TODO: https://www.udemy.com/course/mern-ecommerce/learn/lecture/22498996#questions/12904054
-// TODO Попробовать реализовать useFetch хук. https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 1:50
-// TODO сделать роуты для админа недоступными для остальных по типу как у Ulbi https://www.youtube.com/watch?v=GNrdg3PzpJQ&t=3808s 2:33
 // TODO расставить везде вопросы user?.info?.profile?.name
 // TODO Разобраться с "/:keyword?/:page?/:limit?"
 // TODO Понять где нужен reset редюсера где нет
+// TODO Восстановление пароля
 
 export default App

@@ -27,26 +27,26 @@ export const createProductReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  createProductRequestAC: () => ({ type: 'CREATE_PRODUCT_REQUEST' as const }),
-  createProductSuccessAC: () => ({ type: 'CREATE_PRODUCT_SUCCESS' as const }),
-  createProductFailAC: (errMessage: string) => ({ type: 'CREATE_PRODUCT_FAIL' as const, payload: errMessage }),
-  createProductResetAC: () => ({ type: 'CREATE_PRODUCT_RESET' as const }),
+  request: () => ({ type: 'CREATE_PRODUCT_REQUEST' as const }),
+  success: () => ({ type: 'CREATE_PRODUCT_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'CREATE_PRODUCT_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'CREATE_PRODUCT_RESET' as const }),
 }
 
 export function createProductThunk(product: any): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.createProductRequestAC())
+      dispatch(actions.request())
       await API.admin.createProduct(product)
-      dispatch(actions.createProductSuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.createProductFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.createProductFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

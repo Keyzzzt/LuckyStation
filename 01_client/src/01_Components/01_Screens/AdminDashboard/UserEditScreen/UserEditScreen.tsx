@@ -18,7 +18,7 @@ export const UserEditScreen: FC = () => {
   useScrollToTop()
   const dispatch = useDispatch()
   const { userId } = useParams<{ userId: string }>()
-  const { success, loading, error } = useTypedSelector((state) => state.updateProfileByAdmin)
+  const { success, loading, fail } = useTypedSelector((state) => state.updateProfileByAdmin)
 
   const { user, loading: loadingUser, fail: failUser } = useTypedSelector((state) => state.getUser)
   const [role, setRole] = useState(false)

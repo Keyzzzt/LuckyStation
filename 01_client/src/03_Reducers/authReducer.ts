@@ -28,29 +28,29 @@ export const loginReducer = (state = initialState, action: ActionType): InitialS
 }
 
 export const actions = {
-  loginRequestAC: () => ({ type: 'LOGIN_REQUEST' as const }),
-  loginSuccessAC: () => ({ type: 'LOGIN_SUCCESS' as const }),
-  loginFailAC: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
-  loginResetAC: () => ({ type: 'LOGIN_RESET' as const }),
+  request: () => ({ type: 'LOGIN_REQUEST' as const }),
+  success: () => ({ type: 'LOGIN_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'LOGIN_RESET' as const }),
 }
 
 export function loginThunk(email: string, password: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.loginRequestAC())
+      dispatch(actions.request())
       const { data } = await API.auth.login(email, password)
 
-      dispatch(actions.loginSuccessAC())
+      dispatch(actions.success())
       localStorage.setItem('token', data.accessToken)
       dispatch(userInfoThunk())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.loginFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.loginFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

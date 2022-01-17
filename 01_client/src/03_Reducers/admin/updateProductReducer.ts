@@ -8,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   updatedProduct: null as null | any,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const updateProductReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -18,7 +18,7 @@ export const updateProductReducer = (state = initialState, action: ActionType): 
     case 'UPDATE_PRODUCT_SUCCESS':
       return { ...initialState, updatedProduct: action.payload }
     case 'UPDATE_PRODUCT_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'UPDATE_PRODUCT_RESET':
       return { ...initialState }
     default:
@@ -27,26 +27,26 @@ export const updateProductReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  updateProductRequestAC: () => ({ type: 'UPDATE_PRODUCT_REQUEST' as const }),
-  updateProductSuccessAC: (product: any) => ({ type: 'UPDATE_PRODUCT_SUCCESS' as const, payload: product }),
-  updateProductFailAC: (errMessage: string) => ({ type: 'UPDATE_PRODUCT_FAIL' as const, payload: errMessage }),
-  updateProductResetAC: () => ({ type: 'UPDATE_PRODUCT_RESET' as const }),
+  request: () => ({ type: 'UPDATE_PRODUCT_REQUEST' as const }),
+  success: (product: any) => ({ type: 'UPDATE_PRODUCT_SUCCESS' as const, payload: product }),
+  fail: (errMessage: string) => ({ type: 'UPDATE_PRODUCT_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'UPDATE_PRODUCT_RESET' as const }),
 }
 
 export function updateProductThunk(productId: string, product: any): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.updateProductRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.updateProduct(productId, product)
-      dispatch(actions.updateProductSuccessAC(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.updateProductFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.updateProductFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

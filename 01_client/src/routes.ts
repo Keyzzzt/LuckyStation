@@ -1,6 +1,6 @@
 import { AdminDashboard } from './01_Components/01_Screens/AdminDashboard/AdminDashboard'
 import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
-import { CreateProductPage } from './01_Components/01_Screens/AdminDashboard/ProductCreateScreen/CreateProductPage'
+import { CreateProductPage } from './01_Components/01_Screens/AdminDashboard/CreateProductPage/CreateProductPage'
 import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/ProductEditScreen/ProductEditScreen'
 import { CreateSurvey } from './01_Components/01_Screens/AdminDashboard/Survey/CreateSurvey/CreateSurvey'
 import { SurveyPage } from './01_Components/01_Screens/AdminDashboard/Survey/SurveyPage/SurveyPage'

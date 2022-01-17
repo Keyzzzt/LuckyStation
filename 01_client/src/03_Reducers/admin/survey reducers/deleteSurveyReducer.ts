@@ -27,26 +27,26 @@ export const deleteSurveyReducer = (state = initialState, action: ActionType): I
 }
 
 export const actions = {
-  deleteSurveyRequest: () => ({ type: 'DELETE_SURVEY_REQUEST' as const }),
-  deleteSurveySuccessAC: () => ({ type: 'DELETE_SURVEY_SUCCESS' as const }),
-  deleteSurveyFailAC: (errMessage: string) => ({ type: 'DELETE_SURVEY_FAIL' as const, payload: errMessage }),
-  deleteSurveyResetAC: () => ({ type: 'DELETE_SURVEY_RESET' as const }),
+  request: () => ({ type: 'DELETE_SURVEY_REQUEST' as const }),
+  success: () => ({ type: 'DELETE_SURVEY_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'DELETE_SURVEY_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'DELETE_SURVEY_RESET' as const }),
 }
 
 export function deleteSurveyThunk(surveyId: string): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.deleteSurveyRequest())
+      dispatch(actions.request())
       await API.admin.deleteSurvey(surveyId)
-      dispatch(actions.deleteSurveySuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.deleteSurveyFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.deleteSurveyFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

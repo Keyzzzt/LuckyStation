@@ -30,7 +30,7 @@ export const SurveyPage: FC<Props> = () => {
     }
     alert('Deleted')
     history.push('/dashboard')
-    dispatch(actions.deleteSurveyResetAC())
+    dispatch(actions.reset())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteSuccess])
 

@@ -20,7 +20,7 @@ type Params = {
 // TODO сломан поиск, реализовать не через get строку а через параметры, либо, если не надо делать запрос на сервер сразу сделать поиск на фронте
 
 export const Home: FC = () => {
-  const { loading, error, products } = useTypedSelector((state) => state.productList)
+  const { loading, fail, products } = useTypedSelector((state) => state.productList)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
@@ -46,9 +46,8 @@ export const Home: FC = () => {
 
   return (
     <section className={styles.products}>
-      {error && <ErrorMessage message={error} />}
+      {fail && <ErrorMessage message={fail} />}
       {loading && <Loader />}
-
       <div className={styles.container}>
         <div className={styles.row}>
           {products &&
@@ -68,7 +67,6 @@ export const Home: FC = () => {
             })}
         </div>
       </div>
-
       <Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />
     </section>
   )

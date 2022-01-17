@@ -35,7 +35,7 @@ export const Login: FC = () => {
 
   const resetLoginFail = () => {
     if (loginFail) {
-      dispatch(actions.loginResetAC())
+      dispatch(actions.reset())
     }
   }
 

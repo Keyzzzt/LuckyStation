@@ -3,6 +3,7 @@
 import { CookieOptions, Response, Request, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { v4 as uuidv4 } from 'uuid'
+import jwt from 'jsonwebtoken'
 import { RequestCustom } from '@src/custom'
 import * as utils from '@src/utils'
 import { UserModel } from '@src/models/user.model'
@@ -12,6 +13,29 @@ export const cookieOpt: CookieOptions = {
   httpOnly: true,
   maxAge: 30 * 24 * 60 * 60 * 1000,
   secure: false,
+}
+
+export async function passwordRecovery(req: Request, res: Response, next: NextFunction) {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
+
+    const { email } = req.body
+    const user = await UserModel.findOne({ email })
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_RESTORE_PASSWORD_KEY, { expiresIn: '30m' })
+
+    utils.sendPasswordRecoveryLink(email, `${process.env.CLIENT_URL}/restore/${token}`)
+
+    return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
 }
 
 export async function register(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +53,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
     await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
 
-    const activationLink = uuidv4()
+    const activationLink = uuidv4() // todo положить токен с _id
 
     const createdUser = await UserModel.create({ email, password, activationLink })
 

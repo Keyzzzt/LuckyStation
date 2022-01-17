@@ -22,7 +22,7 @@ const initialState = {
   taxPrice: 0 as number,
   totalPrice: 0 as number,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const cartReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -38,7 +38,7 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
     case 'CART_REMOVE':
       return { ...state, cartItems: state.cartItems.filter((n) => n._id !== action.payload) }
     case 'CART_FAIL':
-      return { ...state, error: action.payload }
+      return { ...state, fail: action.payload }
     case 'SAVE_SHIPPING_ADDRESS':
       return { ...state, shippingAddress: action.payload }
     case 'SAVE_PAYMENT_METHOD':

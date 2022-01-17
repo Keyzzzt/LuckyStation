@@ -28,26 +28,26 @@ export const surveyListReducer = (state = initialState, action: ActionType): Ini
 }
 
 export const actions = {
-  surveyListRequestAC: () => ({ type: 'SURVEY_LIST_REQUEST' as const }),
-  surveyListSuccessAC: (data: SurveyFromDB[]) => ({ type: 'SURVEY_LIST_SUCCESS' as const, payload: data }),
-  surveyListFailAC: (errMessage: string) => ({ type: 'SURVEY_LIST_FAIL' as const, payload: errMessage }),
-  surveyListResetAC: () => ({ type: 'SURVEY_LIST_RESET' as const }),
+  request: () => ({ type: 'SURVEY_LIST_REQUEST' as const }),
+  success: (data: SurveyFromDB[]) => ({ type: 'SURVEY_LIST_SUCCESS' as const, payload: data }),
+  fail: (errMessage: string) => ({ type: 'SURVEY_LIST_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'SURVEY_LIST_RESET' as const }),
 }
 
 export function surveyListThunk(): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.surveyListRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.getSurveys()
-      dispatch(actions.surveyListSuccessAC(data.items))
+      dispatch(actions.success(data.items))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.surveyListFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.surveyListFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

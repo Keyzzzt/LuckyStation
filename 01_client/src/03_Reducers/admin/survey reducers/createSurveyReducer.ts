@@ -27,26 +27,26 @@ export const createSurveyReducer = (state = initialState, action: ActionType): I
 }
 
 export const actions = {
-  createSurveyRequestAC: () => ({ type: 'CREATE_SURVEY_REQUEST' as const }),
-  createSurveySuccessAC: () => ({ type: 'CREATE_SURVEY_SUCCESS' as const }),
-  createSurveyFailAC: (errMessage: string) => ({ type: 'CREATE_SURVEY_FAIL' as const, payload: errMessage }),
-  createSurveyResetAC: () => ({ type: 'CREATE_SURVEY_RESET' as const }),
+  request: () => ({ type: 'CREATE_SURVEY_REQUEST' as const }),
+  success: () => ({ type: 'CREATE_SURVEY_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'CREATE_SURVEY_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'CREATE_SURVEY_RESET' as const }),
 }
 
 export function createSurveyThunk(survey: Survey): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.createSurveyRequestAC())
+      dispatch(actions.request())
       await API.admin.createSurvey(survey)
-      dispatch(actions.createSurveySuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.createSurveyFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.createSurveyFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

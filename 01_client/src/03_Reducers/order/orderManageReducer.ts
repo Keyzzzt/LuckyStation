@@ -14,14 +14,13 @@ const initialState = {
   successNotPaid: false,
   successDelete: false,
   loading: false,
-  manageOrderError: '',
+  fail: '',
 }
 
 export const orderManageReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'MANAGE_ORDER_REQUEST':
       return { ...initialState, loading: true }
-
     case 'DELIVERED_SUCCESS':
       return { ...initialState, successDelivered: true }
     case 'NOT_DELIVERED_SUCCESS':
@@ -32,14 +31,12 @@ export const orderManageReducer = (state = initialState, action: ActionType): In
       return { ...initialState, successNotPaid: true }
     case 'ORDER_DELETE_SUCCESS':
       return { ...initialState, successNotPaid: true }
-
     case 'DELIVERED_FAIL':
     case 'PAID_FAIL':
     case 'NOT_DELIVERED_FAIL':
     case 'NOT_PAID_FAIL':
     case 'ORDER_DELETE_FAIL':
-      return { ...initialState, manageOrderError: action.payload }
-
+      return { ...initialState, fail: action.payload }
     case 'ORDER_MANAGE_RESET':
       return { ...initialState }
     default:
@@ -48,7 +45,7 @@ export const orderManageReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  manageOrderRequestAC: () => ({ type: 'MANAGE_ORDER_REQUEST' as const }),
+  request: () => ({ type: 'MANAGE_ORDER_REQUEST' as const }),
 
   deliveredSuccessAC: () => ({ type: 'DELIVERED_SUCCESS' as const }),
   notDeliveredSuccessAC: () => ({ type: 'NOT_DELIVERED_SUCCESS' as const }),
@@ -62,13 +59,13 @@ export const actions = {
   notPaidFailAC: (errMessage: string) => ({ type: 'NOT_PAID_FAIL' as const, payload: errMessage }),
   deleteOrderFailAC: (errMessage: string) => ({ type: 'ORDER_DELETE_FAIL' as const, payload: errMessage }),
 
-  orderManageResetAC: () => ({ type: 'ORDER_MANAGE_RESET' as const }),
+  reset: () => ({ type: 'ORDER_MANAGE_RESET' as const }),
 }
 
 export function deliveredThunk(orderId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.manageOrderRequestAC())
+      dispatch(actions.request())
       await API.admin.setToDelivered(orderId)
       dispatch(actions.deliveredSuccessAC())
     } catch (err: any) {
@@ -85,7 +82,7 @@ export function deliveredThunk(orderId: string): ThunkType {
 export function notDeliveredThunk(orderId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.manageOrderRequestAC())
+      dispatch(actions.request())
       await API.admin.setToNotDelivered(orderId)
       dispatch(actions.notDeliveredSuccessAC())
     } catch (err: any) {
@@ -102,7 +99,7 @@ export function notDeliveredThunk(orderId: string): ThunkType {
 export function paidThunk(orderId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.manageOrderRequestAC())
+      dispatch(actions.request())
       await API.admin.setToPaid(orderId)
       dispatch(actions.paidSuccessAC())
     } catch (err: any) {
@@ -119,7 +116,7 @@ export function paidThunk(orderId: string): ThunkType {
 export function notPaidThunk(orderId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.manageOrderRequestAC())
+      dispatch(actions.request())
       await API.admin.setToNotPaid(orderId)
       dispatch(actions.notPaidSuccessAC())
     } catch (err: any) {
@@ -136,7 +133,7 @@ export function notPaidThunk(orderId: string): ThunkType {
 export function deleteOrderThunk(orderId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.manageOrderRequestAC())
+      dispatch(actions.request())
       await API.admin.deleteOrder(orderId)
       dispatch(actions.deleteOrderSuccessAC())
     } catch (err: any) {

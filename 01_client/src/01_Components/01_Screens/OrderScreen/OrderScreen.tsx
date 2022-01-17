@@ -15,7 +15,7 @@ import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { getRandom } from '../../../04_Utils/utils'
 
 export const OrderScreen: FC = () => {
-  const { orderInfo, loading, error } = useTypedSelector((state) => state.orderInfo)
+  const { orderInfo, loading, fail } = useTypedSelector((state) => state.orderInfo)
   const { success: successPay, loading: loadingPay } = useTypedSelector((state) => state.orderPay)
   const [sdkReady, setSdkReady] = useState(false)
   const dispatch = useDispatch()
@@ -37,7 +37,7 @@ export const OrderScreen: FC = () => {
       document.body.appendChild(script)
     }
     if (successPay) {
-      dispatch(actions.orderPayResetAC())
+      dispatch(actions.reset())
     } else if (!orderInfo?.isPaid) {
       if (!window.paypal) {
         addPayPalScript()
@@ -54,7 +54,7 @@ export const OrderScreen: FC = () => {
   return (
     <div className={styles.container}>
       {loading && <Loader />}
-      {error && <ErrorMessage message={error} />}
+      {fail && <ErrorMessage message={fail} />}
 
       <div>
         <div>Order Items</div>

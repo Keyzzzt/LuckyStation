@@ -5,6 +5,7 @@ export const auth = [
   body('email', 'Invalid email or password').trim().isEmail().bail(),
   body('password', 'Invalid email or password').trim().isLength({ min: 3, max: 33 }),
 ]
+export const emailOnly = [body('email', 'Invalid email').trim().isEmail()]
 
 export const subscribe = [body('email', 'Invalid email').trim().isEmail()]
 export const updateProfileByUser = [

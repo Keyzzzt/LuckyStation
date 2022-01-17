@@ -17,10 +17,15 @@ export const OrderEditScreen: FC = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { orderId } = useParams<{ orderId: string }>()
-  const { orderInfo, error, loading } = useTypedSelector((state) => state.orderInfo)
-  const { successDelivered, successNotDelivered, successPaid, successNotPaid, successDelete, manageOrderError } = useTypedSelector(
-    (state) => state.orderManage
-  )
+  const { orderInfo, fail, loading } = useTypedSelector((state) => state.orderInfo)
+  const {
+    successDelivered,
+    successNotDelivered,
+    successPaid,
+    successNotPaid,
+    successDelete,
+    fail: manageOrderFail,
+  } = useTypedSelector((state) => state.orderManage)
 
   type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
   const manageOrderHandler = (action: ActionType) => {
@@ -50,8 +55,8 @@ export const OrderEditScreen: FC = () => {
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={() => manageOrderHandler('delete')}>Delete</button>
       {loading && <Loader />}
-      {error && <ErrorMessage message={error} />}
-      {manageOrderError && <ErrorMessage message={manageOrderError} />}
+      {fail && <ErrorMessage message={fail} />}
+      {manageOrderFail && <ErrorMessage message={manageOrderFail} />}
 
       <div>
         <div>Order Items</div>

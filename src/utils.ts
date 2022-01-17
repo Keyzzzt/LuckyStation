@@ -81,6 +81,21 @@ export async function sendActivationMail(to, link) {
       `,
   })
 }
+export async function sendPasswordRecoveryLink(to, link) {
+  transporter.sendMail({
+    from: process.env.SMTP_USER,
+    to,
+    subject: `Password recovery link`,
+    text: '',
+    html: `
+          <div>
+          <h1>To reset your password please use link below</h1>
+          <h1>Link active 30 minutes</h1>
+          <a href="${link}">${link}</a>
+          </div>
+      `,
+  })
+}
 export async function refresh(refreshToken: string) {
   if (!refreshToken) {
     throw ApiError.UnauthorizedError()

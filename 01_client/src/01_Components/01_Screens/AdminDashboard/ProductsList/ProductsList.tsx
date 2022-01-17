@@ -12,16 +12,16 @@ import { getRandom } from '../../../../04_Utils/utils'
 export const ProductsList: FC = () => {
   const dispatch = useDispatch()
   const { config } = useTypedSelector((state) => state)
-  const { products, loading, error } = useTypedSelector((state) => state.productList)
+  const { products, loading, fail } = useTypedSelector((state) => state.productList)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     dispatch(productListThunk('', 1, 100))
-    dispatch(actions.productInfoResetAC())
+    dispatch(actions.reset())
   }, [dispatch])
   return (
     <div className={`${styles.customerslist} ${themeClass}`}>
-      {error && <ErrorMessage message={error} />}
+      {fail && <ErrorMessage message={fail} />}
       {loading && <Loader />}
       <div className={styles.customerslist__header}>
         <h2 className={`${styles.customerslist__header__title} ${themeClass}`}>Products</h2>

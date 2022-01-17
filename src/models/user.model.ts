@@ -12,9 +12,10 @@ export interface UserDocType extends Document {
   isAdmin: boolean
   isSubscribed: boolean
   isActivated: boolean
-  activationLink: string
   credits: number
   favorite: string[]
+  activationToken: string
+  passwordResetToken: string
   createdAt?: Date
   updatedAt?: Date
   comparePassword(candidatePassword: string): Promise<boolean>
@@ -29,9 +30,10 @@ const UserSchema: Schema = new Schema<UserDocType>(
     isAdmin: { type: Boolean, required: true, default: false },
     isSubscribed: { type: Boolean, required: true, default: false },
     isActivated: { type: Boolean, default: false },
-    activationLink: { type: String },
     credits: { type: Number, default: 0 },
     favorite: [String],
+    activationToken: { type: String },
+    passwordResetToken: { type: String, default: '' },
   },
   {
     timestamps: true,

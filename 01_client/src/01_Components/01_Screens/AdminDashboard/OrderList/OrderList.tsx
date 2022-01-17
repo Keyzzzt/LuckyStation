@@ -11,7 +11,7 @@ import { getRandom } from '../../../../04_Utils/utils'
 export const OrderList: FC = () => {
   const dispatch = useDispatch()
   const { config } = useTypedSelector((state) => state)
-  const { orders, loading, error } = useTypedSelector((state) => state.orderList)
+  const { orders, loading, fail } = useTypedSelector((state) => state.orderList)
   const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export const OrderList: FC = () => {
   }, [dispatch])
   return (
     <div className={`${styles.customerslist} ${themeClass}`}>
-      {error && <ErrorMessage message={error} />}
+      {fail && <ErrorMessage message={fail} />}
       {loading && <Loader />}
       <div className={styles.customerslist__header}>
         <h2 className={`${styles.customerslist__header__title} ${themeClass}`}>Orders</h2>

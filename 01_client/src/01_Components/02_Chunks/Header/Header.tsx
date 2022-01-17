@@ -34,7 +34,7 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
     history.push('/')
     dispatch(logoutThunk())
     dispatch(myOrdersActions.myOrdersResetAC())
-    dispatch(orderInfoActions.orderInfoResetAC())
+    dispatch(orderInfoActions.reset())
     //TODO: Здесь нужно сбросить все приватные данные
   }
   return (

@@ -8,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const orderPayReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -18,7 +18,7 @@ export const orderPayReducer = (state = initialState, action: ActionType): Initi
     case 'ORDER_PAY_SUCCESS':
       return { ...initialState, success: true }
     case 'ORDER_PAY_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'ORDER_PAY_RESET':
       return { ...initialState }
     default:
@@ -27,27 +27,27 @@ export const orderPayReducer = (state = initialState, action: ActionType): Initi
 }
 
 export const actions = {
-  orderPayRequestAC: () => ({ type: 'ORDER_PAY_REQUEST' as const }),
-  orderPaySuccessAC: () => ({ type: 'ORDER_PAY_SUCCESS' as const }),
-  orderPayFailAC: (errMessage: string) => ({ type: 'ORDER_PAY_FAIL' as const, payload: errMessage }),
-  orderPayResetAC: () => ({ type: 'ORDER_PAY_RESET' as const }),
+  request: () => ({ type: 'ORDER_PAY_REQUEST' as const }),
+  success: () => ({ type: 'ORDER_PAY_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'ORDER_PAY_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'ORDER_PAY_RESET' as const }),
 }
 
 export function payOrderThunk(orderId: string, paymentResult: any): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.orderPayRequestAC())
+      dispatch(actions.request())
       await API.order.payOrder(orderId, paymentResult)
-      dispatch(actions.orderPaySuccessAC())
+      dispatch(actions.success())
       localStorage.removeItem('cartItems')
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.orderPayFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.orderPayFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

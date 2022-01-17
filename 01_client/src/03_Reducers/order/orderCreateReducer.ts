@@ -6,10 +6,12 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
+// todo any
+
 const initialState = {
   order: null as null | any,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const orderCreateReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -19,7 +21,7 @@ export const orderCreateReducer = (state = initialState, action: ActionType): In
     case 'ORDER_CREATE_SUCCESS':
       return { ...initialState, order: action.payload }
     case 'ORDER_CREATE_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'ORDER_CREATE_RESET':
       return { ...initialState }
     default:
@@ -28,26 +30,26 @@ export const orderCreateReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  createOrderRequestAC: () => ({ type: 'ORDER_CREATE_REQUEST' as const }),
-  createOrderSuccessAC: (data: any) => ({ type: 'ORDER_CREATE_SUCCESS' as const, payload: data }),
-  createOrderFailAC: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
-  createOrderResetAC: () => ({ type: 'ORDER_CREATE_RESET' as const }),
+  request: () => ({ type: 'ORDER_CREATE_REQUEST' as const }),
+  success: (data: any) => ({ type: 'ORDER_CREATE_SUCCESS' as const, payload: data }),
+  fail: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'ORDER_CREATE_RESET' as const }),
 }
 
 export function createOrderThunk(newOrder: OrderToAPI): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.createOrderRequestAC())
+      dispatch(actions.request())
       const { data } = await API.order.createOrder(newOrder)
-      dispatch(actions.createOrderSuccessAC(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.createOrderFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.createOrderFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

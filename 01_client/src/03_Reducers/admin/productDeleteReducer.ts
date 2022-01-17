@@ -8,19 +8,17 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   success: false,
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const productDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_DELETE_REQUEST':
       return { ...initialState, loading: true }
-
     case 'PRODUCT_DELETE_SUCCESS':
       return { ...initialState, success: true }
-
     case 'PRODUCT_DELETE_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'PRODUCT_DELETE_RESET':
       return { ...initialState }
     default:
@@ -29,26 +27,26 @@ export const productDeleteReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  productDeleteRequestAC: () => ({ type: 'PRODUCT_DELETE_REQUEST' as const }),
-  productDeleteSuccessAC: () => ({ type: 'PRODUCT_DELETE_SUCCESS' as const }),
-  productDeleteFailAC: (errMessage: string) => ({ type: 'PRODUCT_DELETE_FAIL' as const, payload: errMessage }),
-  productDeleteResetAC: () => ({ type: 'PRODUCT_DELETE_RESET' as const }),
+  request: () => ({ type: 'PRODUCT_DELETE_REQUEST' as const }),
+  success: () => ({ type: 'PRODUCT_DELETE_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'PRODUCT_DELETE_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'PRODUCT_DELETE_RESET' as const }),
 }
 
 export function productDeleteThunk(productId: string): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.productDeleteRequestAC())
+      dispatch(actions.request())
       await API.admin.deleteProduct(productId)
-      dispatch(actions.productDeleteSuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.productDeleteFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.productDeleteFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

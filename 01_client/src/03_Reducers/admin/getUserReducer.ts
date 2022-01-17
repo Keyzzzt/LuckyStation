@@ -6,7 +6,6 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
-// todo set user to null
 export const initialState = {
   user: null as null | User,
   loading: false,
@@ -29,26 +28,26 @@ export const getUserReducer = (state = initialState, action: ActionType): Initia
 }
 
 export const actions = {
-  getUserRequestAC: () => ({ type: 'GET_USER_REQUEST' as const }),
-  getUserSuccessAC: (user: any) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
-  getUserFailAC: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
-  getUserResetAC: () => ({ type: 'GET_USER_RESET' as const }),
+  request: () => ({ type: 'GET_USER_REQUEST' as const }),
+  success: (user: any) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
+  fail: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
+  reset: () => ({ type: 'GET_USER_RESET' as const }),
 }
 
 export function getUserThunk(userId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.getUserRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.getUser(userId)
-      dispatch(actions.getUserSuccessAC(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.getUserFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.getUserFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

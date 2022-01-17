@@ -96,7 +96,7 @@ export const CreateProductPage: FC = () => {
       return
     }
     history.push('/dashboard')
-    dispatch(actions.createProductResetAC())
+    dispatch(actions.reset())
   }, [success])
 
   return (

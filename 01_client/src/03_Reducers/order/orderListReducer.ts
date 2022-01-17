@@ -9,7 +9,7 @@ type ActionType = InferActionTypes<typeof actions>
 const initialState = {
   orders: null as null | OrderFromAPI[],
   loading: false,
-  error: '',
+  fail: '',
 }
 
 export const orderListReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -18,35 +18,33 @@ export const orderListReducer = (state = initialState, action: ActionType): Init
       return { ...initialState, loading: true }
     case 'ORDER_LIST_SUCCESS':
       return { ...initialState, orders: action.payload }
-
     case 'ORDER_LIST_FAIL':
-      return { ...initialState, error: action.payload }
-
+      return { ...initialState, fail: action.payload }
     default:
       return state
   }
 }
 
 export const actions = {
-  getOrdersRequestAC: () => ({ type: 'ORDER_LIST_REQUEST' as const }),
-  getOrdersSuccessAC: (data: OrderFromAPI[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
-  getOrdersFailAC: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
+  request: () => ({ type: 'ORDER_LIST_REQUEST' as const }),
+  success: (data: OrderFromAPI[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
+  fail: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
 }
 
 export function orderListThunk(page: number, limit: number): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.getOrdersRequestAC())
+      dispatch(actions.request())
       const { data } = await API.admin.getOrders(page, limit)
-      dispatch(actions.getOrdersSuccessAC(data.items))
+      dispatch(actions.success(data.items))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.getOrdersFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.getOrdersFailAC(error))
+      dispatch(actions.fail(error))
     }
   }
 }

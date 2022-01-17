@@ -26,9 +26,9 @@ export const configReducer = (state = initialState, action: ActionType): Initial
 }
 
 export const actions = {
-  toggleColorThemeRequestAC: () => ({ type: 'TOGGLE_COLOR_THEME_REQUEST' as const }),
-  toggleColorThemeSuccessAC: () => ({ type: 'TOGGLE_COLOR_THEME_SUCCESS' as const }),
-  toggleColorThemeFailAC: (errMessage: string) => ({ type: 'TOGGLE_COLOR_THEME_FAIL' as const, payload: errMessage }),
+  request: () => ({ type: 'TOGGLE_COLOR_THEME_REQUEST' as const }),
+  success: () => ({ type: 'TOGGLE_COLOR_THEME_SUCCESS' as const }),
+  fail: (errMessage: string) => ({ type: 'TOGGLE_COLOR_THEME_FAIL' as const, payload: errMessage }),
 }
 
 export const configThunk = {
@@ -36,17 +36,17 @@ export const configThunk = {
     try {
       console.log('Config Reducer')
 
-      dispatch(actions.toggleColorThemeRequestAC())
+      dispatch(actions.request())
       // await API.config.setColorTheme() // TODO:
-      dispatch(actions.toggleColorThemeSuccessAC())
+      dispatch(actions.success())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.toggleColorThemeFailAC(errMsg))
+        dispatch(actions.fail(errMsg))
         return
       }
-      dispatch(actions.toggleColorThemeFailAC(error))
+      dispatch(actions.fail(error))
     }
   },
 }
