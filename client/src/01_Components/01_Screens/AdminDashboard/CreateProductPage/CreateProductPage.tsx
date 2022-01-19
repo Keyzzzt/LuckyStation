@@ -28,12 +28,12 @@ export const CreateProductPage: FC = () => {
   const [countInStock, setCountInStock] = useState('10')
   const [colors, setColors] = useState('')
   const [sizes, setSizes] = useState('')
-  const [isNew, setIsNew] = useState(false)
+  const [isNewProduct, setIsNewProduct] = useState(false)
 
   const [image, setImage] = useState('')
   const [uploadedFile, setUploadedFile] = useState({ fileName: '', filePath: '' })
   // todo uploadProgress теперь можно использовать для создания лоадера с % подгрузки
-  const [uploadProgress, setUploadProgress] = useState(0)
+  // const [uploadProgress, setUploadProgress] = useState(0)
 
   const clearHandler = () => {
     setName('')
@@ -61,11 +61,12 @@ export const CreateProductPage: FC = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: (progress: any) => {
-          // @ts-ignore
-          setUploadProgress(parseInt(Math.round((progress.loaded * 100) / progress.total)))
-          setTimeout(() => setUploadProgress(0), 1000)
-        },
+        // onUploadProgress: (progress: any) => {
+        //   const { loaded, total } = progress
+        //   // @ts-ignore
+        //   setUploadProgress(parseInt(Math.round((loaded * 100) / total)))
+        //   setTimeout(() => setUploadProgress(0), 1000)
+        // },
       }
       const { data } = await $api.post('http://localhost:5000/api/upload', formData, config)
       const { fileName, filePath } = data
@@ -98,7 +99,7 @@ export const CreateProductPage: FC = () => {
         countInStock,
         colors: stringToArray(colors),
         sizes: stringToArray(sizes),
-        isNew,
+        isNewProduct,
       })
     )
   }
@@ -130,13 +131,13 @@ export const CreateProductPage: FC = () => {
         <input onChange={(e) => setColors(e.target.value)} type="text" value={colors} placeholder="Colors in #xxxxxx format" />
         <input onChange={(e) => setSizes(e.target.value)} type="text" value={sizes} placeholder="Sizes" />
         <label htmlFor="isNew">New product</label>
-        <input onChange={(e) => setIsNew((prev) => !prev)} type="checkbox" id="isNew" />
+        <input onChange={(e) => setIsNewProduct((prev) => !prev)} type="checkbox" id="isNew" />
         <input type="submit" value="Create" />
       </form>
       {uploadedFile.filePath ? (
         <div>
           <div>{uploadedFile.fileName}</div>
-          <img src={uploadedFile.filePath} alt="Uploaded image" />
+          <img src={uploadedFile.filePath} alt="product" />
         </div>
       ) : (
         <div>No image uploaded</div>
