@@ -75,7 +75,7 @@ export async function sendActivationMail(to, link) {
     text: '',
     html: `
           <div>
-          <h1>To activate your account please click link below</h1>
+          <h1>To activate your account please click link below. Link is valid 24 hours.</h1>
           <a href="${link}">${link}</a>
           </div>
       `,

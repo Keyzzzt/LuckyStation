@@ -114,7 +114,7 @@ export const Register: FC = () => {
   useEffect(() => {
     if (registerSuccess) {
       history.push(redirect)
-      registerReset()
+      dispatch(actions.registerResetAC())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerSuccess])

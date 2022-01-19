@@ -13,7 +13,7 @@ export const Login: FC = () => {
   const [email, setEmail] = useState('a@a.com')
   const [emailDirty, setEmailDirty] = useState(false)
   const [emailError, setEmailError] = useState('Empty email')
-  const [password, setPassword] = useState('zzxxccVV11!')
+  const [password, setPassword] = useState('123')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty password')
   const { fail: loginFail } = useTypedSelector((state) => state.login)

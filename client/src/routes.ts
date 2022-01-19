@@ -20,11 +20,11 @@ import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { RestorePassword } from './01_Components/02_Chunks/Auth/RestorePassword'
 
 export const publicRotes = [
+  { path: '/restore/:token', component: RestorePassword, exact: true },
   { path: '/', component: Home, exact: true },
   { path: '/login', component: Login, exact: true },
   { path: '/ulbi', component: Ulbi, exact: true },
   { path: '/register', component: Register, exact: true },
-  { path: '/restore', component: RestorePassword, exact: true },
   { path: '/shipping', component: ShippingScreen, exact: true },
   { path: '/payment', component: PaymentScreen, exact: true },
   { path: '/placeorder', component: PlaceOrderScreen, exact: true },

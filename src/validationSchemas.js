@@ -1,5 +1,11 @@
+/* eslint-disable camelcase */
 /* eslint-disable prettier/prettier */
 import { body } from 'express-validator'
+
+export const password_confirm = [
+  body('password', 'Invalid email or password').trim().isLength({ min: 3, max: 33 }),
+  body('confirm', 'Invalid email or password').trim().isLength({ min: 3, max: 33 }),
+]
 
 export const auth = [
   body('email', 'Invalid email or password').trim().isEmail().bail(),

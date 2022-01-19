@@ -16,11 +16,13 @@ export function routes(app) {
   app.post('/api/logout', Auth.logout)
   app.get('/api/auth/google/redirect', Auth.googleOAuthRedirect)
   app.get('/api/auth/google', Auth.googleOAuth)
-  app.get('/api/activate/:link', Auth.activate)
-  app.post('/api/recovery', Validation.emailOnly, Auth.passwordRecovery)
+  app.get('/api/activate/:token', Auth.activate)
+  app.post('/api/recovery', Validation.emailOnly, Auth.passwordRecoveryLink)
+  app.put('/api/recovery', Validation.password_confirm, Auth.passwordReset)
   app.get('/api/refresh', Auth.refresh)
 
   // ADMIN
+
   app.get('/api/admin/user/:page/:limit', privateRoute, adminRoute, paginatedResult(UserModel, null), Admin.getAllUsers)
   app.get('/api/admin/user/:id', privateRoute, adminRoute, Admin.getUser)
   app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.updateUserProfile)

@@ -4,5 +4,5 @@ import { PayloadType } from './types'
 export interface RequestCustom extends Request {
   user: PayloadType
   paginatedResponse: any
-  file: any
+  files: any
 }

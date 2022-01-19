@@ -8,14 +8,15 @@ type Props = {
   price: number
   _id: string
   isFavorite: boolean
+  image: string
   favoriteHandler: (productId: string, flag: boolean) => void
 }
 
-export const ProductCard: FC<Props> = ({ brand, name, price, _id, isFavorite, favoriteHandler }) => {
+export const ProductCard: FC<Props> = ({ brand, name, price, _id, isFavorite, image, favoriteHandler }) => {
   return (
     <div className={styles.col}>
       <Link to={`/product/${_id}`}>
-        <img src="https://via.placeholder.com/150" alt="" />
+        <img src={image} alt="" />
       </Link>
       <div className={styles.brand}>{brand}</div>
       <div className={styles.name}>{name}</div>

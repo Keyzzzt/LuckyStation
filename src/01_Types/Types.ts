@@ -1,5 +1,3 @@
-import { ProductDoc } from '@src/models/product.model'
-
 /* eslint-disable camelcase */
 type ReviewType = {
   name: string

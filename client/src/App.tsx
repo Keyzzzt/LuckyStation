@@ -46,18 +46,9 @@ const App = () => {
             <Route path={route.path} component={route.component} exact={route.exact} />
           </Switch>
         ))}
-      <Redirect to="/" />
       <Footer isSubscribed={userInfo?.isSubscribed ? true : false} />
     </>
   )
 }
-
-// TODO: Тест приложения при отключенном API.
-// TODO: Нужно реализовать некий принцип брони, чтобы 2 покупателя не купили последний оставшийся продукт.
-// TODO: https://www.udemy.com/course/mern-ecommerce/learn/lecture/22498996#questions/12904054
-// TODO расставить везде вопросы user?.info?.profile?.name
-// TODO Разобраться с "/:keyword?/:page?/:limit?"
-// TODO Понять где нужен reset редюсера где нет
-// TODO Восстановление пароля
 
 export default App

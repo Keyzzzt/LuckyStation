@@ -8,6 +8,7 @@ export interface UserDocType extends Document {
   email: string
   password: string
   googleId: string
+  phone: string
   logo: string
   isAdmin: boolean
   isSubscribed: boolean
@@ -24,7 +25,8 @@ export interface UserDocType extends Document {
 const UserSchema: Schema = new Schema<UserDocType>(
   {
     email: { type: String, required: true, unique: true },
-    password: { type: String },
+    password: { type: String, default: '' },
+    phone: { type: String, default: '' },
     googleId: { type: String, default: '' },
     logo: { type: String, default: '' },
     isAdmin: { type: Boolean, required: true, default: false },

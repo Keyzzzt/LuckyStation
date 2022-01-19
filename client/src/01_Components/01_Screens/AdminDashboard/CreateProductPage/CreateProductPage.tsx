@@ -10,6 +10,8 @@ import $api from '../../../../04_Utils/axiosSetup'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 
+// todo декомпозировать в компонент <FileUploader> ту часть что отвечает за подгрузку
+
 export const CreateProductPage: FC = () => {
   const history = useHistory()
   const { success, loading, fail } = useTypedSelector((state) => state.createProduct)
@@ -22,12 +24,16 @@ export const CreateProductPage: FC = () => {
   const [category, setCategory] = useState('Audio')
   const [description, setDescription] = useState('What if you could always be in the perfect place to listen to the music you love? ')
   const [price, setPrice] = useState('99')
-  const [image, setImage] = useState('')
   const [uploading, setUploading] = useState(false)
   const [countInStock, setCountInStock] = useState('10')
   const [colors, setColors] = useState('')
   const [sizes, setSizes] = useState('')
   const [isNew, setIsNew] = useState(false)
+
+  const [image, setImage] = useState('')
+  const [uploadedFile, setUploadedFile] = useState({ fileName: '', filePath: '' })
+  // todo uploadProgress теперь можно использовать для создания лоадера с % подгрузки
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const clearHandler = () => {
     setName('')
@@ -48,19 +54,25 @@ export const CreateProductPage: FC = () => {
   const uploadImageHandler = async (e: any) => {
     const file = e.target.files[0]
     const formData = new FormData()
-    formData.append('image', file)
+    formData.append('file', file)
     setUploading(true)
     try {
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        onUploadProgress: (progress: any) => {
+          // @ts-ignore
+          setUploadProgress(parseInt(Math.round((progress.loaded * 100) / progress.total)))
+          setTimeout(() => setUploadProgress(0), 1000)
+        },
       }
       const { data } = await $api.post('http://localhost:5000/api/upload', formData, config)
-      setImage(data)
+      const { fileName, filePath } = data
+      setImage(filePath)
+      setUploadedFile({ fileName, filePath })
       setUploading(false)
     } catch (error) {
-      console.log(error)
       setUploading(false)
     }
   }
@@ -113,7 +125,6 @@ export const CreateProductPage: FC = () => {
         <input onChange={(e) => setPrice(e.target.value)} type="text" value={price} placeholder="Price" />
         <input onChange={(e) => setCountInStock(e.target.value)} type="text" value={countInStock} placeholder="Count in stock" />
         <input onChange={(e) => setImage(e.target.value)} type="text" value={image} placeholder="Image" />
-        <label htmlFor="image-file">Choose image</label>
         <input onChange={uploadImageHandler} type="file" id="image-file" />
         {uploading && <Loader />}
         <input onChange={(e) => setColors(e.target.value)} type="text" value={colors} placeholder="Colors in #xxxxxx format" />
@@ -122,6 +133,14 @@ export const CreateProductPage: FC = () => {
         <input onChange={(e) => setIsNew((prev) => !prev)} type="checkbox" id="isNew" />
         <input type="submit" value="Create" />
       </form>
+      {uploadedFile.filePath ? (
+        <div>
+          <div>{uploadedFile.fileName}</div>
+          <img src={uploadedFile.filePath} alt="Uploaded image" />
+        </div>
+      ) : (
+        <div>No image uploaded</div>
+      )}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { useParams } from 'react-router'
 import { Pagination } from '../../02_Chunks/Pagination/Pagination'
 import { getRandom } from '../../../04_Utils/utils'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
+import { VerticalSlider } from '../../02_Chunks/VerticalSlider/VerticalSlider'
 
 type Params = {
   page: string
@@ -48,6 +49,7 @@ export const Home: FC = () => {
     <section className={styles.products}>
       {fail && <ErrorMessage message={fail} />}
       {loading && <Loader />}
+      <VerticalSlider />
       <div className={styles.container}>
         <div className={styles.row}>
           {products &&
@@ -62,6 +64,7 @@ export const Home: FC = () => {
                   _id={product._id}
                   brand={product.brand}
                   price={product.price}
+                  image={product.image}
                 />
               )
             })}
