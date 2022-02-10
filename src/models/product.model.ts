@@ -24,12 +24,13 @@ export interface ProductDocType extends Document {
   reviews: ReviewType[]
   colors: string[]
   sizes: number[]
-  isNewProduct: boolean
   numReviews: number
   price: number
   countInStock: number
   countInFavorite: number
   countViewed: number
+  isNewProduct: boolean
+  isDirty: boolean
 }
 const ReviewSchema = new Schema<ReviewDocType>(
   {
@@ -69,7 +70,6 @@ const ProductSchema = new Schema<ProductDocType>(
     },
     colors: [String],
     sizes: [Number],
-    isNewProduct: Boolean,
     image: {
       type: String,
       required: true,
@@ -111,6 +111,14 @@ const ProductSchema = new Schema<ProductDocType>(
     countViewed: {
       type: Number,
       default: 0,
+    },
+    isNewProduct: {
+      type: Boolean,
+      default: false,
+    },
+    isDirty: {
+      type: Boolean,
+      default: false,
     },
   },
   {

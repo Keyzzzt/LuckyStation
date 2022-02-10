@@ -5,7 +5,7 @@ import { NextFunction, Response } from 'express'
 import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
 import { ProductModel, ReviewType } from '@src/models/product.model'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 
 // Frontend DONE
 export async function getProducts(req: RequestCustom, res: Response, next: NextFunction) {
@@ -49,7 +49,7 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
 
     const alreadyReviewed = product.reviews.find(
       // @ts-ignore
-      (r) => r.user._id.toString() === req.user.id.toString()
+      r => r.user._id.toString() === req.user.id.toString()
     )
     if (alreadyReviewed) {
       return next(ApiError.BadRequest('Product already reviewed'))
@@ -57,7 +57,7 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
 
     const review: ReviewType = {
       rating: Number(rating),
-      user: req.user.id,
+      user: req.user._id,
       comment,
     }
 

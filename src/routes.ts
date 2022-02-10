@@ -1,3 +1,4 @@
+import { getApiInfo } from '@src/Controllers/temp'
 import * as Auth from '@src/Controllers/auth.controller'
 import * as Admin from '@src/Controllers/admin.controller'
 import * as User from '@src/Controllers/user.controller'
@@ -11,6 +12,9 @@ import { OrderModel } from './models/order.model'
 import { SurveyModel } from './models/survey.model'
 
 export function routes(app) {
+  // todo api info route
+  app.get('/api/info', getApiInfo)
+
   app.post('/api/login', Validation.auth, Auth.login)
   app.post('/api/registration', Validation.auth, Auth.register)
   app.post('/api/logout', Auth.logout)
@@ -25,23 +29,36 @@ export function routes(app) {
 
   app.get('/api/admin/user/:page/:limit', privateRoute, adminRoute, paginatedResult(UserModel, null), Admin.getAllUsers)
   app.get('/api/admin/user/:id', privateRoute, adminRoute, Admin.getUser)
-  app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.updateUserProfile)
-  app.delete('/api/admin/user/:_id', privateRoute, adminRoute, Admin.deleteUser)
+  app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.setUsersAdminStatus)
+  app.delete('/api/admin/user/:id', privateRoute, adminRoute, Admin.deleteUser)
 
-  app.get('/api/admin/order/:page/:limit', privateRoute, adminRoute, paginatedResult(OrderModel, null), Admin.getAllOrders)
-  app.get('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
+  app.get(
+    '/api/admin/order/:page/:limit',
+    privateRoute,
+    adminRoute,
+    paginatedResult(OrderModel, null),
+    Admin.getAllOrders
+  )
+  app.post('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
+
   app.delete('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToNotPaid)
-  app.get('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToDelivered)
+  app.post('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToDelivered)
   app.delete('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToNotDelivered)
 
   app.post('/api/admin/product', Validation.createAndUpdateProduct, privateRoute, adminRoute, Admin.createProduct)
   app.put('/api/admin/product/:id', Validation.createAndUpdateProduct, privateRoute, adminRoute, Admin.updateProduct)
   app.delete('/api/admin/product/:id', privateRoute, adminRoute, Admin.deleteProduct)
-
   app.get('/api/admin/statistic', privateRoute, adminRoute, Admin.getStatistic)
-  app.put('/api/admin/statistic/email', privateRoute, adminRoute, Admin.removeEmailFromList)
+  app.put('/api/admin/statistic/email', privateRoute, adminRoute, Validation.emailOnly, Admin.removeEmailFromList)
+  app.get(
+    '/api/admin/survey/:page/:limit',
+    privateRoute,
+    adminRoute,
+    paginatedResult(SurveyModel, null),
+    Admin.getAllSurveys
+  )
+  // In process
 
-  app.get('/api/admin/survey/:page/:limit', privateRoute, adminRoute, paginatedResult(SurveyModel, null), Admin.getAllSurveys)
   app.get('/api/admin/survey/:id', privateRoute, adminRoute, Admin.getSurveyById)
   app.delete('/api/admin/survey/:id', privateRoute, adminRoute, Admin.deleteSurvey)
   app.post('/api/admin/survey', Validation.createSurvey, privateRoute, adminRoute, Admin.createSurvey)

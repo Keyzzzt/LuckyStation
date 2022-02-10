@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 import sendgrid from 'sendgrid'
+
 const helper = sendgrid.mail
 
 // TODO: .ts

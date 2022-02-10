@@ -10,7 +10,7 @@ import { publicRotes, privateRotes, adminRoutes } from './routes'
 const App = () => {
   const dispatch = useDispatch()
   // Получаем тут userInfo чтобы сделать header & footer чистыми компонентами
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const { userInfo } = useTypedSelector(state => state.userInfo)
   const [isAuth, setIsAuth] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(false)
 
@@ -28,20 +28,20 @@ const App = () => {
     <>
       <Header isAuth={isAuth} isAdmin={isAdmin} />
 
-      {publicRotes.map((route) => (
+      {publicRotes.map(route => (
         <Switch>
           <Route path={route.path} component={route.component} exact={route.exact} />
         </Switch>
       ))}
 
       {isAuth &&
-        privateRotes.map((route) => (
+        privateRotes.map(route => (
           <Switch>
             <Route path={route.path} component={route.component} exact={route.exact} />
           </Switch>
         ))}
       {isAdmin &&
-        adminRoutes.map((route) => (
+        adminRoutes.map(route => (
           <Switch>
             <Route path={route.path} component={route.component} exact={route.exact} />
           </Switch>

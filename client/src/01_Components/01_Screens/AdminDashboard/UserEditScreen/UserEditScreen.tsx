@@ -7,7 +7,6 @@ import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
 import { userDeleteThunk } from '../../../../03_Reducers/user/userDeleteReducer'
 import { updateProfileByAdminThunk } from '../../../../03_Reducers/admin/updateProfileByAdminReducer'
-// import { actions } from '../../../03_Reducers/admin/getUserReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
@@ -20,7 +19,7 @@ export const UserEditScreen: FC = () => {
   const { userId } = useParams<{ userId: string }>()
   const { success, loading, fail } = useTypedSelector((state) => state.updateProfileByAdmin)
 
-  const { user, loading: loadingUser, fail: failUser } = useTypedSelector((state) => state.getUser)
+  const { user, fail: failUser } = useTypedSelector((state) => state.getUser)
   const [role, setRole] = useState(false)
 
   // TODO Проверить что происходит когда удалется залогиненный пользователь
@@ -67,7 +66,6 @@ export const UserEditScreen: FC = () => {
           </div>
           {user.isActivated ? <div>Account is activated</div> : <div>Account not activated</div>}
           {user.isSubscribed ? <div>Subscribed for newsletter</div> : <div>Not subscribed</div>}
-          <div>Credits: {user.credits}</div>
           <div>
             {user.favorite && user.favorite.map((item) => <div>{item}</div>)}
             {user.favorite?.length === 0 && <div>Favorite list is empty</div>}

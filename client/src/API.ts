@@ -11,30 +11,35 @@ import {
   OrderToAPI,
   SurveysList,
   SurveyFromDB,
+  UpdateProfile,
 } from './05_Types/APIResponse'
 import { Survey } from './05_Types/01_Base'
 
 export const API = {
   auth: {
-    login: async (email: string, password: string): Promise<AxiosResponse<LoginResponse>> => {
+    login: async (email: string, password: string) => {
       return $api.post<LoginResponse>('/login', { email, password })
     },
-    registration: async (email: string, password: string): Promise<void> => {
+    // No data in response, test for response status
+    registration: async (email: string, password: string) => {
       return $api.post('/registration', { email, password })
     },
+    // No data in response, test for response status
     logout: async (): Promise<void> => {
       return $api.post('/logout')
     },
-    authenticate: async (): Promise<AxiosResponse<LoginResponse>> => {
+    authenticate: async () => {
       return axios.get<LoginResponse>(`${API_URL}/refresh`, { withCredentials: true })
     },
   },
   user: {
-    getProfile: async (): Promise<AxiosResponse<any>> => {
-      return $api.get<any>('/user/profile')
+    getProfile: async (): Promise<AxiosResponse<User>> => {
+      return $api.get<User>('/user/profile')
     },
-    updateOwnProfile: async (formData: any): Promise<AxiosResponse<any>> => {
-      return $api.put<any>(`/user/profile`, formData)
+
+    // TODO:
+    updateOwnProfile: async (formData: UpdateProfile) => {
+      return $api.put<User>(`/user/profile`, formData)
     },
     myOrders: async (page: number, limit: number): Promise<AxiosResponse<any>> => {
       return $api.get<any>(`/order/myorders/${page}/${limit}`)
@@ -44,12 +49,6 @@ export const API = {
     },
     toggleSubscription: async (email: string): Promise<void> => {
       return $api.post(`/user/subscription`, { email })
-    },
-  },
-  config: {
-    setColorTheme: async (): Promise<AxiosResponse<any>> => {
-      // TODO:
-      return $api.get<any>('/config/theme')
     },
   },
   order: {
@@ -76,7 +75,11 @@ export const API = {
     getSingleProduct: async (productId: string): Promise<AxiosResponse<Product>> => {
       return $api.get<Product>(`product/${productId}`)
     },
-    getProducts: async (keyword: string, page: number, limit: number): Promise<AxiosResponse<GetAllProductsResponse>> => {
+    getProducts: async (
+      keyword: string,
+      page: number,
+      limit: number
+    ): Promise<AxiosResponse<GetAllProductsResponse>> => {
       return $api.get<GetAllProductsResponse>(`product/${page}/${limit}?keyword=${keyword}`)
     },
     deleteProduct: async (productId: string): Promise<AxiosResponse<any>> => {
@@ -95,7 +98,7 @@ export const API = {
       return $api.get<GetAllOrdersResponse>(`admin/order/${page}/${limit}`)
     },
     setToDelivered: async (orderId: string): Promise<void> => {
-      return $api.post(`admin/order/${orderId}/delivered`)
+      return $api.post(`/admin/order/${orderId}/delivered`)
     },
     setToNotDelivered: async (orderId: string): Promise<void> => {
       return $api.delete(`admin/order/${orderId}/delivered`)

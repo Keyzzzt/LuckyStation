@@ -13,13 +13,13 @@ import { OrderModel } from '@src/models/order.model'
 import { SurveyModel } from '@src/models/survey.model'
 import { Mailer } from '@src/services/Mailer'
 import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
 import * as utils from '@src/utils'
 import { StatisticModel } from '@src/models/statistic.model'
+import { getUserProfile } from '@src/mongoRequests'
 
-// Frontend DONE
 export async function getAllUsers(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     return res.status(200).json(req.paginatedResponse)
@@ -28,27 +28,26 @@ export async function getAllUsers(req: RequestCustom, res: Response, next: NextF
   }
 }
 
-// Frontend DONE
 export async function getStatistic(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    // todo validation
-    const statistic = await StatisticModel.findOne({ name: 'Statistic' }).select('-__v -_id -name')
+    const statistic = await StatisticModel.findOne({ name: 'Statistic' }).select(
+      '-__v -_id -name -createdAt -updatedAt'
+    )
     return res.status(200).json(statistic)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// Frontend DONE
 export async function removeEmailFromList(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    // todo validation
-    const { email } = req.body
-    const user = await UserModel.findOne({ email })
-    if (user) {
-      user.isSubscribed = false
-      await user.save()
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
+    const { email } = req.body
+    await UserModel.findOneAndUpdate({ email }, { isSubscribed: false })
+
     await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'remove')
     await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'remove')
     return res.sendStatus(200)
@@ -57,25 +56,23 @@ export async function removeEmailFromList(req: RequestCustom, res: Response, nex
   }
 }
 
-// Frontend DONE
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const { _id } = req.params
-    const user = await UserModel.findById(req.params.id)
-    await utils.handleEmailInStatistics(user.email, 'allSubscribersEmailList', 'remove')
-    await UserModel.deleteOne({ _id })
-    await TokenModel.deleteOne({ user: _id })
-
+    const { id } = req.params
+    await UserModel.findOneAndDelete({ _id: id })
+    await TokenModel.deleteOne({ user: id })
     return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// Frontend DONE
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await await UserModel.findById(req.params.id).select('-password -__v -activationLink -googleId')
+    // No point to check if there is a id, as mongo will return 500 error if no id
+    const user = await await UserModel.findById(req.params.id).select(
+      '-password -__v -activationToken -googleId -passwordResetToken'
+    )
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
@@ -85,47 +82,31 @@ export async function getUser(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-// Frontend DONE
-export async function updateUserProfile(req: Request, res: Response, next: NextFunction) {
+export async function setUsersAdminStatus(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
+    const { id } = req.params
+    await UserModel.findByIdAndUpdate(id, { isAdmin: req.body.isAdmin })
+    const user = await getUserProfile(id)
 
-    const user = await UserModel.findById(req.params.id)
-    if (!user) {
-      return next(ApiError.NotFound('User not found'))
-    }
-
-    const { isAdmin } = req.body
-
-    user.isAdmin = isAdmin
-
-    await user.save()
-
-    return res.status(200).json(user)
+    return res.json(user)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// Frontend DONE
 export async function deleteProduct(req: Request, res: Response, next: NextFunction) {
   try {
-    const product = await ProductModel.findById(req.params.id)
-    if (!product) {
-      return next(ApiError.NotFound('Product not found'))
-    }
-
-    await product.remove()
+    await ProductModel.findOneAndDelete({ _id: req.params.id })
     return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// TODO:
 export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -133,12 +114,11 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    // TODO:  isNewProduct
     const { name, price, image, brand, category, countInStock, description, isNewProduct } = req.body
     const product = new ProductModel({
       name,
       price,
-      user: req.user.id,
+      user: req.user._id,
       image,
       brand,
       category,
@@ -155,7 +135,6 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
   }
 }
 
-// TODO:
 export async function updateProduct(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -163,7 +142,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    const { name, price, image, brand, category, countInStock, description } = req.body
+    const { name, price, image, brand, category, countInStock, description, isNewProduct } = req.body
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
       return next(ApiError.BadRequest('Product not found'))
@@ -176,6 +155,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
     product.category = category
     product.countInStock = countInStock
     product.description = description
+    product.isNewProduct = isNewProduct
 
     await product.save()
 
@@ -185,7 +165,6 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
   }
 }
 
-// Frontend DONE
 export async function getAllOrders(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     return res.status(200).json(req.paginatedResponse)
@@ -196,7 +175,11 @@ export async function getAllOrders(req: RequestCustom, res: Response, next: Next
 
 export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log('hello')
+
     const order = await OrderModel.findById(req.params.id)
+    console.log(order)
+
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
     }
@@ -211,13 +194,12 @@ export async function setOrderToPaid(req: Request, res: Response, next: NextFunc
     }
 
     await order.save()
-    return res.status(201).json(200)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// TODO:
 export async function setOrderToNotPaid(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
@@ -235,15 +217,16 @@ export async function setOrderToNotPaid(req: Request, res: Response, next: NextF
     }
 
     await order.save()
-    return res.status(201).json(200)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// TODO:
 export async function setOrderToDelivered(req: Request, res: Response, next: NextFunction) {
   try {
+    console.log('hello')
+
     const order = await OrderModel.findById(req.params.id)
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
@@ -253,13 +236,12 @@ export async function setOrderToDelivered(req: Request, res: Response, next: Nex
     order.deliveredAt = Date.now()
     await order.save()
 
-    return res.status(201).json(200)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// TODO:
 export async function setOrderToNotDelivered(req: Request, res: Response, next: NextFunction) {
   try {
     const order = await OrderModel.findById(req.params.id)
@@ -271,13 +253,12 @@ export async function setOrderToNotDelivered(req: Request, res: Response, next: 
     order.deliveredAt = undefined
     await order.save()
 
-    return res.status(201).json(200)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
 }
 
-// TODO:
 export async function createSurvey(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -291,8 +272,8 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
       title,
       subject,
       body,
-      recipients: recipients.split(',').map((email) => ({ email: email.trim() })),
-      user: req.user.id,
+      recipients: recipients.split(',').map(email => ({ email: email.trim() })),
+      user: req.user._id,
       dateSent: Date.now(),
     })
 
@@ -306,7 +287,6 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
   }
 }
 
-// TODO:
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     return res.status(201).json(req.paginatedResponse)
@@ -315,7 +295,6 @@ export async function getAllSurveys(req: RequestCustom, res: Response, next: Nex
   }
 }
 
-// TODO:
 export async function getSurveyById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const survey = await SurveyModel.findById(req.params.id).select('-recipients -__v -createdAt -updatedAt')
@@ -405,7 +384,11 @@ export async function subscribersEmailStringForSurvey(req: RequestCustom, res: R
     return next(error.message)
   }
 }
-export async function usersThatBoughtProductEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
+export async function usersThatBoughtProductEmailStringForSurvey(
+  req: RequestCustom,
+  res: Response,
+  next: NextFunction
+) {
   try {
     // TODO:
   } catch (error) {

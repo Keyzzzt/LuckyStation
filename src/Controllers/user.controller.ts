@@ -5,18 +5,18 @@ import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
 import { UserModel } from '@src/models/user.model'
 import { cookieOpt } from '@src/Controllers/auth.controller'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 import * as utils from '@src/utils'
 import { ProductModel } from '@src/models/product.model'
+import { getUserProfile } from '@src/mongoRequests'
 
 export async function getProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const user = await await UserModel.findById(req.user.id).select('-password -__v -activationLink -googleId')
-    if (!user) {
+    const profile = await getUserProfile(req.user._id)
+    if (!profile) {
       return next(ApiError.NotFound('User not found'))
     }
-
-    return res.status(200).json(user)
+    return res.status(200).json(profile)
   } catch (error) {
     return next(error.message)
   }
@@ -37,7 +37,7 @@ export async function subscribe(req: RequestCustom, res: Response, next: NextFun
       user.isSubscribed = true
       await user.save()
     } else {
-      // Модель для не зарегистрированных пользователей
+      // TODO Модель для не зарегистрированных пользователей
     }
 
     return res.sendStatus(200)
@@ -69,8 +69,7 @@ export async function updateProfile(req: RequestCustom, res: Response, next: Nex
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    // @ts-ignore
-    const user = await UserModel.findById(req.user.id)
+    const user = await UserModel.findById(req.user._id)
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
@@ -88,23 +87,17 @@ export async function updateProfile(req: RequestCustom, res: Response, next: Nex
 
     await user.save()
     const tokens = utils.generateTokens({
-      id: user._id,
+      _id: user._id,
       email: user.email,
       isActivated: user.isActivated,
       isAdmin: user.isAdmin,
     })
     res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
 
+    const profile = await getUserProfile(req.user._id)
     return res.status(200).json({
       accessToken: tokens.accessToken,
-      data: {
-        user: {
-          id: user._id,
-          email: user.email,
-          isActivated: user.isActivated,
-          isAdmin: user.isAdmin,
-        },
-      },
+      ...profile,
     })
   } catch (error) {
     return next(error.message)
@@ -113,13 +106,13 @@ export async function updateProfile(req: RequestCustom, res: Response, next: Nex
 
 export async function addToFavorite(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const user = await UserModel.findById(req.user.id).select('-password')
+    const user = await UserModel.findById(req.user._id).select('-password')
     const product = await ProductModel.findById(req.params.id)
 
     if (!user && !product) {
       return next(ApiError.NotFound('User or product not found'))
     }
-    const isFavorite = user.favorite.find((item) => item === req.params.id)
+    const isFavorite = user.favorite.find(item => item === req.params.id)
 
     if (isFavorite) {
       return next(ApiError.BadRequest('Product already in favorite list.'))
@@ -137,12 +130,12 @@ export async function addToFavorite(req: RequestCustom, res: Response, next: Nex
 
 export async function removeFromFavorite(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const user = await UserModel.findById(req.user.id).select('-password')
+    const user = await UserModel.findById(req.user._id).select('-password')
 
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
-    user.favorite = user.favorite.filter((item) => item !== req.params.id)
+    user.favorite = user.favorite.filter(item => item !== req.params.id)
 
     user.save()
 

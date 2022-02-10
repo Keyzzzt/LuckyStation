@@ -4,14 +4,14 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
-import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
+import { Message } from '../../02_Chunks/Message/Message'
 import { actions } from '../../../03_Reducers/order/orderCreateReducer'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 
 export const PlaceOrderScreen: FC = () => {
   const { cart } = useTypedSelector((state) => state)
-  const { loading, fail, order } = useTypedSelector((state) => state.orderCreate)
+  const { order, fail } = useTypedSelector((state) => state.orderCreate)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -53,8 +53,7 @@ export const PlaceOrderScreen: FC = () => {
   return (
     <div className={styles.container}>
       <CheckoutSteps step1 step2 step3 step4 />
-      {fail && <ErrorMessage message={fail} />}
-      {loading && <Loader />}
+      {fail && <Message message={fail} type="fail" />}
       <div className={styles.summary}>
         <div className={styles.summaryItem}>
           <div>

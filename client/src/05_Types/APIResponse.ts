@@ -1,16 +1,32 @@
-import { Survey } from './01_Base'
+export interface LoginResponse {
+  accessToken: string
+  _id: string
+}
+
+// export interface ErrorResponse {
+//   error: string
+//   errors: string[]
+// }
 
 export type User = {
+  accessToken?: string
   _id: string
+  name: string
   email: string
   logo: string
+  phone: string
   isAdmin: boolean
   isSubscribed: boolean
   isActivated: boolean
-  credits: number
   favorite: string[]
   createdAt: Date
   updatedAt: Date
+}
+
+export interface UpdateProfile {
+  oldPassword: string
+  newPassword: string
+  confirmNewPassword: string
 }
 
 export type UserTypeForList = {
@@ -20,17 +36,12 @@ export type UserTypeForList = {
   isActivated: boolean
 }
 
-export interface LoginResponse {
-  accessToken: string
-  id: string
-}
-
 type ReviewFromAPI = {
+  _id: string
+  name: string
   rating: number
   comment: string
   user: string
-  _id: string
-  name: string
 }
 export type Product = {
   brand: string

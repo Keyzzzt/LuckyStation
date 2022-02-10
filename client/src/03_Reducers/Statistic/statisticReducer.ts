@@ -7,7 +7,6 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   statistic: {} as {} | any,
-  loading: false,
   fail: '',
 }
 
@@ -15,8 +14,6 @@ const initialState = {
 
 export const statisticReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'STATISTIC_REQUEST':
-      return { ...initialState, loading: true }
     case 'STATISTIC_SUCCESS':
       return { ...initialState, statistic: action.payload }
     case 'STATISTIC_FAIL':
@@ -33,7 +30,6 @@ export const statisticReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  request: () => ({ type: 'STATISTIC_REQUEST' as const }),
   success: (statistic: any) => ({ type: 'STATISTIC_SUCCESS' as const, payload: statistic }),
   fail: (errMessage: string) => ({ type: 'STATISTIC_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'STATISTIC_RESET' as const }),
@@ -45,7 +41,6 @@ export const actions = {
 export function statisticThunk(): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getStatistic()
       dispatch(actions.success(data))
     } catch (err: any) {
@@ -63,7 +58,6 @@ export function statisticThunk(): ThunkType {
 export function removeEmailThunk(email: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.request())
       await API.admin.removeEmailFromList(email)
       dispatch(statisticThunk())
     } catch (err: any) {

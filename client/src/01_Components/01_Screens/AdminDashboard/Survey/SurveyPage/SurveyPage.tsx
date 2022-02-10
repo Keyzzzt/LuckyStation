@@ -14,7 +14,7 @@ export const SurveyPage: FC<Props> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { surveyId } = useParams<{ surveyId: string }>()
-  const { survey, loading, fail } = useTypedSelector((state) => state.singleSurvey)
+  const { survey, fail } = useTypedSelector((state) => state.singleSurvey)
   const { success: deleteSuccess, loading: loadingDelete, fail: deleteFail } = useTypedSelector((state) => state.deleteSurvey)
 
   const deleteHandler = (surveyId: string) => {
@@ -44,16 +44,16 @@ export const SurveyPage: FC<Props> = () => {
         <Loader />
       ) : (
         <div className={styles.container}>
-          <div>ID: {survey?._id}</div>
-          <div>User created this survey: {survey?.user}</div>
-          <div>Survey title: {survey?.title}</div>
-          <div>Survey subject: {survey?.subject}</div>
-          <div>Survey body: {survey?.body}</div>
-          <div>Yes answer: {survey?.yes}</div>
-          <div>No answer: {survey?.no}</div>
-          <div>Date sent: {survey?.dateSent}</div>
+          <div>ID: {survey._id}</div>
+          <div>User created this survey: {survey.user}</div>
+          <div>Survey title: {survey.title}</div>
+          <div>Survey subject: {survey.subject}</div>
+          <div>Survey body: {survey.body}</div>
+          <div>Yes answer: {survey.yes}</div>
+          <div>No answer: {survey.no}</div>
+          <div>Date sent: {survey.dateSent}</div>
           <button onClick={() => history.push('/dashboard')}>Back</button>
-          <button onClick={() => deleteHandler(survey?._id)}>Delete</button>
+          <button onClick={() => deleteHandler(survey._id)}>Delete</button>
           <button onClick={() => history.push('/dashboard/survey/new')}>Create new</button>
         </div>
       )}

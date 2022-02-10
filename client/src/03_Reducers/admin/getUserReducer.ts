@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 export const initialState = {
   user: null as null | User,
-  loading: false,
   fail: '',
 }
 
 export const getUserReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'GET_USER_REQUEST':
-      return { ...initialState, loading: true }
     case 'GET_USER_SUCCESS':
       return { ...initialState, user: action.payload }
     case 'GET_USER_FAIL':
@@ -28,7 +25,6 @@ export const getUserReducer = (state = initialState, action: ActionType): Initia
 }
 
 export const actions = {
-  request: () => ({ type: 'GET_USER_REQUEST' as const }),
   success: (user: any) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
   fail: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'GET_USER_RESET' as const }),
@@ -37,7 +33,6 @@ export const actions = {
 export function getUserThunk(userId: string): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getUser(userId)
       dispatch(actions.success(data))
     } catch (err: any) {

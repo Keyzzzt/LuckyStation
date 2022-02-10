@@ -35,6 +35,7 @@ export interface OrderDocType extends Document {
   paidAt: Date | number
   isDelivered: boolean
   deliveredAt: Date | number
+  isDirty: boolean
 }
 
 const OrderSchema = new Schema<OrderDocType>(
@@ -104,6 +105,10 @@ const OrderSchema = new Schema<OrderDocType>(
     isDelivered: {
       type: Boolean,
       required: true,
+      default: false,
+    },
+    isDirty: {
+      type: Boolean,
       default: false,
     },
     deliveredAt: {

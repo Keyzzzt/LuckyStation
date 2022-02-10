@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   users: null as null | UserTypeForList[],
-  loading: false,
   fail: '',
 }
 
 export const userListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'USER_LIST_REQUEST':
-      return { ...initialState, loading: true }
     case 'USER_LIST_SUCCESS':
       return { ...initialState, users: action.payload }
     case 'USER_LIST_FAIL':
@@ -26,15 +23,13 @@ export const userListReducer = (state = initialState, action: ActionType): Initi
 }
 
 export const actions = {
-  getUsersRequestAC: () => ({ type: 'USER_LIST_REQUEST' as const }),
   getUsersSuccessAC: (data: UserTypeForList[]) => ({ type: 'USER_LIST_SUCCESS' as const, payload: data }),
   getUsersFailAC: (errMessage: string) => ({ type: 'USER_LIST_FAIL' as const, payload: errMessage }),
 }
 
 export function usersListThunk(page: number, limit: number): ThunkType {
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
     try {
-      dispatch(actions.getUsersRequestAC())
       const { data } = await API.admin.getUsers(page, limit)
       dispatch(actions.getUsersSuccessAC(data.items))
     } catch (err: any) {

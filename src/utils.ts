@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken'
 import axios from 'axios'
 import qs from 'qs'
 import dotenv from 'dotenv'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
 import { IGoogleProfile } from './01_Types/Types'
@@ -39,7 +39,7 @@ export async function saveToken(userId, refreshToken) {
   const token = await TokenModel.create({ user: userId, refreshToken })
   return token
 }
-export async function removeToken(refreshToken: string) {
+export async function removeTokenSession(refreshToken: string) {
   const token = await TokenModel.deleteOne({ refreshToken })
   return token
 }
@@ -105,9 +105,9 @@ export async function refresh(refreshToken: string) {
   if (!userData || !tokenFromDB) {
     throw ApiError.UnauthorizedError()
   }
-  const user = await UserModel.findById(userData.id)
+  const user = await UserModel.findById(userData._id)
   const tokens = generateTokens({
-    id: user._id,
+    _id: user._id,
     email: user.email,
     isActivated: user.isActivated,
     isAdmin: user.isAdmin,
@@ -128,7 +128,9 @@ export function getGoogleOAuthURL() {
     access_type: 'offline',
     response_type: 'code',
     prompt: 'consent',
-    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'].join(' '),
+    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'].join(
+      ' '
+    ),
   }
 
   const _qs = new URLSearchParams(options)
@@ -156,11 +158,14 @@ export async function getGoogleOAuthTokens({ code }: { code: string }): Promise<
 
 export async function getGoogleUserProfile({ id_token, access_token }) {
   try {
-    const res = await axios.get<IGoogleProfile>(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`, {
-      headers: {
-        Authorization: `Bearer ${id_token}`,
-      },
-    })
+    const res = await axios.get<IGoogleProfile>(
+      `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
+      {
+        headers: {
+          Authorization: `Bearer ${id_token}`,
+        },
+      }
+    )
     return res.data
   } catch (error) {
     throw new Error(error.message)
@@ -175,13 +180,13 @@ export async function handleEmailInStatistics(email: string, field: string, acti
   try {
     const statistic = await StatisticModel.findOne({ name: /Statistic/i }, field).exec()
     if (action === 'add') {
-      const isInList = statistic[field].find((x) => x.toLowerCase() === email.trim().toLowerCase())
+      const isInList = statistic[field].find(x => x.toLowerCase() === email.trim().toLowerCase())
       if (!isInList) {
         statistic[field].push(email.trim())
       }
     }
     if (action === 'remove') {
-      statistic[field] = statistic[field].filter((x) => x !== email)
+      statistic[field] = statistic[field].filter(x => x !== email)
     }
     await statistic.save()
   } catch (error) {

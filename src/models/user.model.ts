@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 import { Schema, model, Document } from 'mongoose'
 
 export interface UserDocType extends Document {
+  name: string
   email: string
   password: string
   googleId: string
@@ -13,7 +14,6 @@ export interface UserDocType extends Document {
   isAdmin: boolean
   isSubscribed: boolean
   isActivated: boolean
-  credits: number
   favorite: string[]
   activationToken: string
   passwordResetToken: string
@@ -24,15 +24,15 @@ export interface UserDocType extends Document {
 
 const UserSchema: Schema = new Schema<UserDocType>(
   {
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: [true, 'Email is required.'], unique: true },
+    name: { type: String, default: '' },
     password: { type: String, default: '' },
     phone: { type: String, default: '' },
     googleId: { type: String, default: '' },
     logo: { type: String, default: '' },
-    isAdmin: { type: Boolean, required: true, default: false },
-    isSubscribed: { type: Boolean, required: true, default: false },
+    isAdmin: { type: Boolean, default: false },
+    isSubscribed: { type: Boolean, default: false },
     isActivated: { type: Boolean, default: false },
-    credits: { type: Number, default: 0 },
     favorite: [String],
     activationToken: { type: String },
     passwordResetToken: { type: String, default: '' },

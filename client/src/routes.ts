@@ -18,9 +18,11 @@ import { Ulbi } from './01_Components/01_Screens/Ulbi/Ulbi'
 import { Login } from './01_Components/02_Chunks/Auth/Login'
 import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { RestorePassword } from './01_Components/02_Chunks/Auth/RestorePassword'
+import { ProductsList } from './01_Components/01_Screens/AdminDashboard/ProductsList/ProductsList'
+import { OrderList } from './01_Components/01_Screens/AdminDashboard/OrderList/OrderList'
 
 export const publicRotes = [
-  { path: '/restore/:token', component: RestorePassword, exact: true },
+  { path: '/restore/:token', component: RestorePassword },
   { path: '/', component: Home, exact: true },
   { path: '/login', component: Login, exact: true },
   { path: '/ulbi', component: Ulbi, exact: true },
@@ -29,7 +31,7 @@ export const publicRotes = [
   { path: '/payment', component: PaymentScreen, exact: true },
   { path: '/placeorder', component: PlaceOrderScreen, exact: true },
   { path: '/product/:productId', component: ProductScreen, exact: true },
-  { path: '/cart', component: CartScreen, exact: true },
+  { path: '/cart/:productId', component: CartScreen },
 ]
 export const privateRotes = [
   { path: '/profile', component: ProfileScreen, exact: true },
@@ -38,10 +40,13 @@ export const privateRotes = [
 export const adminRoutes = [
   { path: '/dashboard', component: AdminDashboard, exact: true },
   { path: '/product/:productId/edit', component: ProductEditScreen, exact: true },
-  { path: '/dashboard/users', component: UsersList, exact: true },
   { path: '/user/:userId/edit', component: UserEditScreen, exact: true },
   { path: '/order/:orderId/edit', component: OrderEditScreen, exact: true },
   { path: '/dashboard/create', component: CreateProductPage, exact: true },
   { path: '/survey/:surveyId', component: SurveyPage, exact: true },
   { path: '/dashboard/survey/new', component: CreateSurvey, exact: true },
+  // Temp routes
+  { path: '/dashboard/users', component: UsersList, exact: true },
+  { path: '/dashboard/products', component: ProductsList, exact: true },
+  { path: '/dashboard/orders', component: OrderList, exact: true },
 ]

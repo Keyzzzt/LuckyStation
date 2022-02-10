@@ -12,7 +12,7 @@ import Loader from '../../02_Chunks/Loader/Loader'
 
 export const ProductScreen: FC = () => {
   const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { loading, fail, productInfo } = useTypedSelector((state) => state.productInfo)
+  const { productInfo, fail } = useTypedSelector((state) => state.productInfo)
   const { success: successReview, loading: loadingReview, fail: failReview } = useTypedSelector((state) => state.productReview)
   const history = useHistory()
   const dispatch = useDispatch()
@@ -28,6 +28,7 @@ export const ProductScreen: FC = () => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    // todo Валидация сообщения
     dispatch(productReviewThunk(productId, { rating, comment }))
   }
 
@@ -36,7 +37,7 @@ export const ProductScreen: FC = () => {
       dispatch(productInfoThunk(productId))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, productId, successReview])
+  }, [productId, successReview])
   return (
     <div className={styles.container}>
       {!productInfo ? (

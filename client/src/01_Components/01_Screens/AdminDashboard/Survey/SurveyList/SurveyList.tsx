@@ -5,12 +5,13 @@ import { useTypedSelector } from '../../../../../05_Types/01_Base'
 import Loader from '../../../../02_Chunks/Loader/Loader'
 import { useHistory } from 'react-router-dom'
 import { surveyListThunk } from '../../../../../03_Reducers/admin/survey reducers/surveyListReducer'
+import { Message } from '../../../../02_Chunks/Message/Message'
 
 export const SurveyList: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { config } = useTypedSelector((state) => state)
-  const { surveys, loading, fail } = useTypedSelector((state) => state.surveyList)
+  const { surveys, fail } = useTypedSelector((state) => state.surveyList)
 
   useEffect(() => {
     dispatch(surveyListThunk())
@@ -18,8 +19,7 @@ export const SurveyList: FC = () => {
 
   return (
     <div className={styles.container}>
-      {/* {loading && <Loader />} */}
-      {/* {error && <Message type="error" message={error} />} */}
+      {fail && <Message type="fail" message={fail} />}
       {!surveys ? (
         <Loader />
       ) : (

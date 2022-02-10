@@ -8,9 +8,6 @@ import { actions, registerThunk } from '../../../03_Reducers/user/userRegisterRe
 import { CustomInput } from './CustomInput'
 import { GoogleLogin } from './GoogleLogin'
 
-//todo оповещение при удачной регистрации
-//todo https://www.youtube.com/watch?v=yYq0rWESsNY - взять телефон отсюда
-
 export const Register: FC = () => {
   const [email, setEmail] = useState('123@123.com')
   const [emailDirty, setEmailDirty] = useState(false)

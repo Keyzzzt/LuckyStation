@@ -31,7 +31,7 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
 
   return (
     <div className={styles.pagination}>
-      {products.length !== 0 && totalPages > 1 && (
+      {products && products.length !== 0 && totalPages > 1 && (
         <ul className={styles.list}>
           {activePage > 1 && (
             <li onClick={() => setActivePage((prev) => prev - 1)} className={`${styles.prev} ${styles.btn}`}>

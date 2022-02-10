@@ -3,7 +3,6 @@ import { FC, useEffect, useRef } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Chart, registerables } from 'chart.js'
 import { addData } from '../../../../04_Utils/utils'
-import { useHistory } from 'react-router'
 
 Chart.register(...registerables)
 const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -30,8 +29,6 @@ const data = {
 }
 
 export const ChartContainer: FC = () => {
-  const history = useHistory()
-
   const { config } = useTypedSelector((state) => state)
   const chartRef = useRef()
   // const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
@@ -81,5 +78,5 @@ export const ChartContainer: FC = () => {
     return () => chartRef.current.destroy()
   }, [config.colorTheme])
 
-  return <canvas id="myCanvas"></canvas>
+  return <canvas className={styles.container} id="myCanvas"></canvas>
 }

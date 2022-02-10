@@ -10,8 +10,6 @@ import $api from '../../../../04_Utils/axiosSetup'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 
-// todo декомпозировать в компонент <FileUploader> ту часть что отвечает за подгрузку
-
 export const CreateProductPage: FC = () => {
   const history = useHistory()
   const { success, loading, fail } = useTypedSelector((state) => state.createProduct)
@@ -45,10 +43,6 @@ export const CreateProductPage: FC = () => {
     setCountInStock('')
     setColors('')
     setSizes('')
-  }
-
-  const saveToLocalStorage = () => {
-    // TODO нужно ли сохранять в localStorage ???
   }
 
   const uploadImageHandler = async (e: any) => {
@@ -116,8 +110,6 @@ export const CreateProductPage: FC = () => {
     <div className={styles.container}>
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={clearHandler}>Clear</button>
-      <button onClick={saveToLocalStorage}>Save locally</button>
-
       <form onSubmit={submitHandler}>
         <input onChange={(e) => setBrand(e.target.value)} type="text" value={brand} placeholder="Brand" />
         <input onChange={(e) => setName(e.target.value)} type="text" value={name} placeholder="Name" />

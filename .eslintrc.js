@@ -22,9 +22,9 @@ module.exports = {
   rules: {
     semi: 'off',
     'prettier/prettier': 'error',
-    'import/prefer-default-export': 0,
     'import/extensions': 'off',
     'no-console': 'off',
+    'import/prefer-default-export': 0,
     'import/order': [
       'error',
       {

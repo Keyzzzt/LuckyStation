@@ -5,8 +5,6 @@ import { Product } from '../../05_Types/APIResponse'
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
-// TODO: Написать типы по умному
-// todo products : null as null | Product[],
 type PrevPage = {
   limit: number
   prevPage: number
@@ -17,18 +15,15 @@ type NextPage = {
 }
 
 const initialState = {
-  products: [] as [] | Product[],
+  products: null as null | Product[],
   next: null as null | NextPage,
   prev: null as null | PrevPage,
   totalPages: 0,
-  loading: false,
   fail: '',
 }
 
 export const productListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'PRODUCT_LIST_REQUEST':
-      return { ...initialState, loading: true }
     case 'PRODUCT_LIST_SUCCESS':
       return {
         ...initialState,
@@ -45,7 +40,6 @@ export const productListReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  request: () => ({ type: 'PRODUCT_LIST_REQUEST' as const }),
   success: (data: any) => ({ type: 'PRODUCT_LIST_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'PRODUCT_LIST_FAIL' as const, payload: errMessage }),
 }
@@ -53,9 +47,7 @@ export const actions = {
 export function productListThunk(keyword = '', page: number, limit: number): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getProducts(keyword, page, limit)
-
       dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data

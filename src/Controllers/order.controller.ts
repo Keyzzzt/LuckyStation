@@ -4,7 +4,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 import { OrderModel } from '@src/models/order.model'
 
 export async function createNewOrder(req: RequestCustom, res: Response, next: NextFunction) {
@@ -21,7 +21,7 @@ export async function createNewOrder(req: RequestCustom, res: Response, next: Ne
     }
 
     const order = await OrderModel.create({
-      user: req.user.id,
+      user: req.user._id,
       orderItems,
       shippingAddress,
       paymentMethod,

@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   productInfo: null as null | Product,
-  loading: false,
   fail: '',
 }
 
 export const productInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'PRODUCT_INFO_REQUEST':
-      return { ...initialState, loading: true }
     case 'PRODUCT_INFO_SUCCESS':
       return { ...initialState, productInfo: action.payload }
     case 'PRODUCT_INFO_FAIL':
@@ -28,7 +25,6 @@ export const productInfoReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  request: () => ({ type: 'PRODUCT_INFO_REQUEST' as const }),
   success: (product: Product) => ({ type: 'PRODUCT_INFO_SUCCESS' as const, payload: product }),
   fail: (errMessage: string) => ({ type: 'PRODUCT_INFO_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'PRODUCT_INFO_RESET' as const }),
@@ -37,7 +33,6 @@ export const actions = {
 export function productInfoThunk(productId: string): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getSingleProduct(productId)
       dispatch(actions.success(data))
     } catch (err: any) {

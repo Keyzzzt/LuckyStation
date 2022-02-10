@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   surveys: null as null | SurveyFromDB[],
-  loading: false,
   fail: '',
 }
 
 export const surveyListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'SURVEY_LIST_REQUEST':
-      return { ...initialState, loading: true }
     case 'SURVEY_LIST_SUCCESS':
       return { ...initialState, surveys: action.payload }
     case 'SURVEY_LIST_FAIL':
@@ -28,7 +25,6 @@ export const surveyListReducer = (state = initialState, action: ActionType): Ini
 }
 
 export const actions = {
-  request: () => ({ type: 'SURVEY_LIST_REQUEST' as const }),
   success: (data: SurveyFromDB[]) => ({ type: 'SURVEY_LIST_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'SURVEY_LIST_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'SURVEY_LIST_RESET' as const }),
@@ -37,7 +33,6 @@ export const actions = {
 export function surveyListThunk(): ThunkType {
   return async (dispatch) => {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getSurveys()
       dispatch(actions.success(data.items))
     } catch (err: any) {

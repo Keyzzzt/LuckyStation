@@ -5,12 +5,11 @@ import { useDispatch } from 'react-redux'
 import { productListThunk } from '../../../03_Reducers/product/productListReducer'
 import { ProductCard } from '../../02_Chunks/ProductCard/ProductCard'
 import Loader from '../../02_Chunks/Loader/Loader'
-import { ErrorMessage } from '../../02_Chunks/ErrorMessage/ErrorMessage'
+import { Message } from '../../02_Chunks/Message/Message'
 import { useParams } from 'react-router'
 import { Pagination } from '../../02_Chunks/Pagination/Pagination'
 import { getRandom } from '../../../04_Utils/utils'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
-import { VerticalSlider } from '../../02_Chunks/VerticalSlider/VerticalSlider'
 
 type Params = {
   page: string
@@ -21,7 +20,7 @@ type Params = {
 // TODO сломан поиск, реализовать не через get строку а через параметры, либо, если не надо делать запрос на сервер сразу сделать поиск на фронте
 
 export const Home: FC = () => {
-  const { loading, fail, products } = useTypedSelector((state) => state.productList)
+  const { fail, products } = useTypedSelector((state) => state.productList)
   const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
@@ -47,12 +46,12 @@ export const Home: FC = () => {
 
   return (
     <section className={styles.products}>
-      {fail && <ErrorMessage message={fail} />}
-      {loading && <Loader />}
-      <VerticalSlider />
+      {fail && <Message message={fail} type="fail" />}
       <div className={styles.container}>
         <div className={styles.row}>
-          {products &&
+          {!products ? (
+            <Loader />
+          ) : (
             products.map((product) => {
               const isFavorite = userInfo?.favorite?.find((x) => x === product._id) ? true : false
               return (
@@ -67,7 +66,8 @@ export const Home: FC = () => {
                   image={product.image}
                 />
               )
-            })}
+            })
+          )}
         </div>
       </div>
       <Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />

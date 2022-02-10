@@ -15,7 +15,7 @@ const initialState = {
 export const productReviewReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_REVIEW_REQUEST':
-      return { ...initialState, success: true }
+      return { ...initialState, loading: true }
     case 'PRODUCT_REVIEW_SUCCESS':
       return { ...initialState, success: true }
     case 'PRODUCT_REVIEW_FAIL':

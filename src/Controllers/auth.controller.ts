@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import { RequestCustom } from '@src/custom'
 import * as utils from '@src/utils'
 import { UserModel } from '@src/models/user.model'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 
 export const cookieOpt: CookieOptions = {
   httpOnly: true,
@@ -74,7 +74,6 @@ export async function passwordReset(req: Request, res: Response, next: NextFunct
     return next(error.message)
   }
 }
-
 export async function register(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
@@ -92,7 +91,9 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
     const activationToken = jwt.sign({ email }, process.env.JWT_ACTIVATION_KEY, { expiresIn: '24h' })
 
-    await UserModel.create({ email, password, activationToken })
+    const name = email.split('@')[0]
+
+    await UserModel.create({ email, password, activationToken, name })
 
     await utils.sendActivationMail(email, `${process.env.SERVER_ROOT_URI}/api/activate/${activationToken}`)
 
@@ -120,7 +121,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
       return next(ApiError.BadRequest(`User not found. Have you activated your account?`))
     }
     const tokens = utils.generateTokens({
-      id: user._id,
+      _id: user._id,
       email,
       isActivated: user.isActivated,
       isAdmin: user.isAdmin,
@@ -130,7 +131,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
     return res.status(200).json({
       accessToken: tokens.accessToken,
-      id: user._id,
+      _id: user._id,
     })
   } catch (error) {
     return next(error.message)
@@ -139,7 +140,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 export async function logout(req: Request, res: Response, next: NextFunction) {
   try {
     const { refreshToken } = req.cookies
-    await utils.removeToken(refreshToken)
+    await utils.removeTokenSession(refreshToken)
     res.clearCookie('refreshToken')
     return res.sendStatus(200)
   } catch (error) {
@@ -195,7 +196,7 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
     // Если имейл и googleId совпадают - логиним
     if (user && user.googleId === googleProfile.id) {
       const tokens = utils.generateTokens({
-        id: user._id,
+        _id: user._id,
         email: user.email,
         isActivated: user.isActivated,
         isAdmin: user.isAdmin,
@@ -203,13 +204,13 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       utils.saveToken(user._id, tokens.refreshToken)
       res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
 
-      return res.redirect('http://localhost:3000')
+      return res.redirect(process.env.CLIENT_URL)
     }
     // Если имейл совпадает, активирован, имейл гугл верифицирован - логиним с добавлением googleId
     if (user && user.isActivated && googleProfile.verified_email) {
       user.googleId = googleProfile.id
       const tokens = utils.generateTokens({
-        id: user._id,
+        _id: user._id,
         email: user.email,
         isActivated: user.isActivated,
         isAdmin: user.isAdmin,
@@ -217,7 +218,7 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       utils.saveToken(user._id, tokens.refreshToken)
       res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
 
-      return res.redirect('http://localhost:3000')
+      return res.redirect(process.env.CLIENT_URL)
     }
 
     // Если имейл совпадает, аккаунт НЕ активирован, имейл гугл верифицирован:
@@ -231,7 +232,7 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       })
 
       const tokens = utils.generateTokens({
-        id: createdUser._id,
+        _id: createdUser._id,
         email: googleProfile.email,
         isActivated: true,
         isAdmin: createdUser.isAdmin,
@@ -239,33 +240,27 @@ export async function googleOAuth(req: RequestCustom, res: Response, next: NextF
       utils.saveToken(createdUser._id, tokens.refreshToken)
       res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
 
-      return res.redirect('http://localhost:3000')
+      return res.redirect(process.env.CLIENT_URL)
     }
 
-    // Нет пользовалеля - создаем нового с добавлением googleId
-    if (!user) {
-      await utils.handleEmailInStatistics(googleProfile.email, 'allUsersEmailList', 'add')
+    // Если дошли сюда значит нет такого пользовалеля - создаем нового с добавлением googleId
+    await utils.handleEmailInStatistics(googleProfile.email, 'allUsersEmailList', 'add')
 
-      const createdUser = await UserModel.create({
-        email: googleProfile.email,
-        googleId: googleProfile.id,
-        isActivated: true,
-      })
+    const createdUser = await UserModel.create({
+      email: googleProfile.email,
+      googleId: googleProfile.id,
+      isActivated: true,
+    })
 
-      console.log(typeof createdUser._id)
-
-      const tokens = utils.generateTokens({
-        id: createdUser._id, // todo change to _id
-        email: googleProfile.email,
-        isActivated: true,
-        isAdmin: createdUser.isAdmin,
-      })
-      utils.saveToken(createdUser._id, tokens.refreshToken)
-      res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
-      return res.redirect('http://localhost:3000')
-    }
-    // Если не ничего не сработало из условий сверху вернем ошибку сервера.
-    return res.sendStatus(500)
+    const tokens = utils.generateTokens({
+      _id: createdUser._id,
+      email: googleProfile.email,
+      isActivated: true,
+      isAdmin: createdUser.isAdmin,
+    })
+    utils.saveToken(createdUser._id, tokens.refreshToken)
+    res.cookie('refreshToken', tokens.refreshToken, cookieOpt)
+    return res.redirect(process.env.CLIENT_URL)
   } catch (error) {
     return next(error.message)
   }

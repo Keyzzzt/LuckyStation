@@ -10,14 +10,14 @@ import { GoogleLogin } from './GoogleLogin'
 import { isEmail } from '../../../04_Utils/utils'
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState('a@a.com')
+  const [email, setEmail] = useState('123@123.com')
   const [emailDirty, setEmailDirty] = useState(false)
   const [emailError, setEmailError] = useState('Empty email')
-  const [password, setPassword] = useState('123')
+  const [password, setPassword] = useState('123456')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty password')
-  const { fail: loginFail } = useTypedSelector((state) => state.login)
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
+  const { fail: loginFail } = useTypedSelector(state => state.login)
+  const { userInfo } = useTypedSelector(state => state.userInfo)
   const history = useHistory()
   const location = useLocation()
   const dispatch = useDispatch()

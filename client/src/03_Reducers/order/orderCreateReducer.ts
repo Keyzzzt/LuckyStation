@@ -10,14 +10,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   order: null as null | any,
-  loading: false,
   fail: '',
 }
 
 export const orderCreateReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'ORDER_CREATE_REQUEST':
-      return { ...initialState, loading: true }
     case 'ORDER_CREATE_SUCCESS':
       return { ...initialState, order: action.payload }
     case 'ORDER_CREATE_FAIL':
@@ -30,7 +27,6 @@ export const orderCreateReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  request: () => ({ type: 'ORDER_CREATE_REQUEST' as const }),
   success: (data: any) => ({ type: 'ORDER_CREATE_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'ORDER_CREATE_RESET' as const }),
@@ -39,7 +35,6 @@ export const actions = {
 export function createOrderThunk(newOrder: OrderToAPI): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.request())
       const { data } = await API.order.createOrder(newOrder)
       dispatch(actions.success(data))
     } catch (err: any) {

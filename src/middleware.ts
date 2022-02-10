@@ -1,7 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-redeclare */
 import { NextFunction, Response } from 'express'
 import { RequestCustom } from '@src/custom'
-import { ApiError } from '@src/middleware/error.middleware'
+import ApiError from '@src/middleware/error.middleware'
 import * as utils from '@src/utils'
 
 export async function deserializeUser(req: RequestCustom, res: Response, next: NextFunction) {
@@ -64,13 +65,12 @@ export const paginatedResult = (model, flag) => {
             },
           }
         : {}
+      const response = {} as any
       const startIndex = (page - 1) * limit
       const endIndex = page * limit
-      const totalDocs = await model.countDocuments().exec()
-      const totalPages = Math.ceil(totalDocs / limit)
-      const response = {} as any
+      const totalDocs = await model.count()
 
-      response.totalPages = totalPages
+      response.totalPages = Math.ceil(totalDocs / limit)
 
       if (endIndex < totalDocs) {
         response.next = {
@@ -85,7 +85,12 @@ export const paginatedResult = (model, flag) => {
         }
       }
       if (flag === 'own') {
-        response.items = await model.find({ user: req.user.id }).select('-password -__v -activationLink').limit(limit).skip(startIndex).exec()
+        response.items = await model
+          .find({ user: req.user._id })
+          .select('-password -__v -activationLink')
+          .limit(limit)
+          .skip(startIndex)
+          .exec()
         if (!response.items || response.items.length === 0) {
           return next(ApiError.NotFound('Not found'))
         }
@@ -96,7 +101,9 @@ export const paginatedResult = (model, flag) => {
 
       response.items = await model
         .find({ ...keyword })
-        .select('-password -__v -recipients -activationLink -googleId -logo -isSubscribed -credits -favorite -createdAt -updatedAt')
+        .select(
+          '-password -__v -recipients -activationLink -googleId -logo -isSubscribed -credits -favorite -createdAt -updatedAt'
+        )
         .limit(limit)
         .skip(startIndex)
         .exec()

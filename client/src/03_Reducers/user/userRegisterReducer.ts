@@ -43,7 +43,7 @@ export function registerThunk(email: string, password: string, confirmPassword: 
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
 
       if (errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ') //FIXME: WTF
+        const errMsg = errors.map(e => e.msg).join('; ') //FIXME: WTF
         dispatch(actions.registerFailAC(errMsg))
         return
       }

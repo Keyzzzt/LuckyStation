@@ -32,7 +32,7 @@ export const actions = {
 }
 
 export function userDeleteThunk(userId: string): ThunkType {
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
     try {
       dispatch(actions.deleteUserRequestAC())
       await API.admin.deleteUser(userId)

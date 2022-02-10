@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
-import { ErrorMessage } from '../../../02_Chunks/ErrorMessage/ErrorMessage'
+import { Message } from '../../../02_Chunks/Message/Message'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
@@ -17,7 +17,7 @@ export const OrderEditScreen: FC = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { orderId } = useParams<{ orderId: string }>()
-  const { orderInfo, fail, loading } = useTypedSelector((state) => state.orderInfo)
+  const { orderInfo, fail } = useTypedSelector((state) => state.orderInfo)
   const {
     successDelivered,
     successNotDelivered,
@@ -54,62 +54,66 @@ export const OrderEditScreen: FC = () => {
     <div className={styles.container}>
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={() => manageOrderHandler('delete')}>Delete</button>
-      {loading && <Loader />}
-      {fail && <ErrorMessage message={fail} />}
-      {manageOrderFail && <ErrorMessage message={manageOrderFail} />}
-
-      <div>
-        <div>Order Items</div>
-        {orderInfo?.orderItems.map((item) => (
-          <div key={getRandom()}>
-            <div>Name: {item.name}</div>
-            <div>
-              <img src={item.image} alt="Product" />
-            </div>
-            <div>Quantity: {item.quantity}</div>
-            <div>Product price: {item.price}</div>
+      {fail && <Message message={fail} type="fail" />}
+      {manageOrderFail && <Message message={manageOrderFail} type="fail" />}
+      {!orderInfo ? (
+        <Loader />
+      ) : (
+        <>
+          <div>
+            <div>Order Items</div>
+            {orderInfo.orderItems.map((item) => (
+              <div key={getRandom()}>
+                <div>Name: {item.name}</div>
+                <div>
+                  <img src={item.image} alt="Product" />
+                </div>
+                <div>Quantity: {item.quantity}</div>
+                <div>Product price: {item.price}</div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        <div>Order Summary</div>
-        <div>Tax price: {orderInfo?.taxPrice}</div>
-        <div>Shipping price: {orderInfo?.shippingPrice}</div>
-        <div>Total price: {orderInfo?.totalPrice}</div>
-        <div>
-          Shipping address:{' '}
-          {`${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.country}`}
-        </div>
-        <div>Created at: {orderInfo?.createdAt}</div>
-        <div>
-          {orderInfo?.isPaid ? (
+          <div>
+            <div>Order Summary</div>
+            <div>Tax price: {orderInfo.taxPrice}</div>
+            <div>Shipping price: {orderInfo.shippingPrice}</div>
+            <div>Total price: {orderInfo.totalPrice}</div>
             <div>
-              <div style={{ backgroundColor: 'green' }}>Paid</div>
-              <button onClick={() => manageOrderHandler('notPaid')}>Set to not paid</button>
+              Shipping address:{' '}
+              {`${orderInfo.shippingAddress.address}, ${orderInfo.shippingAddress.postalCode}, ${orderInfo.shippingAddress.city}, ${orderInfo.shippingAddress.country}`}
             </div>
-          ) : (
+            <div>Created at: {orderInfo.createdAt}</div>
             <div>
-              <div style={{ backgroundColor: 'red' }}>NOT Paid</div>
-              <button onClick={() => manageOrderHandler('paid')}>Set to paid</button>
+              {orderInfo.isPaid ? (
+                <div>
+                  <div style={{ backgroundColor: 'green' }}>Paid</div>
+                  <button onClick={() => manageOrderHandler('notPaid')}>Set to not paid</button>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ backgroundColor: 'red' }}>NOT Paid</div>
+                  <button onClick={() => manageOrderHandler('paid')}>Set to paid</button>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div>
-          {orderInfo?.isDelivered ? (
             <div>
-              <div style={{ backgroundColor: 'green' }}>Delivered</div>
-              <button onClick={() => manageOrderHandler('notDelivered')}>Set to not delivered</button>
+              {orderInfo.isDelivered ? (
+                <div>
+                  <div style={{ backgroundColor: 'green' }}>Delivered</div>
+                  <button onClick={() => manageOrderHandler('notDelivered')}>Set to not delivered</button>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ backgroundColor: 'red' }}>NOT Delivered</div>
+                  <button onClick={() => manageOrderHandler('delivered')}>Set to delivered</button>
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <div style={{ backgroundColor: 'red' }}>NOT Delivered</div>
-              <button onClick={() => manageOrderHandler('delivered')}>Set to delivered</button>
-            </div>
-          )}
-        </div>
-        {orderInfo?.paidAt && <div>Paid at: {orderInfo?.paidAt}</div>}
-        <div>Payment method: {orderInfo?.paymentMethod}</div>
-      </div>
+            {orderInfo.paidAt && <div>Paid at: {orderInfo.paidAt}</div>}
+            <div>Payment method: {orderInfo.paymentMethod}</div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

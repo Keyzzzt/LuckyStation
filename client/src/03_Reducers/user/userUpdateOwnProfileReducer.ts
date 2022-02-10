@@ -1,6 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { userInfoThunk } from './userInfoReducer'
+import { UpdateProfile } from '../../05_Types/APIResponse'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -34,21 +35,20 @@ export const actions = {
   updateOwnProfileResetAC: () => ({ type: 'UPDATE_OWN_PROFILE_RESET' as const }),
 }
 
-export function updateOwnProfileThunk(formData: any): ThunkType {
+export function updateOwnProfileThunk(formData: UpdateProfile): ThunkType {
   return async function (dispatch, getState) {
     try {
       dispatch(actions.updateOwnProfileRequestAC())
       const { data } = await API.user.updateOwnProfile(formData)
+      //@ts-ignore
       localStorage.setItem('token', data.accessToken)
       userInfoThunk()
       dispatch(actions.updateOwnProfileSuccessAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg)
+        const errMsg = errors.map(e => e.msg)
         dispatch(actions.updateOwnProfileFailAC(errMsg[0]))
-        console.log(errMsg)
-
         return
       }
       dispatch(actions.updateOwnProfileFailAC(error))

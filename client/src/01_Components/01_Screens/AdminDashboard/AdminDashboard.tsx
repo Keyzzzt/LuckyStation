@@ -32,6 +32,8 @@ export const AdminDashboard: FC = () => {
       <div className={`${styles.container} ${themeClass}`}>
         <button onClick={() => history.push('/dashboard/create')}>Create Product</button>
         <button onClick={() => history.push('/dashboard/users')}>Users list</button>
+        <button onClick={() => history.push('/dashboard/products')}>Products list</button>
+        <button onClick={() => history.push('/dashboard/orders')}>Orders list</button>
         <div className={`${styles.dashboard}`}>
           <div className={`${styles.adminToolUnit}`}>
             <CreateSurvey allEmails={statistic.allUsersEmailList} subscribedEmails={statistic.allSubscribersEmailList} />

@@ -9,6 +9,7 @@ export interface SurveyDocType extends Document {
   recipients: string[]
   yes: number
   no: number
+  isDirty: boolean
   dateSent: SchemaDefinitionProperty<Schema.Types.Date>
   lastResponded: SchemaDefinitionProperty<Schema.Types.Date>
 }
@@ -34,6 +35,10 @@ const SurveySchema: Schema = new Schema<SurveyDocType>(
     recipients: [RecipientSchema],
     yes: { type: Number, default: 0 },
     no: { type: Number, default: 0 },
+    isDirty: {
+      type: Boolean,
+      default: false,
+    },
     dateSent: Date,
     lastResponded: Date,
   },

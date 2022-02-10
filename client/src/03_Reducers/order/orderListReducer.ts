@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   orders: null as null | OrderFromAPI[],
-  loading: false,
   fail: '',
 }
 
 export const orderListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'ORDER_LIST_REQUEST':
-      return { ...initialState, loading: true }
     case 'ORDER_LIST_SUCCESS':
       return { ...initialState, orders: action.payload }
     case 'ORDER_LIST_FAIL':
@@ -26,7 +23,6 @@ export const orderListReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  request: () => ({ type: 'ORDER_LIST_REQUEST' as const }),
   success: (data: OrderFromAPI[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
 }
@@ -34,7 +30,6 @@ export const actions = {
 export function orderListThunk(page: number, limit: number): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.request())
       const { data } = await API.admin.getOrders(page, limit)
       dispatch(actions.success(data.items))
     } catch (err: any) {

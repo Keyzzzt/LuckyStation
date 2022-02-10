@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 export type PayloadType = {
-  id: string
+  _id: string
   email: string
   isActivated: boolean
   isAdmin: boolean

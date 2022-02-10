@@ -8,14 +8,11 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   userInfo: null as null | User,
-  loading: false,
   error: '',
 }
 
 export const userInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'USER_INFO_REQUEST':
-      return { ...initialState, loading: true }
     case 'USER_INFO_SUCCESS':
       return { ...initialState, userInfo: action.payload }
     case 'USER_INFO_FAIL':
@@ -45,7 +42,6 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
 }
 
 export const actions = {
-  userInfoRequestAC: () => ({ type: 'USER_INFO_REQUEST' as const }),
   userInfoSuccessAC: (data: User) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
   userInfoFailAC: (errMessage: string) => ({ type: 'USER_INFO_FAIL' as const, payload: errMessage }),
   userInfoResetAC: () => ({ type: 'USER_INFO_RESET' as const }),
@@ -105,7 +101,6 @@ export function subscribeThunk(email: string): ThunkType {
 export function userInfoThunk(): ThunkType {
   return async function (dispatch) {
     try {
-      dispatch(actions.userInfoRequestAC())
       const { data } = await API.user.getProfile()
       dispatch(actions.userInfoSuccessAC(data))
     } catch (err: any) {
