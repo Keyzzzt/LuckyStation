@@ -13,7 +13,6 @@ export const auth = [
 ]
 export const emailOnly = [body('email', 'Invalid email').trim().isEmail()]
 
-export const subscribe = [body('email', 'Invalid email').trim().isEmail()]
 export const updateProfileByUser = [
   // FIXME: Смены пароля может и не быть, но если newPassword / confirmNewPassword не пустые, то их нужно проверить.
   body('newPassword', 'Password should be between 3 and 33').trim().isLength({ min: 3, max: 33 }),
@@ -30,17 +29,36 @@ export const createAndUpdateProduct = [
     .withMessage('Name is required.')
     .isLength({ max: 32 })
     .withMessage('Product name must be between 1 and 32 characters long.'),
-  body('price').trim().notEmpty().withMessage('Price is required.').isNumeric().withMessage('Price must contain only numbers.'),
+  body('price')
+    .trim()
+    .notEmpty()
+    .withMessage('Price is required.')
+    .isNumeric()
+    .withMessage('Price must contain only numbers.'),
   body('image', 'Product image is required.').trim().notEmpty(),
-  body('brand').trim().notEmpty().withMessage('Brand is required.').isLength({ max: 32 }).withMessage('Brand length is maximum 32 characters.'),
+  body('brand')
+    .trim()
+    .notEmpty()
+    .withMessage('Brand is required.')
+    .isLength({ max: 32 })
+    .withMessage('Brand length is maximum 32 characters.'),
   body('category')
     .trim()
     .notEmpty()
     .withMessage('Category is required.')
     .isLength({ max: 32 })
     .withMessage('Category length is maximum 32 characters.'),
-  body('countInStock').trim().notEmpty().withMessage('Price is required.').isNumeric().withMessage('Count must contain only numbers.'),
-  body('description', 'Description is required.').trim().notEmpty().isLength({ min: 6 }).withMessage('Brand length is minimum 6 characters.'),
+  body('countInStock')
+    .trim()
+    .notEmpty()
+    .withMessage('Price is required.')
+    .isNumeric()
+    .withMessage('Count must contain only numbers.'),
+  body('description', 'Description is required.')
+    .trim()
+    .notEmpty()
+    .isLength({ min: 6 })
+    .withMessage('Brand length is minimum 6 characters.'),
 ]
 
 export const createSurvey = [
@@ -70,8 +88,20 @@ export const createOrder = [
   body('orderItems', 'No products in order.').isArray({ min: 1 }),
   body('shippingAddress').isObject(),
   body('paymentMethod').trim().notEmpty().withMessage('Order items is empty.'),
-  body('itemsPrice').trim().notEmpty().withMessage('Items price is required.').bail().isNumeric().withMessage('Price must contain only numbers.'),
-  body('taxPrice').trim().notEmpty().withMessage('Tax price is required.').bail().isNumeric().withMessage('Tax price must contain only numbers.'),
+  body('itemsPrice')
+    .trim()
+    .notEmpty()
+    .withMessage('Items price is required.')
+    .bail()
+    .isNumeric()
+    .withMessage('Price must contain only numbers.'),
+  body('taxPrice')
+    .trim()
+    .notEmpty()
+    .withMessage('Tax price is required.')
+    .bail()
+    .isNumeric()
+    .withMessage('Tax price must contain only numbers.'),
   body('shippingPrice')
     .trim()
     .notEmpty()
@@ -89,7 +119,13 @@ export const createOrder = [
 ]
 
 export const createReview = [
-  body('rating').trim().notEmpty().withMessage('Rating is required.').bail().isNumeric().withMessage('Rating must contain only numbers.'),
+  body('rating')
+    .trim()
+    .notEmpty()
+    .withMessage('Rating is required.')
+    .bail()
+    .isNumeric()
+    .withMessage('Rating must contain only numbers.'),
   body('comment').trim().notEmpty().withMessage('Comment is required.'),
 ]
 

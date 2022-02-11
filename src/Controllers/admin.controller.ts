@@ -92,7 +92,7 @@ export async function setUsersAdminStatus(req: Request, res: Response, next: Nex
     await UserModel.findByIdAndUpdate(id, { isAdmin: req.body.isAdmin })
     const user = await getUserProfile(id)
 
-    return res.json(user)
+    return res.status(200).json(user)
   } catch (error) {
     return next(error.message)
   }
@@ -159,7 +159,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
 
     await product.save()
 
-    return res.status(201).json(product)
+    return res.status(200).json(product)
   } catch (error) {
     return next(error.message)
   }
@@ -289,7 +289,7 @@ export async function createSurvey(req: RequestCustom, res: Response, next: Next
 
 export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    return res.status(201).json(req.paginatedResponse)
+    return res.status(200).json(req.paginatedResponse)
   } catch (error) {
     return next(error.message)
   }
@@ -301,7 +301,7 @@ export async function getSurveyById(req: RequestCustom, res: Response, next: Nex
     if (!survey) {
       return next(ApiError.NotFound('Survey not found'))
     }
-    return res.status(201).json(survey)
+    return res.status(200).json(survey)
   } catch (error) {
     return next(error.message)
   }

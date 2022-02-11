@@ -22,8 +22,6 @@ export interface ProductDocType extends Document {
   description: string
   rating: number
   reviews: ReviewType[]
-  colors: string[]
-  sizes: number[]
   numReviews: number
   price: number
   countInStock: number
@@ -68,8 +66,6 @@ const ProductSchema = new Schema<ProductDocType>(
       type: String,
       required: true,
     },
-    colors: [String],
-    sizes: [Number],
     image: {
       type: String,
       required: true,

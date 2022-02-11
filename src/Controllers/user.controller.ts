@@ -32,13 +32,7 @@ export async function subscribe(req: RequestCustom, res: Response, next: NextFun
     await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'add')
     await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
 
-    const user = await UserModel.findOne({ email })
-    if (user) {
-      user.isSubscribed = true
-      await user.save()
-    } else {
-      // TODO Модель для не зарегистрированных пользователей
-    }
+    await UserModel.findOneAndUpdate({ email }, { isSubscribed: true })
 
     return res.sendStatus(200)
   } catch (error) {
@@ -50,12 +44,7 @@ export async function unSubscribe(req: RequestCustom, res: Response, next: NextF
   try {
     const email = req.params.email.trim()
     await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'remove')
-    const user = await UserModel.findOne({ email })
-    if (user) {
-      user.isSubscribed = false
-      await user.save()
-    }
-
+    await UserModel.findOneAndUpdate({ email }, { isSubscribed: false })
     return next()
   } catch (error) {
     return next(error.message)
@@ -107,20 +96,22 @@ export async function updateProfile(req: RequestCustom, res: Response, next: Nex
 export async function addToFavorite(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const user = await UserModel.findById(req.user._id).select('-password')
-    const product = await ProductModel.findById(req.params.id)
-
-    if (!user && !product) {
-      return next(ApiError.NotFound('User or product not found'))
+    if (!user) {
+      return next(ApiError.NotFound('User not found'))
     }
     const isFavorite = user.favorite.find(item => item === req.params.id)
 
     if (isFavorite) {
       return next(ApiError.BadRequest('Product already in favorite list.'))
     }
+    // Нужна проверка на продукт, поскольку конструкция ниже не вернет ошибку даже если продукта с таким id нет
+    // Если продукт был, он вернется, если нет - null
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, { $inc: { countInFavorite: 1 } })
+    if (!product) {
+      return next(ApiError.NotFound('Product not found'))
+    }
     user.favorite.push(req.params.id)
-    product.countInFavorite += 1
     await user.save()
-    await product.save()
 
     return res.sendStatus(200)
   } catch (error) {
@@ -131,14 +122,20 @@ export async function addToFavorite(req: RequestCustom, res: Response, next: Nex
 export async function removeFromFavorite(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const user = await UserModel.findById(req.user._id).select('-password')
-
     if (!user) {
       return next(ApiError.NotFound('User not found'))
     }
+    const isFavorite = user.favorite.find(item => item === req.params.id)
+
+    if (!isFavorite) {
+      return next(ApiError.BadRequest('Product not in favorite list.'))
+    }
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, { $inc: { countInFavorite: -1 } })
+    if (!product) {
+      return next(ApiError.NotFound('Product not found'))
+    }
     user.favorite = user.favorite.filter(item => item !== req.params.id)
-
     user.save()
-
     return res.sendStatus(200)
   } catch (error) {
     return next(error.message)

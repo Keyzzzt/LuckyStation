@@ -57,8 +57,6 @@ export function routes(app) {
     paginatedResult(SurveyModel, null),
     Admin.getAllSurveys
   )
-  // In process
-
   app.get('/api/admin/survey/:id', privateRoute, adminRoute, Admin.getSurveyById)
   app.delete('/api/admin/survey/:id', privateRoute, adminRoute, Admin.deleteSurvey)
   app.post('/api/admin/survey', Validation.createSurvey, privateRoute, adminRoute, Admin.createSurvey)
@@ -66,6 +64,7 @@ export function routes(app) {
   app.get('/api/survey/unsubscribe/:email', User.unSubscribe, (req, res) => {
     res.send('Unsubscribed!')
   })
+  // This route is pure backend logic
   app.get('/api/survey/:surveyId/:choice', (req, res) => {
     res.send('Thanks')
   })
@@ -74,17 +73,16 @@ export function routes(app) {
   app.put('/api/user/profile', Validation.updateProfileByUser, privateRoute, User.updateProfile)
   app.post('/api/user/favorite/:id', privateRoute, User.addToFavorite)
   app.delete('/api/user/favorite/:id', privateRoute, User.removeFromFavorite)
-  app.post('/api/user/subscription', Validation.subscribe, User.subscribe)
-  app.post('/api/user/subscription', Validation.subscribe, User.subscribe)
+  app.post('/api/user/subscribe', Validation.emailOnly, User.subscribe)
+  app.delete('/api/user/subscribe', Validation.emailOnly, User.unSubscribe)
 
-  app.post('/api/order', Validation.createOrder, Order.createNewOrder)
+  app.post('/api/order', Validation.createOrder, privateRoute, Order.createNewOrder)
   app.get('/api/order/myorders/:page/:limit', privateRoute, paginatedResult(OrderModel, 'own'), Order.getOwnOrders)
   app.get('/api/order/:id', privateRoute, Order.getOrderById)
-  app.post('/api/order/:id/pay', privateRoute, Order.setOrderToPaid)
-
   app.get('/api/product/:page/:limit', paginatedResult(ProductModel, null), Product.getProducts)
+  // In process
   app.post('/api/product/:id/review', Validation.createReview, privateRoute, Product.createReview)
   app.get('/api/product/:id', Product.getProductById)
-
   app.get('/api/config/paypal', User.getPayPalClientId)
+  app.post('/api/order/:id/pay', privateRoute, Order.setOrderToPaid)
 }

@@ -16,10 +16,9 @@ export async function getProducts(req: RequestCustom, res: Response, next: NextF
   }
 }
 
-// Frontend DONE
 export async function getProductById(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const product = await await ProductModel.findById(req.params.id).select('-__v')
+    const product = await ProductModel.findById(req.params.id).select('-__v')
     if (!product) {
       return next(ApiError.NotFound('Product not found'))
     }
@@ -31,17 +30,16 @@ export async function getProductById(req: RequestCustom, res: Response, next: Ne
   }
 }
 
-// @desc     Create review
-// @route    POST /api/product/:id/review
-// @access   Private
 export async function createReview(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
-    if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    if (!errors.isEmpty()) {
+      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    }
 
     const { rating, comment } = req.body
 
-    // FIXME: check if rating not between 1 and
+    // FIXME: check if rating not between 1 and 5
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
       return next(ApiError.NotFound('Product not found'))
@@ -55,8 +53,18 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
       return next(ApiError.BadRequest('Product already reviewed'))
     }
 
+    let normalizedRating
+
+    if (rating < 0) {
+      normalizedRating = 0
+    } else if (rating > 5) {
+      normalizedRating = 5
+    } else {
+      normalizedRating = rating
+    }
+
     const review: ReviewType = {
-      rating: Number(rating),
+      rating: Number(normalizedRating),
       user: req.user._id,
       comment,
     }
