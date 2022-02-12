@@ -15,8 +15,8 @@ import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { getRandom } from '../../../04_Utils/utils'
 
 export const OrderScreen: FC = () => {
-  const { orderInfo, fail } = useTypedSelector((state) => state.orderInfo)
-  const { success: successPay, loading: loadingPay } = useTypedSelector((state) => state.orderPay)
+  const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
+  const { success: successPay, loading: loadingPay } = useTypedSelector(state => state.orderPay)
   const [sdkReady, setSdkReady] = useState(false)
   const dispatch = useDispatch()
   const params = useParams<{ orderId: string }>()
@@ -24,6 +24,7 @@ export const OrderScreen: FC = () => {
     if (!orderInfo) {
       return
     }
+    console.log(paymentResult)
     dispatch(payOrderThunk(orderInfo._id, paymentResult))
   }
 
@@ -65,7 +66,7 @@ export const OrderScreen: FC = () => {
         <>
           <div>
             <div>Order Items</div>
-            {orderInfo.orderItems.map((item) => (
+            {orderInfo.orderItems.map(item => (
               <div key={getRandom()}>
                 <div>Name: {item.name}</div>
                 <div>
@@ -95,7 +96,11 @@ export const OrderScreen: FC = () => {
           {!orderInfo.isPaid && (
             <div>
               {loadingPay && <Loader />}
-              {!sdkReady ? <Loader /> : <PayPalButton amount={orderInfo.totalPrice} onSuccess={successPaymentHandler} />}
+              {!sdkReady ? (
+                <Loader />
+              ) : (
+                <PayPalButton amount={orderInfo.totalPrice} onSuccess={successPaymentHandler} />
+              )}
             </div>
           )}
         </>

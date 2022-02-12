@@ -13,13 +13,18 @@ export const auth = [
 ]
 export const emailOnly = [body('email', 'Invalid email').trim().isEmail()]
 
+export const paypalPaymentResult = [
+  body('id', 'id is required.').trim().isString(),
+  body('status', 'status is required.').trim().isString(),
+  body('update_time', 'update_time is required.').trim().isDate(),
+]
+
 export const updateProfileByUser = [
   // FIXME: Смены пароля может и не быть, но если newPassword / confirmNewPassword не пустые, то их нужно проверить.
   body('newPassword', 'Password should be between 3 and 33').trim().isLength({ min: 3, max: 33 }),
   body('confirmNewPassword', 'Password should be between 3 and 33').trim().isLength({ min: 3, max: 33 }),
 ]
 
-// TODO:
 export const updateProfileByAdmin = [body('isAdmin').isBoolean()]
 
 export const createAndUpdateProduct = [

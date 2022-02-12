@@ -60,12 +60,11 @@ export async function getOwnOrders(req: RequestCustom, res: Response, next: Next
 
 export async function setOrderToPaid(req: Request, res: Response, next: NextFunction) {
   try {
-    // TODO: Validate
     // const errors = validationResult(req)
     // if (!errors.isEmpty()) return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
 
-    const { id, status, updateTime } = req.body
-    const order = await OrderModel.findById(req.params.id)
+    const { id, status, update_time } = req.body
+    const order = await OrderModel.findById(req.params.orderId)
     if (!order) {
       return next(ApiError.NotFound('Order not found'))
     }
@@ -76,7 +75,7 @@ export async function setOrderToPaid(req: Request, res: Response, next: NextFunc
     order.paymentResult = {
       id,
       status,
-      updateTime,
+      updateTime: update_time,
       emailAddress: req.body.payer.email_address,
     }
 

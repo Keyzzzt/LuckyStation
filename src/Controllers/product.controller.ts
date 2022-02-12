@@ -37,24 +37,20 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    const { rating, comment } = req.body
-
-    // FIXME: check if rating not between 1 and 5
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
       return next(ApiError.NotFound('Product not found'))
     }
 
-    const alreadyReviewed = product.reviews.find(
-      // @ts-ignore
-      r => r.user._id.toString() === req.user.id.toString()
-    )
+    // Check if product already has been reviewed
+    const alreadyReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString())
     if (alreadyReviewed) {
       return next(ApiError.BadRequest('Product already reviewed'))
     }
 
+    // Check if rating value not between 0 and 5
+    const { rating, comment } = req.body
     let normalizedRating
-
     if (rating < 0) {
       normalizedRating = 0
     } else if (rating > 5) {
@@ -63,6 +59,7 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
       normalizedRating = rating
     }
 
+    // Create review object
     const review: ReviewType = {
       rating: Number(normalizedRating),
       user: req.user._id,
@@ -73,9 +70,9 @@ export async function createReview(req: RequestCustom, res: Response, next: Next
     product.numReviews = product.reviews.length
     product.rating = product.reviews.reduce((acc, elem) => elem.rating + acc, 0) / product.reviews.length
     await product.save()
-    return res.status(201).json({
-      data: product,
-    })
+
+    // return res.status(200).json(product)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }

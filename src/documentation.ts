@@ -4,463 +4,8 @@
 /* eslint-disable no-underscore-dangle */
 import { NextFunction, Request, Response } from 'express'
 
-const routes = [
-  'Login',
-  {
-    action: 'Login',
-    method: 'POST',
-    path: '/login',
-    access: 'public',
-    requiredValues: {
-      email: 'string',
-      password: 'string',
-    },
-    successResponse: {
-      data: {
-        accessToken: 'string',
-        _id: 'string',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'Required valid email and password between 3 and 33 characters in body',
-  },
-  'Registration',
-  {
-    action: 'Registration',
-    method: 'POST',
-    path: '/registration',
-    access: 'public',
-    requiredValues: {
-      email: 'string',
-      password: 'string',
-    },
-    successResponse: {
-      data: null,
-      status: 201,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'Required valid email and password between 3 and 33 characters in body',
-  },
-  'Logout',
-  {
-    action: 'Logout',
-    method: 'POST',
-    path: '/logout',
-    access: 'public',
-    requiredValues: null,
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Google OAUTH redirect',
-  {
-    action: 'Redirect to Google authentication',
-    method: 'GET',
-    path: '/auth/google/redirect',
-    access: 'public',
-    requiredValues: null,
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Google OAUTH',
-  {
-    action: 'Login / Register with google',
-    method: 'GET',
-    path: '/auth/google',
-    access: 'public',
-    requiredValues: null,
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'If success redirects to main page',
-  },
-  'Account activation',
-  {
-    action: 'Activate account after registration',
-    method: 'GET',
-    path: '/activate/:token',
-    access: 'public',
-    requiredValues: {
-      token: 'token from link that has been sent to users email as query parameter string /activate/:token',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'If success redirects to main page',
-  },
-  'Password reset link to email',
-  {
-    action: 'Send a link to recover a password',
-    method: 'POST',
-    path: '/recovery',
-    access: 'public',
-    requiredValues: {
-      email: 'string',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Set new password',
-  {
-    action: 'Set new password',
-    method: 'PUT',
-    path: '/recovery',
-    access: 'public',
-    requiredValues: {
-      password: 'string',
-      confirm: 'string',
-      passwordResetToken: 'string',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Issues new pair of access and refresh token',
-  {
-    action: 'Issues new pair of access and refresh token',
-    method: 'GET',
-    path: '/refresh',
-    access: 'public',
-    requiredValues: {
-      refreshToken: 'valid refreshToken in cookies',
-    },
-    successResponse: {
-      data: {
-        accessToken: 'string',
-        _id: 'string',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Get all users by admin',
-  {
-    action: 'Get all users by admin',
-    method: 'GET',
-    path: '/admin/user/:page/:limit',
-    access: 'admin',
-    requiredValues: {
-      page: 'as request parameter /admin/survey/:page/:limit',
-      limit: 'as request parameter /admin/survey/:page/:limit',
-    },
-    successResponse: {
-      data: {
-        _id: 'string',
-        name: 'string',
-        email: 'string',
-        logo: 'string',
-        phone: 'string',
-        isAdmin: 'boolean',
-        isSubscribed: 'boolean',
-        isActivated: 'boolean',
-        favorite: 'array',
-        createdAt: 'date',
-        updatedAt: 'date',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - users not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'Returns an array of users',
-  },
-  'Set user admin status',
-  {
-    action: 'Set user admin status',
-    method: 'PUT',
-    path: '/admin/user/:id',
-    access: 'admin',
-    requiredValues: {
-      id: 'as query parameter /admin/user/:id',
-      isAdmin: 'boolean',
-    },
-    successResponse: {
-      data: {
-        _id: 'string',
-        email: 'string',
-        name: 'string',
-        phone: 'string',
-        logo: 'string',
-        isAdmin: 'boolean',
-        isSubscribed: 'boolean',
-        isActivated: 'boolean',
-        favorite: 'Array of favorite products ids',
-        createdAt: 'Date',
-        updatedAt: 'Date',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Get user by id',
-  {
-    action: 'Get user by id',
-    method: 'GET',
-    path: '/admin/user/:id',
-    access: 'admin',
-    requiredValues: {
-      id: 'as query parameter /admin/user/:id',
-    },
-    successResponse: {
-      data: {
-        _id: 'string',
-        email: 'string',
-        name: 'string',
-        phone: 'string',
-        logo: 'string',
-        isAdmin: 'boolean',
-        isSubscribed: 'boolean',
-        isActivated: 'boolean',
-        favorite: 'Array of favorite products ids',
-        createdAt: 'Date',
-        updatedAt: 'Date',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Delete user by admin',
-  {
-    action: 'Delete user by admin',
-    method: 'DELETE',
-    path: '/admin/user/:id',
-    access: 'admin',
-    requiredValues: {
-      id: 'valid mongoDB _id /admin/user/:id',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Get all orders by admin',
-  {
-    action: 'Get all orders by admin',
-    method: 'GET',
-    path: '/admin/order/:page/:limit',
-    access: 'admin',
-    requiredValues: {
-      page: 'as request parameter /admin/survey/:page/:limit',
-      limit: 'as request parameter /admin/survey/:page/:limit',
-    },
-    successResponse: {
-      data: {
-        shippingAddress: {
-          address: 'string',
-          city: 'string',
-          postalCode: 'number',
-          country: 'string',
-        },
-        _id: 'string',
-        user: 'string',
-        orderItems: [
-          {
-            name: 'string',
-            quantity: 'number',
-            image: 'string',
-            price: 'number',
-            product: 'string',
-            _id: 'string',
-          },
-        ],
-        paymentMethod: 'string',
-        itemsPrice: 'number',
-        taxPrice: 'number',
-        shippingPrice: 'number',
-        totalPrice: 'number',
-        isPaid: 'boolean',
-        isDelivered: 'boolean',
-      },
-      totalPages: 'number',
-      next: {
-        page: 'number',
-        limit: 'number',
-      },
-      prev: {
-        page: 'number',
-        limit: 'number',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - orders not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: 'Returns an array of order objects',
-  },
+const apiDocumentation = [
+  '***** PUBLIC',
   'Get all products',
   {
     action: 'Get all products',
@@ -468,9 +13,9 @@ const routes = [
     path: '/api/product/:page/:limit',
     access: 'public',
     requiredValues: {
-      page: 'as request parameter /admin/survey/:page/:limit',
-      limit: 'as request parameter /admin/survey/:page/:limit',
-      keyword: 'as optional query parameter /admin/survey/:page/:limit',
+      page: 'as route parameter',
+      limit: 'as route parameter',
+      keyword: 'as optional query parameter',
     },
     successResponse: {
       data: [
@@ -524,15 +69,799 @@ const routes = [
     },
     comment: 'returns an array of products',
   },
+  'Get single product by id',
+  {
+    action: 'Get single product by id',
+    method: 'GET',
+    path: '/api/product/:id',
+    access: 'public',
+    requiredValues: {
+      id: 'product id as route parameter',
+    },
+    successResponse: {
+      data: {
+        _id: 'string',
+        user: 'string',
+        name: 'string',
+        brand: 'string',
+        image: 'string',
+        category: 'string',
+        description: 'string',
+        rating: 'number',
+        numReviews: 'number',
+        price: 'number',
+        countInStock: 'number',
+        countInFavorite: 'number',
+        countViewed: 'number',
+        isNewProduct: 'boolean',
+        isDirty: 'boolean',
+        reviews: [
+          {
+            rating: 'number',
+            comment: 'string',
+            user: 'string',
+            _id: 'string',
+            createdAt: 'date',
+            updatedAt: 'date',
+          },
+        ],
+        createdAt: 'date',
+        updatedAt: 'date',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - not found, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'returns an array of products',
+  },
+  'Get own orders by user',
+  {
+    action: 'Get own orders by user',
+    method: 'GET',
+    path: '/api/order/myorders/:page/:limit',
+    access: 'private',
+    requiredValues: {
+      page: 'as query parameter',
+      limit: 'as query parameter',
+    },
+    successResponse: {
+      data: {
+        items: [
+          {
+            _id: 'string',
+            user: 'string',
+            paymentMethod: 'string',
+            itemsPrice: 'number',
+            taxPrice: 'number',
+            shippingPrice: 'number',
+            totalPrice: 'number',
+            isDirty: 'boolean',
+            isPaid: 'boolean',
+            isDelivered: 'boolean',
+            createdAt: 'date',
+            updatedAt: 'date',
+            paidAt: 'date',
+            shippingAddress: {
+              address: 'string',
+              city: 'string',
+              postalCode: 'string',
+              country: 'string',
+            },
+            paymentResult: {
+              id: '',
+              status: '',
+              updateTime: '',
+              emailAddress: '',
+            },
+            orderItems: [
+              {
+                name: 'string',
+                quantity: 'number',
+                image: 'string',
+                price: 'number',
+                product: 'string',
+                _id: 'string',
+              },
+            ],
+          },
+        ],
+      },
+      totalPages: 'number',
+      next: {
+        page: 'number',
+        limit: 'number',
+      },
+      prev: {
+        page: 'number',
+        limit: 'number',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - not found, 401 - not authorized, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Set order to paid automatically after payment',
+  {
+    action: 'Set order to paid after payment',
+    method: 'POST',
+    path: '/api/order/:orderId/pay',
+    access: 'private',
+    requiredValues: {
+      orderId: 'order id as route parameter',
+      id: 'comes from paypal',
+      status: 'comes from paypal',
+      update_time: 'string',
+      payer: {
+        email_address: 'email that customer used to pay with paypal',
+      },
+    },
+    successResponse: {
+      data: {},
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - order not found, 401 - not admin, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Create product review',
+  {
+    action: 'Create product review',
+    method: 'POST',
+    path: '/api/product/:id/review',
+    access: 'private',
+    requiredValues: {
+      id: 'product id as route parameter',
+      rating: 'number',
+      comment: 'string',
+    },
+    successResponse: {
+      data: null,
+      status: 201,
+    },
+    errorResponse: {
+      status: '400 - bad request, 401 - not authorized, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Add to favorites',
+  {
+    action: 'Add to favorites',
+    method: 'POST',
+    path: '/api/user/favorite/:id',
+    access: 'public',
+    requiredValues: {
+      id: 'product id as route parameter',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: '400; 401; 404; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Remove from favorites',
+  {
+    action: 'Remove from favorites',
+    method: 'DELETE',
+    path: '/api/user/favorite/:id',
+    access: 'public',
+    requiredValues: {
+      id: 'product id as route parameter',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: '400; 401; 404; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
+  {
+    action: 'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
+    method: 'GET',
+    path: '/api/subscribe',
+    access: 'public',
+    requiredValues: {
+      email: 'valid email',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: '400; 401; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment:
+      'Unsubscribe link should be in survey emails and in profile. This option will remove only from allSubscribersEmailList. To remove from allUsersEmailList use specific method.',
+  },
+  'Unsubscribe and remove from allSubscribersEmailList',
+  {
+    action: 'Unsubscribe and remove from allSubscribersEmailList',
+    method: 'DELETE',
+    path: '/api/subscribe',
+    access: 'public',
+    requiredValues: {
+      email: 'valid email',
+    },
+    successResponse: {
+      data: null,
+      status: 201,
+    },
+    errorResponse: {
+      status: '400; 401; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Unsubscribe and remove from allSubscribersEmailList with link from survey',
+  {
+    action: 'Unsubscribe and remove from allSubscribersEmailList with link from survey',
+    method: 'GET',
+    path: '/api/survey/unsubscribe/:email',
+    access: 'public',
+    requiredValues: {
+      email: 'as query parameter',
+    },
+    successResponse: {
+      data: null,
+      status: 201,
+    },
+    errorResponse: {
+      status: '400; 401; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment:
+      'Unsubscribe link should be in survey emails and in profile. This option will remove only from allSubscribersEmailList. To remove from allUsersEmailList use specific method.',
+  },
+  'Get PAYPAL client id',
+  {
+    action: 'Get PAYPAL client id',
+    method: 'GET',
+    path: '/api/config/paypal',
+    access: 'public',
+    requiredValues: null,
+    successResponse: {
+      data: 'string',
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - not found, 401 - not authorized, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Login',
+  {
+    action: 'Login',
+    method: 'POST',
+    path: '/api/login',
+    access: 'public',
+    requiredValues: {
+      email: 'string',
+      password: 'string',
+    },
+    successResponse: {
+      data: {
+        accessToken: 'string',
+        _id: 'string',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'Required valid email and password between 3 and 33 characters in body',
+  },
+  'Registration',
+  {
+    action: 'Registration',
+    method: 'POST',
+    path: '/api/registration',
+    access: 'public',
+    requiredValues: {
+      email: 'string',
+      password: 'string',
+    },
+    successResponse: {
+      data: null,
+      status: 201,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'Required valid email and password between 3 and 33 characters in body',
+  },
+  'Logout',
+  {
+    action: 'Logout',
+    method: 'POST',
+    path: '/api/logout',
+    access: 'public',
+    requiredValues: null,
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Google OAUTH redirect',
+  {
+    action: 'Redirect to Google authentication',
+    method: 'GET',
+    path: '/api/auth/google/redirect',
+    access: 'public',
+    requiredValues: null,
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Google OAUTH',
+  {
+    action: 'Login / Register with google',
+    method: 'GET',
+    path: '/api/auth/google',
+    access: 'public',
+    requiredValues: null,
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'If success redirects to main page',
+  },
+  'Activate account after registration',
+  {
+    action: 'Activate account after registration',
+    method: 'GET',
+    path: '/api/activate/:token',
+    access: 'public',
+    requiredValues: {
+      token: 'token from link that has been sent to users email as route parameter',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'If success redirects to main page',
+  },
+  'Send a link to recover a password',
+  {
+    action: 'Send a link to recover a password',
+    method: 'POST',
+    path: '/api/recovery',
+    access: 'public',
+    requiredValues: {
+      email: 'string',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Set new password',
+  {
+    action: 'Set new password',
+    method: 'PUT',
+    path: '/api/recovery',
+    access: 'public',
+    requiredValues: {
+      password: 'string',
+      confirm: 'string',
+      passwordResetToken: 'token that has been sent to users email',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+
+  '****ADMIN',
+  'Get all users by admin',
+  {
+    action: 'Get all users by admin',
+    method: 'GET',
+    path: '/api/admin/user/:page/:limit',
+    access: 'admin',
+    requiredValues: {
+      page: 'as route parameter',
+      limit: 'as route parameter',
+    },
+    successResponse: {
+      data: {
+        _id: 'string',
+        name: 'string',
+        email: 'string',
+        logo: 'string',
+        phone: 'string',
+        isAdmin: 'boolean',
+        isSubscribed: 'boolean',
+        isActivated: 'boolean',
+        favorite: 'array',
+        createdAt: 'date',
+        updatedAt: 'date',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - users not found, 401 - not admin, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'Returns an array of users',
+  },
+  'Set user admin status',
+  {
+    action: 'Set user admin status',
+    method: 'PUT',
+    path: '/api/admin/user/:id',
+    access: 'admin',
+    requiredValues: {
+      id: 'user id as route parameter',
+      isAdmin: 'boolean',
+    },
+    successResponse: {
+      data: {
+        _id: 'string',
+        email: 'string',
+        name: 'string',
+        phone: 'string',
+        logo: 'string',
+        isAdmin: 'boolean',
+        isSubscribed: 'boolean',
+        isActivated: 'boolean',
+        favorite: 'Array of favorite products ids',
+        createdAt: 'Date',
+        updatedAt: 'Date',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Get user by admin',
+  {
+    action: 'Get user by id',
+    method: 'GET',
+    path: '/api/admin/user/:id',
+    access: 'admin',
+    requiredValues: {
+      id: 'user id as route parameter',
+    },
+    successResponse: {
+      data: {
+        _id: 'string',
+        email: 'string',
+        name: 'string',
+        phone: 'string',
+        logo: 'string',
+        isAdmin: 'boolean',
+        isSubscribed: 'boolean',
+        isActivated: 'boolean',
+        favorite: 'Array of favorite products ids',
+        createdAt: 'Date',
+        updatedAt: 'Date',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Delete user by admin',
+  {
+    action: 'Delete user by admin',
+    method: 'DELETE',
+    path: '/api/admin/user/:id',
+    access: 'admin',
+    requiredValues: {
+      id: 'user id as route parameter',
+    },
+    successResponse: {
+      data: null,
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - user not found, 401 - not admin, 500 - server error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Get all orders by admin',
+  {
+    action: 'Get all orders by admin',
+    method: 'GET',
+    path: '/api/admin/order/:page/:limit',
+    access: 'admin',
+    requiredValues: {
+      page: 'as route parameter',
+      limit: 'as route parameter',
+    },
+    successResponse: {
+      data: {
+        _id: 'string',
+        user: 'string',
+        paymentMethod: 'string',
+        itemsPrice: 'number',
+        taxPrice: 'number',
+        shippingPrice: 'number',
+        totalPrice: 'number',
+        isPaid: 'boolean',
+        isDelivered: 'boolean',
+        shippingAddress: {
+          address: 'string',
+          city: 'string',
+          postalCode: 'number',
+          country: 'string',
+        },
+        orderItems: [
+          {
+            name: 'string',
+            quantity: 'number',
+            image: 'string',
+            price: 'number',
+            product: 'string',
+            _id: 'string',
+          },
+        ],
+      },
+      totalPages: 'number',
+      next: {
+        page: 'number',
+        limit: 'number',
+      },
+      prev: {
+        page: 'number',
+        limit: 'number',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - orders not found, 401 - not admin, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: 'Returns an array of order objects',
+  },
   'Get all surveys by admin',
   {
     action: 'Get all surveys by admin',
     method: 'GET',
-    path: '/admin/survey/:page/:limit',
+    path: '/api/admin/survey/:page/:limit',
     access: 'admin',
     requiredValues: {
-      page: 'as request parameter',
-      limit: 'as request parameter',
+      page: 'as route parameter',
+      limit: 'as route parameter',
     },
     successResponse: {
       data: {
@@ -620,96 +949,19 @@ const routes = [
     },
     comment: '',
   },
-  'Get own orders',
+  'Get order by admin',
   {
-    action: 'Get own orders',
-    method: 'GET',
-    path: '/api/order/myorders/:page/:limit',
-    access: 'private',
-    requiredValues: {
-      page: 'as query parameter /admin/survey/:page/:limit',
-      limit: 'as query parameter /admin/survey/:page/:limit',
-    },
-    successResponse: {
-      data: {
-        items: [
-          {
-            _id: 'string',
-            user: 'string',
-            paymentMethod: 'string',
-            itemsPrice: 'number',
-            taxPrice: 'number',
-            shippingPrice: 'number',
-            totalPrice: 'number',
-            isDirty: 'boolean',
-            isPaid: 'boolean',
-            isDelivered: 'boolean',
-            createdAt: 'date',
-            updatedAt: 'date',
-            paidAt: 'date',
-            shippingAddress: {
-              address: 'string',
-              city: 'string',
-              postalCode: 'string',
-              country: 'string',
-            },
-            paymentResult: {
-              id: '',
-              status: '',
-              updateTime: '',
-              emailAddress: '',
-            },
-            orderItems: [
-              {
-                name: 'string',
-                quantity: 'number',
-                image: 'string',
-                price: 'number',
-                product: 'string',
-                _id: 'string',
-              },
-            ],
-          },
-        ],
-      },
-      totalPages: 'number',
-      next: {
-        page: 'number',
-        limit: 'number',
-      },
-      prev: {
-        page: 'number',
-        limit: 'number',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Get order by id - ADMIN',
-  {
-    action: 'Get order by id',
+    action: 'Get order by admin',
     method: 'GET',
     path: '/api/order/:id',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter',
+      id: 'as route parameter',
     },
     successResponse: {
       data: {
-        _id: 'string',
-        user: 'string',
+        _id: 'order id',
+        user: 'user id that has created order',
         paymentMethod: 'string',
         itemsPrice: 'number',
         taxPrice: 'number',
@@ -769,15 +1021,14 @@ const routes = [
     },
     comment: '',
   },
-
   'Set order to paid manually by admin',
   {
     action: 'Set order to paid manually by admin',
     method: 'POST',
-    path: '/admin/order/:id/pay',
+    path: '/api/admin/order/:id/pay',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/order/:id/pay',
+      id: 'order id as route parameter',
     },
     successResponse: {
       data: null,
@@ -801,10 +1052,10 @@ const routes = [
   {
     action: 'Set order to NOT paid manually by admin',
     method: 'DELETE',
-    path: '/admin/order/:id/pay',
+    path: '/api/admin/order/:id/pay',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/order/:id/pay',
+      id: 'order id as route parameter',
     },
     successResponse: {
       data: null,
@@ -828,10 +1079,10 @@ const routes = [
   {
     action: 'Set order to delivered manually by admin',
     method: 'POST',
-    path: '/admin/order/:id/delivered',
+    path: '/api/admin/order/:id/delivered',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/order/:id/delivered',
+      id: 'order id as route parameter',
     },
     successResponse: {
       data: null,
@@ -855,10 +1106,10 @@ const routes = [
   {
     action: 'Set order to NOT delivered manually by admin',
     method: 'POST',
-    path: '/admin/order/:id/delivered',
+    path: '/api/admin/order/:id/delivered',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/order/:id/delivered',
+      id: 'order id as route parameter',
     },
     successResponse: {
       data: null,
@@ -882,7 +1133,7 @@ const routes = [
   {
     action: 'Create new product',
     method: 'POST',
-    path: '/admin/product',
+    path: '/api/admin/product',
     access: 'admin',
     requiredValues: {
       name: 'string',
@@ -916,10 +1167,10 @@ const routes = [
   {
     action: 'Update product',
     method: 'PUT',
-    path: '/admin/product/:id',
+    path: '/api/admin/product/:id',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/product/:id',
+      id: 'as route parameter',
       name: 'string',
       price: 'string',
       image: 'string',
@@ -960,10 +1211,10 @@ const routes = [
   {
     action: 'Delete product',
     method: 'DELETE',
-    path: '/admin/product/:id',
+    path: '/api/admin/product/:id',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter /admin/product/:id',
+      id: 'as route parameter',
     },
     successResponse: {
       data: null,
@@ -987,7 +1238,7 @@ const routes = [
   {
     action: 'Get statistic',
     method: 'GET',
-    path: '/admin/statistic',
+    path: '/api/admin/statistic',
     access: 'admin',
     requiredValues: null,
     successResponse: {
@@ -1027,7 +1278,7 @@ const routes = [
   {
     action: 'Remove email from lists and unsubscribe',
     method: 'PUT',
-    path: '/admin/statistic/email',
+    path: '/api/admin/statistic/email',
     access: 'admin',
     requiredValues: null,
     successResponse: {
@@ -1055,7 +1306,7 @@ const routes = [
     path: '/api/admin/survey/:id',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter',
+      id: 'as route parameter',
     },
     successResponse: {
       data: {
@@ -1092,7 +1343,7 @@ const routes = [
     path: '/api/admin/survey/:id',
     access: 'admin',
     requiredValues: {
-      id: 'as query parameter',
+      id: 'as route parameter',
     },
     successResponse: {
       data: null,
@@ -1130,6 +1381,38 @@ const routes = [
     },
     errorResponse: {
       status: '400; 401; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+
+  '***** PRIVATE',
+  'Issues new pair of access and refresh token',
+  {
+    action: 'Issues new pair of access and refresh token',
+    method: 'GET',
+    path: '/api/refresh',
+    access: 'public',
+    requiredValues: {
+      refreshToken: 'refreshToken in cookies',
+    },
+    successResponse: {
+      data: {
+        accessToken: 'new accessToken as string',
+        _id: 'users _id as string',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
       error: 'Error message',
       errors: [
         {
@@ -1221,158 +1504,11 @@ const routes = [
     },
     comment: '',
   },
-  'Add to favorites',
-  {
-    action: 'Add to favorites',
-    method: 'POST',
-    path: '/api/user/favorite/:id',
-    access: 'private',
-    requiredValues: {
-      id: 'product id as query parameter',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: '400; 401; 404; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Remove from favorites',
-  {
-    action: 'Remove from favorites',
-    method: 'DELETE',
-    path: '/api/user/favorite/:id',
-    access: 'private',
-    requiredValues: {
-      id: 'product id as query parameter',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: '400; 401; 404; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
-  {
-    action: 'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
-    method: 'GET',
-    path: '/api/subscribe',
-    access: 'public',
-    requiredValues: {
-      email: 'valid email',
-    },
-    successResponse: {
-      data: null,
-      status: 200,
-    },
-    errorResponse: {
-      status: '400; 401; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment:
-      'Unsubscribe link should be in survey emails and in profile. This option will remove only from allSubscribersEmailList. To remove from allUsersEmailList use specific method.',
-  },
-  'Unsubscribe and remove from allSubscribersEmailList',
-  {
-    action: 'Unsubscribe and remove from allSubscribersEmailList',
-    method: 'GET',
-    path: '/api/survey/unsubscribe/:email',
-    access: 'public',
-    requiredValues: {
-      email: 'as query parameter',
-    },
-    successResponse: {
-      data: null,
-      status: 201,
-    },
-    errorResponse: {
-      status: '400; 401; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment:
-      'Unsubscribe link should be in survey emails and in profile. This option will remove only from allSubscribersEmailList. To remove from allUsersEmailList use specific method.',
-  },
-  'Unsubscribe and remove from allSubscribersEmailList with link from survey',
-  {
-    action: 'Unsubscribe and remove from allSubscribersEmailList with link from survey',
-    method: 'GET',
-    path: '/api/survey/unsubscribe/:email',
-    access: 'public',
-    requiredValues: {
-      email: 'as query parameter',
-    },
-    successResponse: {
-      data: null,
-      status: 201,
-    },
-    errorResponse: {
-      status: '400; 401; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment:
-      'Unsubscribe link should be in survey emails and in profile. This option will remove only from allSubscribersEmailList. To remove from allUsersEmailList use specific method.',
-  },
-]
-
-const models = [
-  {
-    modelName: '',
-  },
 ]
 
 export async function getApiInfo(req: Request, res: Response, next: NextFunction) {
   try {
-    return res.status(200).json({
-      routes,
-      models,
-    })
+    return res.status(200).json(apiDocumentation)
   } catch (error) {
     return next(error.message)
   }
