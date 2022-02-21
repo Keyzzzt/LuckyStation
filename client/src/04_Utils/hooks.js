@@ -31,16 +31,16 @@ export function useAutoFetch(query, page) {
         q: query,
         page,
       },
-      cancelToken: new axios.CancelToken((c) => (cancel = c)),
+      cancelToken: new axios.CancelToken(c => (cancel = c)),
     })
-      .then((res) => {
-        setData((prev) => {
-          return [...new Set([...prev, ...res.data.docs.map((book) => book.title)])]
+      .then(res => {
+        setData(prev => {
+          return [...new Set([...prev, ...res.data.docs.map(book => book.title)])]
         })
         setHasMore(res.data.docs.length > 0)
         setLoading(false)
       })
-      .catch((e) => {
+      .catch(e => {
         if (axios.isCancel(e)) return
         setError(true)
       })
@@ -130,7 +130,7 @@ export const useSelectByFilter = (items, filter) => {
 export const useSelectByFilterAndQuery = (items, filter, query) => {
   const sortedItems = useSelectByFilter(items, filter)
   const sortedAndSearchedItems = useMemo(() => {
-    return sortedItems.filter((item) => item.name.toLowerCase().includes(query.toLowerCase()))
+    return sortedItems.filter(item => item.name.toLowerCase().includes(query.toLowerCase()))
   }, [query, sortedItems])
   return sortedAndSearchedItems
 }
@@ -141,7 +141,7 @@ export const useSelectByFilterAndQuery = (items, filter, query) => {
  * не нужно и обнулять ошибку в глобальном state
  */
 // Создаем хук
-export const useFetch = (callback) => {
+export const useFetch = callback => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = ['']
   const fetching = async (...args) => {
@@ -183,7 +183,7 @@ export const useInput = (initialValue, validations) => {
   const [isDirty, setIsDirty] = useState(false)
   const valid = useValidation(value, validations)
 
-  const onChange = (e) => {
+  const onChange = e => {
     setValue(e.target.value)
   }
   const onBlur = () => {

@@ -5,9 +5,11 @@ import { ArrowDownSVG } from '../../../02_Chunks/svg/ArrowdownSVG'
 import { ChartContainer } from '../ChartContainer/ChartContainer'
 
 export const Earnings: FC = () => {
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
-  const fill = config.colorTheme === 'light' ? '#929292' : '#fff'
+  const { colorTheme } = useTypedSelector(state => state)
+  //@ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  //@ts-ignore
+  const fill = colorTheme === 'light' ? '#929292' : '#fff'
 
   // useIsAdminRedirect()
 

@@ -60,6 +60,9 @@ export const API = {
     },
   },
   admin: {
+    getApiInfo: async () => {
+      return $api.get(`/apiinfo`)
+    },
     getUser: async (userId: string): Promise<AxiosResponse<User>> => {
       return $api.get<User>(`admin/user/${userId}`)
     },

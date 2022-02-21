@@ -1,22 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
 
+// Colors
+$color--dark: #181a1b;
+$color--grey: #494f52;
+$color--light: #e8e6e3;
+$color--golden: #81786a;
+$color--green: #226057;
+$color--error: #a02718;
+
+// Border radius
+$bRadius10: 10px;
+$bRadius5: 5px;
+
+// spacing
+$spacing-sm: 12px;
+$spacing-md: 24px;
+$spacing-lg: 32px;
+$spacing-xl: 64px;
+
+// Header
+$headerHeight: 120px;
+
+$letter-spacing: 2px;
+
+// To remove
 $main: #09c;
 $hover: #f2994a;
 $light: #fff;
 $grey: #c2c2c2;
-$dark: #000;
 $error: #eb5757;
 $success: #33c863;
-
-$bRadius10: 10px;
-$bRadius5: 5px;
 
 $fz1comma2: 1.2rem;
 $fz1: 1rem;
 $fz2: 2rem;
 $fz3: 3rem;
 
-$fw600: 600;
+$fw100: 100;
+$fw400: 400;
+$fw700: 700;
 
 $m10: 10px;
 $m20: 20px;

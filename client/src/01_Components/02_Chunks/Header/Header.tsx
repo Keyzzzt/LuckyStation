@@ -7,6 +7,7 @@ import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { actions as myOrdersActions } from '../../../03_Reducers/user/myOrdersReducer'
 import { actions as orderInfoActions } from '../../../03_Reducers/order/orderInfoReducer'
 import { Search } from '../Search/Search'
+import { TopBanner } from '../Banners/Banners'
 
 interface Props {
   isAuth: boolean
@@ -20,7 +21,7 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
   const size = useWindowSize()
 
   useEffect(() => {
-    if (size.width! > 768 && menuOpen) {
+    if (size.width! > 992 && menuOpen) {
       setMenuOpen(false)
     }
   }, [size, menuOpen])
@@ -38,56 +39,93 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
     //TODO: Здесь нужно сбросить все приватные данные
   }
   return (
-    <header className={styles.header}>
-      <div className={styles.header__content}>
-        <Link to="/" className={styles.header__content__logo}>
-          LOGO
-        </Link>
+    <>
+      <TopBanner placeholder="Click to toggle color theme..." />
+      <header className={styles.header}>
+        <div className={styles.header__content}>
+          <div className={styles.logo}>
+            <Link to="/" className={styles.logo}>
+              Lucky Station
+              <div className={styles.logoTitle}>fullstack web studio</div>
+            </Link>
+          </div>
 
-        <nav className={`${styles.header__content__nav} ${menuOpen && size.width! < 768 ? styles.isMenu : ''}`}>
-          <ul>
-            <li>
-              <Search />
-            </li>
-            <li>
-              <Link to="/" onClick={() => setMenuOpen(false)}>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/cart" onClick={() => setMenuOpen(false)}>
-                <i className="fas fa-shopping-cart"></i>
-                Cart
-              </Link>
-            </li>
-            {isAuth && <li onClick={logoutHandler}>Logout</li>}
-            {isAuth && (
+          <nav className={`${styles.menu} ${menuOpen && size.width! < 992 ? styles.isMenu : ''}`}>
+            <ul>
               <li>
-                <Link to="/profile">Profile</Link>
-              </li>
-            )}
-            {!isAuth && (
-              <li>
-                <Link to="/login" onClick={() => setMenuOpen(false)}>
-                  Login
+                <Link to="/products" onClick={() => setMenuOpen(false)}>
+                  PRODUCTS
                 </Link>
               </li>
+              <li>
+                <Link to="/services" onClick={() => setMenuOpen(false)}>
+                  SERVICES
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" onClick={() => setMenuOpen(false)}>
+                  ABOUT
+                </Link>
+              </li>
+              <li>
+                <Link to="/help" onClick={() => setMenuOpen(false)}>
+                  HELP
+                </Link>
+              </li>
+            </ul>
+            <ul>
+              <li>
+                <a href="#">
+                  <i className="fa-solid fa-magnifying-glass" />
+                </a>
+              </li>
+
+              <li>
+                <Link to="/cart" onClick={() => setMenuOpen(false)}>
+                  <i className="fas fa-shopping-cart" />
+                </Link>
+              </li>
+              {isAuth && (
+                <li onClick={logoutHandler}>
+                  <Link to="/cart" onClick={() => setMenuOpen(false)}>
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                  </Link>
+                </li>
+              )}
+              {isAuth && !isAdmin && (
+                <li>
+                  <Link to="/profile">Profile</Link>
+                </li>
+              )}
+              {!isAuth && (
+                <li>
+                  <Link to="/login" onClick={() => setMenuOpen(false)}>
+                    <i className="fa-solid fa-arrow-right-to-bracket"></i>
+                  </Link>
+                </li>
+              )}
+              {isAdmin && (
+                <li className="dashboard" onClick={dashboardHandler}>
+                  <Link to="/dashboard" onClick={() => setMenuOpen(false)}>
+                    <i className="fa-solid fa-gears"></i>
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </nav>
+          <div className={styles.header__content__toggle}>
+            {menuOpen ? (
+              <div className={styles.temp1} onClick={() => setMenuOpen(false)}>
+                <i className="fa-solid fa-xmark" />
+              </div>
+            ) : (
+              <div onClick={() => setMenuOpen(true)} className={styles.temp2}>
+                <i className="fa-solid fa-bars"></i>
+              </div>
             )}
-          </ul>
-          {isAdmin && <button onClick={dashboardHandler}>Dashboard</button>}
-        </nav>
-        <div className={styles.header__content__toggle}>
-          {menuOpen ? (
-            <div className={styles.temp1} onClick={() => setMenuOpen(false)}>
-              Close
-            </div>
-          ) : (
-            <div onClick={() => setMenuOpen(true)} className={styles.temp2}>
-              Open
-            </div>
-          )}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   )
 }

@@ -1,0 +1,42 @@
+@import './../../../../02_Styles/newVariables.scss';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  padding-top: 20px;
+  background-color: $grey;
+  & .item {
+    margin-bottom: 10px;
+    & .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      cursor: pointer;
+    }
+  }
+
+  & .admin {
+    background-color: #415171;
+  }
+  & .private {
+    background-color: #74959a;
+  }
+  & .public {
+    background-color: #f1e0ac;
+  }
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+.content.show {
+  height: auto;
+  max-height: 3000px;
+  transition: all 0.5s ease;
+}

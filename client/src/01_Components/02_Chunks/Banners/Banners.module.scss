@@ -1,0 +1,16 @@
+@import '../../../02_Styles/newVariables.scss';
+
+.topBanner {
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+}
+.light_mode {
+  background-color: $color--light !important;
+  color: $color--dark !important;
+}
+.dark_mode {
+  background-color: $color--grey !important;
+  color: $color--light !important;
+}

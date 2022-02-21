@@ -29,9 +29,10 @@ const data = {
 }
 
 export const ChartContainer: FC = () => {
-  const { config } = useTypedSelector((state) => state)
+  const { colorTheme } = useTypedSelector(state => state)
   const chartRef = useRef()
-  // const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     const canvasId = document.getElementById('myCanvas')
@@ -60,11 +61,13 @@ export const ChartContainer: FC = () => {
             grid: {
               drawBorder: false,
               borderDash: [6],
-              color: config.colorTheme === 'light' ? '#dddfe5' : '#26323f',
+              // @ts-ignore
+              color: colorTheme === 'light' ? '#dddfe5' : '#26323f',
               border: false,
             },
             ticks: {
-              color: config.colorTheme === 'light' ? '#929292' : '#fff',
+              // @ts-ignore
+              color: colorTheme === 'light' ? '#929292' : '#fff',
               font: {
                 family: "'Roboto', sans-serif",
                 size: '16px',
@@ -76,7 +79,7 @@ export const ChartContainer: FC = () => {
     })
     //@ts-ignore
     return () => chartRef.current.destroy()
-  }, [config.colorTheme])
+  }, [colorTheme])
 
   return <canvas className={styles.container} id="myCanvas"></canvas>
 }

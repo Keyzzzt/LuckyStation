@@ -9,12 +9,13 @@ import { Link } from 'react-router-dom'
 
 export const UsersList: FC = () => {
   const dispatch = useDispatch()
-  const { config } = useTypedSelector((state) => state)
-  const { users, fail } = useTypedSelector((state) => state.userList)
-  const { success } = useTypedSelector((state) => {
+  const { colorTheme } = useTypedSelector(state => state)
+  const { users, fail } = useTypedSelector(state => state.userList)
+  const { success } = useTypedSelector(state => {
     return state.userDelete
   })
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     dispatch(usersListThunk(1, 10))
@@ -29,7 +30,7 @@ export const UsersList: FC = () => {
         {!users ? (
           <Loader />
         ) : (
-          users.map((user) => (
+          users.map(user => (
             <div key={user._id} className={styles.list__item}>
               <div className={styles.info}>
                 <Link to={`/user/${user._id}/edit`} className={`${styles.name} ${themeClass}`}>

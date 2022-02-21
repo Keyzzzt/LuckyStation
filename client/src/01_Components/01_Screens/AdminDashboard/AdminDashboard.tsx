@@ -14,15 +14,18 @@ import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
 import { useDispatch } from 'react-redux'
 import { CreateSurvey } from './Survey/CreateSurvey/CreateSurvey'
 import { useHistory } from 'react-router'
+import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
+import { images } from '../../../fakeData'
 
 export const AdminDashboard: FC = () => {
-  const { statistic } = useTypedSelector((state) => state.statistic)
+  const { statistic } = useTypedSelector(state => state.statistic)
   const dispatch = useDispatch()
   const history = useHistory()
 
   useScrollToTop()
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { colorTheme } = useTypedSelector(state => state)
+  //@ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     dispatch(statisticThunk())
@@ -34,10 +37,16 @@ export const AdminDashboard: FC = () => {
         <button onClick={() => history.push('/dashboard/users')}>Users list</button>
         <button onClick={() => history.push('/dashboard/products')}>Products list</button>
         <button onClick={() => history.push('/dashboard/orders')}>Orders list</button>
+        <button onClick={() => history.push('/dashboard/api')}>API</button>
+        <button onClick={() => history.push('/dashboard/slider')}>Slider</button>
         <div className={`${styles.dashboard}`}>
           <div className={`${styles.adminToolUnit}`}>
-            <CreateSurvey allEmails={statistic.allUsersEmailList} subscribedEmails={statistic.allSubscribersEmailList} />
+            <CreateSurvey
+              allEmails={statistic.allUsersEmailList}
+              subscribedEmails={statistic.allSubscribersEmailList}
+            />
             <RemoveEmailFromList />
+            <SingleProductPageSlider images={images} />
           </div>
         </div>
       </div>

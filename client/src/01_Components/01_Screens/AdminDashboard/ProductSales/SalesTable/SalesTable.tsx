@@ -55,8 +55,9 @@ const products = [
 ]
 
 export const SalesTable: FC = () => {
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { colorTheme } = useTypedSelector(state => state)
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (
     <table className={`${styles.table} ${themeClass}`}>
       <thead>

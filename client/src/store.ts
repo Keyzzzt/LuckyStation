@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import { cartReducer } from './03_Reducers/cart/cartReducer'
-import { configReducer } from './03_Reducers/configReducer'
+import { colorThemeReducer } from './03_Reducers/colorThemeReducer'
 import { orderCreateReducer } from './03_Reducers/order/orderCreateReducer'
 import { orderInfoReducer } from './03_Reducers/order/orderInfoReducer'
 import { orderListReducer } from './03_Reducers/order/orderListReducer'
@@ -27,6 +27,7 @@ import { createSurveyReducer } from './03_Reducers/admin/survey reducers/createS
 import { surveyListReducer } from './03_Reducers/admin/survey reducers/surveyListReducer'
 import { deleteSurveyReducer } from './03_Reducers/admin/survey reducers/deleteSurveyReducer'
 import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleSurveyReducer'
+import { apiReducer } from './03_Reducers/admin/apiReducer'
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -50,23 +51,30 @@ const rootReducer = combineReducers({
   orderManage: orderManageReducer,
   myOrders: myOrdersReducer,
   cart: cartReducer,
-  config: configReducer,
+  colorTheme: colorThemeReducer,
   statistic: statisticReducer,
   createSurvey: createSurveyReducer,
   surveyList: surveyListReducer,
   deleteSurvey: deleteSurveyReducer,
   singleSurvey: singleSurveyReducer,
+  api: apiReducer,
 })
 
 // @ts-ignore
 const cartItemsFromStorage = localStorage.getItem('cartItems') ? JSON.parse(localStorage.getItem('cartItems')) : []
-// @ts-ignore
-const shippingAddressFromStorage = localStorage.getItem('shippingAddress') ? JSON.parse(localStorage.getItem('shippingAddress')) : {}
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+  ? // @ts-ignore
+    JSON.parse(localStorage.getItem('shippingAddress'))
+  : {}
 
 // @ts-ignore
 const paymentMethodFromStorage = localStorage.getItem('paymentMethod') ? localStorage.getItem('paymentMethod') : ''
 const initialState = {
-  cart: { cartItems: cartItemsFromStorage, shippingAddress: shippingAddressFromStorage, paymentMethod: paymentMethodFromStorage },
+  cart: {
+    cartItems: cartItemsFromStorage,
+    shippingAddress: shippingAddressFromStorage,
+    paymentMethod: paymentMethodFromStorage,
+  },
 }
 
 // @ts-ignore

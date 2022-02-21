@@ -13,8 +13,9 @@ const totalCards = [
 ]
 
 export const Totals: FC = () => {
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { colorTheme } = useTypedSelector(state => state)
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (
     <div className={styles.totals}>
       {totalCards.map(({ id, title, total, icon }) => (

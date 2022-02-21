@@ -4,8 +4,9 @@ import styles from './ProductSales.module.scss'
 import { SalesTable } from './SalesTable/SalesTable'
 
 export const ProductSales: FC = () => {
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { colorTheme } = useTypedSelector(state => state)
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
   return (
     <div className={`${styles.productsales} ${themeClass}`}>
       <div className={styles.productsales__header}>

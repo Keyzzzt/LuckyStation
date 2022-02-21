@@ -1,17 +1,18 @@
 import styles from './DashboardHeader.module.scss'
 import { FC } from 'react'
-import { configThunk } from '../../../../03_Reducers/configReducer'
+import { configThunk } from '../../../../03_Reducers/colorThemeReducer'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { NotificationSVG } from '../../../02_Chunks/svg/NotificationSVG'
 import { SearchSVG } from '../../../02_Chunks/svg/SearchSVG'
 import { ToggleSwitch } from '../../../02_Chunks/ToggleSwitch/ToggleSwitch'
 
 export const DashboardHeader: FC = () => {
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-
-  const { config } = useTypedSelector((state) => state)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
-  const iconFill = config.colorTheme === 'light' ? '#929292' : '#fff'
+  const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { colorTheme } = useTypedSelector(state => state)
+  //@ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  // @ts-ignore
+  const iconFill = colorTheme === 'light' ? '#929292' : '#fff'
 
   return (
     <div className={styles.header}>

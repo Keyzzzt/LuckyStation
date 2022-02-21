@@ -7,7 +7,7 @@ import { SurveyPage } from './01_Components/01_Screens/AdminDashboard/Survey/Sur
 import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
 import { UsersList } from './01_Components/01_Screens/AdminDashboard/UsersList/UsersList'
 import { CartScreen } from './01_Components/01_Screens/CartScreen/CartScreen'
-import { Home } from './01_Components/01_Screens/Home/Home'
+import { LandingPage } from './01_Components/01_Screens/LandingPage/LandingPage'
 import { OrderScreen } from './01_Components/01_Screens/OrderScreen/OrderScreen'
 import { PaymentScreen } from './01_Components/01_Screens/PaymentScreen/PaymentScreen'
 import { PlaceOrderScreen } from './01_Components/01_Screens/PlaceOrderScreen/PlaceOrderScreen'
@@ -20,10 +20,12 @@ import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { RestorePassword } from './01_Components/02_Chunks/Auth/RestorePassword'
 import { ProductsList } from './01_Components/01_Screens/AdminDashboard/ProductsList/ProductsList'
 import { OrderList } from './01_Components/01_Screens/AdminDashboard/OrderList/OrderList'
+import { API } from './01_Components/01_Screens/AdminDashboard/API/API'
+import { SingleProductPageSlider } from './01_Components/02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
 
 export const publicRotes = [
   { path: '/restore/:token', component: RestorePassword },
-  { path: '/', component: Home, exact: true },
+  { path: '/', component: LandingPage, exact: true },
   { path: '/login', component: Login, exact: true },
   { path: '/ulbi', component: Ulbi, exact: true },
   { path: '/register', component: Register, exact: true },
@@ -49,4 +51,7 @@ export const adminRoutes = [
   { path: '/dashboard/users', component: UsersList, exact: true },
   { path: '/dashboard/products', component: ProductsList, exact: true },
   { path: '/dashboard/orders', component: OrderList, exact: true },
+  { path: '/dashboard/api', component: API, exact: true },
+  // todo REMOVE
+  { path: '/dashboard/slider', component: SingleProductPageSlider, exact: true },
 ]

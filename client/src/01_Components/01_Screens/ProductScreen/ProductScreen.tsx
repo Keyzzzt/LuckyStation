@@ -11,13 +11,17 @@ import { getRandom } from '../../../04_Utils/utils'
 import Loader from '../../02_Chunks/Loader/Loader'
 
 export const ProductScreen: FC = () => {
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { productInfo, fail } = useTypedSelector((state) => state.productInfo)
-  const { success: successReview, loading: loadingReview, fail: failReview } = useTypedSelector((state) => state.productReview)
+  const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { productInfo, fail } = useTypedSelector(state => state.productInfo)
+  const {
+    success: successReview,
+    loading: loadingReview,
+    fail: failReview,
+  } = useTypedSelector(state => state.productReview)
   const history = useHistory()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
-  const alreadyReviewed = productInfo?.reviews.find((review) => review.user === userInfo?._id)
+  const alreadyReviewed = productInfo?.reviews.find(review => review.user === userInfo?._id)
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
@@ -68,8 +72,8 @@ export const ProductScreen: FC = () => {
             </div>
             {productInfo.countInStock && productInfo.countInStock > 0 ? (
               <div className={styles.quantity}>
-                <select value={qty} onChange={(e) => setQty(Number(e.target.value))}>
-                  {[...Array(productInfo.countInStock).keys()].map((n) => (
+                <select value={qty} onChange={e => setQty(Number(e.target.value))}>
+                  {[...Array(productInfo.countInStock).keys()].map(n => (
                     <option key={getRandom()} value={n + 1}>
                       {n + 1}
                     </option>
@@ -93,7 +97,7 @@ export const ProductScreen: FC = () => {
             {productInfo.reviews.length === 0 ? (
               <div>No reviews</div>
             ) : (
-              productInfo.reviews.map((r) => (
+              productInfo.reviews.map(r => (
                 <div>
                   <div className={styles.review}>
                     <div>Rated: {r.rating}</div>
@@ -109,9 +113,9 @@ export const ProductScreen: FC = () => {
               <div>You have already reviewed this product with rating {alreadyReviewed.rating}</div>
             ) : (
               <form onSubmit={submitHandler} className={styles.reviewForm}>
-                <input onChange={(e) => setComment(e.target.value)} type="text" value={comment} />
+                <input onChange={e => setComment(e.target.value)} type="text" value={comment} />
                 <label htmlFor="rating">Rating</label>
-                <select onChange={(e) => setRating(Number(e.target.value))} id="rating" value={rating}>
+                <select onChange={e => setRating(Number(e.target.value))} id="rating" value={rating}>
                   <option value="0">0</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -119,7 +123,7 @@ export const ProductScreen: FC = () => {
                   <option value="4">4</option>
                   <option value="5">5</option>
                 </select>
-                <input onChange={(e) => setComment(e.target.value)} type="submit" value="Submit" />
+                <input onChange={e => setComment(e.target.value)} type="submit" value="Submit" />
               </form>
             )}
           </div>

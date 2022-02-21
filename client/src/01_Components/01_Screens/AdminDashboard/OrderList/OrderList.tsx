@@ -10,9 +10,10 @@ import { getRandom } from '../../../../04_Utils/utils'
 
 export const OrderList: FC = () => {
   const dispatch = useDispatch()
-  const { config } = useTypedSelector((state) => state)
-  const { orders, fail } = useTypedSelector((state) => state.orderList)
-  const themeClass = config.colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { colorTheme } = useTypedSelector(state => state)
+  const { orders, fail } = useTypedSelector(state => state.orderList)
+  // @ts-ignore
+  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     dispatch(orderListThunk(1, 100))
@@ -28,7 +29,7 @@ export const OrderList: FC = () => {
         {!orders ? (
           <Loader />
         ) : (
-          orders.map((order) => (
+          orders.map(order => (
             <div key={getRandom()} className={styles.list__item}>
               <div className={styles.info}>
                 <Link to={`/order/${order._id}/edit`} className={`${styles.name} ${themeClass}`}>

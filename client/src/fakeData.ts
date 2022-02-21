@@ -36,3 +36,18 @@ export const posts = [
     price: 229,
   },
 ]
+
+export const images = [
+  {
+    imageSrc: '/uploads/HammockDesert_1.jpg',
+    imageAlt: 'Hammock Desert',
+  },
+  {
+    imageSrc: '/uploads/HammockDesert_2.jpg',
+    imageAlt: 'Hammock Desert',
+  },
+  {
+    imageSrc: '/uploads/HammockDesert_3.jpg',
+    imageAlt: 'Hammock Desert',
+  },
+]

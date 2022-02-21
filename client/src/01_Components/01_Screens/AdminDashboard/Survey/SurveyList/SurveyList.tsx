@@ -10,8 +10,7 @@ import { Message } from '../../../../02_Chunks/Message/Message'
 export const SurveyList: FC = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const { config } = useTypedSelector((state) => state)
-  const { surveys, fail } = useTypedSelector((state) => state.surveyList)
+  const { surveys, fail } = useTypedSelector(state => state.surveyList)
 
   useEffect(() => {
     dispatch(surveyListThunk())
@@ -34,7 +33,7 @@ export const SurveyList: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {surveys.map((x) => (
+              {surveys.map(x => (
                 <tr key={x._id} onClick={() => history.push(`/survey/${x._id}`)}>
                   <td>{x.title}</td>
                   <td>{x.subject}</td>

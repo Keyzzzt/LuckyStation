@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Redirect, Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Header } from './01_Components/02_Chunks/Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
