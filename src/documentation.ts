@@ -6,6 +6,85 @@ import { NextFunction, Request, Response } from 'express'
 
 const apiDocumentation = [
   '***** PUBLIC',
+  'Issues new pair of access and refresh token',
+  {
+    action: 'Issues new pair of access and refresh token',
+    method: 'GET',
+    path: '/api/refresh',
+    access: 'public',
+    requiredValues: {
+      refreshToken: 'refreshToken in cookies',
+    },
+    successResponse: {
+      data: {
+        accessToken: 'new accessToken as string',
+        _id: 'users _id as string',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: 400,
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Create new order',
+  {
+    action: 'Create new order',
+    method: 'POST',
+    path: '/api/order',
+    access: 'public',
+    requiredValues: {
+      taxPrice: 'number',
+      shippingPrice: 'number',
+      totalPrice: 'number',
+      itemsPrice: 'number',
+      paymentMethod: 'string',
+      user: 'string',
+      orderItems: [
+        {
+          product: {
+            _id: 'string',
+          },
+          name: 'string',
+          quantity: 'number',
+          image: 'string',
+          price: '100',
+        },
+      ],
+      shippingAddress: {
+        address: 'string',
+        city: 'string',
+        postalCode: 'string',
+        country: 'string',
+      },
+    },
+    successResponse: {
+      data: 'created order id string',
+      status: 201,
+    },
+    errorResponse: {
+      status: '400; 401; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
   'Get all products',
   {
     action: 'Get all products',
@@ -124,145 +203,7 @@ const apiDocumentation = [
     },
     comment: 'returns an array of products',
   },
-  'Get own orders by user',
-  {
-    action: 'Get own orders by user',
-    method: 'GET',
-    path: '/api/order/myorders/:page/:limit',
-    access: 'private',
-    requiredValues: {
-      page: 'as query parameter',
-      limit: 'as query parameter',
-    },
-    successResponse: {
-      data: {
-        items: [
-          {
-            _id: 'string',
-            user: 'string',
-            paymentMethod: 'string',
-            itemsPrice: 'number',
-            taxPrice: 'number',
-            shippingPrice: 'number',
-            totalPrice: 'number',
-            isDirty: 'boolean',
-            isPaid: 'boolean',
-            isDelivered: 'boolean',
-            createdAt: 'date',
-            updatedAt: 'date',
-            paidAt: 'date',
-            shippingAddress: {
-              address: 'string',
-              city: 'string',
-              postalCode: 'string',
-              country: 'string',
-            },
-            paymentResult: {
-              id: '',
-              status: '',
-              updateTime: '',
-              emailAddress: '',
-            },
-            orderItems: [
-              {
-                name: 'string',
-                quantity: 'number',
-                image: 'string',
-                price: 'number',
-                product: 'string',
-                _id: 'string',
-              },
-            ],
-          },
-        ],
-      },
-      totalPages: 'number',
-      next: {
-        page: 'number',
-        limit: 'number',
-      },
-      prev: {
-        page: 'number',
-        limit: 'number',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Set order to paid automatically after payment',
-  {
-    action: 'Set order to paid after payment',
-    method: 'POST',
-    path: '/api/order/:orderId/pay',
-    access: 'private',
-    requiredValues: {
-      orderId: 'order id as route parameter',
-      id: 'comes from paypal',
-      status: 'comes from paypal',
-      update_time: 'string',
-      payer: {
-        email_address: 'email that customer used to pay with paypal',
-      },
-    },
-    successResponse: {
-      data: {},
-      status: 200,
-    },
-    errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
-  'Create product review',
-  {
-    action: 'Create product review',
-    method: 'POST',
-    path: '/api/product/:id/review',
-    access: 'private',
-    requiredValues: {
-      id: 'product id as route parameter',
-      rating: 'number',
-      comment: 'string',
-    },
-    successResponse: {
-      data: null,
-      status: 201,
-    },
-    errorResponse: {
-      status: '400 - bad request, 401 - not authorized, 500 - other error',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
+
   'Add to favorites',
   {
     action: 'Add to favorites',
@@ -900,55 +841,7 @@ const apiDocumentation = [
     },
     comment: 'Returns an array with survey objects',
   },
-  'Create new order',
-  {
-    action: 'Create new order',
-    method: 'POST',
-    path: '/api/order',
-    access: 'public',
-    requiredValues: {
-      taxPrice: 'number',
-      shippingPrice: 'number',
-      totalPrice: 'number',
-      itemsPrice: 'number',
-      paymentMethod: 'string',
-      user: 'string',
-      orderItems: [
-        {
-          product: {
-            _id: 'string',
-          },
-          name: 'string',
-          quantity: 'number',
-          image: 'string',
-          price: '100',
-        },
-      ],
-      shippingAddress: {
-        address: 'string',
-        city: 'string',
-        postalCode: 'string',
-        country: 'string',
-      },
-    },
-    successResponse: {
-      data: 'created order id string',
-      status: 201,
-    },
-    errorResponse: {
-      status: '400; 401; 500',
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
+
   'Get order by admin',
   {
     action: 'Get order by admin',
@@ -1395,36 +1288,7 @@ const apiDocumentation = [
   },
 
   '***** PRIVATE',
-  'Issues new pair of access and refresh token',
-  {
-    action: 'Issues new pair of access and refresh token',
-    method: 'GET',
-    path: '/api/refresh',
-    access: 'public',
-    requiredValues: {
-      refreshToken: 'refreshToken in cookies',
-    },
-    successResponse: {
-      data: {
-        accessToken: 'new accessToken as string',
-        _id: 'users _id as string',
-      },
-      status: 200,
-    },
-    errorResponse: {
-      status: 400,
-      error: 'Error message',
-      errors: [
-        {
-          value: 'string',
-          msg: 'string',
-          param: 'string',
-          location: 'string',
-        },
-      ],
-    },
-    comment: '',
-  },
+
   'Get own profile by user',
   {
     action: 'Get own profile by user',
@@ -1492,6 +1356,145 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '401; 404; 500',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Get own orders by user',
+  {
+    action: 'Get own orders by user',
+    method: 'GET',
+    path: '/api/order/myorders/:page/:limit',
+    access: 'private',
+    requiredValues: {
+      page: 'as query parameter',
+      limit: 'as query parameter',
+    },
+    successResponse: {
+      data: {
+        items: [
+          {
+            _id: 'string',
+            user: 'string',
+            paymentMethod: 'string',
+            itemsPrice: 'number',
+            taxPrice: 'number',
+            shippingPrice: 'number',
+            totalPrice: 'number',
+            isDirty: 'boolean',
+            isPaid: 'boolean',
+            isDelivered: 'boolean',
+            createdAt: 'date',
+            updatedAt: 'date',
+            paidAt: 'date',
+            shippingAddress: {
+              address: 'string',
+              city: 'string',
+              postalCode: 'string',
+              country: 'string',
+            },
+            paymentResult: {
+              id: '',
+              status: '',
+              updateTime: '',
+              emailAddress: '',
+            },
+            orderItems: [
+              {
+                name: 'string',
+                quantity: 'number',
+                image: 'string',
+                price: 'number',
+                product: 'string',
+                _id: 'string',
+              },
+            ],
+          },
+        ],
+      },
+      totalPages: 'number',
+      next: {
+        page: 'number',
+        limit: 'number',
+      },
+      prev: {
+        page: 'number',
+        limit: 'number',
+      },
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - not found, 401 - not authorized, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Set order to paid automatically after payment',
+  {
+    action: 'Set order to paid after payment',
+    method: 'POST',
+    path: '/api/order/:orderId/pay',
+    access: 'private',
+    requiredValues: {
+      orderId: 'order id as route parameter',
+      id: 'comes from paypal',
+      status: 'comes from paypal',
+      update_time: 'string',
+      payer: {
+        email_address: 'email that customer used to pay with paypal',
+      },
+    },
+    successResponse: {
+      data: {},
+      status: 200,
+    },
+    errorResponse: {
+      status: '404 - order not found, 401 - not admin, 500 - other error',
+      error: 'Error message',
+      errors: [
+        {
+          value: 'string',
+          msg: 'string',
+          param: 'string',
+          location: 'string',
+        },
+      ],
+    },
+    comment: '',
+  },
+  'Create product review',
+  {
+    action: 'Create product review',
+    method: 'POST',
+    path: '/api/product/:id/review',
+    access: 'private',
+    requiredValues: {
+      id: 'product id as route parameter',
+      rating: 'number',
+      comment: 'string',
+    },
+    successResponse: {
+      data: null,
+      status: 201,
+    },
+    errorResponse: {
+      status: '400 - bad request, 401 - not authorized, 500 - other error',
       error: 'Error message',
       errors: [
         {

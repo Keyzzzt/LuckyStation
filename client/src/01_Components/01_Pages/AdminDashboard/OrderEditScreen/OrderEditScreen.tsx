@@ -8,7 +8,13 @@ import { Message } from '../../../02_Chunks/Message/Message'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
-import { deleteOrderThunk, deliveredThunk, notDeliveredThunk, notPaidThunk, paidThunk } from '../../../../03_Reducers/order/orderManageReducer'
+import {
+  deleteOrderThunk,
+  deliveredThunk,
+  notDeliveredThunk,
+  notPaidThunk,
+  paidThunk,
+} from '../../../../03_Reducers/order/orderManageReducer'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { getRandom } from '../../../../04_Utils/utils'
 
@@ -17,7 +23,7 @@ export const OrderEditScreen: FC = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const { orderId } = useParams<{ orderId: string }>()
-  const { orderInfo, fail } = useTypedSelector((state) => state.orderInfo)
+  const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
   const {
     successDelivered,
     successNotDelivered,
@@ -25,7 +31,7 @@ export const OrderEditScreen: FC = () => {
     successNotPaid,
     successDelete,
     fail: manageOrderFail,
-  } = useTypedSelector((state) => state.orderManage)
+  } = useTypedSelector(state => state.orderManage)
 
   type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
   const manageOrderHandler = (action: ActionType) => {
@@ -62,7 +68,7 @@ export const OrderEditScreen: FC = () => {
         <>
           <div>
             <div>Order Items</div>
-            {orderInfo.orderItems.map((item) => (
+            {orderInfo.orderItems.map(item => (
               <div key={getRandom()}>
                 <div>Name: {item.name}</div>
                 <div>

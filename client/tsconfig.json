@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-, "src/01_Components/02_Chunks/ProductCard/ProductCard/.tsx"  ]
+, "src/01_Components/02_Chunks/ProductCard/ProductCard/.tsx", "public/AccordionItem.tsx", "src/01_Components/02_Chunks/BackButton"  ]
 }

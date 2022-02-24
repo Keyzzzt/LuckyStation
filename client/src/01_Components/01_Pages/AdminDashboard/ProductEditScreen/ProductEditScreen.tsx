@@ -17,8 +17,8 @@ export const ProductEditScreen: FC = () => {
   useScrollToTop()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
-  const { productInfo, fail } = useTypedSelector((state) => state.productInfo)
-  const { loading: loadingUpdate } = useTypedSelector((state) => state.updateProduct)
+  const { productInfo, fail } = useTypedSelector(state => state.productInfo)
+  const { loading: loadingUpdate } = useTypedSelector(state => state.updateProduct)
 
   const [name, setName] = useState('')
   const [brand, setBrand] = useState('')
@@ -44,7 +44,8 @@ export const ProductEditScreen: FC = () => {
         category,
         countInStock,
         price,
-        image: 'https://www.usa.philips.com/c-dam/b2c/category-pages/sound-and-vision/fidelio/master/homepage/l3-hero-image.png',
+        image:
+          'https://www.usa.philips.com/c-dam/b2c/category-pages/sound-and-vision/fidelio/master/homepage/l3-hero-image.png',
         isNewProduct: true,
       })
     )
@@ -76,27 +77,37 @@ export const ProductEditScreen: FC = () => {
           <button onClick={() => deleteHandler(productId, productInfo.name!)}>Delete</button>
           <div>
             <label htmlFor="edit-name">Product name</label>
-            <input onChange={(e) => setName(e.target.value)} type="text" value={name} id="edit-name" />
+            <input onChange={e => setName(e.target.value)} type="text" value={name} id="edit-name" />
           </div>
           <div>
             <label htmlFor="edit-brand">Product brand</label>
-            <input onChange={(e) => setBrand(e.target.value)} type="text" value={brand} id="edit-brand" />
+            <input onChange={e => setBrand(e.target.value)} type="text" value={brand} id="edit-brand" />
           </div>
           <div>
             <label htmlFor="edit-category">Category</label>
-            <input onChange={(e) => setCategory(e.target.value)} type="text" value={category} id="edit-category" />
+            <input onChange={e => setCategory(e.target.value)} type="text" value={category} id="edit-category" />
           </div>
           <div>
             <label htmlFor="edit-description">Description</label>
-            <input onChange={(e) => setDescription(e.target.value)} type="text" value={description} id="edit-description" />
+            <input
+              onChange={e => setDescription(e.target.value)}
+              type="text"
+              value={description}
+              id="edit-description"
+            />
           </div>
           <div>
             <label htmlFor="edit-price">Price</label>
-            <input onChange={(e) => setPrice(Number(e.target.value))} type="text" value={price} id="edit-price" />
+            <input onChange={e => setPrice(Number(e.target.value))} type="text" value={price} id="edit-price" />
           </div>
           <div>
             <label htmlFor="edit-stock">Count in stock</label>
-            <input onChange={(e) => setCountInStock(Number(e.target.value))} type="text" value={countInStock} id="edit-stock" />
+            <input
+              onChange={e => setCountInStock(Number(e.target.value))}
+              type="text"
+              value={countInStock}
+              id="edit-stock"
+            />
           </div>
           <Link to={`/user/${productInfo.user}/edit`}>User added this product - {productInfo.user}</Link>
           <div>Rating: {productInfo.rating}</div>

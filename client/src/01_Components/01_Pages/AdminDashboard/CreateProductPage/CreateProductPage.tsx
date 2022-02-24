@@ -12,7 +12,7 @@ import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 
 export const CreateProductPage: FC = () => {
   const history = useHistory()
-  const { success, loading, fail } = useTypedSelector((state) => state.createProduct)
+  const { success, loading, fail } = useTypedSelector(state => state.createProduct)
 
   useScrollToTop()
   const dispatch = useDispatch()
@@ -20,7 +20,9 @@ export const CreateProductPage: FC = () => {
   const [brand, setBrand] = useState('Phillips')
   const [name, setName] = useState('Fidelity')
   const [category, setCategory] = useState('Audio')
-  const [description, setDescription] = useState('What if you could always be in the perfect place to listen to the music you love? ')
+  const [description, setDescription] = useState(
+    'What if you could always be in the perfect place to listen to the music you love? '
+  )
   const [price, setPrice] = useState('99')
   const [uploading, setUploading] = useState(false)
   const [countInStock, setCountInStock] = useState('10')
@@ -77,7 +79,7 @@ export const CreateProductPage: FC = () => {
     return str
       .trim()
       .split(',')
-      .map((item) => item.trim())
+      .map(item => item.trim())
   }
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -111,19 +113,34 @@ export const CreateProductPage: FC = () => {
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={clearHandler}>Clear</button>
       <form onSubmit={submitHandler}>
-        <input onChange={(e) => setBrand(e.target.value)} type="text" value={brand} placeholder="Brand" />
-        <input onChange={(e) => setName(e.target.value)} type="text" value={name} placeholder="Name" />
-        <input onChange={(e) => setCategory(e.target.value)} type="text" value={category} placeholder="Category" />
-        <input onChange={(e) => setDescription(e.target.value)} type="text" value={description} placeholder="Description" />
-        <input onChange={(e) => setPrice(e.target.value)} type="text" value={price} placeholder="Price" />
-        <input onChange={(e) => setCountInStock(e.target.value)} type="text" value={countInStock} placeholder="Count in stock" />
-        <input onChange={(e) => setImage(e.target.value)} type="text" value={image} placeholder="Image" />
+        <input onChange={e => setBrand(e.target.value)} type="text" value={brand} placeholder="Brand" />
+        <input onChange={e => setName(e.target.value)} type="text" value={name} placeholder="Name" />
+        <input onChange={e => setCategory(e.target.value)} type="text" value={category} placeholder="Category" />
+        <input
+          onChange={e => setDescription(e.target.value)}
+          type="text"
+          value={description}
+          placeholder="Description"
+        />
+        <input onChange={e => setPrice(e.target.value)} type="text" value={price} placeholder="Price" />
+        <input
+          onChange={e => setCountInStock(e.target.value)}
+          type="text"
+          value={countInStock}
+          placeholder="Count in stock"
+        />
+        <input onChange={e => setImage(e.target.value)} type="text" value={image} placeholder="Image" />
         <input onChange={uploadImageHandler} type="file" id="image-file" />
         {uploading && <Loader />}
-        <input onChange={(e) => setColors(e.target.value)} type="text" value={colors} placeholder="Colors in #xxxxxx format" />
-        <input onChange={(e) => setSizes(e.target.value)} type="text" value={sizes} placeholder="Sizes" />
+        <input
+          onChange={e => setColors(e.target.value)}
+          type="text"
+          value={colors}
+          placeholder="Colors in #xxxxxx format"
+        />
+        <input onChange={e => setSizes(e.target.value)} type="text" value={sizes} placeholder="Sizes" />
         <label htmlFor="isNew">New product</label>
-        <input onChange={(e) => setIsNewProduct((prev) => !prev)} type="checkbox" id="isNew" />
+        <input onChange={e => setIsNewProduct(prev => !prev)} type="checkbox" id="isNew" />
         <input type="submit" value="Create" />
       </form>
       {uploadedFile.filePath ? (

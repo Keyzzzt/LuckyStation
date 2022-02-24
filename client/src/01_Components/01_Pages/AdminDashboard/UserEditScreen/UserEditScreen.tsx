@@ -17,9 +17,9 @@ export const UserEditScreen: FC = () => {
   useScrollToTop()
   const dispatch = useDispatch()
   const { userId } = useParams<{ userId: string }>()
-  const { success, loading, fail } = useTypedSelector((state) => state.updateProfileByAdmin)
+  const { success, loading, fail } = useTypedSelector(state => state.updateProfileByAdmin)
 
-  const { user, fail: failUser } = useTypedSelector((state) => state.getUser)
+  const { user, fail: failUser } = useTypedSelector(state => state.getUser)
   const [role, setRole] = useState(false)
 
   // TODO Проверить что происходит когда удалется залогиненный пользователь
@@ -62,12 +62,12 @@ export const UserEditScreen: FC = () => {
           <div>
             <label htmlFor="role">{role ? 'Admin' : 'User'}</label>
 
-            <input onChange={() => setRole((prev) => !prev)} type="checkBox" id="role" checked={role} />
+            <input onChange={() => setRole(prev => !prev)} type="checkBox" id="role" checked={role} />
           </div>
           {user.isActivated ? <div>Account is activated</div> : <div>Account not activated</div>}
           {user.isSubscribed ? <div>Subscribed for newsletter</div> : <div>Not subscribed</div>}
           <div>
-            {user.favorite && user.favorite.map((item) => <div>{item}</div>)}
+            {user.favorite && user.favorite.map(item => <div>{item}</div>)}
             {user.favorite?.length === 0 && <div>Favorite list is empty</div>}
           </div>
           <div>Created at: {user.createdAt}</div>

@@ -13,7 +13,7 @@ import { SurveyModel } from './models/survey.model'
 
 export function routes(app) {
   // todo api info route
-  app.get('/api/info', getApiInfo)
+  app.get('/api/apiinfo', getApiInfo)
 
   app.post('/api/login', Validation.auth, Auth.login)
   app.post('/api/registration', Validation.auth, Auth.register)

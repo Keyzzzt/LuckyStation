@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import styles from './Accordion.module.scss'
 import { AccordionData } from './Accordion'
+import { getRefValue } from '../../../04_Utils/getRefValue'
 
 type Props = {
   data: AccordionData
@@ -14,7 +15,7 @@ export const AccordionItem: FC<Props> = ({ data, isOpen, btnOnClick }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const contentEl = contentRef.current as HTMLDivElement
+      const contentEl = getRefValue(contentRef)
       setHeight(contentEl.scrollHeight)
     } else {
       setHeight(0)

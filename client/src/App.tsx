@@ -7,7 +7,7 @@ import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'
 import { publicRotes, privateRotes, adminRoutes } from './routes'
 
-const App = () => {
+export const App = () => {
   const dispatch = useDispatch()
   // Получаем тут userInfo чтобы сделать header & footer чистыми компонентами
   const { userInfo } = useTypedSelector(state => state.userInfo)
