@@ -40,14 +40,14 @@ export const posts = [
 export const images = [
   {
     imageSrc: '/uploads/HammockDesert_1.jpg',
-    imageAlt: 'Hammock Desert',
+    imageAlt: 'Hammock Desert 1',
   },
   {
     imageSrc: '/uploads/HammockDesert_2.jpg',
-    imageAlt: 'Hammock Desert',
+    imageAlt: 'Hammock Desert 2',
   },
   {
     imageSrc: '/uploads/HammockDesert_3.jpg',
-    imageAlt: 'Hammock Desert',
+    imageAlt: 'Hammock Desert 3',
   },
 ]

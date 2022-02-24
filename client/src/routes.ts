@@ -1,26 +1,26 @@
-import { AdminDashboard } from './01_Components/01_Screens/AdminDashboard/AdminDashboard'
-import { OrderEditScreen } from './01_Components/01_Screens/AdminDashboard/OrderEditScreen/OrderEditScreen'
-import { CreateProductPage } from './01_Components/01_Screens/AdminDashboard/CreateProductPage/CreateProductPage'
-import { ProductEditScreen } from './01_Components/01_Screens/AdminDashboard/ProductEditScreen/ProductEditScreen'
-import { CreateSurvey } from './01_Components/01_Screens/AdminDashboard/Survey/CreateSurvey/CreateSurvey'
-import { SurveyPage } from './01_Components/01_Screens/AdminDashboard/Survey/SurveyPage/SurveyPage'
-import { UserEditScreen } from './01_Components/01_Screens/AdminDashboard/UserEditScreen/UserEditScreen'
-import { UsersList } from './01_Components/01_Screens/AdminDashboard/UsersList/UsersList'
-import { CartScreen } from './01_Components/01_Screens/CartScreen/CartScreen'
-import { LandingPage } from './01_Components/01_Screens/LandingPage/LandingPage'
-import { OrderScreen } from './01_Components/01_Screens/OrderScreen/OrderScreen'
-import { PaymentScreen } from './01_Components/01_Screens/PaymentScreen/PaymentScreen'
-import { PlaceOrderScreen } from './01_Components/01_Screens/PlaceOrderScreen/PlaceOrderScreen'
-import { ProductScreen } from './01_Components/01_Screens/ProductScreen/ProductScreen'
-import { ProfileScreen } from './01_Components/01_Screens/ProfileScreen/ProfileScreen'
-import { ShippingScreen } from './01_Components/01_Screens/ShippingScreen/ShippingScreen'
-import { Ulbi } from './01_Components/01_Screens/Ulbi/Ulbi'
+import { AdminDashboard } from './01_Components/01_Pages/AdminDashboard/AdminDashboard'
+import { OrderEditScreen } from './01_Components/01_Pages/AdminDashboard/OrderEditScreen/OrderEditScreen'
+import { CreateProductPage } from './01_Components/01_Pages/AdminDashboard/CreateProductPage/CreateProductPage'
+import { ProductEditScreen } from './01_Components/01_Pages/AdminDashboard/ProductEditScreen/ProductEditScreen'
+import { CreateSurvey } from './01_Components/01_Pages/AdminDashboard/Survey/CreateSurvey/CreateSurvey'
+import { SurveyPage } from './01_Components/01_Pages/AdminDashboard/Survey/SurveyPage/SurveyPage'
+import { UserEditScreen } from './01_Components/01_Pages/AdminDashboard/UserEditScreen/UserEditScreen'
+import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/UsersList'
+import { CartScreen } from './01_Components/01_Pages/CartScreen/CartScreen'
+import { LandingPage } from './01_Components/01_Pages/LandingPage/LandingPage'
+import { OrderScreen } from './01_Components/01_Pages/OrderScreen/OrderScreen'
+import { PaymentScreen } from './01_Components/01_Pages/PaymentScreen/PaymentScreen'
+import { PlaceOrderScreen } from './01_Components/01_Pages/PlaceOrderScreen/PlaceOrderScreen'
+import { ProductScreen } from './01_Components/01_Pages/ProductScreen/ProductScreen'
+import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'
+import { ShippingScreen } from './01_Components/01_Pages/ShippingScreen/ShippingScreen'
+import { Ulbi } from './01_Components/01_Pages/Ulbi/Ulbi'
 import { Login } from './01_Components/02_Chunks/Auth/Login'
 import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { RestorePassword } from './01_Components/02_Chunks/Auth/RestorePassword'
-import { ProductsList } from './01_Components/01_Screens/AdminDashboard/ProductsList/ProductsList'
-import { OrderList } from './01_Components/01_Screens/AdminDashboard/OrderList/OrderList'
-import { API } from './01_Components/01_Screens/AdminDashboard/API/API'
+import { ProductsList } from './01_Components/01_Pages/AdminDashboard/ProductsList/ProductsList'
+import { OrderList } from './01_Components/01_Pages/AdminDashboard/OrderList/OrderList'
+import { API } from './01_Components/01_Pages/AdminDashboard/API/API'
 import { SingleProductPageSlider } from './01_Components/02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
 
 export const publicRotes = [
@@ -52,6 +52,4 @@ export const adminRoutes = [
   { path: '/dashboard/products', component: ProductsList, exact: true },
   { path: '/dashboard/orders', component: OrderList, exact: true },
   { path: '/dashboard/api', component: API, exact: true },
-  // todo REMOVE
-  { path: '/dashboard/slider', component: SingleProductPageSlider, exact: true },
 ]

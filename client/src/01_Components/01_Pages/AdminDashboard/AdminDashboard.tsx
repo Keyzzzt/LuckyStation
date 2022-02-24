@@ -38,7 +38,6 @@ export const AdminDashboard: FC = () => {
         <button onClick={() => history.push('/dashboard/products')}>Products list</button>
         <button onClick={() => history.push('/dashboard/orders')}>Orders list</button>
         <button onClick={() => history.push('/dashboard/api')}>API</button>
-        <button onClick={() => history.push('/dashboard/slider')}>Slider</button>
         <div className={`${styles.dashboard}`}>
           <div className={`${styles.adminToolUnit}`}>
             <CreateSurvey

@@ -12,6 +12,9 @@ import { Pagination } from '../../02_Chunks/Pagination/Pagination'
 import { getRandom } from '../../../04_Utils/utils'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { NewProductsSection } from '../../02_Chunks/NewProductsSection/NewProductsSection'
+import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
+import { Accordion } from '../../02_Chunks/Accordion/Accordion'
+import { images } from '../../../fakeData'
 
 type Params = {
   page: string
@@ -22,8 +25,8 @@ type Params = {
 // TODO сломан поиск, реализовать не через get строку а через параметры, либо, если не надо делать запрос на сервер сразу сделать поиск на фронте
 
 export const LandingPage: FC = () => {
-  const { fail, products } = useTypedSelector(state => state.productList)
-  const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { fail, products } = useTypedSelector((state) => state.productList)
+  const { userInfo } = useTypedSelector((state) => state.userInfo)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
   page = page ? page : '1'
@@ -46,8 +49,59 @@ export const LandingPage: FC = () => {
     dispatch(productListThunk(keyword, Number(page), Number(limit)))
   }, [dispatch, keyword, page, limit])
 
+  // todo: Remove this fake array
+  const accordionItems = [
+    {
+      title: 'First accordion header',
+      content: (
+        <div>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo molestias laudantium possimus rerum. Non
+          nostrum molestiae iure esse commodi optio sed quaerat blanditiis. Accusamus doloribus nihil officiis quae, ex
+          veniam.{' '}
+          <ul>
+            <li>Hello</li>
+            <li>Hola</li>
+            <li>Bounjour</li>
+          </ul>
+        </div>
+      ),
+    },
+    {
+      title: 'Second accordion header',
+      content: (
+        <div>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo molestias laudantium possimus rerum. Non
+          nostrum molestiae iure esse commodi optio sed quaerat blanditiis. Accusamus doloribus nihil officiis quae, ex
+          veniam.{' '}
+          <ul>
+            <li>Hello</li>
+            <li>Hola</li>
+            <li>Bounjour</li>
+          </ul>
+        </div>
+      ),
+    },
+    {
+      title: 'Third accordion header',
+      content: (
+        <div>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo molestias laudantium possimus rerum. Non
+          nostrum molestiae iure esse commodi optio sed quaerat blanditiis. Accusamus doloribus nihil officiis quae, ex
+          veniam.{' '}
+          <ul>
+            <li>Hello</li>
+            <li>Hola</li>
+            <li>Bounjour</li>
+          </ul>
+        </div>
+      ),
+    },
+  ]
+
   return (
     <>
+      <SingleProductPageSlider images={images} />
+      <Accordion items={accordionItems} />
       <HeroSection />
       <NewProductsSection products={[]} />
       <section className={styles.products}>
@@ -57,8 +111,8 @@ export const LandingPage: FC = () => {
             {!products ? (
               <Loader />
             ) : (
-              products.map(product => {
-                const isFavorite = userInfo?.favorite?.find(x => x === product._id) ? true : false
+              products.map((product) => {
+                const isFavorite = userInfo?.favorite?.find((x) => x === product._id) ? true : false
                 return (
                   <ProductCard
                     key={getRandom()}
