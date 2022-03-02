@@ -28,6 +28,7 @@ import { surveyListReducer } from './03_Reducers/admin/survey reducers/surveyLis
 import { deleteSurveyReducer } from './03_Reducers/admin/survey reducers/deleteSurveyReducer'
 import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleSurveyReducer'
 import { apiReducer } from './03_Reducers/admin/apiReducer'
+import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
 
 const rootReducer = combineReducers({
   login: loginReducer,
@@ -58,6 +59,7 @@ const rootReducer = combineReducers({
   deleteSurvey: deleteSurveyReducer,
   singleSurvey: singleSurveyReducer,
   api: apiReducer,
+  termsAndConditions: termsAndConditionsReducer,
 })
 
 // @ts-ignore

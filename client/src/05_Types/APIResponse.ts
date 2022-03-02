@@ -43,25 +43,41 @@ type ReviewFromAPI = {
   comment: string
   user: string
 }
+export type Image = {
+  imageSrc: string
+  imageAlt: string
+}
 export type Product = {
+  _id: string
+  user: string
+  name: string
   brand: string
   category: string
   countInFavorite: number
   countInStock: number
   countViewed: number
-  createdAt: Date
   description: string
-  image: string
+  description2: string
+  includes: string
+  maximumLoadCapacity: string
+  weight: string
+  size: string
+  colorsInText: string
+  materials: string
+  careInstructions: string
+  additionalInfo: string
+  whatShouldYouKnow: string
+  quality: string
+  images: Image[]
   isNewProduct: boolean
-  name: string
   numReviews: number
   price: number
   qty?: number
   rating: number
+  isDirty: boolean
   reviews: ReviewFromAPI[]
+  createdAt: Date
   updatedAt: Date
-  user: string
-  _id: string
 }
 type OrderProductInfo = {
   name: string
@@ -172,4 +188,22 @@ export interface SurveysList {
 export type ReviewToAPI = {
   rating: number
   comment: string
+}
+
+export type TermsAndConditions = {
+  lang: string
+  mainTitle: number
+  companyAddress: {
+    companyName: string
+    companyId: string
+    companyAddress: string
+    companyPhone: string
+    companyEmail: string
+  }
+  termsAndConditions: [
+    {
+      paragraphTitle: string
+      paragraphText: string
+    }
+  ]
 }

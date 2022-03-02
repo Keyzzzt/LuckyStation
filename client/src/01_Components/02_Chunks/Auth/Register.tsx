@@ -18,8 +18,8 @@ export const Register: FC = () => {
   const [confirm, setConfirm] = useState('123456')
   const [confirmDirty, setConfirmDirty] = useState(false)
   const [confirmError, setConfirmError] = useState('Empty field')
-  const { userInfo } = useTypedSelector((state) => state.userInfo)
-  const { registerFail, registerSuccess, registerLoading } = useTypedSelector((state) => state.userRegister)
+  const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { registerFail, registerSuccess } = useTypedSelector(state => state.userRegister)
   const history = useHistory()
   const location = useLocation()
   const dispatch = useDispatch()
@@ -93,6 +93,7 @@ export const Register: FC = () => {
     email.length > 0 && setEmailError('')
     password.length > 0 && setPasswordError('')
     confirm.length > 0 && setConfirmError('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {

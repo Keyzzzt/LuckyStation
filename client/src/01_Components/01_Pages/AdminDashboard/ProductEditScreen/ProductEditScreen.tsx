@@ -17,8 +17,7 @@ export const ProductEditScreen: FC = () => {
   useScrollToTop()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
-  const { productInfo, fail } = useTypedSelector(state => state.productInfo)
-  const { loading: loadingUpdate } = useTypedSelector(state => state.updateProduct)
+  const { productInfo } = useTypedSelector(state => state.productInfo)
 
   const [name, setName] = useState('')
   const [brand, setBrand] = useState('')
@@ -120,9 +119,9 @@ export const ProductEditScreen: FC = () => {
           </div>
           <div>Created at: {productInfo.createdAt}</div>
           <div>Updated at: {productInfo.updatedAt}</div>
-          <div>
+          {/* <div>
             <img src={productInfo.image} alt="Logo" />
-          </div>
+          </div> */}
         </>
       )}
     </div>

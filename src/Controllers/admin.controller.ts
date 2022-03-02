@@ -19,6 +19,7 @@ import { TokenModel } from '@src/models/TokenModel'
 import * as utils from '@src/utils'
 import { StatisticModel } from '@src/models/statistic.model'
 import { getUserProfile } from '@src/mongoRequests'
+import { TermsAndConditionsModel } from '@src/models/TermsAndConditions.model'
 
 export async function getAllUsers(req: RequestCustom, res: Response, next: NextFunction) {
   try {
@@ -109,27 +110,60 @@ export async function deleteProduct(req: Request, res: Response, next: NextFunct
 
 export async function createProduct(req: RequestCustom, res: Response, next: NextFunction) {
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //   return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    // }
 
-    const { name, price, image, brand, category, countInStock, description, isNewProduct } = req.body
-    const product = new ProductModel({
+    const {
       name,
       price,
-      user: req.user._id,
-      image,
+      images,
       brand,
       category,
       countInStock,
       description,
+      description2,
+      includes,
+      maximumLoadCapacity,
+      weight,
+      size,
+      colors,
+      colorsInText,
+      materials,
+      careInstructions,
+      additionalInfo,
+      whatShouldYouKnow,
+      quality,
+      isNewProduct,
+    } = req.body
+    const product = new ProductModel({
+      name,
+      price,
+      user: req.user._id,
+      images,
+      brand,
+      category,
+      countInStock,
+      description,
+      description2,
+      includes,
+      maximumLoadCapacity,
+      weight,
+      size,
+      colors,
+      colorsInText,
+      materials,
+      careInstructions,
+      additionalInfo,
+      whatShouldYouKnow,
+      quality,
       isNewProduct,
     })
 
-    await product.save()
+    const createdProduct = await product.save()
 
-    return res.sendStatus(201)
+    return res.status(201).json(createdProduct)
   } catch (error) {
     return next(error.message)
   }
@@ -142,7 +176,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
 
-    const { name, price, image, brand, category, countInStock, description, isNewProduct } = req.body
+    const { name, price, images, brand, category, countInStock, description, isNewProduct } = req.body
     const product = await ProductModel.findById(req.params.id)
     if (!product) {
       return next(ApiError.BadRequest('Product not found'))
@@ -150,7 +184,7 @@ export async function updateProduct(req: Request, res: Response, next: NextFunct
 
     product.name = name
     product.price = price
-    product.image = image
+    product.images = images
     product.brand = brand
     product.category = category
     product.countInStock = countInStock
@@ -347,7 +381,6 @@ export async function manageSendgridEvents(req: RequestCustom, res: Response, ne
   }
 }
 
-// Frontend DONE
 export async function deleteSurvey(req: Request, res: Response, next: NextFunction) {
   try {
     const survey = await SurveyModel.findById(req.params.id)
@@ -357,6 +390,27 @@ export async function deleteSurvey(req: Request, res: Response, next: NextFuncti
 
     await survey.remove()
     return res.sendStatus(200)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function termsAndConditions(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //   return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    // }
+    const newTerms = req.body
+
+    const updatedTerms = await TermsAndConditionsModel.findOneAndUpdate({ lang: newTerms.lang }, { ...newTerms })
+    if (!updatedTerms) {
+      const terms = new TermsAndConditionsModel({ user: req.user._id, ...newTerms })
+      await terms.save()
+      return res.status(201).json(terms)
+    }
+
+    return res.status(200).json(newTerms)
   } catch (error) {
     return next(error.message)
   }

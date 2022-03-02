@@ -6,6 +6,7 @@ export interface AppConfigDocType extends Document {
   darkThemeColors: string
   lightThemeColors: string
   defaultLanguage: string
+  minPriceForFreeShipping: number
 }
 
 const AppConfigSchema: Schema = new Schema<AppConfigDocType>(
@@ -15,6 +16,7 @@ const AppConfigSchema: Schema = new Schema<AppConfigDocType>(
     darkThemeColors: { type: String, default: '' },
     lightThemeColors: { type: String, default: '' },
     defaultLanguage: { type: String, default: 'en' },
+    minPriceForFreeShipping: { type: Number, default: 1000 },
   },
   {
     timestamps: true,

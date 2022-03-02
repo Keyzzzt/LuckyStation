@@ -9,6 +9,7 @@ import ApiError from '@src/middleware/error.middleware'
 import * as utils from '@src/utils'
 import { ProductModel } from '@src/models/product.model'
 import { getUserProfile } from '@src/mongoRequests'
+import { TermsAndConditionsModel } from '@src/models/TermsAndConditions.model'
 
 export async function getProfile(req: RequestCustom, res: Response, next: NextFunction) {
   try {
@@ -17,6 +18,16 @@ export async function getProfile(req: RequestCustom, res: Response, next: NextFu
       return next(ApiError.NotFound('User not found'))
     }
     return res.status(200).json(profile)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function getTermsAndConditions(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    const { lang } = req.params
+    const doc = await TermsAndConditionsModel.findOne({ lang })
+
+    return res.status(200).json(doc)
   } catch (error) {
     return next(error.message)
   }

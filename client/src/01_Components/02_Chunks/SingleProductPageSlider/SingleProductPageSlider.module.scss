@@ -1,13 +1,15 @@
 @import './../../../02_Styles/newVariables.scss';
 .sliderContainer {
-  width: 300px;
-  max-width: 300px;
-  overflow: hidden;
-  cursor: pointer;
-  touch-action: pan-x; // Mobile browser touch action
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: pan-x; // Mobile browser touch action
+  margin-bottom: 100px;
 }
 
 .sliderList {
@@ -33,17 +35,28 @@
 .sliderIndicator {
   display: flex;
 
-  &Item{
-    height: 20px;
-    width: 20px;
+  &Item {
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
-    background-color: $color--grey;
+    border: 3px solid $color--border;
+
     margin: 10px 10px 0 0;
     cursor: pointer;
     &.active {
-      background-color: #09c;
+      background-color: $color--grey;
+      border-color: $color--grey;
     }
   }
-
 }
 
+.new {
+  position: absolute;
+  display: block;
+  top: 10px;
+  left: 10px;
+  text-transform: uppercase;
+  padding: 10px 15px;
+  background-color: $color--light;
+  z-index: 1;
+}

@@ -1,0 +1,60 @@
+@import './../../../02_Styles/newVariables.scss';
+
+.container {
+  overflow: hidden;
+  @include breakpoint(992) {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 50px;
+  }
+}
+
+.product {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  @include breakpoint(992) {
+    flex-direction: row;
+    align-items: start;
+  }
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  @include breakpoint(992) {
+    margin-left: 50px;
+    padding: 0;
+  }
+}
+
+.name {
+  text-transform: uppercase;
+  font-size: $fz-lg;
+  font-weight: $fw-md;
+  margin-bottom: 50px;
+}
+.description {
+  font-size: $fz-md;
+  margin-bottom: 50px;
+}
+
+.addToCartBtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: $color--grey;
+  color: #fff;
+  padding: 20px;
+  margin-bottom: 50px;
+  font-size: $fz-md;
+  font-weight: $fw-sm;
+  cursor: pointer;
+}
+
+.price {
+  text-align: right;
+  font-size: $fz-lg;
+}

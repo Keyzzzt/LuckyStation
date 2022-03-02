@@ -212,5 +212,6 @@ export const useValidation = (value, validations) => {
       minLengthError,
       isEmpty,
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 }

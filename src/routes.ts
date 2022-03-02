@@ -31,6 +31,7 @@ export function routes(app) {
   app.get('/api/admin/user/:id', privateRoute, adminRoute, Admin.getUser)
   app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.setUsersAdminStatus)
   app.delete('/api/admin/user/:id', privateRoute, adminRoute, Admin.deleteUser)
+  app.post('/api/admin/terms', privateRoute, adminRoute, Admin.termsAndConditions)
 
   app.get(
     '/api/admin/order/:page/:limit',
@@ -40,7 +41,6 @@ export function routes(app) {
     Admin.getAllOrders
   )
   app.post('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
-
   app.delete('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToNotPaid)
   app.post('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToDelivered)
   app.delete('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToNotDelivered)
@@ -75,6 +75,7 @@ export function routes(app) {
   app.delete('/api/user/favorite/:id', User.removeFromFavorite)
   app.post('/api/user/subscribe', Validation.emailOnly, User.subscribe)
   app.delete('/api/user/subscribe', Validation.emailOnly, User.unSubscribe)
+  app.get('/api/user/terms/:lang', User.getTermsAndConditions)
 
   app.post('/api/order', Validation.createOrder, privateRoute, Order.createNewOrder)
   app.get('/api/order/myorders/:page/:limit', privateRoute, paginatedResult(OrderModel, 'own'), Order.getOwnOrders)

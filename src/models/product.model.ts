@@ -12,14 +12,30 @@ export type ReviewType = {
   comment: string
   rating: number
 }
+type Images = {
+  imageSrc: string
+  imageAlt: string
+}
 
 export interface ProductDocType extends Document {
   user: UserDocType['id']
-  name: string
-  image: string
   brand: string
+  name: string
+  images: Images[]
   category: string
   description: string
+  description2: string
+  includes: string
+  maximumLoadCapacity: string
+  weight: string
+  size: string
+  colors: string[]
+  colorsInText: string
+  materials: string
+  careInstructions: string
+  additionalInfo: string
+  whatShouldYouKnow: string
+  quality: string
   rating: number
   reviews: ReviewType[]
   numReviews: number
@@ -66,19 +82,38 @@ const ProductSchema = new Schema<ProductDocType>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
-      required: true,
+    images: {
+      type: [
+        {
+          imageSrc: String,
+          imageAlt: String,
+        },
+      ],
+      default: null,
     },
-
     category: {
       type: String,
-      required: true,
+      default: '',
     },
     description: {
       type: String,
       required: true,
     },
+    description2: {
+      type: String,
+      default: '',
+    },
+    includes: { type: String, default: '' },
+    maximumLoadCapacity: String,
+    weight: String,
+    size: String,
+    colors: [String],
+    colorsInText: String,
+    materials: String,
+    careInstructions: String,
+    additionalInfo: String,
+    whatShouldYouKnow: String,
+    quality: String,
     rating: {
       type: Number,
       required: true,

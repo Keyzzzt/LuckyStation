@@ -21,7 +21,7 @@
 
   .title {
     font-size: $fz-md;
-    font-weight: $fw700;
+    font-weight: $fw-lg;
   }
   form {
     margin: 40px 0;
@@ -87,7 +87,7 @@
     & .counter {
       position: absolute;
       font-size: $fz-sm;
-      font-weight: $fw700;
+      font-weight: $fw-lg;
       right: 38px;
       top: 15px;
       display: block;

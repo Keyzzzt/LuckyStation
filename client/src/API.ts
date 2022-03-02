@@ -12,6 +12,7 @@ import {
   SurveysList,
   SurveyFromDB,
   UpdateProfile,
+  TermsAndConditions,
 } from './05_Types/APIResponse'
 import { Survey } from './05_Types/01_Base'
 
@@ -36,8 +37,10 @@ export const API = {
     getProfile: async (): Promise<AxiosResponse<User>> => {
       return $api.get<User>('/user/profile')
     },
-
-    // TODO:
+    // TODO: endpoint
+    getTermsAndConditions: async (lang: string): Promise<AxiosResponse<TermsAndConditions>> => {
+      return $api.get<TermsAndConditions>(`/user/terms/${lang}`)
+    },
     updateOwnProfile: async (formData: UpdateProfile) => {
       return $api.put<User>(`/user/profile`, formData)
     },

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import styles from './Accordion.module.scss'
 import { AccordionData } from './Accordion'
 import { getRefValue } from '../../../04_Utils/getRefValue'
@@ -30,7 +30,14 @@ export const AccordionItem: FC<Props> = ({ data, isOpen, btnOnClick }) => {
       </h2>
       <div className={styles.accordionItemContainer} style={{ height }}>
         <div ref={contentRef} className={styles.accordionItemContent}>
-          {data.content}
+          {data.content.map((el: any) =>
+            el.value === '' ? null : (
+              <div>
+                <div className={styles.accordionSubItem}>{el.title}</div>
+                <div>{el.value}</div>
+              </div>
+            )
+          )}
         </div>
       </div>
     </li>

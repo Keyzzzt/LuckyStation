@@ -12,11 +12,12 @@ export const ProfileScreen: FC = () => {
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { orders, error: meyOrdersErr } = useTypedSelector(state => state.myOrders)
-  const { loading, success, fail } = useTypedSelector(state => state.userUpdateOwnProfile)
+  const { success, fail } = useTypedSelector(state => state.userUpdateOwnProfile)
 
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [message, setMessage] = useState('')
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -36,6 +37,7 @@ export const ProfileScreen: FC = () => {
 
   useEffect(() => {
     dispatch(myOrdersThunk(1, 1))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -8,12 +8,13 @@ import { getTouchEventData } from '../../../04_Utils/dom'
 
 export type Props = {
   images: SliderItemProps[]
+  isNew?: boolean
 }
 
 // Sensivity value. Greater value = less swiper sensivity
 const MIN_SWIPE_REQUIRE = 35
 
-export const SingleProductPageSlider: React.FC<Props> = ({ images }) => {
+export const SingleProductPageSlider: React.FC<Props> = ({ images, isNew = false }) => {
   const containerRef = useRef<HTMLUListElement>(null)
   const containerWidthRef = useRef(0)
   const minOffsetXRef = useRef(0)
@@ -94,6 +95,7 @@ export const SingleProductPageSlider: React.FC<Props> = ({ images }) => {
 
   return (
     <div onTouchStart={onTouchStart} onMouseDown={onTouchStart} className={styles.sliderContainer}>
+      {isNew && <div className={styles.new}>new</div>}
       <ul
         ref={containerRef}
         className={`${styles.sliderList} ${isSwiping ? styles.swiping : ''}`}

@@ -17,9 +17,9 @@ export const UserEditScreen: FC = () => {
   useScrollToTop()
   const dispatch = useDispatch()
   const { userId } = useParams<{ userId: string }>()
-  const { success, loading, fail } = useTypedSelector(state => state.updateProfileByAdmin)
+  // const { success, loading, fail } = useTypedSelector(state => state.updateProfileByAdmin)
 
-  const { user, fail: failUser } = useTypedSelector(state => state.getUser)
+  const { user } = useTypedSelector(state => state.getUser)
   const [role, setRole] = useState(false)
 
   // TODO Проверить что происходит когда удалется залогиненный пользователь
@@ -36,6 +36,7 @@ export const UserEditScreen: FC = () => {
   }
   useEffect(() => {
     dispatch(getUserThunk(userId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId])
 
   useEffect(() => {

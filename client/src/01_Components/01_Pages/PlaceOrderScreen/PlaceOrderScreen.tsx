@@ -6,12 +6,11 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
 import { Message } from '../../02_Chunks/Message/Message'
 import { actions } from '../../../03_Reducers/order/orderCreateReducer'
-import Loader from '../../02_Chunks/Loader/Loader'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 
 export const PlaceOrderScreen: FC = () => {
-  const { cart } = useTypedSelector((state) => state)
-  const { order, fail } = useTypedSelector((state) => state.orderCreate)
+  const { cart } = useTypedSelector(state => state)
+  const { order, fail } = useTypedSelector(state => state.orderCreate)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -24,10 +23,10 @@ export const PlaceOrderScreen: FC = () => {
   cart.totalPrice = addDecimals(Number(cart.itemsPrice + cart.shippingPrice + cart.taxPrice))
 
   const createOrder = () => {
-    const orderItems = cart.cartItems.map((item) => ({
+    const orderItems = cart.cartItems.map(item => ({
       name: item.name,
       quantity: item.qty,
-      image: item.image,
+      images: item.images,
       price: item.price,
       product: item._id,
     }))
@@ -76,11 +75,11 @@ export const PlaceOrderScreen: FC = () => {
           </div>
           <div>
             {cart.cartItems.length > 0 &&
-              cart.cartItems.map((item) => (
+              cart.cartItems.map(item => (
                 <div key={item._id}>
                   <div>{item.name}</div>
                   <div>
-                    <img src={item.image} alt="" />
+                    <img src={item.images[0].imageSrc} alt="" />
                   </div>
                   <div>Quantity: {item.qty}</div>
                   <div>Price: {item.qty! * item.price}</div>

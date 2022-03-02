@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styles from './SurveyPage.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -14,8 +15,8 @@ export const SurveyPage: FC<Props> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
   const { surveyId } = useParams<{ surveyId: string }>()
-  const { survey, fail } = useTypedSelector((state) => state.singleSurvey)
-  const { success: deleteSuccess, loading: loadingDelete, fail: deleteFail } = useTypedSelector((state) => state.deleteSurvey)
+  const { survey } = useTypedSelector(state => state.singleSurvey)
+  const { success: deleteSuccess } = useTypedSelector(state => state.deleteSurvey)
 
   const deleteHandler = (surveyId: string) => {
     if (!window.confirm('Are you sure you want to delete this survey?')) {

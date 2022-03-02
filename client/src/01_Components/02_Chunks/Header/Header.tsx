@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux'
 import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { actions as myOrdersActions } from '../../../03_Reducers/user/myOrdersReducer'
 import { actions as orderInfoActions } from '../../../03_Reducers/order/orderInfoReducer'
-import { Search } from '../Search/Search'
 import { TopBanner } from '../Banners/Banners'
 
 interface Props {
@@ -75,6 +74,7 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
             </ul>
             <ul>
               <li>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a href="#">
                   <i className="fa-solid fa-magnifying-glass" />
                 </a>

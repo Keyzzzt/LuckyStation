@@ -1,0 +1,36 @@
+@import './../../../02_Styles/newVariables.scss';
+
+.container {
+  max-width: 1400px;
+  width: 992px;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+.mainTitle {
+  text-align: center;
+  font-size: $fz-xxl;
+  text-transform: uppercase;
+}
+
+.paragraphTitle {
+  margin-top: 50px;
+  margin-bottom: 25px;
+  font-size: $fz-xl;
+  text-transform: uppercase;
+}
+
+.text {
+  letter-spacing: 1.5px;
+  line-height: 1.5;
+  font-size: $fz-lg;
+  font-weight: $fw-sm;
+}
+
+.text:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.boldText {
+  font-weight: normal;
+}

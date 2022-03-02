@@ -14,6 +14,7 @@ export const SurveyList: FC = () => {
 
   useEffect(() => {
     dispatch(surveyListThunk())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

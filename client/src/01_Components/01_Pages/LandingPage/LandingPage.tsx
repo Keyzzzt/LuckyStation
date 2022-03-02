@@ -12,9 +12,6 @@ import { Pagination } from '../../02_Chunks/Pagination/Pagination'
 import { getRandom } from '../../../04_Utils/utils'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { NewProductsSection } from '../../02_Chunks/NewProductsSection/NewProductsSection'
-import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
-import { Accordion } from '../../02_Chunks/Accordion/Accordion'
-import { accordionItems, images } from '../../../fakeData'
 
 type Params = {
   page: string
@@ -71,7 +68,7 @@ export const LandingPage: FC = () => {
                     _id={product._id}
                     brand={product.brand}
                     price={product.price}
-                    image={product.image}
+                    images={product.images}
                   />
                 )
               })

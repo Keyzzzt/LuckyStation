@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import styles from './SingleProductPageSlider.module.scss'
-import { useDispatch } from 'react-redux'
 
 export type SliderItemProps = {
   imageSrc: string

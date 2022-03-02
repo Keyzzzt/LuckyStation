@@ -74,6 +74,7 @@ export const Login: FC = () => {
   useEffect(() => {
     email.length > 0 && setEmailError('')
     password.length > 0 && setPasswordError('')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {

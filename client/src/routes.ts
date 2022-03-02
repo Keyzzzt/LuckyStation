@@ -6,12 +6,11 @@ import { CreateSurvey } from './01_Components/01_Pages/AdminDashboard/Survey/Cre
 import { SurveyPage } from './01_Components/01_Pages/AdminDashboard/Survey/SurveyPage/SurveyPage'
 import { UserEditScreen } from './01_Components/01_Pages/AdminDashboard/UserEditScreen/UserEditScreen'
 import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/UsersList'
-import { CartScreen } from './01_Components/01_Pages/CartScreen/CartScreen'
 import { LandingPage } from './01_Components/01_Pages/LandingPage/LandingPage'
 import { OrderScreen } from './01_Components/01_Pages/OrderScreen/OrderScreen'
 import { PaymentScreen } from './01_Components/01_Pages/PaymentScreen/PaymentScreen'
 import { PlaceOrderScreen } from './01_Components/01_Pages/PlaceOrderScreen/PlaceOrderScreen'
-import { ProductScreen } from './01_Components/01_Pages/ProductScreen/ProductScreen'
+import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'
 import { ShippingScreen } from './01_Components/01_Pages/ShippingScreen/ShippingScreen'
 import { Ulbi } from './01_Components/01_Pages/Ulbi/Ulbi'
@@ -21,7 +20,8 @@ import { RestorePassword } from './01_Components/02_Chunks/Auth/RestorePassword'
 import { ProductsList } from './01_Components/01_Pages/AdminDashboard/ProductsList/ProductsList'
 import { OrderList } from './01_Components/01_Pages/AdminDashboard/OrderList/OrderList'
 import { API } from './01_Components/01_Pages/AdminDashboard/API/API'
-import { SingleProductPageSlider } from './01_Components/02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
+import { Cart } from './01_Components/01_Pages/Cart/Cart'
+import { TermsAndConditions } from './01_Components/01_Pages/TermsAndConditions/TermsAndConditions'
 
 export const publicRotes = [
   { path: '/restore/:token', component: RestorePassword },
@@ -33,7 +33,8 @@ export const publicRotes = [
   { path: '/payment', component: PaymentScreen, exact: true },
   { path: '/placeorder', component: PlaceOrderScreen, exact: true },
   { path: '/product/:productId', component: ProductScreen, exact: true },
-  { path: '/cart/:productId', component: CartScreen },
+  { path: '/cart/:productId?', component: Cart },
+  { path: '/terms', component: TermsAndConditions },
 ]
 export const privateRotes = [
   { path: '/profile', component: ProfileScreen, exact: true },

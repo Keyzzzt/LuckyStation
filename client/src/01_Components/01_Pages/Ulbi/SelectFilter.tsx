@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { getRandom } from '../../../04_Utils/utils'
 // import styles from './Ulbi.module.scss'
 
@@ -18,11 +18,11 @@ export const Select: FC<Props> = ({ defaultValue, options, value, onChange }) =>
 
   return (
     <div>
-      <select onChange={(e) => onChange(e.target.value)} value={value}>
+      <select onChange={e => onChange(e.target.value)} value={value}>
         <option disabled value="">
           {defaultValue}
         </option>
-        {options.map((option) => (
+        {options.map(option => (
           <option key={getRandom()} value={option.value}>
             {option.name}
           </option>

@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom'
 type Props = {
   path: string
   colorTheme: string
+  disabled?: boolean
 }
-export const Button: FC<Props> = ({ children, path, colorTheme }) => {
+export const Button: FC<Props> = ({ children, path, colorTheme, disabled }) => {
   const history = useHistory()
   const returnHandler = () => {
     history.push(path)
@@ -19,9 +20,11 @@ export const Button: FC<Props> = ({ children, path, colorTheme }) => {
         outline: 'none',
         border: '0',
         cursor: 'pointer',
-        letterSpacing: '3px',
+        letterSpacing: '2px',
+        fontSize: '1.3rem',
       }}
       onClick={returnHandler}
+      disabled={disabled}
     >
       {children}
     </button>

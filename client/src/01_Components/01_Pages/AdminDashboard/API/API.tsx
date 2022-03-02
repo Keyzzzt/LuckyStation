@@ -19,6 +19,7 @@ export const API: FC = () => {
 
   useEffect(() => {
     dispatch(apiThunk())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

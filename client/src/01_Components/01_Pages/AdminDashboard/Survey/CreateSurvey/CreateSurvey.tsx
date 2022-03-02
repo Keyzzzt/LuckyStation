@@ -41,16 +41,16 @@ export const CreateSurvey: FC<Props> = ({ allEmails, subscribedEmails }) => {
       const message =
         isValid.length === 1
           ? `${isValid.join(',')} is not valid. Would you like to remove it?`
-          : `These emails are not valid:\n${isValid.map((x) => `${x}\n`)} Would you like to remove these?`
+          : `These emails are not valid:\n${isValid.map(x => `${x}\n`)} Would you like to remove these?`
       const autoRemove = window.confirm(message)
       if (!autoRemove) {
         setValidationOK(false)
         return
       }
-      setRecipients((prev) => {
+      setRecipients(prev => {
         return prev
           .split(',')
-          .filter((x) => !isValid.includes(x))
+          .filter(x => !isValid.includes(x))
           .join(',')
       })
       setValidationOK(true)
@@ -95,22 +95,23 @@ export const CreateSurvey: FC<Props> = ({ allEmails, subscribedEmails }) => {
   useEffect(() => {
     const normalizedRecipients = recipients
       .split(',')
-      .map((x) => x.trim())
-      .filter((x) => x !== '')
+      .map(x => x.trim())
+      .filter(x => x !== '')
       .join(',')
     setRecipients(normalizedRecipients)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validationOK])
   return (
     <div className={styles.container}>
       <h1>Create new survey</h1>
       <div>
-        <input onChange={(e) => setTitle(e.target.value)} type="text" value={title} placeholder="Survey title" />
+        <input onChange={e => setTitle(e.target.value)} type="text" value={title} placeholder="Survey title" />
       </div>
       <div>
-        <input onChange={(e) => setSubject(e.target.value)} type="text" value={subject} placeholder="Survey subject" />
+        <input onChange={e => setSubject(e.target.value)} type="text" value={subject} placeholder="Survey subject" />
       </div>
       <div>
-        <textarea cols={50} rows={5} onChange={(e) => setBody(e.target.value)} value={body} placeholder="Survey text" />
+        <textarea cols={50} rows={5} onChange={e => setBody(e.target.value)} value={body} placeholder="Survey text" />
       </div>
       <div>
         <div>

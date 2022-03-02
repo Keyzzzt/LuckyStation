@@ -12,7 +12,7 @@ import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 
 export const CreateProductPage: FC = () => {
   const history = useHistory()
-  const { success, loading, fail } = useTypedSelector(state => state.createProduct)
+  const { success } = useTypedSelector(state => state.createProduct)
 
   useScrollToTop()
   const dispatch = useDispatch()
@@ -106,6 +106,7 @@ export const CreateProductPage: FC = () => {
     }
     history.push('/dashboard')
     dispatch(actions.reset())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success])
 
   return (

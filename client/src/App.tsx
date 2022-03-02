@@ -17,6 +17,7 @@ export const App = () => {
   // Аутентификация при каждом запуске / перезагрезку приложения
   useEffect(() => {
     dispatch(authenticateThunk())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
