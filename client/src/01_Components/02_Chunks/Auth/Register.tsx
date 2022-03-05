@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
-import { CustomInput } from './CustomInput'
 import { GoogleLogin } from './GoogleLogin'
+import { CustomInput } from '../CustomInput/CustomInput'
 
 export const Register: FC = () => {
   const [email, setEmail] = useState('123@123.com')
@@ -121,7 +121,7 @@ export const Register: FC = () => {
     <div className={styles.container}>
       <div className={styles.title}>Register</div>
       <form onSubmit={submitHandler}>
-        <CustomInput
+        {/* <CustomInput
           showError={showEmailError}
           blurHandler={blurHandler}
           onChangeHandler={emailHandler}
@@ -150,7 +150,7 @@ export const Register: FC = () => {
           type="password"
           placeholder="Confirm password"
           name="confirm"
-        />
+        /> */}
         <input type="submit" value="Register" />
         {showLoginError && <div className={styles.errorText}>{registerFail}</div>}
       </form>

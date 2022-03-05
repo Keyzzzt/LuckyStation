@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, loginThunk } from '../../../03_Reducers/authReducer'
-import { CustomInput } from './CustomInput'
 import { GoogleLogin } from './GoogleLogin'
 import { isEmail } from '../../../04_Utils/utils'
+import { CustomInput } from '../CustomInput/CustomInput'
 
 export const Login: FC = () => {
   const [email, setEmail] = useState('123@123.com')
@@ -93,7 +93,7 @@ export const Login: FC = () => {
     <div className={styles.container}>
       <div className={styles.title}>Login</div>
       <form onSubmit={submitHandler}>
-        <CustomInput
+        {/* <CustomInput
           showError={showEmailError}
           blurHandler={blurHandler}
           onChangeHandler={emailHandler}
@@ -112,7 +112,7 @@ export const Login: FC = () => {
           type="password"
           placeholder="Password"
           name="password"
-        />
+        /> */}
         <input type="submit" value="Login" />
         {showLoginError && <div className={styles.errorText}>{loginFail}</div>}
       </form>

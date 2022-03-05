@@ -14,120 +14,61 @@
       color: $color--dark;
       &:hover {
         text-decoration: underline;
-        color: $hover;
+        color: $color--error;
       }
     }
   }
+}
 
-  .title {
+.title {
+  font-size: $fz-md;
+  font-weight: $fw-lg;
+}
+
+.container form {
+  margin: 40px 0;
+  input {
+    height: 50px;
+    width: 100%;
+    border: 1px solid $color--grey;
+    border-radius: $bRadius5;
+    padding: 0 45px;
     font-size: $fz-md;
-    font-weight: $fw-lg;
-  }
-  form {
-    margin: 40px 0;
-
-    & .field {
-      width: 100%;
-      margin-bottom: 40px;
-      &.shake {
-        animation: shake 0.3s ease-in-out;
-      }
-    }
-    @keyframes shake {
-      20%,
-      80% {
-        margin-left: -12px;
-      }
-      40%,
-      60% {
-        margin-left: 12px;
-      }
-    }
-
-    input {
-      height: 50px;
-      width: 100%;
-      border: 1px solid $color--grey;
-      border-radius: $bRadius5;
-      padding: 0 45px;
-      font-size: $fz-sm;
-      color: inherit;
-      &::placeholder {
-        color: $color--grey;
-        font-size: $fz-md;
-      }
-      &[type='submit'] {
-        border: none;
-        color: $color--light;
-        background-color: $color--light;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        &:hover {
-          background-color: $hover;
-        }
-      }
-    }
-    & .borderError {
-      border-color: $error;
-    }
-    & .inputArea {
-      position: relative;
-    }
-    & .field i {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: $fz-sm;
-      pointer-events: none;
-    }
-    & .icon {
-      left: 15px;
+    color: inherit;
+    &::placeholder {
       color: $color--grey;
+      font-size: $fz-md;
     }
-    & .counter {
-      position: absolute;
-      font-size: $fz-sm;
-      font-weight: $fw-lg;
-      right: 38px;
-      top: 15px;
-      display: block;
-      color: $error;
-      height: 30px;
-      width: 30px;
-    }
-    & .counterEnough {
-      color: $success;
-    }
-    & .errorIcon {
-      right: 15px;
-      color: $error;
-    }
-    & .errorText {
-      position: absolute;
-      color: $error;
-      margin: 5px 0;
-      text-align: left;
-    }
-  }
-  .passLink {
-    margin-top: -10px;
-    padding-bottom: 10px;
-    & a {
-      color: inherit;
+    &[type='submit'] {
+      border: none;
+      color: $color--light;
+      background-color: $color--light;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
       &:hover {
-        text-decoration: underline;
-        color: $hover;
+        background-color: $color--error;
       }
     }
   }
-  .google {
-    margin-top: $m10;
-    & a {
-      color: inherit;
-    }
+}
+.passLink {
+  margin-top: -10px;
+  padding-bottom: 10px;
+  & a {
+    color: inherit;
     &:hover {
       text-decoration: underline;
-      color: $hover;
+      color: $color--error;
     }
+  }
+}
+.google {
+  margin-top: $m10;
+  & a {
+    color: inherit;
+  }
+  &:hover {
+    text-decoration: underline;
+    color: $color--error;
   }
 }

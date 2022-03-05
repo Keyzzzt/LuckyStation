@@ -9,7 +9,7 @@ import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/Use
 import { LandingPage } from './01_Components/01_Pages/LandingPage/LandingPage'
 import { OrderScreen } from './01_Components/01_Pages/OrderScreen/OrderScreen'
 import { PaymentScreen } from './01_Components/01_Pages/PaymentScreen/PaymentScreen'
-import { PlaceOrderScreen } from './01_Components/01_Pages/PlaceOrderScreen/PlaceOrderScreen'
+import { OrderPage } from './01_Components/01_Pages/OrderPage/OrderPage'
 import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'
 import { ShippingScreen } from './01_Components/01_Pages/ShippingScreen/ShippingScreen'
@@ -31,7 +31,7 @@ export const publicRotes = [
   { path: '/register', component: Register, exact: true },
   { path: '/shipping', component: ShippingScreen, exact: true },
   { path: '/payment', component: PaymentScreen, exact: true },
-  { path: '/placeorder', component: PlaceOrderScreen, exact: true },
+  { path: '/placeorder', component: OrderPage, exact: true },
   { path: '/product/:productId', component: ProductScreen, exact: true },
   { path: '/cart/:productId?', component: Cart },
   { path: '/terms', component: TermsAndConditions },

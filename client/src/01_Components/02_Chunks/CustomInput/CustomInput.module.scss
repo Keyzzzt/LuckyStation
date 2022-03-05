@@ -1,0 +1,64 @@
+@import './../../../02_Styles/newVariables.scss';
+
+.field {
+  width: 100%;
+  margin-bottom: 40px;
+  .inputArea {
+  }
+  position: relative;
+  & i {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: $fz-md;
+    pointer-events: none;
+  }
+  &.shake {
+    animation: shake 0.3s ease-in-out;
+  }
+}
+@keyframes shake {
+  20%,
+  80% {
+    margin-left: -12px;
+  }
+  40%,
+  60% {
+    margin-left: 12px;
+  }
+}
+
+.icon {
+  left: 15px;
+  color: $color--grey;
+}
+
+.errorIcon {
+  right: 15px;
+  color: $color--error;
+}
+.errorText {
+  position: absolute;
+  color: $color--error;
+  margin: 5px 0;
+  text-align: left;
+}
+
+.input {
+  height: 50px;
+  width: 100%;
+  border: 1px solid $color--grey;
+  border-radius: $bRadius5;
+  padding: 0 45px;
+  font-size: $fz-md;
+  color: inherit;
+  &::placeholder {
+    color: $color--grey;
+    font-size: $fz-md;
+  }
+}
+
+// Если написать этот класс выше, то .input перезатрет стили
+.borderError {
+  border-color: $color--error;
+}

@@ -42,7 +42,7 @@ export const Cart: FC = () => {
         return
       }
     }
-    history.push('/login?redirect=shipping')
+    history.push('/placeorder')
   }
   const shippingMessage =
     totalPrice > 1000

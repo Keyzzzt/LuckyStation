@@ -12,6 +12,7 @@ export const TermsAndConditions: FC = () => {
 
   useEffect(() => {
     dispatch(termsAndConditionsThunk(lang))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
