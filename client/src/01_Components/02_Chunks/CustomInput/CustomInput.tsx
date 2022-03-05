@@ -40,18 +40,18 @@ export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, re
     // TODO: На этом примере показать что setValue(e.target.value) это асинхронная функция и поэтому необходим useEffect
     // Todo: Узнать как это называется в React
   }
-  // Без inputError в массиве работать будет не корректно, видимо потому что в onChangeHandler мы не вызываем returnValue
-  // Хотя не понятно!!!
+
   useEffect(() => {
     if (value !== '') {
       returnValue(name, value)
     }
-  }, [value, inputError])
+  }, [value]) // inputError
 
   useEffect(() => {
     if (inputError) {
       setIsDirty(true)
     }
+    returnValue(name, value) // ВАЖНО !!!
   }, [inputError])
 
   useEffect(() => {
