@@ -4,19 +4,28 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
-import { actions } from '../../../03_Reducers/order/orderCreateReducer'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 import { Button } from '../../02_Chunks/Button/Button'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 import { isEmail } from '../../../04_Utils/utils'
+import { saveContactInfoThunk } from '../../../03_Reducers/cart/cartReducer'
 
 export const OrderPage: FC = () => {
   const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { shippingAddress } = useTypedSelector(state => state.cart)
   const { cart } = useTypedSelector(state => state)
-  const { order, fail } = useTypedSelector(state => state.orderCreate)
-  const [inputError, setInputError] = useState(false)
 
+  const [inputError, setInputError] = useState(false)
   const [continueAsGuest, setContinueAsGuest] = useState(false)
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState(shippingAddress.name)
+  const [lastName, setLastName] = useState(shippingAddress.lastName)
+  const [country, setCountry] = useState(shippingAddress.country)
+  const [address, setAddress] = useState(shippingAddress.address)
+  const [apartment, setApartment] = useState(shippingAddress.apartment)
+  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode)
+  const [city, setCity] = useState(shippingAddress.city)
+  const [phone, setPhone] = useState(shippingAddress.phone)
 
   const dispatch = useDispatch()
   const history = useHistory()
@@ -46,40 +55,35 @@ export const OrderPage: FC = () => {
       taxPrice: cart.taxPrice,
       totalPrice: cart.totalPrice,
     }
-    dispatch(createOrderThunk(order))
+    return order
   }
 
-  // Возвращаем значения из полей, важно дать инициализационные значения, чтобы не было ошибки при проверке, когда пользователь не ввел данные
-  const formData = {
-    email: '',
-    name: '',
-    lastName: '',
-  }
-  const returnValue = (key: 'email' | 'name' | 'lastName', value: string) => {
-    formData[key] = value
-    console.log(formData)
-  }
-  // При submit нужно проверить валидность данных
-
-  const submitHandler = (e: FormEvent<HTMLFormElement>, formData: any) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(formData)
-    if (isEmail(formData.email) && formData.name.length >= 2 && formData.lastName.length >= 2) {
+    if (isEmail(email) && name.length >= 2 && lastName.length >= 2) {
       setInputError(false)
     } else {
       setInputError(true)
       return
     }
-
-    alert('OK')
-  }
-
-  useEffect(() => {
-    if (order) {
-      history.push(`/order/${order}`)
-      dispatch(actions.reset())
+    const contactInfo = {
+      name,
+      lastName,
+      address,
+      city,
+      postalCode,
+      apartment,
+      country,
+      phone,
     }
-  }, [history, order, dispatch])
+    dispatch(saveContactInfoThunk(contactInfo))
+    const order = createOrder()
+    // todo предпоказ заказа для подтверждения, если OK ...
+    if (window.confirm('Save order and proceed to payment?')) {
+      dispatch(createOrderThunk(order))
+      history.push('/payment')
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -99,53 +103,102 @@ export const OrderPage: FC = () => {
               </div>
             </div>
           )}
-          <form onSubmit={e => submitHandler(e, formData)} className={styles.contactInfo}>
+          <form onSubmit={submitHandler} className={styles.contactInfo}>
             <CustomInput
-              returnValue={returnValue}
+              value={email}
+              returnValue={setEmail}
               setInputError={setInputError}
+              inputError={inputError}
               type="text"
               placeholder="Email"
               name="email"
-              inputError={inputError}
             />
-
             <div>
               <input className={styles.checkBox} type="checkbox" id="signUpForNewsletter" />
               <label htmlFor="signUpForNewsletter">Email me with news and offers</label>
             </div>
             <div className={styles.name}>
               <CustomInput
-                returnValue={returnValue}
+                value={name}
+                returnValue={setName}
                 setInputError={setInputError}
-                type="text"
-                placeholder="First name"
-                name="name"
                 inputError={inputError}
+                type="text"
+                placeholder="Name"
+                name="name"
               />
               <CustomInput
-                returnValue={returnValue}
+                value={lastName}
+                returnValue={setLastName}
                 setInputError={setInputError}
+                inputError={inputError}
                 type="text"
                 placeholder="Last name"
                 name="lastName"
-                inputError={inputError}
               />
             </div>
             <div>Shipping address</div>
             <div>
-              <input type="text" placeholder="Country" />
-              <input type="text" placeholder="Address" />
+              <CustomInput
+                value={country}
+                returnValue={setCountry}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Country"
+                name="country"
+              />
+              <CustomInput
+                value={address}
+                returnValue={setAddress}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Address"
+                name="address"
+              />
             </div>
             <div>
-              <input type="text" placeholder="Apartment, suite, etc. (optional)" />
+              <CustomInput
+                value={apartment}
+                returnValue={setApartment}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Apartment, suite, etc. (optional)"
+                name="apartment"
+              />
+              <CustomInput
+                value={postalCode}
+                returnValue={setPostalCode}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Postal code"
+                name="postal code"
+              />
             </div>
-            <div>
-              <input type="text" placeholder="Postal code" />
-              <input type="text" placeholder="City" />
+            <div className={styles.cityAndPhone}>
+              <CustomInput
+                value={city}
+                returnValue={setCity}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="City"
+                name="city"
+              />
+              <CustomInput
+                value={phone}
+                returnValue={setPhone}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Phone"
+                name="phone"
+              />
             </div>
-            <div>
-              <input type="text" placeholder="Phone" />
-            </div>
+
             <div>
               <label htmlFor="saveInfo">Save this information for next time</label>
               <input className={styles.checkBox} type="checkbox" id="saveInfo" />
@@ -156,7 +209,7 @@ export const OrderPage: FC = () => {
           </form>
         </div>
       </div>
-      <div className={styles.orderRight}></div>
+      <div className={styles.orderRight}>// todo</div>
     </div>
   )
 }

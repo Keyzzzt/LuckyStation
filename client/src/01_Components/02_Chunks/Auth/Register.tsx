@@ -9,13 +9,13 @@ import { GoogleLogin } from './GoogleLogin'
 import { CustomInput } from '../CustomInput/CustomInput'
 
 export const Register: FC = () => {
-  const [email, setEmail] = useState('123@123.com')
+  const [email, setEmail] = useState('')
   const [emailDirty, setEmailDirty] = useState(false)
   const [emailError, setEmailError] = useState('Empty field')
-  const [password, setPassword] = useState('123456')
+  const [password, setPassword] = useState('')
   const [passwordDirty, setPasswordDirty] = useState(false)
   const [passwordError, setPasswordError] = useState('Empty field')
-  const [confirm, setConfirm] = useState('123456')
+  const [confirm, setConfirm] = useState('')
   const [confirmDirty, setConfirmDirty] = useState(false)
   const [confirmError, setConfirmError] = useState('Empty field')
   const { userInfo } = useTypedSelector(state => state.userInfo)
@@ -158,8 +158,8 @@ export const Register: FC = () => {
         <Link to="/restore">Forgot password?</Link>
       </div>
       <div className={styles.regLink}>
-        Not yet member?
-        <Link to="/register"> Register now!</Link>
+        Already member?
+        <Link to="/login"> Login</Link>
       </div>
       <GoogleLogin />
     </div>

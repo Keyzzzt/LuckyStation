@@ -9,12 +9,10 @@
   display: flex;
   justify-content: flex-end;
   height: 100vh;
-  background-color: red;
   flex: 5;
   text-align: center;
 }
 .leftWrapper {
-  background-color: #09c;
   padding: 50px;
   width: 70%;
   height: 100vh;
@@ -28,7 +26,8 @@
   padding: 20px 50px;
 }
 
-.name {
+.name,
+.cityAndPhone {
   display: flex;
   justify-content: space-between;
   & input {

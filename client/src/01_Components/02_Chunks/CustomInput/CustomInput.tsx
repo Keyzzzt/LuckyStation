@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import styles from './CustomInput.module.scss'
-import { FC, FocusEvent, ChangeEvent, useState, useEffect } from 'react'
+import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
 type Props = {
@@ -8,11 +8,12 @@ type Props = {
   placeholder: string
   name: string
   inputError: boolean
-  returnValue(key: string, value: string): void
+  value: string
+  returnValue(value: string): void
   setInputError(value: boolean): void
 }
 
-export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, returnValue, setInputError }) => {
+export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, returnValue, setInputError, value }) => {
   let iconValue = ''
   switch (name) {
     case 'email':
@@ -25,33 +26,26 @@ export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, re
     case 'lastName':
       iconValue = 'fa-solid fa-user'
       break
+    case 'country':
+      iconValue = 'fa-solid fa-globe'
+      break
     default:
       iconValue = ''
   }
 
-  const [value, setValue] = useState('')
   const [errorMessage, setErrorMessage] = useState('Empty field')
   const [isDirty, setIsDirty] = useState(false)
   const showError = errorMessage && isDirty
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setInputError(false)
-    setValue(prev => e.target.value)
-    // TODO: На этом примере показать что setValue(e.target.value) это асинхронная функция и поэтому необходим useEffect
-    // Todo: Узнать как это называется в React
+    returnValue(e.target.value)
   }
-
-  useEffect(() => {
-    if (value !== '') {
-      returnValue(name, value)
-    }
-  }, [value]) // inputError
 
   useEffect(() => {
     if (inputError) {
       setIsDirty(true)
     }
-    returnValue(name, value) // ВАЖНО !!!
   }, [inputError])
 
   useEffect(() => {
@@ -64,20 +58,24 @@ export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, re
           setErrorMessage('Enter a valid email')
           break
         }
-      case 'name':
-        if (value.length > 1) {
+      case 'password':
+        if (value.length >= 6) {
           setErrorMessage('')
           break
         } else {
-          setErrorMessage('Enter a valid name')
+          setErrorMessage('Enter a valid password')
           break
         }
-      case 'lastName':
+      case 'apartment':
+        setErrorMessage('')
+        break
+
+      default:
         if (value.length > 1) {
           setErrorMessage('')
           break
         } else {
-          setErrorMessage('Enter a valid name')
+          setErrorMessage('Field is required')
           break
         }
     }

@@ -42,7 +42,7 @@
     &[type='submit'] {
       border: none;
       color: $color--light;
-      background-color: $color--light;
+      background-color: $color--dark;
       cursor: pointer;
       transition: background-color 0.3s ease;
       &:hover {
