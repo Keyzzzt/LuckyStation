@@ -3,10 +3,14 @@ import { ProductDocType } from './product.model'
 import { UserDocType } from './user.model'
 
 interface ShippingAddress {
+  name: string
+  lastName: string
   address: string
   city: string
   postalCode: string
+  apartment: string
   country: string
+  phone: string
 }
 interface PaymentResult {
   id: string
@@ -17,12 +21,12 @@ interface PaymentResult {
 export interface OrderItem extends Document {
   name: string
   quantity: number
-  image: string
+  images: []
   price: number
   product: ProductDocType['id']
 }
 export interface OrderDocType extends Document {
-  user: UserDocType['id'] | string // Если незарегистрированный пользователь, пишем сюда имя.
+  user: string // Если незарегистрированный пользователь, пишем сюда имя.
   orderItems: OrderItem[]
   shippingAddress: ShippingAddress
   paymentMethod: string
@@ -40,16 +44,12 @@ export interface OrderDocType extends Document {
 
 const OrderSchema = new Schema<OrderDocType>(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'User',
-    },
+    user: { type: String, required: true },
     orderItems: [
       {
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
-        image: { type: String, required: true },
+        images: { type: Array, required: true },
         price: { type: Number, required: true },
         product: {
           type: Schema.Types.ObjectId,
@@ -63,6 +63,10 @@ const OrderSchema = new Schema<OrderDocType>(
       city: { type: String, required: true },
       postalCode: { type: String, required: true },
       country: { type: String, required: true },
+      name: { type: String, required: true },
+      lastName: { type: String, required: true },
+      phone: { type: String, required: true },
+      apartment: { type: String, defaultValue: 'Not specified' },
     },
     paymentMethod: {
       type: String,

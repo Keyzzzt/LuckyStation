@@ -29,8 +29,10 @@ import { deleteSurveyReducer } from './03_Reducers/admin/survey reducers/deleteS
 import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleSurveyReducer'
 import { apiReducer } from './03_Reducers/admin/apiReducer'
 import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
+import { appConfigReducer } from './03_Reducers/appConfigReducer'
 
 const rootReducer = combineReducers({
+  appConfig: appConfigReducer,
   login: loginReducer,
   getUser: getUserReducer,
   userRegister: userRegisterReducer,

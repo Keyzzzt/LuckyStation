@@ -6,47 +6,50 @@ type Props = {
   step1?: boolean
   step2?: boolean
   step3?: boolean
-  step4?: boolean
 }
 
-export const CheckoutSteps: FC<Props> = ({ step1, step2, step3, step4 }) => {
+export const CheckoutSteps: FC<Props> = ({ step1, step2, step3 }) => {
   return (
     <div className={styles.container}>
       {step1 ? (
         <div>
-          <Link to="/cart">Cart-</Link>
+          <Link to="/cart">
+            Cart&nbsp;
+            <i className={`fa-solid fa-chevron-right`} />
+          </Link>
         </div>
       ) : (
         <div>
-          <div>-Cart-</div>
+          <div>
+            &nbsp;
+            <i className={`fa-solid fa-chevron-right`} />
+          </div>
         </div>
       )}
       {step2 ? (
         <div>
-          <Link to="/shipping">Shipping-</Link>
+          <Link to="/shipping">
+            &nbsp;Shipping&nbsp;
+            <i className={`fa-solid fa-chevron-right`} />
+          </Link>
         </div>
       ) : (
         <div>
-          <div>-Shipping-</div>
+          <div>
+            &nbsp;Shipping&nbsp;
+            <i className={`fa-solid fa-chevron-right`} />
+          </div>
         </div>
       )}
       {step3 ? (
         <div>
-          <Link to="/payment">Payment-</Link>
+          <Link className={styles.link} to="/payment">
+            &nbsp;Payment&nbsp;
+          </Link>
         </div>
       ) : (
         <div>
-          <div>Payment-</div>
-        </div>
-      )}
-
-      {step4 ? (
-        <div>
-          <Link to="/placeorder">Place Order</Link>
-        </div>
-      ) : (
-        <div>
-          <div>Place Order</div>
+          <div>&nbsp;Payment&nbsp;</div>
         </div>
       )}
     </div>

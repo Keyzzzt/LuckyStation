@@ -13,10 +13,16 @@ import {
   SurveyFromDB,
   UpdateProfile,
   TermsAndConditions,
+  ConfigType,
 } from './05_Types/APIResponse'
 import { Survey } from './05_Types/01_Base'
 
 export const API = {
+  config: {
+    getConfig: async () => {
+      return $api.get<ConfigType>('/config')
+    },
+  },
   auth: {
     login: async (email: string, password: string) => {
       return $api.post<LoginResponse>('/login', { email, password })
@@ -50,13 +56,13 @@ export const API = {
     createReview: async (productId: string, review: any): Promise<void> => {
       return $api.post(`/product/${productId}/review`, { ...review })
     },
-    toggleSubscription: async (email: string): Promise<void> => {
-      return $api.post(`/user/subscription`, { email })
+    subscribe: async (email: string): Promise<void> => {
+      return $api.post(`/user/subscribe`, { email })
     },
   },
   order: {
-    createOrder: async (newOrder: OrderToAPI): Promise<AxiosResponse<OrderFromAPI>> => {
-      return $api.post<OrderFromAPI>('/order', newOrder)
+    createOrder: async (newOrder: OrderToAPI): Promise<AxiosResponse<string>> => {
+      return $api.post<string>('/order', newOrder)
     },
     payOrder: async (orderId: string, paymentResult: any): Promise<AxiosResponse<any>> => {
       return $api.post<any>(`/order/${orderId}/pay`, paymentResult)

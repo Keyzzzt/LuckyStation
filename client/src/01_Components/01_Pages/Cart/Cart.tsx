@@ -10,13 +10,16 @@ import { Button } from '../../02_Chunks/Button/Button'
 import { Fail, Success } from '../../02_Chunks/SuccessAndFail/SuccessAndFail'
 
 export const Cart: FC = () => {
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  const { minPriceForFreeShipping, freeShippingMessage } = useTypedSelector(state => state.appConfig.config!)
+  const { cartItems } = useTypedSelector(state => state.cart)
+
   const { productId } = useParams<{ productId: string }>()
   const { search } = useLocation()
   const history = useHistory()
   const dispatch = useDispatch()
-  const { cartItems } = useTypedSelector(state => state.cart)
-  const [acceptedTerms, setAcceptedTerms] = useState(false)
-  const [totalPrice, setTotalPrice] = useState(0)
 
   const qty = search ? Number(search.split('=')[1]) : 1
 
@@ -42,12 +45,12 @@ export const Cart: FC = () => {
         return
       }
     }
-    history.push('/placeorder')
+    history.push('/shipping')
   }
   const shippingMessage =
-    totalPrice > 1000
-      ? 'You are eligible for free shipping!'
-      : `Spend € ${1000 - totalPrice} more and get free shipping!`
+    totalPrice > minPriceForFreeShipping
+      ? freeShippingMessage
+      : `Spend € ${minPriceForFreeShipping - totalPrice} more and get free shipping!`
 
   useEffect(() => {
     if (productId) {
@@ -57,6 +60,7 @@ export const Cart: FC = () => {
 
   useEffect(() => {
     history.push('/cart')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
     setTotalPrice(prev => cartItems.reduce((acc, item) => acc + item.price! * item.qty!, 0))
@@ -83,9 +87,9 @@ export const Cart: FC = () => {
                 <div className={styles.headerQuantity}>QUANTITY</div>
                 <div className={styles.headerTotal}>PRICE</div>
               </div>
-              {cartItems.map((item, i) => (
+              {cartItems.map(item => (
                 <>
-                  <div className={styles.productItem}>
+                  <div className={styles.productItem} key={getRandom()}>
                     <div className={styles.productName}>
                       <Link to={`/product/${item._id}`}>
                         <div className={styles.productNameWrapper}>

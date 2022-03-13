@@ -1,17 +1,16 @@
 @import './../../../02_Styles/newVariables.scss';
 
 .field {
+  position: relative;
   width: 100%;
   margin-bottom: 40px;
-  .inputArea {
-  }
-  position: relative;
   & i {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: $fz-md;
-    pointer-events: none;
+    display: none;
+    // position: absolute;
+    // top: 50%;
+    // transform: translateY(-50%);
+    // font-size: $fz-md;
+    // pointer-events: none;
   }
   &.shake {
     animation: shake 0.3s ease-in-out;
@@ -30,7 +29,7 @@
 
 .icon {
   left: 15px;
-  color: $color--grey;
+  color: #d6d6d6;
 }
 
 .errorIcon {
@@ -47,14 +46,14 @@
 .input {
   height: 50px;
   width: 100%;
-  border: 1px solid $color--grey;
+  border: 1px solid #d6d6d6;
   border-radius: $bRadius5;
-  padding: 0 45px;
-  font-size: $fz-md;
-  color: inherit;
+  padding: 0 10px;
+  // padding: 0 45px;
+  font-size: 0.9rem;
   &::placeholder {
-    color: $color--grey;
-    font-size: $fz-md;
+    color: #737373;
+    font-size: 0.9rem;
   }
 }
 

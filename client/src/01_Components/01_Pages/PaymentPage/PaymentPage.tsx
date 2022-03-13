@@ -1,5 +1,5 @@
+import styles from './PaymentPage.module.scss'
 import { FC, useEffect, useState } from 'react'
-import styles from './OrderScreen.module.scss'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
@@ -14,7 +14,7 @@ import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { getRandom } from '../../../04_Utils/utils'
 
-export const OrderScreen: FC = () => {
+export const PaymentPage: FC = () => {
   const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
   const { success: successPay, loading: loadingPay } = useTypedSelector(state => state.orderPay)
   const [sdkReady, setSdkReady] = useState(false)
@@ -24,7 +24,6 @@ export const OrderScreen: FC = () => {
     if (!orderInfo) {
       return
     }
-    console.log(paymentResult)
     dispatch(payOrderThunk(orderInfo._id, paymentResult))
   }
 
@@ -65,6 +64,7 @@ export const OrderScreen: FC = () => {
       ) : (
         <>
           <div>
+            <h1 style={{ fontSize: '100px' }}>TODO</h1>
             <div>Order Items</div>
             {orderInfo.orderItems.map(item => (
               <div key={getRandom()}>

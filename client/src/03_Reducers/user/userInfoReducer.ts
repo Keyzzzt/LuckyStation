@@ -20,7 +20,7 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
     case 'USER_INFO_RESET':
       return { ...initialState }
     case 'ADD_TO_FAVORITE':
-      const isFavorite = state.userInfo?.favorite?.find((n) => n === action.payload)
+      const isFavorite = state.userInfo?.favorite?.find(n => n === action.payload)
       if (isFavorite) {
         return { ...state }
       } else {
@@ -28,8 +28,11 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
         return { ...state, userInfo: { ...state.userInfo, favorite: [...state.userInfo?.favorite, action.payload] } }
       }
     case 'REMOVE_FROM_FAVORITE':
-      //@ts-ignore
-      return { ...state, userInfo: { ...state.userInfo, favorite: [...state.userInfo?.favorite.filter((x) => x !== action.payload)] } }
+      return {
+        ...state,
+        //@ts-ignore
+        userInfo: { ...state.userInfo, favorite: [...state.userInfo?.favorite.filter(x => x !== action.payload)] },
+      }
     case 'SUBSCRIBE':
       if (action.payload === state.userInfo?.email) {
         return { ...state, userInfo: { ...state.userInfo, isSubscribed: true } }
@@ -62,7 +65,7 @@ export const actions = {
 // Мы отправляем запрос на базу и меняем стейт
 // Таким образом данные в базе и на фронте сопадают без запроса пользователя с новыми даннми
 export function toggleFavoriteThunk(productId: string, isFavorite: boolean): ThunkType {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       await API.product.toggleFavorite(productId, isFavorite)
       if (isFavorite) {
@@ -73,7 +76,7 @@ export function toggleFavoriteThunk(productId: string, isFavorite: boolean): Thu
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ')
+        const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.favoriteFailAC(errMsg))
         return
       }
@@ -82,14 +85,14 @@ export function toggleFavoriteThunk(productId: string, isFavorite: boolean): Thu
   }
 }
 export function subscribeThunk(email: string): ThunkType {
-  return async (dispatch) => {
+  return async dispatch => {
     try {
-      await API.user.toggleSubscription(email)
+      await API.user.subscribe(email)
       dispatch(actions.subscribeAC(email))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ')
+        const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.subscribeFailAC(errMsg))
         return
       }
@@ -106,7 +109,7 @@ export function userInfoThunk(): ThunkType {
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ')
+        const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.userInfoFailAC(errMsg))
         return
       }

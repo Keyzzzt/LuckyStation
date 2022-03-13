@@ -8,6 +8,18 @@ export interface LoginResponse {
 //   errors: string[]
 // }
 
+export type ConfigType = {
+  adminColorTheme: string
+  customersColorTheme: string
+  darkThemeColors: []
+  lightThemeColors: []
+  defaultLanguage: string
+  minPriceForFreeShipping: number
+  defaultShippingPriceToNonEUCountries: number
+  freeShippingMessage: string
+  taxRate: number
+}
+
 export type User = {
   accessToken?: string
   _id: string

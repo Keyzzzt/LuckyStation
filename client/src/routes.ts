@@ -7,12 +7,8 @@ import { SurveyPage } from './01_Components/01_Pages/AdminDashboard/Survey/Surve
 import { UserEditScreen } from './01_Components/01_Pages/AdminDashboard/UserEditScreen/UserEditScreen'
 import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/UsersList'
 import { LandingPage } from './01_Components/01_Pages/LandingPage/LandingPage'
-import { OrderScreen } from './01_Components/01_Pages/OrderScreen/OrderScreen'
-import { PaymentScreen } from './01_Components/01_Pages/PaymentScreen/PaymentScreen'
-import { OrderPage } from './01_Components/01_Pages/OrderPage/OrderPage'
 import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'
-import { ShippingScreen } from './01_Components/01_Pages/ShippingScreen/ShippingScreen'
 import { Ulbi } from './01_Components/01_Pages/Ulbi/Ulbi'
 import { Login } from './01_Components/02_Chunks/Auth/Login'
 import { Register } from './01_Components/02_Chunks/Auth/Register'
@@ -22,6 +18,8 @@ import { OrderList } from './01_Components/01_Pages/AdminDashboard/OrderList/Ord
 import { API } from './01_Components/01_Pages/AdminDashboard/API/API'
 import { Cart } from './01_Components/01_Pages/Cart/Cart'
 import { TermsAndConditions } from './01_Components/01_Pages/TermsAndConditions/TermsAndConditions'
+import { ShippingPage } from './01_Components/01_Pages/ShippingPage/ShippingPage'
+import { PaymentPage } from './01_Components/01_Pages/PaymentPage/PaymentPage'
 
 export const publicRotes = [
   { path: '/restore/:token', component: RestorePassword },
@@ -29,17 +27,13 @@ export const publicRotes = [
   { path: '/login', component: Login, exact: true },
   { path: '/ulbi', component: Ulbi, exact: true },
   { path: '/register', component: Register, exact: true },
-  { path: '/shipping', component: ShippingScreen, exact: true },
-  { path: '/payment', component: PaymentScreen, exact: true },
-  { path: '/placeorder', component: OrderPage, exact: true },
+  { path: '/shipping', component: ShippingPage, exact: true },
   { path: '/product/:productId', component: ProductScreen, exact: true },
   { path: '/cart/:productId?', component: Cart },
+  { path: '/payment/:orderId', component: PaymentPage, exact: true },
   { path: '/terms', component: TermsAndConditions },
 ]
-export const privateRotes = [
-  { path: '/profile', component: ProfileScreen, exact: true },
-  { path: '/order/:orderId', component: OrderScreen, exact: true },
-]
+export const privateRotes = [{ path: '/profile', component: ProfileScreen, exact: true }]
 export const adminRoutes = [
   { path: '/dashboard', component: AdminDashboard, exact: true },
   { path: '/product/:productId/edit', component: ProductEditScreen, exact: true },

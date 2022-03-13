@@ -6,6 +6,8 @@ import { Footer } from './01_Components/02_Chunks/Footer/Footer'
 import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'
 import { publicRotes, privateRotes, adminRoutes } from './routes'
+import { getRandom } from './04_Utils/utils'
+import { configThunk } from './03_Reducers/appConfigReducer'
 
 export const App = () => {
   const dispatch = useDispatch()
@@ -17,6 +19,7 @@ export const App = () => {
   // Аутентификация при каждом запуске / перезагрезку приложения
   useEffect(() => {
     dispatch(authenticateThunk())
+    dispatch(configThunk())
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -30,20 +33,20 @@ export const App = () => {
       <Header isAuth={isAuth} isAdmin={isAdmin} />
 
       {publicRotes.map(route => (
-        <Switch>
+        <Switch key={getRandom()}>
           <Route path={route.path} component={route.component} exact={route.exact} />
         </Switch>
       ))}
 
       {isAuth &&
         privateRotes.map(route => (
-          <Switch>
+          <Switch key={getRandom()}>
             <Route path={route.path} component={route.component} exact={route.exact} />
           </Switch>
         ))}
       {isAdmin &&
         adminRoutes.map(route => (
-          <Switch>
+          <Switch key={getRandom()}>
             <Route path={route.path} component={route.component} exact={route.exact} />
           </Switch>
         ))}

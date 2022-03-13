@@ -10,18 +10,21 @@ import { OrderModel } from '@src/models/order.model'
 export async function createNewOrder(req: RequestCustom, res: Response, next: NextFunction) {
   // FIXME: Если пользователь купил незарегистрированный то нужно в user записать из поля name, которое ждем с фронта
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //   return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    // }
 
-    const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
+    const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice, email } =
+      req.body
     if (orderItems && orderItems.length === 0) {
       return next(ApiError.BadRequest('No products in order!'))
     }
+    console.log(shippingAddress)
 
+    const user = req.user?._id ? req.user._id : email
     const order = await OrderModel.create({
-      user: req.user._id,
+      user,
       orderItems,
       shippingAddress,
       paymentMethod,

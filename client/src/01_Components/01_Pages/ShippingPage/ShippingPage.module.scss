@@ -1,0 +1,233 @@
+@import './../../../02_Styles/newVariables.scss';
+
+.container,
+.subscribe,
+.discount,
+.shipping,
+.askForLogin,
+.name,
+.item,
+.cityAndPhone,
+.subTotalPrice,
+.shippingPrice,
+.totalPrice,
+.totalPriceRight,
+.accordionTitle {
+  display: flex;
+  font-size: 0.9rem;
+  color: $color--dark;
+}
+
+.container {
+  flex-direction: column;
+  @include breakpoint(1200) {
+    flex-direction: row;
+  }
+}
+
+.orderSummaryAccordion {
+  display: flex;
+  justify-content: space-between;
+  // padding: 25px 50px;
+  border-bottom: 1px solid #d6d6d6;
+  background-color: #fafafa;
+  padding: 15px;
+  @include breakpoint(768) {
+    padding: 25px 50px;
+  }
+  @include breakpoint(992) {
+    padding: 25px 100px;
+  }
+  @include breakpoint(1200) {
+    display: none;
+  }
+}
+.accordionTitle div {
+  margin: 0 15px;
+}
+
+// Left side
+.shipping {
+  @include breakpoint(1200) {
+    order: -1;
+    flex: 5;
+    justify-content: end;
+  }
+}
+.leftWrapper {
+  width: 100%;
+  padding: 15px;
+  @include breakpoint(768) {
+    padding: 25px 50px;
+  }
+  @include breakpoint(992) {
+    padding: 30px 100px 50px;
+  }
+  @include breakpoint(1200) {
+    padding: 50px;
+    width: 70%;
+  }
+}
+.askForLogin {
+  justify-content: space-between;
+  align-items: center;
+  // border: 1px solid #d6d6d6;
+  border-radius: 10px;
+  // padding: 20px 50px;
+  margin-bottom: 25px;
+}
+.subscribe {
+  align-items: center;
+  margin-top: -10px;
+  margin-bottom: 25px;
+}
+.subscribe input {
+  margin-right: 5px;
+}
+.shippingAddress {
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+.name,
+.cityAndPhone {
+  flex-direction: column;
+  justify-content: space-between;
+  @include breakpoint(576) {
+    flex-direction: row;
+  }
+  & input {
+    width: 99%;
+  }
+}
+
+// orderSummary
+.orderSummary {
+  background-color: #efefef;
+  transition: height 0.4s ease-in-out;
+  overflow: hidden;
+
+  @include breakpoint(1200) {
+    flex: 4;
+  }
+}
+.rightWrapper {
+  padding: 15px;
+  @include breakpoint(768) {
+    padding: 25px 50px;
+  }
+  @include breakpoint(992) {
+    padding: 100px;
+  }
+  @include breakpoint(1200) {
+    padding: 50px;
+    width: 80%;
+  }
+  @include breakpoint(1400) {
+    padding: 50px;
+    width: 70%;
+  }
+}
+.cartItems,
+.discount,
+.subTotal {
+  border-bottom: 1px solid #d6d6d6;
+}
+.discount,
+.subTotal {
+  padding: 25px 0;
+}
+.item {
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.itemName,
+.itemPrice {
+  color: $color--dark;
+}
+
+.itemImage {
+  position: relative;
+}
+.itemQty {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  top: -5px;
+  right: -5px;
+  color: #fff;
+  background-color: $color--grey;
+  height: 20px;
+  width: 20px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+}
+.itemImage img {
+  width: 60px;
+  border-radius: 10px;
+}
+.discount {
+  flex-direction: column;
+  padding: 15px 0;
+}
+.discount input {
+  // flex: 1;
+  border-radius: 5px;
+  border: 1px solid #d6d6d6;
+  font-size: 0.9rem;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.discount input::placeholder {
+  color: #737373;
+}
+.btn {
+  padding: 15px 25px;
+  // margin-left: 25px;
+  color: #fff;
+  background-color: #bfbfbf;
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btnSubmit {
+  width: 100%;
+}
+
+.totalPrice {
+  padding: 25px 0;
+  align-items: center;
+  justify-content: space-between;
+}
+.subTotalPrice,
+.shippingPrice,
+.totalPrice {
+  justify-content: space-between;
+  color: $color--grey;
+  font-size: 0.9rem;
+}
+.shippingPrice div:last-child {
+  font-size: 0.8rem;
+}
+.price {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.totalPriceLeft div:last-child {
+  margin-top: 10px;
+  font-size: 0.8rem;
+}
+.totalPriceRight {
+  align-items: center;
+}
+.totalPriceRight span:first-child {
+  font-size: 0.8rem;
+}
+.totalPriceRight span:last-child {
+  margin-top: 10px;
+  font-size: 1.3rem;
+  color: $color--dark;
+}

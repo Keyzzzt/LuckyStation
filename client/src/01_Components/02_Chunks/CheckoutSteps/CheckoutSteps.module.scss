@@ -1,7 +1,13 @@
-@import './../../../02_Styles/variables.scss';
+@import './../../../02_Styles/newVariables.scss';
 
 .container {
   display: flex;
   justify-content: center;
   padding: 10px;
+  border-bottom: 1px solid #d6d6d6;
+  margin-bottom: 25px;
+}
+.container a {
+  color: $color--dark;
+  font-weight: 700;
 }

@@ -10,9 +10,10 @@ import { UserModel } from './models/user.model'
 import { ProductModel } from './models/product.model'
 import { OrderModel } from './models/order.model'
 import { SurveyModel } from './models/survey.model'
+import { getConfig } from './Controllers/config.controller'
 
 export function routes(app) {
-  // todo api info route
+  app.get('/api/config', getConfig)
   app.get('/api/apiinfo', getApiInfo)
 
   app.post('/api/login', Validation.auth, Auth.login)
@@ -77,9 +78,9 @@ export function routes(app) {
   app.delete('/api/user/subscribe', Validation.emailOnly, User.unSubscribe)
   app.get('/api/user/terms/:lang', User.getTermsAndConditions)
 
-  app.post('/api/order', Validation.createOrder, privateRoute, Order.createNewOrder)
+  app.post('/api/order', Validation.createOrder, Order.createNewOrder)
   app.get('/api/order/myorders/:page/:limit', privateRoute, paginatedResult(OrderModel, 'own'), Order.getOwnOrders)
-  app.get('/api/order/:id', privateRoute, Order.getOrderById)
+  app.get('/api/order/:id', Order.getOrderById)
   app.get('/api/product/:page/:limit', paginatedResult(ProductModel, null), Product.getProducts)
   app.post('/api/product/:id/review', Validation.createReview, privateRoute, Product.createReview)
   app.get('/api/product/:id', Product.getProductById)
