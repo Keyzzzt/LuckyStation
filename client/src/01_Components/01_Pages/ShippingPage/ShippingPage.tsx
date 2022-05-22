@@ -9,7 +9,7 @@
  * ? TODO - accept terms before proceed product
  * ? TODO -
  * ! FIXME subscribeThunk
- * ! FIXME saveContactInfoThunk синхронная функция, нет необходимости ее диспачить
+ * ! FIXME saveContactInfoThunk синхронная функция, нет необходимости ее диспачить g
  * ! FIXME сообщение о бесплатной доставке должно хранится на серваке
  * ! FIXME Реализовать функционал с кодом скидки
  * ! FIXME Налоговая ставка должна хранится на серваке
