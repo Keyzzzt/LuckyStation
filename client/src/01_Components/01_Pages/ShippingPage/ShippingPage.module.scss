@@ -28,7 +28,6 @@
 .orderSummaryAccordion {
   display: flex;
   justify-content: space-between;
-  // padding: 25px 50px;
   border-bottom: 1px solid #d6d6d6;
   background-color: #fafafa;
   padding: 15px;
@@ -105,7 +104,6 @@
   background-color: #efefef;
   transition: height 0.4s ease-in-out;
   overflow: hidden;
-
   @include breakpoint(1200) {
     flex: 4;
   }
@@ -116,7 +114,7 @@
     padding: 25px 50px;
   }
   @include breakpoint(992) {
-    padding: 100px;
+    padding: 50px 100px;
   }
   @include breakpoint(1200) {
     padding: 50px;

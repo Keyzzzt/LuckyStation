@@ -1,3 +1,15 @@
+/**
+ * * Desc - cart
+ * * Access - PRIVATE
+ * * Props - null
+ * * Components to render - <Button />
+ * ? TODO - show all products in cart
+ * ? TODO - change quantity
+ * ? TODO - remove product from cart
+ * ? TODO - accept terms before proceed product
+ * ! FIXME
+ */
+
 import { FC, useEffect, useState } from 'react'
 import styles from './Cart.module.scss'
 import { useDispatch } from 'react-redux'
@@ -42,6 +54,7 @@ export const Cart: FC = () => {
     if (!acceptedTerms) {
       if (window.confirm('Click OK to accept terms and conditions')) {
         setAcceptedTerms(true)
+        history.push('/shipping')
         return
       }
     }

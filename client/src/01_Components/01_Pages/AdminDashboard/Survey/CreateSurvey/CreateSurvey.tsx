@@ -1,3 +1,22 @@
+/**
+ * * Desc - new survey form
+ * * Access - ADMIN
+ * * Props - allEmails as array, subscribedEmails as array
+ * * Components to render - <RedirectButton />
+ * ? TODO - form with survey title, description, body and email list
+ * ? TODO - get back one step
+ * ? TODO - get back one step
+ * ? TODO get back one step
+ * ? TODO create a beautiful component for message instead of alert
+ * ? TODO load only subscribers
+ * ? TODO load all emails that ever been registered on website
+ * ? TODO clear form
+ * ? TODO check if all emails are valid and if not, ask to remove non-emails values
+ * ? TODO send survey
+ * ! FIXME ask admin password before send survey
+ * ! FIXME inputs as in login form with animation and validation
+ */
+
 import styles from './CreateSurvey.module.scss'
 import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../../../04_Utils/utils'
@@ -9,9 +28,6 @@ type Props = {
   allEmails: string[]
   subscribedEmails: string[]
 }
-
-// todo поля с валидацией как в логин форме
-// todo Перед отпарвкой запросить пароль
 
 export const CreateSurvey: FC<Props> = ({ allEmails, subscribedEmails }) => {
   const [title, setTitle] = useState('New survey')

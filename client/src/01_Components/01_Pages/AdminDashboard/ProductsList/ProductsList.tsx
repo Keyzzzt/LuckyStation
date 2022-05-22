@@ -1,3 +1,14 @@
+/**
+ * * Desc - display all products with simple list with ability to load single product
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />, <Message />
+ * ? TODO - fetch all products and display as simple list with ability to load single product
+ * ? TODO - get back one step
+ * ? TODO - create new product
+ * ! FIXME get back one step
+ */
+
 import styles from './ProductsList.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'

@@ -1,3 +1,15 @@
+/**
+ * * Desc - Here we able to edit and remove a single product
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <RedirectButton />, <Loader />
+ * ? TODO - fetch product by id(get id from query string)
+ * ? TODO - fill out input fields with data
+ * ? TODO - delete product
+ * ? TODO - update product
+ * ? TODO - get back one step
+ */
+
 import styles from './ProductEditScreen.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -26,6 +38,7 @@ export const ProductEditScreen: FC = () => {
   const [price, setPrice] = useState(0)
   const [countInStock, setCountInStock] = useState(0)
 
+  // Delete product
   const deleteHandler = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       dispatch(productDeleteThunk(id))
@@ -34,6 +47,8 @@ export const ProductEditScreen: FC = () => {
     }
     return
   }
+
+  // Update product
   const updateHandler = () => {
     dispatch(
       updateProductThunk(productInfo?._id!, {
@@ -49,10 +64,13 @@ export const ProductEditScreen: FC = () => {
       })
     )
   }
+
+  // Fetch product by id
   useEffect(() => {
     dispatch(productInfoThunk(productId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch])
+  }, [dispatch, productId])
+
+  // When product is fetched - fill out inputs with product data
   useEffect(() => {
     if (productInfo) {
       setName(productInfo.name)
@@ -66,7 +84,7 @@ export const ProductEditScreen: FC = () => {
 
   return (
     <div className={styles.container}>
-      <RedirectButton path="/dashboard">Back</RedirectButton>
+      <RedirectButton path="/dashboard/products">Back</RedirectButton>
       {!productInfo ? (
         <Loader />
       ) : (

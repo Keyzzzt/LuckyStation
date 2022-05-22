@@ -1,3 +1,11 @@
+/**
+ * * Props - null
+ * * Components to render - Loader, Message, ...
+ * * Data to fetch - ...
+ * ! TODO
+ * ! Remove any
+ */
+
 /* eslint-disable no-useless-escape */
 import styles from './Auth.module.scss'
 import { FormEvent, FC, useEffect, useState, ChangeEvent, FocusEvent } from 'react'
@@ -6,7 +14,6 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
 import { GoogleLogin } from './GoogleLogin'
-import { CustomInput } from '../CustomInput/CustomInput'
 
 export const Register: FC = () => {
   const [email, setEmail] = useState('')

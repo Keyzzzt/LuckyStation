@@ -1,3 +1,13 @@
+/**
+ * * Desc - Main page
+ * * Access - PUBLIC
+ * * Props - null
+ * * Components to render - Loader, Pagination, HeroSection, NewProductsSection, ...
+ * * Data to fetch - products
+ * ! TODO
+ * ! Search not working properly
+ */
+
 import { FC, useEffect } from 'react'
 import styles from './LandingPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -18,8 +28,6 @@ type Params = {
   limit: string
   keyword: string
 }
-
-// TODO сломан поиск, реализовать не через get строку а через параметры, либо, если не надо делать запрос на сервер сразу сделать поиск на фронте
 
 export const LandingPage: FC = () => {
   const { fail, products } = useTypedSelector(state => state.productList)

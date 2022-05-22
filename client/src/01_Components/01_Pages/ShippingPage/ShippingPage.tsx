@@ -1,3 +1,30 @@
+/**
+ * * Desc - Shipping page, gather user name, address, phone, email
+ * * Access - PRIVATE / PUBLIC
+ * * Props - null
+ * * Components to render - <Button />
+ * ? TODO - create form that has name,lastName,address,city,postalCode,apartment,country,phone input fields
+ * ? TODO - if user is logged in, all info should be filled in automatically from userInfo
+ * ? TODO - remove product from cart
+ * ? TODO - accept terms before proceed product
+ * ? TODO -
+ * ! FIXME subscribeThunk
+ * ! FIXME saveContactInfoThunk синхронная функция, нет необходимости ее диспачить
+ * ! FIXME сообщение о бесплатной доставке должно хранится на серваке
+ * ! FIXME Реализовать функционал с кодом скидки
+ * ! FIXME Налоговая ставка должна хранится на серваке
+ * ! FIXME сумма после которой идет бесплатная доставка должна хранится на серваке
+ *
+ * * Принцип аккардиона на этой странице.
+ * * Изначальная высота orderSummary 0, но если окно больше чем 1200 то дается значение auto
+ * * У нас есть шапка аккордиона, она спрятана на большом экране.
+ * * Если экран меньше чем 1200 flex-direction: row, и шапка аккардиона появляется.
+ * * Но так как изначально значение высоты 0, то orderSummary будет спрятан. И уже при клике меняем isOpen,
+ * *  и меняем высоту на фактическую высоту orderSummary через useRef
+ * * Однако данная конструкция не будет работать так же если мы с большого экрана будем вручную менять размер экрана,
+ * *  при уменьшении появится шапка аккордиона и orderSummary будет открыт, так как ранее в useEffect мы меняли значение.
+ */
+
 import { FC, FormEvent, useEffect, useRef, useState } from 'react'
 import styles from './ShippingPage.module.scss'
 import { useDispatch } from 'react-redux'
@@ -13,24 +40,28 @@ import { API } from '../../../API'
 import { getRefValue } from '../../../04_Utils/getRefValue'
 import { useWindowSize } from '../../../04_Utils/hooks'
 
-// todo Реализовать функционал с кодом скидки
-// todo Налоговая ставка должна хранится на серваке
-// todo сумма после которой идет бесплатная доставка должна хранится на серваке
-// todo сообщение о бесплатной доставке должно хранится на серваке
-
 export const ShippingPage: FC = () => {
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { shippingAddress } = useTypedSelector(state => state.cart)
   const { cart } = useTypedSelector(state => state)
+
+  // Here orderId and orderSuccess works together to avoid redirect if order once has been created,
+  // we simply set orderSuccess to false before we redirect to payment, and so we easily can return.
   const { orderId } = useTypedSelector(state => state.orderCreate)
+  const [orderSuccess, setOrderSuccess] = useState(false)
+
   const { minPriceForFreeShipping, freeShippingMessage, taxRate } = useTypedSelector(state => state.appConfig.config!)
 
   const contentRef = useRef<HTMLDivElement>(null)
 
   const [subscribe, setSetSubscribe] = useState(false)
+
   const [isOpen, setIsOpen] = useState(false)
   const [height, setHeight] = useState<string | number>(0)
+  const size = useWindowSize()
+
   const [inputError, setInputError] = useState(false)
+
   const [continueAsGuest, setContinueAsGuest] = useState(false)
   const [email, setEmail] = useState('2342@235454.com')
   const [name, setName] = useState(shippingAddress.name)
@@ -44,7 +75,6 @@ export const ShippingPage: FC = () => {
 
   const dispatch = useDispatch()
   const history = useHistory()
-  const size = useWindowSize()
 
   cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty!, 0)
   cart.shippingPrice = +cart.itemsPrice > minPriceForFreeShipping ? 0 : 25
@@ -92,8 +122,8 @@ export const ShippingPage: FC = () => {
     }
     dispatch(saveContactInfoThunk(contactInfo))
     const order = createOrder()
+    setOrderSuccess(true)
 
-    // todo предпоказ заказа для подтверждения, если OK ...
     if (window.confirm('Save order and proceed to payment?')) {
       if (subscribe) {
         API.user.subscribe(email)
@@ -101,27 +131,31 @@ export const ShippingPage: FC = () => {
       dispatch(createOrderThunk({ ...order }))
     }
   }
+
   useEffect(() => {
     if (isOpen) {
       const contentEl = getRefValue(contentRef)
-      setHeight(contentEl.scrollHeight)
+      setHeight(contentEl.scrollHeight - 30)
     } else {
       setHeight(0)
     }
   }, [isOpen])
 
+  // If window
   useEffect(() => {
-    if (size.width! > 1200) {
+    if (size.width > 1200) {
       setHeight('auto')
       setIsOpen(false)
     }
   }, [size])
 
+  // If order created and flag is true then redirect to next step
   useEffect(() => {
-    if (orderId) {
+    if (orderId && orderSuccess) {
+      setOrderSuccess(false)
       history.push(`/payment/${orderId}`)
     }
-  }, [orderId])
+  }, [orderId, history, orderSuccess])
 
   return (
     <div className={styles.container}>

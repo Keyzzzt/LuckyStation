@@ -1,3 +1,13 @@
+/**
+ * * Desc - Temporary component to show API docs
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />
+ * ? TODO - fetch api docs
+ * ? TODO - display api docs as accordion.
+ * ! FIXME API docs comes as an array with bunch strings in it. Use another data structure and remove if statement from map function.
+ */
+
 import styles from './API.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
@@ -19,8 +29,7 @@ export const API: FC = () => {
 
   useEffect(() => {
     dispatch(apiThunk())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={styles.container}>
@@ -30,7 +39,7 @@ export const API: FC = () => {
         <div className={styles.accordion}>
           {
             // @ts-ignore
-            apiInfo.map((item, i) => {
+            apiInfo.map((item, i: number) => {
               if (typeof item === 'string') {
                 return null
               }

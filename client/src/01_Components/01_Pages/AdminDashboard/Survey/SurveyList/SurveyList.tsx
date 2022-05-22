@@ -1,3 +1,14 @@
+/**
+ * * Desc - display all users
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />, <Message />
+ * ? TODO - fetch all users
+ * ? TODO - load single user by click on users field
+ * ? TODO - create new user
+ * ! FIXME
+ */
+
 import styles from './SurveyList.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -14,8 +25,7 @@ export const SurveyList: FC = () => {
 
   useEffect(() => {
     dispatch(surveyListThunk())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={styles.container}>

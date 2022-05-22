@@ -1,3 +1,14 @@
+/**
+ * * Desc - payed/not payed, delivered/not delivered status change ability and delete order access
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />, <Message />
+ * ? TODO - fetch order by order id (get id from query string)
+ * ? TODO - get back one step
+ * ? TODO - delete permanently order with prompt message
+ * ! FIXME
+ */
+
 import styles from './OrderEditScreen.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -5,8 +16,8 @@ import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
-import { useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
+import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
 import {
   deleteOrderThunk,
@@ -34,6 +45,8 @@ export const OrderEditScreen: FC = () => {
   } = useTypedSelector(state => state.orderManage)
 
   type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
+
+  // Change order status and remove it in one single handler
   const manageOrderHandler = (action: ActionType) => {
     action === 'delivered' && dispatch(deliveredThunk(orderId))
     action === 'notDelivered' && dispatch(notDeliveredThunk(orderId))
@@ -50,6 +63,7 @@ export const OrderEditScreen: FC = () => {
       })()
   }
 
+  // Fetch order by id
   useEffect(() => {
     if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
       dispatch(orderInfoThunk(orderId))

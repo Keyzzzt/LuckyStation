@@ -1,3 +1,7 @@
+/**
+ * ! NOT IN USE
+ */
+
 import { FC } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import styles from './ProductSales.module.scss'

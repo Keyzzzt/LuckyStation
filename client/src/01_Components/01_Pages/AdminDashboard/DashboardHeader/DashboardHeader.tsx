@@ -1,3 +1,7 @@
+/**
+ * ! NOT IN USE
+ */
+
 import styles from './DashboardHeader.module.scss'
 import { FC } from 'react'
 import { configThunk } from '../../../../03_Reducers/colorThemeReducer'

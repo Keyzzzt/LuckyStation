@@ -1,3 +1,11 @@
+/**
+ * * Props - null
+ * * Components to render - Loader, Message, ...
+ * * Data to fetch - PayPal, order
+ * ! TODO
+ * ! Remove any
+ */
+
 import styles from './PaymentPage.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { PayPalButton } from 'react-paypal-button-v2'
@@ -8,8 +16,6 @@ import { Message } from '../../02_Chunks/Message/Message'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
-
-// todo remove any
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { getRandom } from '../../../04_Utils/utils'
@@ -27,6 +33,7 @@ export const PaymentPage: FC = () => {
     dispatch(payOrderThunk(orderInfo._id, paymentResult))
   }
 
+  // Load PayPal button
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data } = await $api.get(`/config/paypal`)
@@ -48,13 +55,12 @@ export const PaymentPage: FC = () => {
         setSdkReady(true)
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderInfo?.isPaid, successPay])
+  }, [orderInfo?.isPaid, successPay, dispatch, orderInfo])
 
+  // Fetch order
   useEffect(() => {
     dispatch(orderInfoThunk(params.orderId))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.orderId])
+  }, [params.orderId, dispatch])
 
   return (
     <div className={styles.container}>

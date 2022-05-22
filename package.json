@@ -10,7 +10,8 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "tunnel": "lt --port 5000  --subdomain aergwergqewgr"
+    "tunnel": "lt --port 5000  --subdomain aergwergqewgr",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn add --prefix client && yarn build --prefix client"
   },
   "author": "",
   "license": "ISC",

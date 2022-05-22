@@ -53,11 +53,12 @@ export function useAutoFetch(query, page) {
 /**
  *! ===============================================================================================================================
  *  @useWindowSize
+ * * При каждом изменении окна, будет возвращать объект windowSize c шириной и высотой окна
  */
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
+    width: 0,
+    height: 0,
   })
 
   useEffect(() => {

@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/**
+ * * Desc - admin dashboard
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render -
+ * ? TODO - page with menu and sidebar with selected page
+ * ? TODO - fetch statistic to send different parts of it to different components
+ * ! FIXME page with menu and sidebar with selected page
+ */
+
 import styles from './AdminDashboard.module.scss'
 import { FC, useEffect } from 'react'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-// import { UsersList } from './UsersList/UsersList'
-// import { DashboardHeader } from './DashboardHeader/DashboardHeader'
-// import { Earnings } from './Earnings/Earnings'
-// import { ProductSales } from './ProductSales/ProductSales'
-// import { Totals } from './Totals/Totals'
-// import { ProductsList } from './ProductsList/ProductsList'
-// import { OrderList } from './OrderList/OrderList'
 import { useScrollToTop } from '../../../04_Utils/hooks'
 import { RemoveEmailFromList } from './RemoveEmailFromList/RemoveEmailFromList'
 import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
 import { useDispatch } from 'react-redux'
 import { CreateSurvey } from './Survey/CreateSurvey/CreateSurvey'
 import { useHistory } from 'react-router'
-import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
-import { images } from '../../../fakeData'
 
 export const AdminDashboard: FC = () => {
   const { statistic } = useTypedSelector(state => state.statistic)
@@ -46,7 +47,6 @@ export const AdminDashboard: FC = () => {
               subscribedEmails={statistic.allSubscribersEmailList}
             />
             <RemoveEmailFromList />
-            <SingleProductPageSlider images={images} />
           </div>
         </div>
       </div>

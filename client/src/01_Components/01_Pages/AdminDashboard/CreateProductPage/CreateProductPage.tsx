@@ -1,14 +1,24 @@
-import styles from './CreateProductPage.module.scss'
+/**
+ * * Desc - Create new product
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />
+ * ? TODO - Create form with necessary fields to create a new product
+ * ? TODO - Clear form button
+ * ? TODO - get back one step
+ * ! FIXME - get back one step
+ */
+
 import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import Loader from '../../../02_Chunks/Loader/Loader'
+import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
-import $api from '../../../../04_Utils/axiosSetup'
-import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { actions } from '../../../../03_Reducers/admin/createProductReducer'
+import $api from '../../../../04_Utils/axiosSetup'
 
 export const CreateProductPage: FC = () => {
   const history = useHistory()
@@ -110,7 +120,7 @@ export const CreateProductPage: FC = () => {
   }, [success])
 
   return (
-    <div className={styles.container}>
+    <div>
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={clearHandler}>Clear</button>
       <form onSubmit={submitHandler}>

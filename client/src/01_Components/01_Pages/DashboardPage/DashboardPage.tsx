@@ -7,7 +7,6 @@ import { useScrollToTop } from '../../../04_Utils/hooks'
 import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router'
-git 
 export const DashboardPage: FC = () => {
   const { statistic } = useTypedSelector(state => state.statistic)
   const dispatch = useDispatch()

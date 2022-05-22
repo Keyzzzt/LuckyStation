@@ -1,3 +1,14 @@
+/**
+ * * Desc - simple component with input and button to remove email from survey/subscribers list
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />
+ * ? TODO - remove email from survey/subscribers list
+ * ? TODO - get back one step
+ * ! FIXME get back one step
+ * ! FIXME create a beautiful component for message instead of alert
+ */
+
 import styles from './RemoveEmailFromList.module.scss'
 import { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -22,7 +33,7 @@ export const RemoveEmailFromList: FC = () => {
     <div className={styles.container}>
       <div>
         <div>This option used for remove email from data base, once you removed it you can't roll this back</div>
-        <input onChange={(e) => setEmail(e.target.value)} type="text" value={email} />
+        <input onChange={e => setEmail(e.target.value)} type="text" value={email} />
         <button onClick={removeEmailHandler}>Remove</button>
       </div>
     </div>

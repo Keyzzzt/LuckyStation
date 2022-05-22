@@ -1,4 +1,14 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+/**
+ * * Desc - display single survey + create new survey button + delete this survey
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />
+ * ? TODO - fetch single survey by id from query string
+ * ? TODO - create new survey button
+ * ? TODO - delete survey button
+ * ! FIXME
+ */
+
 import styles from './SurveyPage.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -37,7 +47,7 @@ export const SurveyPage: FC<Props> = () => {
 
   useEffect(() => {
     dispatch(singleSurveyThunk(surveyId))
-  }, [])
+  }, [dispatch, surveyId])
 
   return (
     <>
@@ -53,7 +63,6 @@ export const SurveyPage: FC<Props> = () => {
           <div>Yes answer: {survey.yes}</div>
           <div>No answer: {survey.no}</div>
           <div>Date sent: {survey.dateSent}</div>
-          <button onClick={() => history.push('/dashboard')}>Back</button>
           <button onClick={() => deleteHandler(survey._id)}>Delete</button>
           <button onClick={() => history.push('/dashboard/survey/new')}>Create new</button>
         </div>

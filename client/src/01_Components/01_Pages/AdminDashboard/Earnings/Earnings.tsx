@@ -1,3 +1,12 @@
+/**
+ * * Desc - Display earnings
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - ArrowDownSVG, ChartContainer
+ * * Data to fetch - ...
+ * ! TODO
+ */
+
 import styles from './Earnings.module.scss'
 import { FC } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'

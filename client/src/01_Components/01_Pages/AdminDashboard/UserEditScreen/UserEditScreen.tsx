@@ -1,3 +1,13 @@
+/**
+ * * Desc - Fetch single user and ability to give him admin access or delete this user
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <RedirectButton />, <Loader />
+ * ? TODO - fetch user by id from query string
+ * ? TODO - delete user
+ * ? TODO - toggle admin access
+ */
+
 import { FC, useEffect, useState } from 'react'
 import styles from './UserEditScreen.module.scss'
 import { useDispatch } from 'react-redux'

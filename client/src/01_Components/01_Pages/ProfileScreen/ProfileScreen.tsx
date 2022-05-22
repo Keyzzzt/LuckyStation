@@ -1,3 +1,11 @@
+/**
+ * * Props - null
+ * * Components to render - Loader, Message, ...
+ * * Data to fetch - PayPal, order
+ * ! TODO
+ * ! ...
+ */
+
 import styles from './ProfileScreen.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -5,8 +13,8 @@ import { Link } from 'react-router-dom'
 import { myOrdersThunk } from '../../../03_Reducers/user/myOrdersReducer'
 import { updateOwnProfileThunk } from '../../../03_Reducers/user/userUpdateOwnProfileReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { Message } from '../../02_Chunks/Message/Message'
 import Loader from '../../02_Chunks/Loader/Loader'
+import { Message } from '../../02_Chunks/Message/Message'
 
 export const ProfileScreen: FC = () => {
   const dispatch = useDispatch()
@@ -37,8 +45,7 @@ export const ProfileScreen: FC = () => {
 
   useEffect(() => {
     dispatch(myOrdersThunk(1, 1))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch])
 
   return (
     <div className={styles.container}>

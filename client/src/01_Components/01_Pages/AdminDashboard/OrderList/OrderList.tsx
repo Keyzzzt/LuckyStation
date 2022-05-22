@@ -1,3 +1,15 @@
+/**
+ * * Desc - display all orders with simple list with ability to load single order
+ * * Access - ADMIN
+ * * Props - null
+ * * Components to render - <Loader />, <RedirectButton />, <Message />
+ * ? TODO - fetch all orders
+ * ? TODO - show <Loader /> until data is fetched, then display order.
+ * ? TODO - return to dashboard
+ * ? TODO - delete permanently order with prompt message
+ * ! FIXME get back one step
+ */
+
 import styles from './OrderList.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -15,9 +27,11 @@ export const OrderList: FC = () => {
   // @ts-ignore
   const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
+  // Fetch all orders
   useEffect(() => {
     dispatch(orderListThunk(1, 100))
   }, [dispatch])
+
   return (
     <div className={`${styles.customerslist} ${themeClass}`}>
       {fail && <Message message={fail} type="fail" />}
