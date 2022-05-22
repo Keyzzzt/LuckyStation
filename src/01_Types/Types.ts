@@ -54,7 +54,7 @@ export type OrderType = {
   quantity: number
   image: string
   price: number
-  product: ProductDoc['id']
+  product: string
 }
 
 export interface IGoogleProfile {
