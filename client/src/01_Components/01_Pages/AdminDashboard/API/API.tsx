@@ -2,7 +2,7 @@
  * * Desc - Temporary component to show API docs
  * * Access - ADMIN
  * * Props - null
- * * Components to render - <Loader />, <RedirectButton />
+ * * Components to render - <Loader />, <RedirectButton /> .
  * ? TODO - fetch api docs
  * ? TODO - display api docs as accordion.
  * ! FIXME API docs comes as an array with bunch strings in it. Use another data structure and remove if statement from map function.

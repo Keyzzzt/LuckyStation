@@ -7,7 +7,7 @@ import { StatisticModel } from './models/statistic.model'
 import { createServer } from './server'
 
 dotenv.config()
-const PORT = Number(process.env.port)
+const PORT = Number(process.env.PORT)
 const app = createServer()
 
 // Serve static assets if in production mode
