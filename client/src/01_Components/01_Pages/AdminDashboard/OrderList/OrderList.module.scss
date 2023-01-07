@@ -1,4 +1,4 @@
-@import '../../../../02_Styles/variables.scss';
+@import '../../../../02_Styles/variables';
 
 .customerslist {
   flex: 2;
@@ -7,12 +7,12 @@
   border-radius: $borderRadius;
   padding: 32px;
   &.light_mode {
-    background: $D-light;
-    border: 1px solid $D-dividerLineDark;
+    background: green;
+    border: 1px solid green;
   }
   &.dark_mode {
-    background: $D-lightBlack;
-    border: 1px solid $D-dividerLineLight;
+    background: green;
+    border: 1px solid green;
   }
 
   &__header {
@@ -25,10 +25,10 @@
       letter-spacing: $letter-spacing;
       line-height: 25px;
       &.light_mode {
-        color: $D-dark;
+        color: green;
       }
       &.dark_mode {
-        color: $D-light;
+        color: green;
       }
     }
   }
@@ -63,7 +63,7 @@
           letter-spacing: $letter-spacing;
 
           &.dark_mode {
-            color: $D-light;
+            color: green;
           }
         }
 
@@ -73,10 +73,10 @@
           margin-bottom: 8px;
           font-weight: 800;
           &.light_mode {
-            color: $D-dark;
+            color: green;
           }
           &.dark_mode {
-            color: $D-light;
+            color: green;
           }
         }
 
@@ -85,10 +85,10 @@
           font-size: 14px;
 
           &.light_mode {
-            color: $D-dark;
+            color: green;
           }
           &.dark_mode {
-            color: $D-light;
+            color: green;
           }
         }
       }

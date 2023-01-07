@@ -11,7 +11,7 @@ import { configThunk } from './03_Reducers/appConfigReducer'
 
 export const App = () => {
   const dispatch = useDispatch()
-  // Получаем тут userInfo чтобы сделать header & footer чистыми компонентами
+  // Получаем тут userInfo для того, чтобы сделать header & footer чистыми компонентами
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const [isAuth, setIsAuth] = useState<boolean>(false)
   const [isAdmin, setIsAdmin] = useState<boolean>(false)

@@ -1,10 +1,10 @@
-@import './../../../02_Styles/variables.scss';
+@import '../../../02_Styles/variables';
 
 .container {
   width: 100%;
   display: flex;
   justify-content: center;
-  background: $dark;
+  background: green;
   position: relative;
 }
 
@@ -21,12 +21,12 @@
     margin-bottom: $spacing-md;
 
     &__headline {
-      color: $light;
+      color: green;
       font-size: 1.6rem;
       letter-spacing: $letter-spacing;
     }
     span {
-      color: $light;
+      color: green;
       font-size: 1.1rem;
       margin-bottom: $spacing-md;
     }
@@ -83,7 +83,7 @@
     &__col {
       height: 100%;
       &__headline {
-        color: $light;
+        color: green;
         font-size: 1.6rem;
         margin-bottom: $spacing-md;
         letter-spacing: $letter-spacing;
@@ -95,7 +95,7 @@
           a {
             letter-spacing: $letter-spacing;
             width: 100%;
-            color: $light;
+            color: green;
           }
         }
       }
@@ -106,12 +106,12 @@
     flex-direction: column-reverse;
     align-items: center;
     justify-content: center;
-    color: $light;
+    color: green;
     @include breakpoint(md) {
       flex-direction: row;
     }
     a {
-      color: $light;
+      color: green;
       text-transform: uppercase;
     }
     a,
@@ -146,7 +146,7 @@
         }
         a {
           font-size: 1.6rem;
-          color: $light;
+          color: green;
         }
       }
     }

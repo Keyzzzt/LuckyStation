@@ -1,4 +1,5 @@
-@import '../../../02_Styles/variables.scss';
+
+@import '../../../02_Styles/variables';
 
 .scroll {
   position: relative;
@@ -10,19 +11,19 @@
     width: 8px;
   }
   &.light_mode::-webkit-scrollbar-track {
-    background: $D-light;
+    background: green;
   }
   &.dark_mode::-webkit-scrollbar-track {
-    background: $D-lightBlack;
+    background: green;
   }
   &::-webkit-scrollbar-thumb {
     border-radius: $borderRadius;
   }
   &.light_mode::-webkit-scrollbar-thumb {
-    background: $D-dividerLineLight;
+    background: green;
   }
   &.dark_mode::-webkit-scrollbar-thumb {
-    background: $D-dividerLineDark;
+    background: green;
   }
   ::-webkit-scrollbar {
     width: 8px;
@@ -33,33 +34,33 @@
 
   .light_mode {
     ::-webkit-scrollbar-track {
-      background: $D-light;
+      background: red;
     }
     ::-webkit-scrollbar-thumb {
-      background: $D-dividerLineLight;
+      background: green;
     }
   }
   .dark_mode {
     ::-webkit-scrollbar-track {
-      background: $D-lightBlack;
+      background: green;
     }
     ::-webkit-scrollbar-thumb {
-      background: $D-dividerLineDark;
+      background: green;
     }
   }
 }
 
 .container {
-  margin-left: $D-appBarWidth;
+  margin-left: 10px;
   width: calc(100% - 15.875rem);
 
   padding: 40px 120px;
 
   &.light_mode {
-    background: $D-lightGrey;
+    background: green;
   }
   &.dark_mode {
-    background: $D-dark;
+    background: green;
   }
 }
 
