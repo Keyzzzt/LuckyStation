@@ -1,6 +1,6 @@
 // Done with https://www.youtube.com/watch?v=V0dfhBc2lj8
 
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styles from './SingleProductPageSlider.module.scss'
 import { SliderItem, SliderItemProps } from './SliderItem'
 import { getRefValue, useStateRef } from '../../../04_Utils/getRefValue'
@@ -112,7 +112,7 @@ export const SingleProductPageSlider: React.FC<Props> = ({ images, isNew = false
             className={`${styles.sliderIndicatorItem} ${i === currentIndex ? styles.active : ''}`}
             key={i}
             data-testid="indicator"
-          ></li>
+          />
         ))}
       </ul>
     </div>

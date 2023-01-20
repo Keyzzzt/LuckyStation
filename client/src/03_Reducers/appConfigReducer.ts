@@ -17,6 +17,7 @@ const initialState = {
     defaultShippingPriceToNonEUCountries: 100,
     freeShippingMessage: 'You are eligible for free shipping in EU',
     taxRate: 0.2,
+
   },
   fail: '',
 }

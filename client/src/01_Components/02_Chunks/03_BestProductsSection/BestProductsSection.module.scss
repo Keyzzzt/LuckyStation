@@ -1,0 +1,34 @@
+@import '../../../02_Styles/variables';
+
+.newProductsSection{
+  padding: $sectionVerticalPaddingMobile;
+  color: $color--dark;
+  @include breakpoint(992) {
+    padding: $sectionVerticalPaddingDesktop;
+
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #226057;
+  width: 90%;
+}
+.title {
+  text-transform: uppercase;
+}
+.subTitle{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.button {
+  margin-top: 30px;
+}
+.productsWrapper{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}

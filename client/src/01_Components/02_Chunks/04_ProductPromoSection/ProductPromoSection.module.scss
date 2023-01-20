@@ -1,0 +1,80 @@
+@import '../../../02_Styles/variables';
+
+.newProductsSection{
+  color: $color--dark;
+  padding: $sectionVerticalPaddingMobile;
+  @include breakpoint(992) {
+    padding: $sectionVerticalPaddingDesktop;
+
+  }
+}
+
+.container {
+  width: 90%;
+}
+
+.leftWrapper{
+  position: relative;
+  margin-bottom: 250px;
+}
+.leftWrapper .promoDescription{
+  background-color: #e9e0d2;
+  max-width: 53%;
+  padding: 25px;
+  font-weight: 100;
+}
+.rightWrapper{
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 250px;
+}
+.rightWrapper .promoDescription{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: #e9e0d2;
+  max-width: 53%;
+  padding: 25px;
+  font-weight: 100;
+  & .title {
+    align-self: flex-start;
+    margin-left: 80px;
+
+  }
+}
+
+.title {
+  text-transform: uppercase;
+  background-color: #226057;
+}
+.descriptionItem{
+  margin-top: 20px;
+  max-width: 85%;
+  text-align: justify;
+
+}
+
+.button{
+  margin-top: 70px;
+}
+
+.imageRight {
+  width: 620px;
+  height: 500px;
+  background-color: #00b4b5;
+  position: absolute;
+  right: 0;
+  top: 30px;
+}
+.imageLeft {
+  width: 620px;
+  height: 500px;
+  background-color: #00b4b5;
+  position: absolute;
+  left: 0;
+  top: 30px;
+
+}
+
+//object-fit: cover

@@ -7,12 +7,12 @@
   padding: 0;
 }
 body {
-  width: 100%;
   font-family: $Roboto;
+  font-size: 16px;
+  color: $color--light;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-#root {
-  height: 100%;
+a {
+  color: $color--light;
 }

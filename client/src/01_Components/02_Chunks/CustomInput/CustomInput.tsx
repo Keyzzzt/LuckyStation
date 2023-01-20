@@ -3,7 +3,7 @@ import styles from './CustomInput.module.scss'
 import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
-type Props = {
+type CustomInputProps = {
   type: string
   placeholder: string
   name: string
@@ -13,7 +13,7 @@ type Props = {
   setInputError(value: boolean): void
 }
 
-export const CustomInput: FC<Props> = ({ type, placeholder, name, inputError, returnValue, setInputError, value }) => {
+export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inputError, returnValue, setInputError, value }) => {
   let iconValue = ''
   switch (name) {
     case 'email':

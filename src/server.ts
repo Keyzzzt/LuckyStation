@@ -45,6 +45,5 @@ export function createServer() {
   app.use(deserializeUser)
   routes(app)
   app.use(errorHandler)
-
   return app
 }

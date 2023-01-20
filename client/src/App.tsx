@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { Header } from './01_Components/02_Chunks/Header/Header'
+import { Header } from './01_Components/02_Chunks/01_Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
 import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'

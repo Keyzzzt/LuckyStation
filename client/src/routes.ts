@@ -6,7 +6,7 @@ import { CreateSurvey } from './01_Components/01_Pages/AdminDashboard/Survey/Cre
 import { SurveyPage } from './01_Components/01_Pages/AdminDashboard/Survey/SurveyPage/SurveyPage'
 import { UserEditScreen } from './01_Components/01_Pages/AdminDashboard/UserEditScreen/UserEditScreen'
 import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/UsersList'
-import { LandingPage } from './01_Components/01_Pages/LandingPage/LandingPage'
+import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
 import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'
 import { Ulbi } from './01_Components/01_Pages/Ulbi/Ulbi'

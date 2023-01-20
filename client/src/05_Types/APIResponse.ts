@@ -58,6 +58,7 @@ type ReviewFromAPI = {
 export type Image = {
   imageSrc: string
   imageAlt: string
+  _id: string
 }
 export type Product = {
   _id: string

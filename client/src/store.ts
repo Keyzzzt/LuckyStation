@@ -30,6 +30,7 @@ import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleS
 import { apiReducer } from './03_Reducers/admin/apiReducer'
 import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
 import { appConfigReducer } from './03_Reducers/appConfigReducer'
+import { componentsReducer } from './03_Reducers/componentsReducer'
 
 const rootReducer = combineReducers({
   appConfig: appConfigReducer,
@@ -62,6 +63,7 @@ const rootReducer = combineReducers({
   singleSurvey: singleSurveyReducer,
   api: apiReducer,
   termsAndConditions: termsAndConditionsReducer,
+  components: componentsReducer,
 })
 
 // @ts-ignore

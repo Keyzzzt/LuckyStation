@@ -2,6 +2,17 @@
 
 $Roboto: 'Roboto', sans-serif;
 
+// Adaptive
+$mediaMax480:  80%;
+$mediaMax768:  80%;
+$mediaMax1024: 80%;
+$mediaMax1200: 80%;
+$mediaMin1201: 80%;
+
+// Section vertical padding
+$sectionVerticalPaddingMobile: 40px 0;
+$sectionVerticalPaddingDesktop: 80px 0;
+
 // Colors
 $color--dark: #181a1b;
 $color--grey: #494f52;
@@ -26,7 +37,7 @@ $fw-sm: 100;
 $fw-md: 400;
 $fw-lg: 700;
 
-// Header
+// 01_Header
 $headerHeight: 120px;
 
 // Font size

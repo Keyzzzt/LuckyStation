@@ -1,0 +1,22 @@
+@import 'variables.scss';
+
+.container {
+  margin: 0 auto;
+  width: $mediaMax480;
+  @include breakpoint(480) {
+    width: $mediaMax768;
+  }
+  @include breakpoint(768) {
+    width: $mediaMax1024;
+  }
+  @include breakpoint(1024) {
+    width: $mediaMax1200;
+  }
+  @include breakpoint(1200) {
+    width: $mediaMax1200;
+  }
+  @include breakpoint(1343) {
+    width: $mediaMin1350;
+  }
+}
+

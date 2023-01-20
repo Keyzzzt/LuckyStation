@@ -161,9 +161,9 @@ export const ShippingPage: FC = () => {
     <div className={styles.container}>
       <div onClick={() => setIsOpen(prev => !prev)} className={styles.orderSummaryAccordion}>
         <div className={styles.accordionTitle}>
-          <i className="fa-brands fa-opencart"></i>
+          <i className="fa-brands fa-opencart" />
           <div>{isOpen ? 'Hide' : 'Show'} order summary</div>
-          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`}></i>
+          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`} />
         </div>
         <div className={styles.accordionPrice}>
           <span className={styles.price}>&euro;{cart.itemsPrice}</span>

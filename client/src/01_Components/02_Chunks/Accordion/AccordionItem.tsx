@@ -1,15 +1,15 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './Accordion.module.scss'
 import { AccordionData } from './Accordion'
 import { getRefValue } from '../../../04_Utils/getRefValue'
 
-type Props = {
+type  AccordionItemProps= {
   data: AccordionData
   isOpen: boolean
   btnOnClick: () => void
 }
 
-export const AccordionItem: FC<Props> = ({ data, isOpen, btnOnClick }) => {
+export const AccordionItem = ({ data, isOpen, btnOnClick }: AccordionItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null)
   const [height, setHeight] = useState(0)
 
@@ -30,9 +30,9 @@ export const AccordionItem: FC<Props> = ({ data, isOpen, btnOnClick }) => {
       </h2>
       <div className={styles.accordionItemContainer} style={{ height }}>
         <div ref={contentRef} className={styles.accordionItemContent}>
-          {data.content.map((el: any) =>
+          {data.content.map((el: any, i: number) =>
             el.value === '' ? null : (
-              <div>
+              <div key={i}>
                 <div className={styles.accordionSubItem}>{el.title}</div>
                 <div>{el.value}</div>
               </div>
