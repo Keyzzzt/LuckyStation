@@ -25,8 +25,11 @@ export const ProductPromoSection: FC = () => {
       <div className={globalStyle.container + ' ' + s.container}>
         {productPromo.map((promo, i) => (
           <div key={i} className={i % 2 === 0 ? s.leftWrapper : s.rightWrapper}>
+            <div className={i % 2 === 0 ? s.imageRight : s.imageLeft}>
+              <img src="" alt=""/>
+            </div>
             <div className={s.promoDescription}>
-              <h3 className={s.title}>{promo.title}</h3>
+              <h3 className={i % 2 === 0 ? s.titleLeft : s.titleRight}>{promo.title}</h3>
               {promo.description.map((el, i) => (
                 <div key={i} className={s.descriptionItem}>
                   {el}
@@ -37,9 +40,7 @@ export const ProductPromoSection: FC = () => {
               </div>
 
             </div>
-            <div className={i % 2 === 0 ? s.imageRight : s.imageLeft}>
-              <img src="" alt=""/>
-            </div>
+
           </div>
         ))}
       </div>

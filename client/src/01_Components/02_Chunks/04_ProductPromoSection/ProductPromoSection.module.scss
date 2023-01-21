@@ -1,79 +1,203 @@
 @import '../../../02_Styles/variables';
 
-.newProductsSection{
+.newProductsSection {
   color: $color--dark;
   padding: $sectionVerticalPaddingMobile;
-  @include breakpoint(992) {
-    padding: $sectionVerticalPaddingDesktop;
-
-  }
+  //@include breakpoint(992) {
+  //padding: $sectionVerticalPaddingDesktop;
+  //}
 }
 
 .container {
   width: 90%;
+  background-color: #74959a;
+  font-size: 1.5rem;
 }
 
-.leftWrapper{
-  position: relative;
-  margin-bottom: 250px;
-}
-.leftWrapper .promoDescription{
-  background-color: #e9e0d2;
-  max-width: 53%;
-  padding: 25px;
-  font-weight: 100;
-}
-.rightWrapper{
-  position: relative;
+.leftWrapper {
+  width: 100%;
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 250px;
+  flex-direction: column;
+  margin-bottom: 50px;
+  @include breakpoint(480) {
+    position: relative;
+    margin-bottom: 250px;
+  }
+  @include breakpoint(768) {
+    margin-bottom: 350px;
+  }
+  @include breakpoint(992) {
+    margin-bottom: 150px;
+  }
+  @include breakpoint(1200) {
+    margin-bottom: 250px;
+  }
+  @include breakpoint(1400) {
+    margin-bottom: 380px;
+  }
 }
-.rightWrapper .promoDescription{
+
+.leftWrapper .promoDescription {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-weight: 100;
+  background-color: #e9e0d2;
+  @include breakpoint(768) {
+    max-width: 85%;
+  }
+  @include breakpoint(992) {
+    max-width: 63%;
+  }
+  @include breakpoint(1200) {
+    max-width: 73%;
+  }
+}
+
+.rightWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  @include breakpoint(480) {
+    margin-bottom: 250px;
+    flex-direction: row;
+  }
+  @include breakpoint(768) {
+    margin-bottom: 300px;
+  }
+  @include breakpoint(1400) {
+    margin-bottom: 380px;
+  }
+
+}
+
+.rightWrapper .promoDescription {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   background-color: #e9e0d2;
-  max-width: 53%;
-  padding: 25px;
+  width: 100%;
   font-weight: 100;
-  & .title {
-    align-self: flex-start;
-    margin-left: 80px;
-
+  @include breakpoint(768) {
+    max-width: 85%;
+  }
+  @include breakpoint(992) {
+    max-width: 63%;
+  }
+  @include breakpoint(1200) {
+    max-width: 73%;
   }
 }
 
-.title {
+.titleLeft,
+.titleRight {
   text-transform: uppercase;
   background-color: #226057;
+  align-self: center;
+  padding: 20px;
 }
-.descriptionItem{
+
+.titleLeft {
+  @include breakpoint(768) {
+    align-self: flex-end;
+  }
+}
+
+.titleRight {
+  @include breakpoint(768) {
+    align-self: flex-start;
+  }
+}
+
+.descriptionItem {
   margin-top: 20px;
-  max-width: 85%;
   text-align: justify;
+  @include breakpoint(768) {
+    max-width: 85%;
+  }
+  @include breakpoint(992) {
+    max-width: 70%;
+  }
+  @include breakpoint(1200) {
+    max-width: 70%;
+  }
 
 }
 
-.button{
-  margin-top: 70px;
+.button {
+  margin: 20px auto;
+  @include breakpoint(480) {
+    margin: 50px 0 0 0;
+  }
+
 }
 
 .imageRight {
-  width: 55%;
-  height: 500px;
+  width: 100%;
+  height: 300px;
   background-color: #00b4b5;
-  position: absolute;
-  right: 0;
-  top: 30px;
+  @include breakpoint(480) {
+    position: absolute;
+    right: 20px;
+    width: 270px;
+    height: 270px;
+    bottom: -200px;
+  }
+  @include breakpoint(768) {
+    width: 400px;
+    height: 400px;
+    right: 30px;
+    bottom: -330px;
+  }
+  @include breakpoint(992) {
+    width: 470px;
+    height: 470px;
+    right: 0;
+    top: 110px;
+  }
+  @include breakpoint(1200) {
+    width: 500px;
+    height: 500px;
+  }
+  @include breakpoint(1400) {
+    width: 600px;
+    height: 600px;
+  }
 }
+
 .imageLeft {
-  width: 55%;
-  height: 500px;
+  width: 100%;
+  height: 300px;
   background-color: #00b4b5;
-  position: absolute;
-  left: 0;
-  top: 30px;
+  @include breakpoint(480) {
+    position: absolute;
+    left: 20px;
+    width: 270px;
+    height: 270px;
+    bottom: -200px;
+  }
+  @include breakpoint(768) {
+    width: 400px;
+    height: 400px;
+    left: 30px;
+    bottom: -330px;
+  }
+  @include breakpoint(992) {
+    width: 470px;
+    height: 470px;
+    left: 0;
+    top: 110px;
+  }
+  @include breakpoint(1200) {
+    width: 500px;
+    height: 500px;
+  }
+  @include breakpoint(1400) {
+    width: 600px;
+    height: 600px;
+  }
 
 }
 
