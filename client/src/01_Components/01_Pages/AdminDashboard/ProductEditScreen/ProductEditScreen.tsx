@@ -1,45 +1,39 @@
-/**
- * * Desc - Here we able to edit and remove a single product
- * * Access - ADMIN
- * * Props - null
- * * Components to render - <RedirectButton />, <Loader />
- * ? TODO - fetch product by id(get id from query string)
- * ? TODO - fill out input fields with data
- * ? TODO - delete product
- * ? TODO - update product
- * ? TODO - get back one step
- */
-
-import styles from './ProductEditScreen.module.scss'
 import { FC, useEffect, useState } from 'react'
+import s from './productEditScreen.module.scss'
+import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { productInfoThunk } from '../../../../03_Reducers/product/productInfoReducer'
 import { productDeleteThunk } from '../../../../03_Reducers/admin/productDeleteReducer'
 import { updateProductThunk } from '../../../../03_Reducers/admin/updateProductReducer'
-import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import Loader from '../../../02_Chunks/Loader/Loader'
+import { EditableSpan } from '../../../02_Chunks/EditableSpan/EditableSpan'
+import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
+import { PageType } from '../AdminDashboard'
 
-export const ProductEditScreen: FC = () => {
+type Props = {
+  productId: string
+  setPage: (value: PageType) => void
+  setUserId: (userId: string) => void
+  }
+export const ProductEditScreen: FC<Props> = ({ productId, setUserId, setPage }) => {
   const history = useHistory()
-
   useScrollToTop()
   const dispatch = useDispatch()
-  const { productId } = useParams<{ productId: string }>()
   const { productInfo } = useTypedSelector(state => state.productInfo)
+  const { user } = useTypedSelector(state => state.getUser)
 
-  const [name, setName] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState(0)
-  const [countInStock, setCountInStock] = useState(0)
+  const [userName, setUserName] = useState<string>('')
+  const [name, setName] = useState<string>('')
+  const [brand, setBrand] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [price, setPrice] = useState<number>(0)
+  const [countInStock, setCountInStock] = useState<number>(0)
 
-  // Delete product
-  const deleteHandler = (id: string, name: string) => {
+  const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       dispatch(productDeleteThunk(id))
       alert(`${name} has been removed`)
@@ -47,9 +41,12 @@ export const ProductEditScreen: FC = () => {
     }
     return
   }
+  const handleShowUser = (userId: string) => {
+    setUserId(userId)
+    setPage('userEditScreen')
+  }
 
-  // Update product
-  const updateHandler = () => {
+  const handleUpdate = () => {
     dispatch(
       updateProductThunk(productInfo?._id!, {
         name,
@@ -61,18 +58,17 @@ export const ProductEditScreen: FC = () => {
         image:
           'https://www.usa.philips.com/c-dam/b2c/category-pages/sound-and-vision/fidelio/master/homepage/l3-hero-image.png',
         isNewProduct: true,
-      })
+      }),
     )
   }
 
-  // Fetch product by id
   useEffect(() => {
     dispatch(productInfoThunk(productId))
   }, [dispatch, productId])
 
-  // When product is fetched - fill out inputs with product data
   useEffect(() => {
     if (productInfo) {
+      dispatch(getUserThunk(productInfo.user))
       setName(productInfo.name)
       setBrand(productInfo.brand)
       setDescription(productInfo.description)
@@ -82,30 +78,17 @@ export const ProductEditScreen: FC = () => {
     }
   }, [productInfo])
 
+  useEffect(() => {
+    if (user) setUserName(user.name)
+  }, [user])
+
   return (
-    <div className={styles.container}>
-      <RedirectButton path="/dashboard/products">Back</RedirectButton>
+    <div className={s.container}>
       {!productInfo ? (
-        <Loader />
+        <Loader/>
       ) : (
         <>
-          {' '}
-          <button onClick={updateHandler}>Update</button>
-          <button onClick={() => deleteHandler(productId, productInfo.name!)}>Delete</button>
           <div>
-            <label htmlFor="edit-name">Product name</label>
-            <input onChange={e => setName(e.target.value)} type="text" value={name} id="edit-name" />
-          </div>
-          <div>
-            <label htmlFor="edit-brand">Product brand</label>
-            <input onChange={e => setBrand(e.target.value)} type="text" value={brand} id="edit-brand" />
-          </div>
-          <div>
-            <label htmlFor="edit-category">Category</label>
-            <input onChange={e => setCategory(e.target.value)} type="text" value={category} id="edit-category" />
-          </div>
-          <div>
-            <label htmlFor="edit-description">Description</label>
             <input
               onChange={e => setDescription(e.target.value)}
               type="text"
@@ -113,33 +96,96 @@ export const ProductEditScreen: FC = () => {
               id="edit-description"
             />
           </div>
-          <div>
-            <label htmlFor="edit-price">Price</label>
-            <input onChange={e => setPrice(Number(e.target.value))} type="text" value={price} id="edit-price" />
-          </div>
-          <div>
-            <label htmlFor="edit-stock">Count in stock</label>
-            <input
-              onChange={e => setCountInStock(Number(e.target.value))}
-              type="text"
-              value={countInStock}
-              id="edit-stock"
-            />
-          </div>
-          <Link to={`/user/${productInfo.user}/edit`}>User added this product - {productInfo.user}</Link>
-          <div>Rating: {productInfo.rating}</div>
-          <div>Count in favorites: {productInfo.countInFavorite}</div>
           {productInfo.isNewProduct ? <div>Labeled as NEW</div> : <div>Not labeled as NEW</div>}
-          <div>Count viewed: {productInfo.countViewed}</div>
           <div>
-            <div>Number of Reviews: {productInfo.numReviews}</div>
             <div>Read Reviews</div>
           </div>
-          <div>Created at: {productInfo.createdAt}</div>
-          <div>Updated at: {productInfo.updatedAt}</div>
-          {/* <div>
-            <img src={productInfo.image} alt="Logo" />
-          </div> */}
+
+          <button onClick={handleUpdate}>Update</button>
+          <button onClick={() => handleDelete(productId, productInfo.name!)}>Delete</button>
+          <table className={globalStyles.table}>
+            <thead>
+            <tr>
+              <th>
+                <div>Field</div>
+              </th>
+              <th>
+                <div>Value</div>
+              </th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Name</td>
+              <td>
+                <EditableSpan value={name} changeValue={setName}/>
+              </td>
+            </tr>
+            <tr>
+              <td>Brand</td>
+              <EditableSpan value={brand} changeValue={setBrand}/>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <EditableSpan value={category} changeValue={setCategory}/>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <EditableSpan value={description} changeValue={setDescription}/>
+            </tr>
+            <tr>
+              <td>In stock</td>
+              <td>
+                <div className={countInStock <= 0 ? globalStyles.danger : globalStyles.success}>
+                  {countInStock}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>{price}</td>
+            </tr>
+            <tr>
+              <td>Rating</td>
+              <td>{productInfo.rating}</td>
+            </tr>
+            <tr>
+              <td>Count in favorites</td>
+              <td>{productInfo.countInFavorite}</td>
+            </tr>
+            <tr>
+              <td>Times viewed</td>
+              <td>{productInfo.countViewed}</td>
+            </tr>
+            <tr>
+              <td>Reviews</td>
+              <td>{productInfo.numReviews}</td>
+            </tr>
+            <tr>
+              <td>Created</td>
+              <td>{productInfo.createdAt}</td>
+            </tr>
+            <tr>
+              <td>Last updated</td>
+              <td>{productInfo.updatedAt}</td>
+            </tr>
+            <tr>
+              <td>Created by</td>
+              <td>{user ? (
+                <div onClick={() => handleShowUser(user._id)}>{userName}</div>
+              ) : 'User that created this product is no longer in database.'}</td>
+            </tr>
+            <tr>
+              <td>Images</td>
+              <td>
+                {productInfo.images.map((image, index) => (
+                  <img className={s.image} key={index} src={image.imageSrc} alt={image.imageAlt}/>
+                ))}
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </>
       )}
     </div>

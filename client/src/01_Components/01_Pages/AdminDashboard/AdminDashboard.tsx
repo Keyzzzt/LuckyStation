@@ -9,8 +9,9 @@
  * ! FIXME page with menu and sidebar with selected page
  */
 
-import styles from './AdminDashboard.module.scss'
-import { FC, useEffect } from 'react'
+import s from './AdminDashboard.module.scss'
+import globalStyles from './../../../02_Styles/global.module.scss'
+import React, { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../04_Utils/hooks'
 import { RemoveEmailFromList } from './RemoveEmailFromList/RemoveEmailFromList'
@@ -18,37 +19,91 @@ import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
 import { useDispatch } from 'react-redux'
 import { CreateSurvey } from './Survey/CreateSurvey/CreateSurvey'
 import { useHistory } from 'react-router'
+import { Link } from 'react-router-dom'
+import { CreateProduct } from './CreateProduct/CreateProduct'
+import { Main } from './01_Main/Main'
+import { ProductsByAdmin } from './ProductsByAdmin/ProductsByAdmin'
+import { UsersList } from './UsersList/UsersList'
+import { OrderList } from './OrderList/OrderList'
+import { API } from './API/API'
+import { UserEditScreen } from './UserEditScreen/UserEditScreen'
+import { ProductEditScreen } from './ProductEditScreen/ProductEditScreen'
+import { OrderEditScreen } from './OrderEditScreen/OrderEditScreen'
+
+export type PageType =
+  'main'
+  | 'createProduct'
+  | 'productsList'
+  | 'usersList'
+  | 'ordersList'
+  | 'api'
+  | 'userEditScreen'
+  | 'productEditScreen'
+  | 'orderEditScreen'
+
+export type SortFilterType =
+  'all'
+  | 'byPriceAscending'
+  | 'byPriceDescending'
+  | 'byDateAscending'
+  | 'byDateDescending'
+  | 'byName'
+
 
 export const AdminDashboard: FC = () => {
-  const { statistic } = useTypedSelector(state => state.statistic)
-  const dispatch = useDispatch()
-  const history = useHistory()
+  // const { statistic } = useTypedSelector(state => state.statistic)
+  const [page, setPage] = useState<PageType>('main')
+  const [userId, setUserId] = useState<string>('')
+  const [productId, setProductId] = useState<string>('')
+  const [orderId, setOrderId] = useState<string>('')
 
+  const dispatch = useDispatch()
   useScrollToTop()
-  const { colorTheme } = useTypedSelector(state => state)
-  //@ts-ignore
-  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
 
   useEffect(() => {
     dispatch(statisticThunk())
   }, [])
+
+  const onClickHandlerCreator = (value: PageType) => {
+    return () => setPage(value)
+  }
+  const renderContent = () => {
+    switch (page) {
+      case 'createProduct':
+        return <CreateProduct/>
+      case 'productsList':
+        return <ProductsByAdmin setProductId={setProductId} setPage={setPage}/>
+      case 'productEditScreen':
+        return <ProductEditScreen productId={productId} setPage={setPage} setUserId={setUserId}/>
+      case 'usersList':
+        return <UsersList setPage={setPage} setUserId={setUserId}/>
+      case 'userEditScreen':
+        return <UserEditScreen userId={userId}/>
+      case 'ordersList':
+        return <OrderList setPage={setPage} setOrderId={setOrderId}/>
+      case 'orderEditScreen':
+        return <OrderEditScreen orderId={orderId}/>
+      case 'api':
+        return <API/>
+
+      default:
+        return <Main/>
+    }
+  }
   return (
-    <div className={`${styles.scroll} ${themeClass}`}>
-      <div className={`${styles.container} ${themeClass}`}>
-        <button onClick={() => history.push('/dashboard/create')}>Create Product</button>
-        <button onClick={() => history.push('/dashboard/users')}>Users list</button>
-        <button onClick={() => history.push('/dashboard/products')}>Products list</button>
-        <button onClick={() => history.push('/dashboard/orders')}>Orders list</button>
-        <button onClick={() => history.push('/dashboard/api')}>API</button>
-        <div className={`${styles.dashboard}`}>
-          <div className={`${styles.adminToolUnit}`}>
-            <CreateSurvey
-              allEmails={statistic.allUsersEmailList}
-              subscribedEmails={statistic.allSubscribersEmailList}
-            />
-            <RemoveEmailFromList />
-          </div>
-        </div>
+    <div className={s.container}>
+      <nav className={s.navbar}>
+        <ul className={s.navbarMenu}>
+          <li onClick={onClickHandlerCreator('main')} className={s.luckyStation}>Lucky Station</li>
+          <li onClick={onClickHandlerCreator('createProduct')} className={s.menuItem}>Create Product</li>
+          <li onClick={onClickHandlerCreator('productsList')} className={s.menuItem}>Products list</li>
+          <li onClick={onClickHandlerCreator('usersList')} className={s.menuItem}>Users list</li>
+          <li onClick={onClickHandlerCreator('ordersList')} className={s.menuItem}>Orders list</li>
+          <li onClick={onClickHandlerCreator('api')} className={s.menuItem}>API</li>
+        </ul>
+      </nav>
+      <div className={s.content}>
+        {renderContent()}
       </div>
     </div>
   )

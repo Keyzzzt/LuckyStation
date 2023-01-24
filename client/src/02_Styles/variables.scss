@@ -16,10 +16,14 @@ $sectionVerticalPaddingDesktop: 80px 0;
 // Colors
 $color--dark: #181a1b;
 $color--grey: #494f52;
+$color--success: #7ebdb7;
+$color--success--light: rgba(10,179,156,.1);
+$color--error: #f06548;
+$color--error--light: rgba(240,101,72,.1);
+
 $color--light: #e8e6e3;
 $color--golden: #81786a;
-$color--success: #226057;
-$color--error: #a02718;
+
 $color--border: #dedede;
 
 // Border radius

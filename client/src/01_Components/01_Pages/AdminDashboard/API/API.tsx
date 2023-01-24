@@ -1,15 +1,15 @@
 /**
- * * Desc - Temporary component to show API docs
+ * * Desc - Temporary component to show Main docs
  * * Access - ADMIN
  * * Props - null
  * * Components to render - <Loader />, <RedirectButton /> .
  * ? TODO - fetch api docs
  * ? TODO - display api docs as accordion.
- * ! FIXME API docs comes as an array with bunch strings in it. Use another data structure and remove if statement from map function.
+ * ! FIXME Main docs comes as an array with bunch strings in it. Use another data structure and remove if statement from map function.
  */
 
-import styles from './API.module.scss'
-import { FC, useEffect, useState } from 'react'
+import s from './API.module.scss'
+import React, { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
 import { apiThunk } from '../../../../03_Reducers/admin/apiReducer'
@@ -32,11 +32,11 @@ export const API: FC = () => {
   }, [dispatch])
 
   return (
-    <div className={styles.container}>
+    <div className={s.api}>
       {!apiInfo ? (
         <Loader />
       ) : (
-        <div className={styles.accordion}>
+        <div className={s.accordion}>
           {
             // @ts-ignore
             apiInfo.map((item, i: number) => {
@@ -44,12 +44,12 @@ export const API: FC = () => {
                 return null
               }
               return (
-                <div key={i} className={`${styles.item} ${styles[item.access]}`}>
-                  <div onClick={() => toggleHandler(i)} className={styles.title}>
+                <div key={i} className={`${s.item} ${s[item.access]}`}>
+                  <div onClick={() => toggleHandler(i)} className={s.title}>
                     <h2>{item.action}</h2>
                     <span>{selected === i ? '-' : '+'}</span>
                   </div>
-                  <div className={`${styles.content} ${selected === i ? styles.show : ''}`}>
+                  <div className={`${s.content} ${selected === i ? s.show : ''}`}>
                     <pre>{JSON.stringify(item, null, 7)}</pre>
                   </div>
                 </div>

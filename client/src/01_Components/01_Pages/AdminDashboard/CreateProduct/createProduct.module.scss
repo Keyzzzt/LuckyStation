@@ -1,0 +1,71 @@
+@import '../../../../02_Styles/variables.scss';
+
+.createProduct {
+  display: flex;
+  background-color: #494f52;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  @include breakpoint(768) {
+    background-color: #00b4b5;
+  }
+  @include breakpoint(992) {
+    flex-direction: row;
+  }
+
+}
+
+.form {
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  font-size: 0.6rem;
+  @include breakpoint(480) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  @include breakpoint(768) {
+  }
+  @include breakpoint(992) {
+    flex: 3;
+  }
+
+
+}
+
+
+.formItem {
+  background-color: #955;
+  padding: 5px;
+  margin: 5px;
+  //max-width: 20%;
+}
+
+.formItem label {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.formItem input {
+  border: none;
+  border-radius: 2px;
+  padding: 5px;
+  font-size: inherit;
+}
+
+.uploadImageButton {
+  display: block;
+  font-size: inherit;
+  padding: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.uploadedImage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

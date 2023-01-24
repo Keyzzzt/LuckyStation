@@ -1,43 +1,52 @@
-import { FC, useEffect } from 'react'
-import styles from './UsersList.module.scss'
+import { FC, useEffect, useState } from 'react'
+import s from './UsersList.module.scss'
+import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
 import { usersListThunk } from '../../../../03_Reducers/user/userListReducer'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { Link } from 'react-router-dom'
+import { PageType } from '../AdminDashboard'
 
-export const UsersList: FC = () => {
+// TODO Add sort
+// TODO Polish styles
+
+type Props = {
+  setPage: (value: PageType) => void
+  setUserId: (userId: string) => void
+}
+
+
+export const UsersList: FC<Props> = ({setPage, setUserId}) => {
   const dispatch = useDispatch()
-  const { colorTheme } = useTypedSelector(state => state)
   const { users, fail } = useTypedSelector(state => state.userList)
-  const { success } = useTypedSelector(state => {
-    return state.userDelete
-  })
-  // @ts-ignore
-  const themeClass = colorTheme === 'light' ? styles.light_mode : styles.dark_mode
+  const { success } = useTypedSelector(state => state.userDelete)
+
+
+  const handleShowUser = (userId: string) => {
+    setUserId(userId)
+    setPage('userEditScreen')
+  }
 
   useEffect(() => {
     dispatch(usersListThunk(1, 10))
   }, [dispatch, success])
   return (
-    <div className={`${styles.customerslist} ${themeClass}`}>
-      {fail && <Message message={fail} type="fail" />}
-      <div className={styles.customerslist__header}>
-        <h2 className={`${styles.customerslist__header__title} ${themeClass}`}>Customers</h2>
+    <div className={s.usersList}>
+      {fail && <Message message={fail} type="fail"/>}
+      <div className={s.header}>
+        <h2 className={s.title}>Users</h2>
       </div>
-      <div className={styles.list}>
+      <div className={s.list}>
         {!users ? (
-          <Loader />
+          <Loader/>
         ) : (
-          users.map(user => (
-            <div key={user._id} className={styles.list__item}>
-              <div className={styles.info}>
-                <Link to={`/user/${user._id}/edit`} className={`${styles.name} ${themeClass}`}>
-                  {user._id}
-                </Link>
-                <span className={`${styles.email} ${themeClass}`}>{user.email}</span>
-              </div>
+          users.map(u => (
+            <div key={u._id} onClick={() => handleShowUser(u._id)} className={s.listItem}>
+              <div>Email: {u.email}</div>
+              <div>Name: {u.name}</div>
+              {u.isAdmin ? <div>Status: Admin</div> : <div>Status: User</div>}
+              {u.isActivated ? <div className={globalStyles.success}>Activated</div> : <div className={s.danger}>Not Activated</div>}
             </div>
           ))
         )}

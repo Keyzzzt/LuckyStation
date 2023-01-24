@@ -46,6 +46,7 @@ export type UserTypeForList = {
   email: string
   isAdmin: boolean
   isActivated: boolean
+  name: string
 }
 
 type ReviewFromAPI = {

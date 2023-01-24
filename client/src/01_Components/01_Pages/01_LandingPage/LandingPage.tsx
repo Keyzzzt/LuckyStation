@@ -44,10 +44,6 @@ export const LandingPage: FC = () => {
   useEffect(() => {
     dispatch(productListThunk(keyword, Number(page), Number(limit)))
   }, [dispatch, keyword, page, limit])
-  useEffect(() => {
-    console.log(products)
-
-  }, [products])
 
   return (
     <>

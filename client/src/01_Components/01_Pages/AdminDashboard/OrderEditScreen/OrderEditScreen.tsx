@@ -1,18 +1,6 @@
-/**
- * * Desc - payed/not payed, delivered/not delivered status change ability and delete order access
- * * Access - ADMIN
- * * Props - null
- * * Components to render - <Loader />, <RedirectButton />, <Message />
- * ? TODO - fetch order by order id (get id from query string)
- * ? TODO - get back one step
- * ? TODO - delete permanently order with prompt message
- * ! FIXME
- */
-
-import styles from './OrderEditScreen.module.scss'
+import styles from './orderEditScreen.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
@@ -28,12 +16,17 @@ import {
 } from '../../../../03_Reducers/order/orderManageReducer'
 import { RedirectButton } from '../../../02_Chunks/BackButton/BackButton'
 import { getRandom } from '../../../../04_Utils/utils'
+import { PageType } from '../AdminDashboard'
 
-export const OrderEditScreen: FC = () => {
+type Props = {
+  orderId: string
+}
+
+export const OrderEditScreen: FC<Props> = ({ orderId }) => {
   useScrollToTop()
   const history = useHistory()
   const dispatch = useDispatch()
-  const { orderId } = useParams<{ orderId: string }>()
+  // const { orderId } = useParams<{ orderId: string }>()
   const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
   const {
     successDelivered,
@@ -53,14 +46,14 @@ export const OrderEditScreen: FC = () => {
     action === 'paid' && dispatch(paidThunk(orderId))
     action === 'notPaid' && dispatch(notPaidThunk(orderId))
     action === 'delete' &&
-      (() => {
-        if (window.confirm('Are you sure you want to delete?')) {
-          dispatch(deleteOrderThunk(orderId))
-          history.push('/dashboard')
-          return
-        }
+    (() => {
+      if (window.confirm('Are you sure you want to delete?')) {
+        dispatch(deleteOrderThunk(orderId))
+        history.push('/dashboard')
         return
-      })()
+      }
+      return
+    })()
   }
 
   // Fetch order by id
@@ -74,10 +67,10 @@ export const OrderEditScreen: FC = () => {
     <div className={styles.container}>
       <RedirectButton path="/dashboard">Back</RedirectButton>
       <button onClick={() => manageOrderHandler('delete')}>Delete</button>
-      {fail && <Message message={fail} type="fail" />}
-      {manageOrderFail && <Message message={manageOrderFail} type="fail" />}
+      {fail && <Message message={fail} type="fail"/>}
+      {manageOrderFail && <Message message={manageOrderFail} type="fail"/>}
       {!orderInfo ? (
-        <Loader />
+        <Loader/>
       ) : (
         <>
           <div>
@@ -86,7 +79,7 @@ export const OrderEditScreen: FC = () => {
               <div key={getRandom()}>
                 <div>Name: {item.name}</div>
                 <div>
-                  <img src={item.image} alt="Product" />
+                  <img src={item.image} alt="Product"/>
                 </div>
                 <div>Quantity: {item.quantity}</div>
                 <div>Product price: {item.price}</div>

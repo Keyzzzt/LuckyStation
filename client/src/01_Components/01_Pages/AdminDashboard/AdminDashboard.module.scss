@@ -1,75 +1,36 @@
-
 @import '../../../02_Styles/variables';
 
-.scroll {
-  position: relative;
-  width: 100%;
-  overflow: auto;
-  z-index: 1;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  &.light_mode::-webkit-scrollbar-track {
-    background: green;
-  }
-  &.dark_mode::-webkit-scrollbar-track {
-    background: green;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: $borderRadius;
-  }
-  &.light_mode::-webkit-scrollbar-thumb {
-    background: green;
-  }
-  &.dark_mode::-webkit-scrollbar-thumb {
-    background: green;
-  }
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-  ::-webkit-scrollbar-thumb {
-    border-radius: $borderRadius;
-  }
-
-  .light_mode {
-    ::-webkit-scrollbar-track {
-      background: red;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: green;
-    }
-  }
-  .dark_mode {
-    ::-webkit-scrollbar-track {
-      background: green;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: green;
-    }
-  }
-}
-
 .container {
-  margin-left: 10px;
-  width: calc(100% - 15.875rem);
+  display: flex;
 
-  padding: 40px 120px;
-
-  &.light_mode {
-    background: green;
-  }
-  &.dark_mode {
-    background: green;
-  }
 }
-
-.dashboard {
-  width: 100%;
+.navbar{
+  background-color: #0d253d;
+  padding: 20px;
+  color: $color--light;
+  min-width: 15%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  &__footer {
-    display: flex;
-    margin-top: 40px;
-  }
+  align-items: center;
+}
+.content {
+  min-width: 85%;
+  max-width: 85%;
+  padding: 15px;
+}
+
+.navbarMenu{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.luckyStation {
+  font-weight: 100;
+  margin-bottom: 20px;
+  align-self: center;
+}
+.menuItem:not(:last-child) {
+  margin-bottom: 10px;
 }

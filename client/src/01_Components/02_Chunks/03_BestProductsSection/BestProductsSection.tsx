@@ -4,7 +4,6 @@ import React, { FC } from 'react'
 import { Button } from '../Button/Button'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { Product } from '../../../05_Types/APIResponse'
-import styles from '../../01_Pages/01_LandingPage/LandingPage.module.scss'
 import Loader from '../Loader/Loader'
 import { ProductCard } from '../ProductCard/ProductCard'
 
@@ -15,7 +14,6 @@ type Props = {
 }
 
 export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHandler}) => {
-  console.log(products)
   const {title, subTitle, buttonText} = useTypedSelector(state => state.components.landingPage.bestProducts)
 
   // // By default - not favorite

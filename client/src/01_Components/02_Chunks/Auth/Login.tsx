@@ -11,8 +11,8 @@ import { CustomInput } from '../CustomInput/CustomInput'
 
 export const Login: FC = () => {
   const [inputError, setInputError] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('1@1.com')
+  const [password, setPassword] = useState('123456')
 
   const { fail: loginFail } = useTypedSelector(state => state.login)
   const { userInfo } = useTypedSelector(state => state.userInfo)
