@@ -65,7 +65,7 @@ export const ProductsByAdmin: FC<Props> = ({ setPage, setProductId }) => {
 
 
   return (
-    <div className={s.products}>
+    <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {products?.length === 0 && <Message message='You have no products yet...' type="fail"/>}
       <div className={s.header}>

@@ -2,7 +2,7 @@ import { AdminDashboard } from './01_Components/01_Pages/AdminDashboard/AdminDas
 import { CreateProduct } from './01_Components/01_Pages/AdminDashboard/CreateProduct/CreateProduct'
 import { CreateSurvey } from './01_Components/01_Pages/AdminDashboard/Survey/CreateSurvey/CreateSurvey'
 import { SurveyPage } from './01_Components/01_Pages/AdminDashboard/Survey/SurveyPage/SurveyPage'
-import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersList/UsersList'
+import { UsersList } from './01_Components/01_Pages/AdminDashboard/UsersByAdmin/UsersList'
 import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
 import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { ProfileScreen } from './01_Components/01_Pages/ProfileScreen/ProfileScreen'

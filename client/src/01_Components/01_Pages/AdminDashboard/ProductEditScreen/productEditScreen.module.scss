@@ -9,3 +9,22 @@
   width: 100px;
   margin-right: 10px;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin-top: 20px;
+  & button {
+    padding: 10px;
+  }
+}
+.colors {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  &:not(:last-child){
+    margin-right: 20px;
+  }
+}

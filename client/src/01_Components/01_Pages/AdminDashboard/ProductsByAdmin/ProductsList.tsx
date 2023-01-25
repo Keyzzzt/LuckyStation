@@ -28,7 +28,7 @@ export const ProductList: FC<Props> = ({ setPage, setProductId, products, setSor
 
   const handleShowProduct = (productId: string) => {
     setProductId(productId)
-    setPage('productEditScreen')
+    setPage('productEdit')
   }
 
   const handleFilter = (filter: string) => {

@@ -4,8 +4,9 @@ import s from './editableSpan.module.scss'
 type PropsType = {
   value: string
   changeValue: (title: string) => void
+  asTextArea?: boolean
 }
-export const EditableSpan: FC<PropsType> = ({ value, changeValue }) => {
+export const EditableSpan: FC<PropsType> = ({ value, changeValue, asTextArea }) => {
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
 
@@ -19,10 +20,20 @@ export const EditableSpan: FC<PropsType> = ({ value, changeValue }) => {
   useEffect(() => {
     setTitle(value)
   }, [value])
-  const onEnter = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && offEditMode()
+  const onEnter = (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent<HTMLTextAreaElement>) => e.key === 'Enter' && offEditMode()
   return (
-    isEditMode
+    isEditMode && !asTextArea
       ? <input
+        className={s.inputField}
+        onBlur={offEditMode}
+        onChange={(e) => setTitle(e.currentTarget.value)}
+        onKeyDown={onEnter}
+        value={title}
+        autoFocus
+      />
+      : isEditMode && asTextArea
+      ? <textarea
+        className={s.textareaField}
         onBlur={offEditMode}
         onChange={(e) => setTitle(e.currentTarget.value)}
         onKeyDown={onEnter}

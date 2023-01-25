@@ -62,36 +62,37 @@ export type Image = {
   _id: string
 }
 export type Product = {
-  _id: string
+  _id: string //
   user: string
-  name: string
-  brand: string
-  category: string
-  countInFavorite: number
-  countInStock: number
-  countViewed: number
-  description: string
-  description2: string
-  includes: string
+  name: string //
+  brand: string //
+  category: string //
+  countInFavorite: number //
+  countInStock: number //
+  countViewed: number //
+  description: string //
+  description2: string //
+  includes: string //
   maximumLoadCapacity: string
-  weight: string
-  size: string
-  colorsInText: string
-  materials: string
-  careInstructions: string
+  weight: string //
+  size: string  // Todo переделать в массив
+  colors: string[] //
+  colorsInText: string //
+  materials: string //
+  careInstructions: string //
   additionalInfo: string
   whatShouldYouKnow: string
-  quality: string
-  images: Image[]
-  isNewProduct: boolean
-  numReviews: number
-  price: number
-  qty?: number
-  rating: number
-  isDirty: boolean
-  reviews: ReviewFromAPI[]
-  createdAt: Date
-  updatedAt: Date
+  quality: string //
+  images: Image[] //
+  isNewProduct: boolean //
+  numReviews: number //
+  price: number //
+  qty?: number // TODO WTF
+  rating: number //
+  isDirty: boolean // TODO WTF
+  reviews: ReviewFromAPI[] //
+  createdAt: Date //
+  updatedAt: Date //
 }
 type OrderProductInfo = {
   name: string

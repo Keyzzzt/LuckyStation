@@ -23,12 +23,13 @@ import { Link } from 'react-router-dom'
 import { CreateProduct } from './CreateProduct/CreateProduct'
 import { Main } from './01_Main/Main'
 import { ProductsByAdmin } from './ProductsByAdmin/ProductsByAdmin'
-import { UsersList } from './UsersList/UsersList'
+import { UsersList } from './UsersByAdmin/UsersList'
 import { OrderList } from './OrderList/OrderList'
 import { API } from './API/API'
-import { UserEditScreen } from './UserEditScreen/UserEditScreen'
 import { ProductEditScreen } from './ProductEditScreen/ProductEditScreen'
 import { OrderEditScreen } from './OrderEditScreen/OrderEditScreen'
+import { UsersByAdmin } from './UsersByAdmin/UsersByAdmin'
+import { UserEdit } from './UsersList/UserEdit'
 
 export type PageType =
   'main'
@@ -37,8 +38,8 @@ export type PageType =
   | 'usersList'
   | 'ordersList'
   | 'api'
-  | 'userEditScreen'
-  | 'productEditScreen'
+  | 'userEdit'
+  | 'productEdit'
   | 'orderEditScreen'
 
 export type SortFilterType =
@@ -73,12 +74,12 @@ export const AdminDashboard: FC = () => {
         return <CreateProduct/>
       case 'productsList':
         return <ProductsByAdmin setProductId={setProductId} setPage={setPage}/>
-      case 'productEditScreen':
+      case 'productEdit':
         return <ProductEditScreen productId={productId} setPage={setPage} setUserId={setUserId}/>
+      case 'userEdit':
+        return <UserEdit userId={userId} />
       case 'usersList':
-        return <UsersList setPage={setPage} setUserId={setUserId}/>
-      case 'userEditScreen':
-        return <UserEditScreen userId={userId}/>
+        return <UsersByAdmin setPage={setPage} setUserId={setUserId}/>
       case 'ordersList':
         return <OrderList setPage={setPage} setOrderId={setOrderId}/>
       case 'orderEditScreen':

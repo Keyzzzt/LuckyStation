@@ -1,15 +1,5 @@
-/**
- * * Desc - Fetch single user and ability to give him admin access or delete this user
- * * Access - ADMIN
- * * Props - null
- * * Components to render - <RedirectButton />, <Loader />
- * ? TODO - fetch user by id from query string
- * ? TODO - delete user
- * ? TODO - toggle admin access
- */
-
 import { FC, useEffect, useState } from 'react'
-import styles from './UserEditScreen.module.scss'
+import styles from './userEdit.module.scss'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
@@ -23,7 +13,7 @@ type Props = {
   userId: string
 }
 
-export const UserEditScreen: FC<Props> = ({ userId }) => {
+export const UserEdit: FC<Props> = ({ userId }) => {
   const history = useHistory()
 
   useScrollToTop()
@@ -86,5 +76,6 @@ export const UserEditScreen: FC<Props> = ({ userId }) => {
         </>
       )}
     </div>
+
   )
 }
