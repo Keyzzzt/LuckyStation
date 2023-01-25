@@ -101,6 +101,7 @@ export const AdminDashboard: FC = () => {
           <li onClick={onClickHandlerCreator('productsList')} className={s.menuItem}>Products list</li>
           <li onClick={onClickHandlerCreator('usersList')} className={s.menuItem}>Users list</li>
           <li onClick={onClickHandlerCreator('ordersList')} className={s.menuItem}>Orders list</li>
+          <li onClick={onClickHandlerCreator('ordersList')} className={s.menuItem}>Settings</li>
           <li onClick={onClickHandlerCreator('api')} className={s.menuItem}>API</li>
         </ul>
       </nav>
