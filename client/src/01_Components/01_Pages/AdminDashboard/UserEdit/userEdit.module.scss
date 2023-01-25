@@ -1,0 +1,14 @@
+.container {
+  margin: 5px;
+  width: 100%;
+}
+
+.buttons{
+  margin-top: 20px;
+  & button{
+    padding: 10px;
+  }
+  & button:not(:last-child){
+    margin-right: 20px;
+  }
+}

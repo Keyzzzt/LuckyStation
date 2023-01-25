@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import s from './productEditScreen.module.scss'
+import s from './productEdit.module.scss'
 import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
@@ -21,7 +21,7 @@ type Props = {
 
 // TODO Если что то изменили, то нужно перед выходом спросить, не забыл ли сохранить
 
-export const ProductEditScreen: FC<Props> = ({ productId, setUserId, setPage }) => {
+export const ProductEdit: FC<Props> = ({ productId, setUserId, setPage }) => {
   const history = useHistory()
   useScrollToTop()
   const dispatch = useDispatch()
@@ -46,7 +46,6 @@ export const ProductEditScreen: FC<Props> = ({ productId, setUserId, setPage }) 
   const [countInStock, setCountInStock] = useState<number>(0)
   const [createdDate, setCreatedDate] = useState<Date>()
   const [lastUpdatedDate, setLastUpdatedDate] = useState<Date>()
-  console.log(productInfo)
 
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {

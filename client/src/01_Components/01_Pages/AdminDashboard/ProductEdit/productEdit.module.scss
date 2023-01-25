@@ -10,13 +10,13 @@
   margin-right: 10px;
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 200px;
+.buttons{
   margin-top: 20px;
-  & button {
+  & button{
     padding: 10px;
+  }
+  & button:not(:last-child){
+    margin-right: 20px;
   }
 }
 .colors {

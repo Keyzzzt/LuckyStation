@@ -24,12 +24,13 @@ import { CreateProduct } from './CreateProduct/CreateProduct'
 import { Main } from './01_Main/Main'
 import { ProductsByAdmin } from './ProductsByAdmin/ProductsByAdmin'
 import { UsersList } from './UsersByAdmin/UsersList'
-import { OrderList } from './OrderList/OrderList'
+import { OrderList } from './OrdersByAdmin/OrderList'
 import { API } from './API/API'
-import { ProductEditScreen } from './ProductEditScreen/ProductEditScreen'
-import { OrderEditScreen } from './OrderEditScreen/OrderEditScreen'
+import { ProductEdit } from './ProductEdit/ProductEdit'
+import { OrderEdit } from './OrderEdit/OrderEdit'
 import { UsersByAdmin } from './UsersByAdmin/UsersByAdmin'
-import { UserEdit } from './UsersList/UserEdit'
+import { UserEdit } from './UserEdit/UserEdit'
+import { OrdersByAdmin } from './OrdersByAdmin/OrdersByAdmin'
 
 export type PageType =
   'main'
@@ -75,15 +76,15 @@ export const AdminDashboard: FC = () => {
       case 'productsList':
         return <ProductsByAdmin setProductId={setProductId} setPage={setPage}/>
       case 'productEdit':
-        return <ProductEditScreen productId={productId} setPage={setPage} setUserId={setUserId}/>
+        return <ProductEdit productId={productId} setPage={setPage} setUserId={setUserId}/>
       case 'userEdit':
         return <UserEdit userId={userId} />
       case 'usersList':
         return <UsersByAdmin setPage={setPage} setUserId={setUserId}/>
       case 'ordersList':
-        return <OrderList setPage={setPage} setOrderId={setOrderId}/>
+        return <OrdersByAdmin setPage={setPage} setOrderId={setOrderId}/>
       case 'orderEditScreen':
-        return <OrderEditScreen orderId={orderId}/>
+        return <OrderEdit orderId={orderId}/>
       case 'api':
         return <API/>
 

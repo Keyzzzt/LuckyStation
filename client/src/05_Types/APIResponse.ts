@@ -104,25 +104,25 @@ type OrderProductInfo = {
 }
 
 export type OrderFromAPI = {
-  _id: string
-  user: string
-  isDelivered: boolean
-  isPaid: boolean
-  itemsPrice: number
-  orderItems: OrderProductInfo[]
-  paymentMethod: string
-  shippingAddress: {
+  _id: string //
+  user: string //
+  isDelivered: boolean //
+  isPaid: boolean //
+  itemsPrice: number //
+  orderItems: OrderProductInfo[] //
+  paymentMethod: string //
+  shippingAddress: { //
     address: string
     city: string
     postalCode: string
     country: string
   }
-  shippingPrice: number
-  taxPrice: number
-  totalPrice: number
-  updatedAt: Date
-  createdAt: Date
-  paidAt?: Date
+  shippingPrice: number //
+  taxPrice: number //
+  totalPrice: number //
+  updatedAt: Date //
+  createdAt: Date //
+  paidAt?: Date //
 }
 
 export type OrderToAPI = {
