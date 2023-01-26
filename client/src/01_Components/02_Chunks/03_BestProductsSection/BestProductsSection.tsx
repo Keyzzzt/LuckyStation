@@ -1,4 +1,4 @@
-import s from './BestProductsSection.module.scss'
+import s from './bestProductsSection.module.scss'
 import globalStyle from './../../../02_Styles/global.module.scss'
 import React, { FC } from 'react'
 import { Button } from '../Button/Button'

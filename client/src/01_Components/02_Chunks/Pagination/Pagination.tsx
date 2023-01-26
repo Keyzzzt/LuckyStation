@@ -1,8 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { FC, useEffect, useState } from 'react'
-import { getRandom } from '../../../04_Utils/utils'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import styles from './Pagination.module.scss'
+import s from './pagination.module.scss'
 
 type Props = {
   limit: number
@@ -30,23 +28,23 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
   }, [activePage])
 
   return (
-    <div className={styles.pagination}>
+    <div className={s.pagination}>
       {products && products.length !== 0 && totalPages > 1 && (
-        <ul className={styles.list}>
+        <ul className={s.list}>
           {activePage > 1 && (
-            <li onClick={() => setActivePage((prev) => prev - 1)} className={`${styles.prev} ${styles.btn}`}>
+            <li onClick={() => setActivePage((prev) => prev - 1)} className={`${s.prev} ${s.btn}`}>
               <span>
                 <i className="fas fa-angle-left" />
                 Prev
               </span>
             </li>
           )}
-          {pagesCount.map((pageNumber) =>
+          {pagesCount.map((pageNumber, i) =>
             pageNumber < activePage + 4 && pageNumber > activePage - 4 ? (
               <li
-                className={`${styles.numb} ${pageNumber === activePage && styles.active}`}
+                className={`${s.numb} ${pageNumber === activePage && s.active}`}
                 onClick={() => changePageHandler(pageNumber)}
-                key={getRandom()}
+                key={i}
               >
                 <span>{pageNumber}</span>
               </li>
@@ -54,7 +52,7 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
           )}
 
           {activePage < totalPages && (
-            <li onClick={() => setActivePage((prev) => prev + 1)} className={`${styles.next} ${styles.btn}`}>
+            <li onClick={() => setActivePage((prev) => prev + 1)} className={`${s.next} ${s.btn}`}>
               <span>
                 Next
                 <i className="fas fa-angle-right" />

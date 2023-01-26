@@ -1,5 +1,4 @@
-/* eslint-disable no-useless-escape */
-import styles from './CustomInput.module.scss'
+import s from './customInput.module.scss'
 import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
@@ -82,21 +81,21 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
   }, [value])
 
   return (
-    <div className={`${styles.field} ${showError ? styles.shake : ''}`}>
-      <div className={styles.inputArea}>
+    <div className={`${s.field} ${showError ? s.shake : ''}`}>
+      <div className={s.inputArea}>
         <input
           onBlur={() => setIsDirty(true)}
-          className={`${showError ? styles.borderError : ''} ${styles.input}`}
+          className={`${showError ? s.borderError : ''} ${s.input}`}
           onChange={onChangeHandler}
           type={type}
           placeholder={placeholder}
           value={value}
           name={name}
         />
-        <i className={`${styles.icon} ${iconValue}`} />
-        {showError && <i className={`${styles.errorIcon} fas fa-exclamation-circle`}></i>}
+        <i className={`${s.icon} ${iconValue}`}/>
+        {showError && <i className={`${s.errorIcon} fas fa-exclamation-circle`}/>}
       </div>
-      {showError && <div className={styles.errorText}>{errorMessage}</div>}
+      {showError && <div className={s.errorText}>{errorMessage}</div>}
     </div>
   )
 }

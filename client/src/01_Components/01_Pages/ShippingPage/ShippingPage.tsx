@@ -1,8 +1,4 @@
 /**
- * * Desc - Shipping page, gather user name, address, phone, email
- * * Access - PRIVATE / PUBLIC
- * * Props - null
- * * Components to render - <Button />
  * ? TODO - create form that has name,lastName,address,city,postalCode,apartment,country,phone input fields
  * ? TODO - if user is logged in, all info should be filled in automatically from userInfo
  * ? TODO - remove product from cart
@@ -26,9 +22,8 @@
  */
 
 import { FC, FormEvent, useEffect, useRef, useState } from 'react'
-import styles from './ShippingPage.module.scss'
+import styles from './shippingPage.module.scss'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
@@ -39,6 +34,7 @@ import { subscribeThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { API } from '../../../API'
 import { getRefValue } from '../../../04_Utils/getRefValue'
 import { useWindowSize } from '../../../04_Utils/hooks'
+import { useNavigate } from 'react-router-dom'
 
 export const ShippingPage: FC = () => {
   const { userInfo } = useTypedSelector(state => state.userInfo)
@@ -74,7 +70,7 @@ export const ShippingPage: FC = () => {
   const [phone, setPhone] = useState(shippingAddress.phone)
 
   const dispatch = useDispatch()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty!, 0)
   cart.shippingPrice = +cart.itemsPrice > minPriceForFreeShipping ? 0 : 25
@@ -153,9 +149,9 @@ export const ShippingPage: FC = () => {
   useEffect(() => {
     if (orderId && orderSuccess) {
       setOrderSuccess(false)
-      history.push(`/payment/${orderId}`)
+      navigate(`/payment/${orderId}`)
     }
-  }, [orderId, history, orderSuccess])
+  }, [orderId, navigate, orderSuccess])
 
   return (
     <div className={styles.container}>
@@ -219,7 +215,7 @@ export const ShippingPage: FC = () => {
           {!userInfo && !continueAsGuest && (
             <div className={styles.askForLogin}>
               <div>
-                <button className={styles.btn} onClick={() => history.push('/login?redirect=placeorder')}>
+                <button className={styles.btn} onClick={() => navigate('/login?redirect=placeorder')}>
                   Login
                 </button>
               </div>

@@ -1,7 +1,7 @@
 // Done with https://www.youtube.com/watch?v=V0dfhBc2lj8
 
 import React, { useRef, useState } from 'react'
-import styles from './SingleProductPageSlider.module.scss'
+import styles from './singleProductPageSlider.module.scss'
 import { SliderItem, SliderItemProps } from './SliderItem'
 import { getRefValue, useStateRef } from '../../../04_Utils/getRefValue'
 import { getTouchEventData } from '../../../04_Utils/dom'

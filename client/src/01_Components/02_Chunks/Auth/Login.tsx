@@ -1,8 +1,8 @@
 /* eslint-disable no-useless-escape */
-import styles from './Auth.module.scss'
+import s from './auth.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, loginThunk } from '../../../03_Reducers/authReducer'
 import { GoogleLogin } from './GoogleLogin'
@@ -16,7 +16,7 @@ export const Login: FC = () => {
 
   const { fail: loginFail } = useTypedSelector(state => state.login)
   const { userInfo } = useTypedSelector(state => state.userInfo)
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
 
@@ -30,9 +30,9 @@ export const Login: FC = () => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect)
+      navigate(redirect)
     }
-  }, [history, userInfo, redirect])
+  }, [navigate, userInfo, redirect])
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -46,8 +46,8 @@ export const Login: FC = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>Login</div>
+    <div className={s.container}>
+      <div className={s.title}>Login</div>
       <form onSubmit={submitHandler}>
         <CustomInput
           returnValue={setEmail}
@@ -69,10 +69,10 @@ export const Login: FC = () => {
         />
         <input type="submit" value="Login" />
       </form>
-      <div className={styles.passLink}>
+      <div className={s.passLink}>
         <Link to="/restore">Forgot password?</Link>
       </div>
-      <div className={styles.regLink}>
+      <div className={s.regLink}>
         Not yet member?
         <Link to="/register"> Register now!</Link>
       </div>

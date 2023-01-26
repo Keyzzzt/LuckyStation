@@ -1,14 +1,4 @@
-/**
- * * Desc - Temporary component to show Main docs
- * * Access - ADMIN
- * * Props - null
- * * Components to render - <Loader />, <RedirectButton /> .
- * ? TODO - fetch api docs
- * ? TODO - display api docs as accordion.
- * ! FIXME Main docs comes as an array with bunch strings in it. Use another data structure and remove if statement from map function.
- */
-
-import s from './API.module.scss'
+import s from './api.module.scss'
 import React, { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'

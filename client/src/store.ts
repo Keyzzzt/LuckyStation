@@ -23,10 +23,6 @@ import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
 import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
 import { loginReducer } from './03_Reducers/authReducer'
 import { statisticReducer } from './03_Reducers/Statistic/statisticReducer'
-import { createSurveyReducer } from './03_Reducers/admin/survey reducers/createSurveyReducer'
-import { surveyListReducer } from './03_Reducers/admin/survey reducers/surveyListReducer'
-import { deleteSurveyReducer } from './03_Reducers/admin/survey reducers/deleteSurveyReducer'
-import { singleSurveyReducer } from './03_Reducers/admin/survey reducers/singleSurveyReducer'
 import { apiReducer } from './03_Reducers/admin/apiReducer'
 import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
 import { appConfigReducer } from './03_Reducers/appConfigReducer'
@@ -57,10 +53,6 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   colorTheme: colorThemeReducer,
   statistic: statisticReducer,
-  createSurvey: createSurveyReducer,
-  surveyList: surveyListReducer,
-  deleteSurvey: deleteSurveyReducer,
-  singleSurvey: singleSurveyReducer,
   api: apiReducer,
   termsAndConditions: termsAndConditionsReducer,
   components: componentsReducer,
@@ -89,6 +81,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)))
 
 export type StateType = ReturnType<typeof rootReducer>
-export type AppStoreType = ReturnType<typeof createStore>
+// export type AppStoreType = ReturnType<typeof createStore>
 
 export default store

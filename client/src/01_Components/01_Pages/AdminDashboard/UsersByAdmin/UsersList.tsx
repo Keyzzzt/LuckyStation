@@ -1,29 +1,21 @@
 import { FC } from 'react'
-import s from './usersByAdmin.module.scss'
+import s from './users.module.scss'
 import globalStyles from '../../../../02_Styles/global.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { PageType } from '../AdminDashboard'
 import { UserTypeForList } from '../../../../05_Types/APIResponse'
-import { Message } from '../../../02_Chunks/Message/Message'
+import { useNavigate } from 'react-router-dom'
 
 // TODO Add sort
 // TODO Polish styles
 
 type Props = {
-  setPage: (value: PageType) => void
-  setUserId: (userId: string) => void
   setSortFilter: (filter: string) => void
   users: UserTypeForList[] | null
 }
 
 
-export const UsersList: FC<Props> = ({ setPage, setUserId, users, setSortFilter }) => {
-
-  const handleShowUser = (userId: string) => {
-    setUserId(userId)
-    setPage('userEdit')
-  }
-
+export const UsersList: FC<Props> = ({ users, setSortFilter }) => {
+  const navigate = useNavigate()
 
   return (
     <div className={s.list}>
@@ -56,7 +48,7 @@ export const UsersList: FC<Props> = ({ setPage, setUserId, users, setSortFilter 
               <td>{u.isAdmin ? <div className={globalStyles.success}>Admin</div> : 'Customer'}</td>
               <td>{u.isActivated ? <div className={globalStyles.success}>Confirmed</div> : <div className={globalStyles.danger}>Not confirmed</div>}</td>
               <td>
-                <button onClick={() => handleShowUser(u._id)} className={globalStyles.success}>More info</button>
+                <button onClick={() => navigate(`/dashboard/users/${u._id}`)} className={globalStyles.success}>More info</button>
               </td>
             </tr>
           ))}

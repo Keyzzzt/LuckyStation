@@ -1,16 +1,7 @@
-/**
- * * Props - null
- * * Components to render - Loader, Message, ...
- * * Data to fetch - ...
- * ! TODO
- * ! Remove any
- */
-
-/* eslint-disable no-useless-escape */
-import styles from './Auth.module.scss'
+import s from './auth.module.scss'
 import { FormEvent, FC, useEffect, useState, ChangeEvent, FocusEvent } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
 import { GoogleLogin } from './GoogleLogin'
@@ -27,7 +18,7 @@ export const Register: FC = () => {
   const [confirmError, setConfirmError] = useState('Empty field')
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { registerFail, registerSuccess } = useTypedSelector(state => state.userRegister)
-  const history = useHistory()
+  const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
 
@@ -111,22 +102,22 @@ export const Register: FC = () => {
 
   useEffect(() => {
     if (userInfo) {
-      history.push(redirect)
+      navigate(redirect)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userInfo])
 
   useEffect(() => {
     if (registerSuccess) {
-      history.push(redirect)
+      navigate(redirect)
       dispatch(actions.registerResetAC())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerSuccess])
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>Register</div>
+    <div className={s.container}>
+      <div className={s.title}>Register</div>
       <form onSubmit={submitHandler}>
         {/* <CustomInput
           showError={showEmailError}
@@ -159,12 +150,12 @@ export const Register: FC = () => {
           name="confirm"
         /> */}
         <input type="submit" value="Register" />
-        {showLoginError && <div className={styles.errorText}>{registerFail}</div>}
+        {showLoginError && <div className={s.errorText}>{registerFail}</div>}
       </form>
-      <div className={styles.passLink}>
+      <div className={s.passLink}>
         <Link to="/restore">Forgot password?</Link>
       </div>
-      <div className={styles.regLink}>
+      <div className={s.regLink}>
         Already member?
         <Link to="/login"> Login</Link>
       </div>

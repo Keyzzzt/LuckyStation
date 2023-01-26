@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
 import { Image } from '../../../05_Types/APIResponse'
-import s from './ProductCard.module.scss'
+import s from './productCard.module.scss'
 
 type Props = {
   _id: string

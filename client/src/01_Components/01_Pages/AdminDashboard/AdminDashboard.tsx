@@ -1,112 +1,27 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/**
- * * Desc - admin dashboard
- * * Access - ADMIN
- * * Props - null
- * * Components to render -
- * ? TODO - page with menu and sidebar with selected page
- * ? TODO - fetch statistic to send different parts of it to different components
- * ! FIXME page with menu and sidebar with selected page
- */
-
 import s from './AdminDashboard.module.scss'
-import globalStyles from './../../../02_Styles/global.module.scss'
-import React, { FC, useEffect, useState } from 'react'
-import { useTypedSelector } from '../../../05_Types/01_Base'
+import { FC } from 'react'
 import { useScrollToTop } from '../../../04_Utils/hooks'
-import { RemoveEmailFromList } from './RemoveEmailFromList/RemoveEmailFromList'
-import { statisticThunk } from '../../../03_Reducers/Statistic/statisticReducer'
-import { useDispatch } from 'react-redux'
-import { CreateSurvey } from './Survey/CreateSurvey/CreateSurvey'
-import { useHistory } from 'react-router'
-import { Link } from 'react-router-dom'
-import { CreateProduct } from './CreateProduct/CreateProduct'
-import { Main } from './01_Main/Main'
-import { ProductsByAdmin } from './ProductsByAdmin/ProductsByAdmin'
-import { UsersList } from './UsersByAdmin/UsersList'
-import { OrderList } from './OrdersByAdmin/OrderList'
-import { API } from './API/API'
-import { ProductEdit } from './ProductEdit/ProductEdit'
-import { OrderEdit } from './OrderEdit/OrderEdit'
-import { UsersByAdmin } from './UsersByAdmin/UsersByAdmin'
-import { UserEdit } from './UserEdit/UserEdit'
-import { OrdersByAdmin } from './OrdersByAdmin/OrdersByAdmin'
-
-export type PageType =
-  'main'
-  | 'createProduct'
-  | 'productsList'
-  | 'usersList'
-  | 'ordersList'
-  | 'api'
-  | 'userEdit'
-  | 'productEdit'
-  | 'orderEditScreen'
-
-export type SortFilterType =
-  'all'
-  | 'byPriceAscending'
-  | 'byPriceDescending'
-  | 'byDateAscending'
-  | 'byDateDescending'
-  | 'byName'
-
+import { Outlet, useNavigate } from 'react-router-dom'
 
 export const AdminDashboard: FC = () => {
-  // const { statistic } = useTypedSelector(state => state.statistic)
-  const [page, setPage] = useState<PageType>('main')
-  const [userId, setUserId] = useState<string>('')
-  const [productId, setProductId] = useState<string>('')
-  const [orderId, setOrderId] = useState<string>('')
-
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
   useScrollToTop()
 
-  useEffect(() => {
-    dispatch(statisticThunk())
-  }, [])
-
-  const onClickHandlerCreator = (value: PageType) => {
-    return () => setPage(value)
-  }
-  const renderContent = () => {
-    switch (page) {
-      case 'createProduct':
-        return <CreateProduct/>
-      case 'productsList':
-        return <ProductsByAdmin setProductId={setProductId} setPage={setPage}/>
-      case 'productEdit':
-        return <ProductEdit productId={productId} setPage={setPage} setUserId={setUserId}/>
-      case 'userEdit':
-        return <UserEdit userId={userId} />
-      case 'usersList':
-        return <UsersByAdmin setPage={setPage} setUserId={setUserId}/>
-      case 'ordersList':
-        return <OrdersByAdmin setPage={setPage} setOrderId={setOrderId}/>
-      case 'orderEditScreen':
-        return <OrderEdit orderId={orderId}/>
-      case 'api':
-        return <API/>
-
-      default:
-        return <Main/>
-    }
-  }
   return (
     <div className={s.container}>
       <nav className={s.navbar}>
         <ul className={s.navbarMenu}>
-          <li onClick={onClickHandlerCreator('main')} className={s.luckyStation}>Lucky Station</li>
-          <li onClick={onClickHandlerCreator('createProduct')} className={s.menuItem}>Create Product</li>
-          <li onClick={onClickHandlerCreator('productsList')} className={s.menuItem}>Products list</li>
-          <li onClick={onClickHandlerCreator('usersList')} className={s.menuItem}>Users list</li>
-          <li onClick={onClickHandlerCreator('ordersList')} className={s.menuItem}>Orders list</li>
-          <li onClick={onClickHandlerCreator('ordersList')} className={s.menuItem}>Settings</li>
-          <li onClick={onClickHandlerCreator('api')} className={s.menuItem}>API</li>
+          <li onClick={() => navigate('/dashboard')} className={s.luckyStation}>Lucky Station</li>
+          <li onClick={() => navigate('/dashboard/products/add')} className={s.menuItem}>Add product</li>
+          <li onClick={() => navigate('/dashboard/products')} className={s.menuItem}>Products</li>
+          <li onClick={() => navigate('/dashboard/users')} className={s.menuItem}>Users</li>
+          <li onClick={() => navigate('/dashboard/orders')} className={s.menuItem}>Orders</li>
+          <li onClick={() => navigate('/dashboard/settings')} className={s.menuItem}>Settings</li>
+          <li onClick={() => navigate('/dashboard/api')} className={s.menuItem}>API</li>
         </ul>
       </nav>
       <div className={s.content}>
-        {renderContent()}
+        <Outlet />
       </div>
     </div>
   )

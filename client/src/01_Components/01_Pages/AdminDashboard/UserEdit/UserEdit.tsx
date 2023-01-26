@@ -2,26 +2,21 @@ import { FC, useEffect, useState } from 'react'
 import s from './userEdit.module.scss'
 import globalStyles from '../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
+import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
 import { userDeleteThunk } from '../../../../03_Reducers/user/userDeleteReducer'
 import { updateProfileByAdminThunk } from '../../../../03_Reducers/admin/updateProfileByAdminReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { useScrollToTop } from '../../../../04_Utils/hooks'
+import { useParams } from 'react-router'
 
-type Props = {
-  userId: string
-}
-
-export const UserEdit: FC<Props> = ({ userId }) => {
-  const history = useHistory()
+export const UserEdit: FC = () => {
+  const navigate = useNavigate()
+  const { userId } = useParams<string>()
   const dispatch = useDispatch()
 
-  // useScrollToTop()
-  // const { userId } = useParams<{ userId: string }>()
-  // const { success, loading, fail } = useTypedSelector(state => state.updateProfileByAdmin)
-
+  useScrollToTop()
   const { user } = useTypedSelector(state => state.getUser)
   const [role, setRole] = useState(false)
 
@@ -29,12 +24,14 @@ export const UserEdit: FC<Props> = ({ userId }) => {
     if (window.confirm(`Are you sure you want to delete ${email}?`)) {
       dispatch(userDeleteThunk(userId))
       alert(`${email} has been removed`)
-      history.push('/dashboard')
+      navigate('/dashboard')
     }
     return
   }
   const handleUpdate = () => {
-    dispatch(updateProfileByAdminThunk(userId, { isAdmin: role }))
+    if(userId) {
+      dispatch(updateProfileByAdminThunk(userId, { isAdmin: role }))
+    }
   }
   const handleToggleAdminStatus = () => {
     // Ask in modal about confirmation
@@ -44,7 +41,9 @@ export const UserEdit: FC<Props> = ({ userId }) => {
     // When done, redirect to main page
   }
   useEffect(() => {
-    dispatch(getUserThunk(userId))
+    if(userId) {
+      dispatch(getUserThunk(userId))
+    }
   }, [userId])
 
   useEffect(() => {

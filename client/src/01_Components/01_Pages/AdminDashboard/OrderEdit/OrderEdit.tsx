@@ -1,7 +1,6 @@
 import s from './orderEdit.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
@@ -15,14 +14,15 @@ import {
   paidThunk,
 } from '../../../../03_Reducers/order/orderManageReducer'
 import globalStyles from '../../../../02_Styles/global.module.scss'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router'
 
-type Props = {
-  orderId: string
-}
 
-export const OrderEdit: FC<Props> = ({ orderId }) => {
+
+export const OrderEdit: FC = () => {
+  const {orderId} = useParams()
   useScrollToTop()
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
   const {
@@ -37,16 +37,16 @@ export const OrderEdit: FC<Props> = ({ orderId }) => {
   type ActionType = 'delivered' | 'notDelivered' | 'paid' | 'notPaid' | 'delete'
 
   const manageOrderHandler = (action: ActionType) => {
-    action === 'delivered' && dispatch(deliveredThunk(orderId))
-    action === 'notDelivered' && dispatch(notDeliveredThunk(orderId))
-    // TODO При манульном изменении статуса - ОПЛАЧЕНб необходимо указать и способ оплаты.
-    action === 'paid' && dispatch(paidThunk(orderId))
-    action === 'notPaid' && dispatch(notPaidThunk(orderId))
+    action === 'delivered' && orderId && dispatch(deliveredThunk(orderId))
+    action === 'notDelivered' && orderId && dispatch(notDeliveredThunk(orderId))
+    // TODO When we change status to paid, need to give payment method.
+    action === 'paid' && orderId && dispatch(paidThunk(orderId))
+    action === 'notPaid' && orderId && dispatch(notPaidThunk(orderId))
     action === 'delete' &&
     (() => {
       if (window.confirm('Are you sure you want to delete?')) {
-        dispatch(deleteOrderThunk(orderId))
-        history.push('/dashboard')
+        orderId && dispatch(deleteOrderThunk(orderId))
+        navigate('/dashboard')
         return
       }
       return
@@ -55,7 +55,7 @@ export const OrderEdit: FC<Props> = ({ orderId }) => {
 
   useEffect(() => {
     if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
-      dispatch(orderInfoThunk(orderId))
+      orderId && dispatch(orderInfoThunk(orderId))
     }
   }, [dispatch, successDelivered, successNotDelivered, successPaid, successNotPaid, orderId, successDelete])
   return (

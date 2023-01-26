@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import styles from './Accordion.module.scss'
+import s from './accordion.module.scss'
 import { AccordionData } from './Accordion'
 import { getRefValue } from '../../../04_Utils/getRefValue'
 
@@ -22,18 +22,18 @@ export const AccordionItem = ({ data, isOpen, btnOnClick }: AccordionItemProps) 
     }
   }, [isOpen])
   return (
-    <li className={`${styles.accordionItem} ${isOpen ? styles.active : ''}`}>
-      <h2 className={styles.accordionItemTitle}>
-        <button onClick={btnOnClick} className={styles.accordionItemBtn}>
+    <li className={`${s.accordionItem} ${isOpen ? s.active : ''}`}>
+      <h2 className={s.accordionItemTitle}>
+        <button onClick={btnOnClick} className={s.accordionItemBtn}>
           {data.title}
         </button>
       </h2>
-      <div className={styles.accordionItemContainer} style={{ height }}>
-        <div ref={contentRef} className={styles.accordionItemContent}>
+      <div className={s.accordionItemContainer} style={{ height }}>
+        <div ref={contentRef} className={s.accordionItemContent}>
           {data.content.map((el: any, i: number) =>
             el.value === '' ? null : (
               <div key={i}>
-                <div className={styles.accordionSubItem}>{el.title}</div>
+                <div className={s.accordionSubItem}>{el.title}</div>
                 <div>{el.value}</div>
               </div>
             )

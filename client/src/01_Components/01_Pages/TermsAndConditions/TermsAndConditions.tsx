@@ -1,4 +1,4 @@
-import styles from './TermsAndConditions.module.scss'
+import styles from './termsAndConditions.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { termsAndConditionsThunk } from '../../../03_Reducers/termsAndConditionsReducer'

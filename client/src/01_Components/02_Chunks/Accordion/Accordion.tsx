@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import styles from './Accordion.module.scss'
+import s from './accordion.module.scss'
 import { AccordionItem } from './AccordionItem'
 
 export type AccordionData = {
@@ -17,7 +17,7 @@ export const Accordion: FC<Props> = ({ items }) => {
     setCurrentIndex(prev => (prev === index ? -1 : index))
   }
   return (
-    <ul className={styles.accordion}>
+    <ul className={s.accordion}>
       {items.map((item, i) => (
         <AccordionItem data={item} key={i} isOpen={currentIndex === i} btnOnClick={() => btnOnClick(i)} />
       ))}

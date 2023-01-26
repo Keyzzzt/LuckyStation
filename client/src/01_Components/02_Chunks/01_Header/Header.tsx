@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import s from './Header.module.scss'
 import globalStyle from './../../../02_Styles/global.module.scss'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useWindowSize } from '../../../04_Utils/hooks'
 import { useDispatch } from 'react-redux'
 import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
@@ -18,7 +18,7 @@ interface Props {
 export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
   const { header } = useTypedSelector((state) => state.components)
   const {menuItems, subtitle, title} = header
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [menuOpen, setMenuOpen] = useState(false)
   const size = useWindowSize()
@@ -31,11 +31,11 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
 
   const dashboardHandler = () => {
     setMenuOpen(false)
-    history.push('/dashboard')
+    navigate('/dashboard')
   }
   const logoutHandler = () => {
     setMenuOpen(false)
-    history.push('/')
+    navigate('/')
     dispatch(logoutThunk())
     dispatch(myOrdersActions.myOrdersResetAC())
     dispatch(orderInfoActions.reset())

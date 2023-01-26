@@ -1,12 +1,4 @@
-/**
- * * Props - null
- * * Components to render - Loader, Message, ...
- * * Data to fetch - PayPal, order
- * ! TODO
- * ! ...
- */
-
-import styles from './ProfileScreen.module.scss'
+import styles from './profileScreen.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -25,7 +17,6 @@ export const ProfileScreen: FC = () => {
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [message, setMessage] = useState('')
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {

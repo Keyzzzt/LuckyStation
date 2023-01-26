@@ -1,0 +1,10 @@
+@import '../../../../02_Styles/variables.scss';
+
+.container {
+  @include breakpoint(768) {
+  }
+  @include breakpoint(992) {
+  }
+
+}
+

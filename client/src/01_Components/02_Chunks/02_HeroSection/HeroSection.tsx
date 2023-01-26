@@ -1,6 +1,5 @@
-import s from './HeroSection.module.scss'
+import s from './heroSection.module.scss'
 import globalStyle from './../../../02_Styles/global.module.scss'
-
 import { FC } from 'react'
 import hero from './hero.mp4'
 import { Button } from '../Button/Button'

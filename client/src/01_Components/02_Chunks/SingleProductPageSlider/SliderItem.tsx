@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from './SingleProductPageSlider.module.scss'
+import styles from './singleProductPageSlider.module.scss'
 
 export type SliderItemProps = {
   imageSrc: string

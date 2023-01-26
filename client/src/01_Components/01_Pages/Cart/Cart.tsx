@@ -1,23 +1,10 @@
-/**
- * * Desc - cart
- * * Access - PRIVATE
- * * Props - null
- * * Components to render - <Button />
- * ? TODO - show all products in cart
- * ? TODO - change quantity
- * ? TODO - remove product from cart
- * ? TODO - accept terms before proceed product
- * ! FIXME
- */
-
 import { FC, useEffect, useState } from 'react'
-import styles from './Cart.module.scss'
+import styles from './cart.module.scss'
 import { useDispatch } from 'react-redux'
 import { useLocation, useParams } from 'react-router'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { getRandom } from '../../../04_Utils/utils'
 import { Button } from '../../02_Chunks/Button/Button'
 import { Fail, Success } from '../../02_Chunks/SuccessAndFail/SuccessAndFail'
 
@@ -30,7 +17,7 @@ export const Cart: FC = () => {
 
   const { productId } = useParams<{ productId: string }>()
   const { search } = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const qty = search ? Number(search.split('=')[1]) : 1
@@ -54,11 +41,11 @@ export const Cart: FC = () => {
     if (!acceptedTerms) {
       if (window.confirm('Click OK to accept terms and conditions')) {
         setAcceptedTerms(true)
-        history.push('/shipping')
+        navigate('/shipping')
         return
       }
     }
-    history.push('/shipping')
+    navigate('/shipping')
   }
   const shippingMessage =
     totalPrice > minPriceForFreeShipping
@@ -72,7 +59,7 @@ export const Cart: FC = () => {
   }, [dispatch, productId, qty])
 
   useEffect(() => {
-    history.push('/cart')
+    navigate('/cart')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
@@ -94,57 +81,55 @@ export const Cart: FC = () => {
           <div className={styles.cart}>
             <div className={styles.cartHeader}>CART</div>
             <div className={styles.cartDeliveryMessage}>{shippingMessage}</div>
-            <div key={getRandom()} className={styles.productList}>
+            <div className={styles.productList}>
               <div className={styles.productListHeader}>
                 <div className={styles.headerProduct}>PRODUCT</div>
                 <div className={styles.headerQuantity}>QUANTITY</div>
                 <div className={styles.headerTotal}>PRICE</div>
               </div>
               {cartItems.map(item => (
-                <>
-                  <div className={styles.productItem} key={getRandom()}>
-                    <div className={styles.productName}>
-                      <Link to={`/product/${item._id}`}>
-                        <div className={styles.productNameWrapper}>
-                          <img src={item.images[0].imageSrc} alt="" />
-                          <div className={styles.productNameTitle}>{item.name}</div>
-                        </div>
-                      </Link>
-                    </div>
-                    <div className={styles.productQuantity}>
-                      {/* <select
+                <div className={styles.productItem} key={item._id}>
+                  <div className={styles.productName}>
+                    <Link to={`/product/${item._id}`}>
+                      <div className={styles.productNameWrapper}>
+                        <img src={item.images[0].imageSrc} alt=""/>
+                        <div className={styles.productNameTitle}>{item.name}</div>
+                      </div>
+                    </Link>
+                  </div>
+                  <div className={styles.productQuantity}>
+                    {/* <select
                         value={item.qty}
                         onChange={e => dispatch(addToCartThunk(item._id, Number(e.target.value)))}
                       >
-                        {[...Array(item.countInStock).keys()].map(n => (
-                          <option key={getRandom()} value={n + 1}>
+                        {[...Array(item.countInStock).keys()].map((n, i) => (
+                          <option key={i} value={n + 1}>
                             {n + 1}
                           </option>
                         ))}
                       </select> */}
-                      <div className={styles.productQuantitySelect}>
-                        <div
-                          onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'add')}
-                          className={styles.plus}
-                        >
-                          <i className="fa-solid fa-plus" />
-                        </div>
-                        <div>{item.qty}</div>
-                        <div
-                          onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'remove')}
-                          className={styles.minus}
-                        >
-                          <i className="fa-solid fa-minus" />
-                        </div>
+                    <div className={styles.productQuantitySelect}>
+                      <div
+                        onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'add')}
+                        className={styles.plus}
+                      >
+                        <i className="fa-solid fa-plus"/>
                       </div>
-
-                      <div className={styles.removeFromCart} onClick={() => removeFromCartHandler(item._id)}>
-                        Remove
+                      <div>{item.qty}</div>
+                      <div
+                        onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'remove')}
+                        className={styles.minus}
+                      >
+                        <i className="fa-solid fa-minus"/>
                       </div>
                     </div>
-                    <div className={styles.productPrice}>&euro; {item.price}</div>
+
+                    <div className={styles.removeFromCart} onClick={() => removeFromCartHandler(item._id)}>
+                      Remove
+                    </div>
                   </div>
-                </>
+                  <div className={styles.productPrice}>&euro; {item.price}</div>
+                </div>
               ))}
             </div>
           </div>
@@ -153,7 +138,7 @@ export const Cart: FC = () => {
             <div className={styles.checkoutText}>Shipping &#38; taxes calculated at checkout</div>
             <div className={styles.checkoutTerms}>
               {/* <input type="checkbox" checked={acceptedTerms} onClick={() => setAcceptedTerms(!acceptedTerms)} /> */}
-              <div onClick={() => setAcceptedTerms(!acceptedTerms)}>{acceptedTerms ? <Success /> : <Fail />}</div>
+              <div onClick={() => setAcceptedTerms(!acceptedTerms)}>{acceptedTerms ? <Success/> : <Fail/>}</div>
               <Link to="/terms">
                 &nbsp;I accept <span>terms &#38; conditions</span>
               </Link>

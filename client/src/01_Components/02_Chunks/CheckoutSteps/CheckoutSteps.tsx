@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from './CheckoutSteps.module.scss'
+import s from './checkoutSteps.module.scss'
 import { Link } from 'react-router-dom'
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 
 export const CheckoutSteps: FC<Props> = ({ step1, step2, step3 }) => {
   return (
-    <div className={styles.container}>
+    <div className={s.container}>
       {step1 ? (
         <div>
           <Link to="/cart">
@@ -43,7 +43,7 @@ export const CheckoutSteps: FC<Props> = ({ step1, step2, step3 }) => {
       )}
       {step3 ? (
         <div>
-          <Link className={styles.link} to="/payment">
+          <Link className={s.link} to="/payment">
             &nbsp;Payment&nbsp;
           </Link>
         </div>

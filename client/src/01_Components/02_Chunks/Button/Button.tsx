@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   path: string
@@ -9,9 +9,9 @@ type Props = {
   fontSize?: string
 }
 export const Button: FC<Props> = ({ children, path, colorTheme = 'light', disabled = false, padding = '10px', fontSize = '1rem' }) => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const returnHandler = () => {
-    history.push(path)
+    navigate(path)
   }
   return (
     <button

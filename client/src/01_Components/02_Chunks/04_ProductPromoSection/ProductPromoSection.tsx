@@ -1,15 +1,9 @@
-import s from './ProductPromoSection.module.scss'
+import s from './productPromoSection.module.scss'
 import globalStyle from './../../../02_Styles/global.module.scss'
 import React, { FC } from 'react'
 import { Button } from '../Button/Button'
-import { Product } from '../../../05_Types/APIResponse'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 
-type Props = {
-  favoriteHandler: (productId: string, isFavorite: boolean) => void
-  products: Product[] | null
-  favorite: string[] | undefined
-}
 type Promo = {
   title: string,
   description: string[]

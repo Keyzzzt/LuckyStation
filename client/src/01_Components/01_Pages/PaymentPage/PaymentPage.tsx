@@ -1,12 +1,4 @@
-/**
- * * Props - null
- * * Components to render - Loader, Message, ...
- * * Data to fetch - PayPal, order
- * ! TODO
- * ! Remove any
- */
-
-import styles from './PaymentPage.module.scss'
+import styles from './paymentPage.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { useDispatch } from 'react-redux'
@@ -18,7 +10,6 @@ import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
-import { getRandom } from '../../../04_Utils/utils'
 
 export const PaymentPage: FC = () => {
   const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
@@ -55,12 +46,13 @@ export const PaymentPage: FC = () => {
         setSdkReady(true)
       }
     }
-  }, [orderInfo?.isPaid, successPay, dispatch, orderInfo])
+  }, [orderInfo?.isPaid, successPay, orderInfo])
 
   // Fetch order
   useEffect(() => {
+    if(params.orderId)
     dispatch(orderInfoThunk(params.orderId))
-  }, [params.orderId, dispatch])
+  }, [params.orderId])
 
   return (
     <div className={styles.container}>
@@ -73,7 +65,7 @@ export const PaymentPage: FC = () => {
             <h1 style={{ fontSize: '100px' }}>TODO</h1>
             <div>Order Items</div>
             {orderInfo.orderItems.map(item => (
-              <div key={getRandom()}>
+              <div key={item.id}>
                 <div>Name: {item.name}</div>
                 <div>
                   <img src={item.image} alt="Product" />

@@ -1,11 +1,10 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { FC, useEffect, useState } from 'react'
-import styles from './SingleProductPage.module.scss'
+import styles from './singleProductPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
-import { useHistory, useParams } from 'react-router'
+import { useParams} from 'react-router'
+import {useNavigate } from 'react-router-dom'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
 import { Accordion } from '../../02_Chunks/Accordion/Accordion'
@@ -14,7 +13,7 @@ export const ProductScreen: FC = () => {
   // const { userInfo } = useTypedSelector(state => state.userInfo)
   const { productInfo } = useTypedSelector(state => state.productInfo)
   const { success: successReview } = useTypedSelector(state => state.productReview)
-  const history = useHistory()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { productId } = useParams<{ productId: string }>()
   // const alreadyReviewed = productInfo?.reviews.find(review => review.user === userInfo?._id)
@@ -24,7 +23,7 @@ export const ProductScreen: FC = () => {
   const [accordionData, setAccordionData] = useState<any>([])
 
   const addToCartHandler = () => {
-    history.push(`/cart/${productId}?qty=${qty}`)
+    navigate(`/cart/${productId}?qty=${qty}`)
   }
 
   // const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -33,8 +32,10 @@ export const ProductScreen: FC = () => {
   // }
 
   useEffect(() => {
-    if (!productInfo || productId !== productInfo._id || successReview) {
-      dispatch(productInfoThunk(productId))
+    if (!productInfo || productId !== productInfo._id || successReview ) {
+      if(productId){
+        dispatch(productInfoThunk(productId))
+      }
     }
   }, [productId, successReview])
 

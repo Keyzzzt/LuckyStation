@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from './Modal.module.scss'
+import s from './modal.module.scss'
 
 interface Props {
   isActive: boolean
@@ -8,8 +8,8 @@ interface Props {
 
 export const Modal: FC<Props> = ({ children, isActive, setIsActive }) => {
   return (
-    <div onClick={() => setIsActive(false)} className={`${styles.container} ${isActive ? styles.active : ''}`}>
-      <div onClick={(e) => e.stopPropagation()} className={`${styles.content} ${isActive ? styles.active : ''}`}>
+    <div onClick={() => setIsActive(false)} className={`${s.container} ${isActive ? s.active : ''}`}>
+      <div onClick={(e) => e.stopPropagation()} className={`${s.content} ${isActive ? s.active : ''}`}>
         {children}
       </div>
     </div>

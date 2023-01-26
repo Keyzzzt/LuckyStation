@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from './Message.module.scss'
+import s from './message.module.scss'
 
 type Props = {
   message: string | null
@@ -7,5 +7,5 @@ type Props = {
 }
 
 export const Message: FC<Props> = ({ message, type }) => {
-  return <div className={styles.container}>{message}</div>
+  return <div className={s.container}>{message}</div>
 }

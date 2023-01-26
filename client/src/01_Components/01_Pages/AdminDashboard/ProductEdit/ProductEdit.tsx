@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react'
 import s from './productEdit.module.scss'
 import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { productInfoThunk } from '../../../../03_Reducers/product/productInfoReducer'
@@ -11,18 +10,15 @@ import { updateProductThunk } from '../../../../03_Reducers/admin/updateProductR
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { EditableSpan } from '../../../02_Chunks/EditableSpan/EditableSpan'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
-import { PageType } from '../AdminDashboard'
+import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router'
 
-type Props = {
-  productId: string
-  setPage: (value: PageType) => void
-  setUserId: (userId: string) => void
-}
 
 // TODO Если что то изменили, то нужно перед выходом спросить, не забыл ли сохранить
 
-export const ProductEdit: FC<Props> = ({ productId, setUserId, setPage }) => {
-  const history = useHistory()
+export const ProductEdit: FC = () => {
+  const navigate = useNavigate()
+  const { productId } = useParams()
   useScrollToTop()
   const dispatch = useDispatch()
   const { productInfo } = useTypedSelector(state => state.productInfo)
@@ -51,13 +47,12 @@ export const ProductEdit: FC<Props> = ({ productId, setUserId, setPage }) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
       dispatch(productDeleteThunk(id))
       alert(`${name} has been removed`)
-      history.push('/dashboard')
+      navigate('/dashboard')
     }
     return
   }
   const handleShowUser = (userId: string) => {
-    setUserId(userId)
-    setPage('userEdit')
+    console.log(productInfo?.user)
   }
 
   const handleUpdate = () => {
@@ -85,8 +80,8 @@ export const ProductEdit: FC<Props> = ({ productId, setUserId, setPage }) => {
   }
 
   useEffect(() => {
-    dispatch(productInfoThunk(productId))
-  }, [dispatch, productId])
+    productId && dispatch(productInfoThunk(productId))
+  }, [productId])
 
   useEffect(() => {
     if (productInfo) {
@@ -264,7 +259,7 @@ export const ProductEdit: FC<Props> = ({ productId, setUserId, setPage }) => {
           <div className={s.buttons}>
             <button className={globalStyles.success} onClick={handleUpdate}>Update</button>
             <button className={globalStyles.danger} onClick={handleUpdate}>Reset</button>
-            <button className={globalStyles.danger} onClick={() => handleDelete(productId, productInfo.name!)}>Delete
+            <button className={globalStyles.danger} onClick={() => handleDelete(productId!, productInfo.name!)}>Delete
             </button>
           </div>
         </>
