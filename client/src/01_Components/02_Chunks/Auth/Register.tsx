@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
-import { GoogleLogin } from './GoogleLogin'
 
 export const Register: FC = () => {
   const [email, setEmail] = useState('')
@@ -159,7 +158,11 @@ export const Register: FC = () => {
         Already member?
         <Link to="/login"> Login</Link>
       </div>
-      <GoogleLogin />
+      <div className={s.socialsSignIn}>
+        <a href="http://localhost:5000/api/auth/google/redirect">
+          <i className={`fa-brands fa-google ${s.googleIcon}`}/>
+        </a>
+      </div>
     </div>
   )
 }

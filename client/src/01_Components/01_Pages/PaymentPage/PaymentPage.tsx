@@ -1,4 +1,4 @@
-import styles from './paymentPage.module.scss'
+import s from './paymentPage.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { PayPalButton } from 'react-paypal-button-v2'
 import { useDispatch } from 'react-redux'
@@ -55,7 +55,7 @@ export const PaymentPage: FC = () => {
   }, [params.orderId])
 
   return (
-    <div className={styles.container}>
+    <main className={s.container}>
       {fail && <Message message={fail} type="fail" />}
       {!orderInfo ? (
         <Loader />
@@ -103,6 +103,6 @@ export const PaymentPage: FC = () => {
           )}
         </>
       )}
-    </div>
+    </main>
   )
 }

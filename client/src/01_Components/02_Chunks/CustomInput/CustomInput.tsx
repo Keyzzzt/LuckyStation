@@ -1,10 +1,13 @@
 import s from './customInput.module.scss'
+import globalStyles from './../../../02_Styles/global.module.scss'
 import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
 type CustomInputProps = {
   type: string
   placeholder: string
+  id?: string
+  label?: string
   name: string
   inputError: boolean
   value: string
@@ -12,26 +15,7 @@ type CustomInputProps = {
   setInputError(value: boolean): void
 }
 
-export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inputError, returnValue, setInputError, value }) => {
-  let iconValue = ''
-  switch (name) {
-    case 'email':
-      iconValue = 'fas fa-envelope'
-      break
-    case 'password':
-      iconValue = 'fas fa-lock'
-      break
-    case 'name':
-    case 'lastName':
-      iconValue = 'fa-solid fa-user'
-      break
-    case 'country':
-      iconValue = 'fa-solid fa-globe'
-      break
-    default:
-      iconValue = ''
-  }
-
+export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inputError, returnValue, setInputError, label, value, id = '' }) => {
   const [errorMessage, setErrorMessage] = useState('Empty field')
   const [isDirty, setIsDirty] = useState(false)
   const showError = errorMessage && isDirty
@@ -83,7 +67,9 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
   return (
     <div className={`${s.field} ${showError ? s.shake : ''}`}>
       <div className={s.inputArea}>
+        {id && <label htmlFor={id} className={globalStyles.label}>{label}</label>}
         <input
+          id={id}
           onBlur={() => setIsDirty(true)}
           className={`${showError ? s.borderError : ''} ${s.input}`}
           onChange={onChangeHandler}
@@ -92,8 +78,6 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
           value={value}
           name={name}
         />
-        <i className={`${s.icon} ${iconValue}`}/>
-        {showError && <i className={`${s.errorIcon} fas fa-exclamation-circle`}/>}
       </div>
       {showError && <div className={s.errorText}>{errorMessage}</div>}
     </div>

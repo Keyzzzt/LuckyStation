@@ -23,7 +23,7 @@ export const ProductPromoSection: FC = () => {
               <img src="" alt=""/>
             </div>
             <div className={s.promoDescription}>
-              <h3 className={i % 2 === 0 ? s.titleLeft : s.titleRight}>{promo.title}</h3>
+              <h2 className={i % 2 === 0 ? s.titleLeft : s.titleRight}>{promo.title}</h2>
               {promo.description.map((el, i) => (
                 <div key={i} className={s.descriptionItem}>
                   {el}

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import s from './Header.module.scss'
+import s from './header.module.scss'
 import globalStyle from './../../../02_Styles/global.module.scss'
 import { Link, useNavigate } from 'react-router-dom'
 import { useWindowSize } from '../../../04_Utils/hooks'
@@ -7,12 +7,11 @@ import { useDispatch } from 'react-redux'
 import { logoutThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { actions as myOrdersActions } from '../../../03_Reducers/user/myOrdersReducer'
 import { actions as orderInfoActions } from '../../../03_Reducers/order/orderInfoReducer'
-import { TopBanner } from '../Banners/Banners'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 
-interface Props {
+type Props = {
   isAuth: boolean
-  isAdmin: boolean | undefined
+  isAdmin: boolean
 }
 
 export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
@@ -67,7 +66,6 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
 
   return (
     <>
-      <TopBanner placeholder="Click to toggle color theme..."/>
       <header className={s.header}>
         <div className={globalStyle.container + ' ' + s.container}>
           <div className={s.logo}>

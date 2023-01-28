@@ -1,4 +1,4 @@
-import styles from './profileScreen.module.scss'
+import s from './profilePage.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -8,7 +8,7 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { Message } from '../../02_Chunks/Message/Message'
 
-export const ProfileScreen: FC = () => {
+export const ProfilePage: FC = () => {
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { orders, error: meyOrdersErr } = useTypedSelector(state => state.myOrders)
@@ -39,8 +39,8 @@ export const ProfileScreen: FC = () => {
   }, [dispatch])
 
   return (
-    <div className={styles.container}>
-      <div className={styles.profile}>
+    <main className={s.container}>
+      <div className={s.profile}>
         {fail && <Message message={fail} type="fail" />}
         {success && <Message message={'Profile updated'} type="success" />}
         <div>
@@ -95,7 +95,7 @@ export const ProfileScreen: FC = () => {
           )}
         </form>
       </div>
-      <div className={styles.orders}>
+      <div className={s.orders}>
         {meyOrdersErr && <div>No Orders</div>}
         {orders &&
           orders.map(order => (
@@ -104,6 +104,6 @@ export const ProfileScreen: FC = () => {
             </div>
           ))}
       </div>
-    </div>
+    </main>
   )
 }

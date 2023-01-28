@@ -1,11 +1,11 @@
 @import '../../../02_Styles/variables';
 
 .container {
-  max-width: 400px;
+  max-width: 30vw;
+  max-height: 50vh;
   padding: 40px 30px 45px 30px;
-  margin: 20px; // delete
-  background-color: $color--light;
-  border-radius: $bRadius10;
+  background-color: $white;
+  border-radius: $bRadius3;
   text-align: center;
   color: $color--dark;
   & .regLink {

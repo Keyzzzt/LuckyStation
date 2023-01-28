@@ -4,7 +4,6 @@ import { Header } from './01_Components/02_Chunks/01_Header/Header'
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
 import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'
-import { publicRotes, privateRotes } from './routes'
 import { configThunk } from './03_Reducers/appConfigReducer'
 import { Routes, Route } from 'react-router-dom'
 import { PageNotFound404 } from './01_Components/01_Pages/PageNotFound404/PageNotFound404'
@@ -19,12 +18,21 @@ import { ProductEdit } from './01_Components/01_Pages/AdminDashboard/ProductEdit
 import { Orders } from './01_Components/01_Pages/AdminDashboard/Orders/Orders'
 import { Products } from './01_Components/01_Pages/AdminDashboard/Products/Products'
 import { AddProduct } from './01_Components/01_Pages/AdminDashboard/CreateProduct/AddProduct'
+import { LoginPage } from './01_Components/01_Pages/LoginPage/LoginPage'
+import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
+import { Register } from './01_Components/02_Chunks/Auth/Register'
+import { ShippingPage } from './01_Components/01_Pages/ShippingPage/ShippingPage'
+import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
+import { CartPage } from './01_Components/01_Pages/CartPage/CartPage'
+import { PaymentPage } from './01_Components/01_Pages/PaymentPage/PaymentPage'
+import { TermsAndConditionsPage } from './01_Components/01_Pages/TermsAndConditionsPage/TermsAndConditionsPage'
+import { ProfilePage } from './01_Components/01_Pages/ProfilePage/ProfilePage'
 
 export const App = () => {
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
-  const [isAuth, setIsAuth] = useState<boolean>(false)
-  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [isAuth, setIsAuth] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   // Auth on every page refresh / start
   useEffect(() => {
@@ -33,23 +41,27 @@ export const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    setIsAdmin(userInfo?.isAdmin ? true : false)
-    setIsAuth(userInfo ? true : false)
+    setIsAdmin(!!userInfo?.isAdmin)
+    setIsAuth(!!userInfo)
   }, [userInfo])
+  const header = <Route path='/' element={<Header isAuth={isAuth} isAdmin={isAdmin}/>}/>
   return (
     <>
-      <Header isAuth={isAuth} isAdmin={isAdmin}/>
       <Routes>
+        {/*Public*/}
         <Route path='/*' element={<PageNotFound404/>}/>
-
-
-        {publicRotes.map((route, i) => (
-          <Route key={i} path={route.path} element={<route.component/>}/>
-        ))}
-        {isAuth &&
-        privateRotes.map((route, i) => (
-          <Route key={i} path={route.path} element={<route.component/>}/>
-        ))}
+        <Route path='/' element={<LandingPage />}>
+          {header}
+        </Route>
+        <Route path='/signup' element={<Register/>}/>
+        <Route path='/shipping' element={<ShippingPage/>}/>
+        <Route path='/product/:productId' element={<ProductScreen/>}/>
+        <Route path='/cart/:productId?' element={<CartPage/>}/>
+        <Route path='/payment/:orderId' element={<PaymentPage/>}/>
+        <Route path='/terms' element={<TermsAndConditionsPage/>}/>
+        {/*Private*/}
+        <Route path='/profile' element={<ProfilePage/>}/>
+        {/*Admin*/}
         <Route path='/dashboard' element={<AdminDashboard/>}>
           <Route path='' element={<Main/>}/>
           <Route path='api' element={<API/>}/>
@@ -57,11 +69,12 @@ export const App = () => {
           <Route path='users' element={<Users/>}/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='products' element={<Products/>}/>
-          <Route path='products/create' element={<AddProduct />}/>
+          <Route path='products/create' element={<AddProduct/>}/>
           <Route path='users/:userId' element={<UserEdit/>}/>
           <Route path='orders/:orderId' element={<OrderEdit/>}/>
           <Route path='products/:productId' element={<ProductEdit/>}/>
         </Route>
+        <Route path={'/login'} element={<LoginPage/>}/>
       </Routes>
       <Footer isSubscribed={userInfo?.isSubscribed ? true : false}/>
     </>

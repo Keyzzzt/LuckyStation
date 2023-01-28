@@ -1,6 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@100;400;500&display=swap');
 
-$Roboto: 'Roboto', sans-serif;
+
+$Roboto: 'Poppins', sans-serif;
 
 // Adaptive
 $mediaMax480:  80%;
@@ -23,12 +24,31 @@ $color--error--light: rgba(240,101,72,.1);
 
 $color--light: #e8e6e3;
 $color--golden: #81786a;
-
 $color--border: #dedede;
+
+$colorLightBlue: #e9f5f9;
+
+
+$blue: #2596be;
+$blueDark: #16536a;
+$white: #fff;
+$greyLight: #eaeaea;
+$grey: #bbbbbb;
+$greyDark: #444;
+$greenLight: #0ab39c;
+$green: #0ca296;
+$greenDark: #0a8f85;
+
+$orangeLight: #f06548;
+$orange: #Ee4d2b;
+$orangeDark: #A6260d;
+
+
 
 // Border radius
 $bRadius10: 10px;
 $bRadius5: 5px;
+$bRadius3: 3px;
 
 // spacing
 $spacing-sm: 12px;
@@ -39,7 +59,7 @@ $spacing-xl: 64px;
 // Font weight
 $fw-sm: 100;
 $fw-md: 400;
-$fw-lg: 700;
+$fw-lg: 500;
 
 // 01_Header
 $headerHeight: 120px;

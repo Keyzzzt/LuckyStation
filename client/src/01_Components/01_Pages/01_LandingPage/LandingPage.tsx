@@ -11,6 +11,7 @@ import { useParams } from 'react-router'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { BestProductsSection } from '../../02_Chunks/03_BestProductsSection/BestProductsSection'
 import { ProductPromoSection } from '../../02_Chunks/04_ProductPromoSection/ProductPromoSection'
+import { Outlet } from 'react-router-dom'
 
 type Params = {
   page: string
@@ -45,11 +46,14 @@ export const LandingPage: FC = () => {
 
   return (
     <>
-      <HeroSection />
-      {/*Нужно сделать отдельный массив для лучших товаров = 4шт */}
-      <BestProductsSection products={products} favoriteHandler={favoriteHandler} favorite={userInfo?.favorite}/>
-      <ProductPromoSection />
+      <Outlet />
+      <main>
+        <HeroSection/>
+        {/*Нужно сделать отдельный массив для лучших товаров = 4шт */}
+        <BestProductsSection products={products} favoriteHandler={favoriteHandler} favorite={userInfo?.favorite}/>
+        <ProductPromoSection/>
         {/*<Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />*/}
+      </main>
     </>
   )
 }

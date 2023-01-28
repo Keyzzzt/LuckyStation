@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import styles from './singleProductPage.module.scss'
+import s from './singleProductPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
@@ -105,27 +105,27 @@ export const ProductScreen: FC = () => {
     }
   }, [productInfo])
   return (
-    <div className={styles.container}>
+    <main className={s.container}>
       {!productInfo ? (
         <Loader />
       ) : (
-        <div className={styles.product}>
-          <div className={styles.productSlider}>
+        <div className={s.product}>
+          <div className={s.productSlider}>
             <SingleProductPageSlider images={productInfo.images} isNew={productInfo.isNewProduct} />
           </div>
-          <div className={styles.productInfo}>
-            <h1 className={styles.name}>{productInfo.name}</h1>
+          <div className={s.productInfo}>
+            <h1 className={s.name}>{productInfo.name}</h1>
 
-            <div className={styles.description}>{productInfo.description}</div>
+            <div className={s.description}>{productInfo.description}</div>
             <div>
               {productInfo.countInStock === 0 ? (
-                <div className={styles.buyPrice}>Out of stock</div>
+                <div className={s.buyPrice}>Out of stock</div>
               ) : (
-                <div className={styles.buyPrice}>
+                <div className={s.buyPrice}>
                   {/* <Button path={`/cart/${productId}?qty=${qty}`} colorTheme="light">
-                      Add to Cart
+                      Add to CartPage
                     </Button> */}
-                  <button onClick={addToCartHandler} className={styles.addToCartBtn}>
+                  <button onClick={addToCartHandler} className={s.addToCartBtn}>
                     <span>ADD TO CART</span>
                     <span>&euro; {productInfo.price}</span>
                   </button>
@@ -145,7 +145,7 @@ export const ProductScreen: FC = () => {
                 ) : null}
               </div> */}
             </div>
-            <div className={styles.description}>{productInfo.description2}</div>
+            <div className={s.description}>{productInfo.description2}</div>
           </div>
 
           {/* <Rating value={productInfo.rating} reviews={productInfo.numReviews} /> */}
@@ -185,6 +185,6 @@ export const ProductScreen: FC = () => {
         </div>
       )}
       <Accordion items={accordionData} />
-    </div>
+    </main>
   )
 }

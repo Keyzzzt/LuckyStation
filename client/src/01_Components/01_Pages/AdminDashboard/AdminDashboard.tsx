@@ -9,7 +9,7 @@ export const AdminDashboard: FC = () => {
 
   return (
     <div className={s.container}>
-      <nav className={s.navbar}>
+      <aside className={s.navbar}>
         <ul className={s.navbarMenu}>
           <li onClick={() => navigate('/dashboard')} className={s.luckyStation}>Lucky Station</li>
           <li onClick={() => navigate('/dashboard/products/add')} className={s.menuItem}>Add product</li>
@@ -19,10 +19,10 @@ export const AdminDashboard: FC = () => {
           <li onClick={() => navigate('/dashboard/settings')} className={s.menuItem}>Settings</li>
           <li onClick={() => navigate('/dashboard/api')} className={s.menuItem}>API</li>
         </ul>
-      </nav>
-      <div className={s.content}>
+      </aside>
+      <main className={s.content}>
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }

@@ -1,7 +1,5 @@
-// Done with https://www.youtube.com/watch?v=V0dfhBc2lj8
-
 import React, { useRef, useState } from 'react'
-import styles from './singleProductPageSlider.module.scss'
+import s from './singleProductPageSlider.module.scss'
 import { SliderItem, SliderItemProps } from './SliderItem'
 import { getRefValue, useStateRef } from '../../../04_Utils/getRefValue'
 import { getTouchEventData } from '../../../04_Utils/dom'
@@ -94,22 +92,22 @@ export const SingleProductPageSlider: React.FC<Props> = ({ images, isNew = false
   }
 
   return (
-    <div onTouchStart={onTouchStart} onMouseDown={onTouchStart} className={styles.sliderContainer}>
-      {isNew && <div className={styles.new}>new</div>}
+    <div onTouchStart={onTouchStart} onMouseDown={onTouchStart} className={s.sliderContainer}>
+      {isNew && <div className={s.new}>new</div>}
       <ul
         ref={containerRef}
-        className={`${styles.sliderList} ${isSwiping ? styles.swiping : ''}`}
+        className={`${s.sliderList} ${isSwiping ? s.swiping : ''}`}
         style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
       >
         {images.map((image, index) => (
           <SliderItem key={index} {...image} />
         ))}
       </ul>
-      <ul className={styles.sliderIndicator}>
+      <ul className={s.sliderIndicator}>
         {images.map((image, i) => (
           <li
             onClick={() => indicatorOnClick(i)}
-            className={`${styles.sliderIndicatorItem} ${i === currentIndex ? styles.active : ''}`}
+            className={`${s.sliderIndicatorItem} ${i === currentIndex ? s.active : ''}`}
             key={i}
             data-testid="indicator"
           />

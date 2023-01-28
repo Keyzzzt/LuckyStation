@@ -3,15 +3,7 @@
 .field {
   position: relative;
   width: 100%;
-  margin-bottom: 40px;
-  & i {
-    display: none;
-    // position: absolute;
-    // top: 50%;
-    // transform: translateY(-50%);
-    // font-size: $fz-md;
-    // pointer-events: none;
-  }
+  margin-bottom: 20px;
   &.shake {
     animation: shake 0.3s ease-in-out;
   }
@@ -19,45 +11,36 @@
 @keyframes shake {
   20%,
   80% {
-    margin-left: -12px;
+    margin-left: -4px;
   }
   40%,
   60% {
-    margin-left: 12px;
+    margin-left: 4px;
   }
-}
-
-.icon {
-  left: 15px;
-  color: #d6d6d6;
-}
-
-.errorIcon {
-  right: 15px;
-  color: $color--error;
 }
 .errorText {
   position: absolute;
+  right: 0;
   color: $color--error;
   margin: 5px 0;
   text-align: left;
+  font-size: 0.8rem;
 }
 
 .input {
-  height: 50px;
   width: 100%;
-  border: 1px solid #d6d6d6;
-  border-radius: $bRadius5;
-  padding: 0 10px;
-  // padding: 0 45px;
-  font-size: 0.9rem;
+  border: 1px solid $grey;
+  border-radius: $bRadius3;
+  padding: 10px;
+  font-size: 0.8rem;
   &::placeholder {
-    color: #737373;
-    font-size: 0.9rem;
+    color: $grey;
+
   }
 }
 
-// Если написать этот класс выше, то .input перезатрет стили
+
+
 .borderError {
   border-color: $color--error;
 }

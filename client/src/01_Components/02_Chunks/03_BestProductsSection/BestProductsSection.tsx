@@ -36,8 +36,8 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
   return (
     <section className={s.newProductsSection}>
       <div className={globalStyle.container + ' ' + s.container}>
-        <h1 className={s.title}>{title}</h1>
-        <h1 className={s.subTitle}>{subTitle}</h1>
+        <h2 className={s.title}>{title}</h2>
+        <h3 className={s.subTitle}>{subTitle}</h3>
         <div className={s.productsWrapper}>
           {!products ? (
             <Loader />

@@ -28,6 +28,14 @@
   overflow: hidden;
 }
 
+.label {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: $fw-lg;
+  margin-bottom: 10px;
+  color: $greyDark;
+}
+
 .table {
   overflow: hidden;
   width: 100%;

@@ -10,8 +10,8 @@ export const HeroSection: FC = () => {
   return (
     <section className={s.hero}>
       <div className={globalStyle.container + ' ' + s.container}>
-        <h1 className={s.heroTitle}>{title}</h1>
-        <h2 className={s.heroSubTitle}>{subTitle}</h2>
+        <h2 className={s.heroTitle}>{title}</h2>
+        <h3 className={s.heroSubTitle}>{subTitle}</h3>
         <p className={s.heroText}>{text}</p>
         <div className={s.button}>
           <Button path="/products" colorTheme="light" padding='10px'>{buttonText}</Button>

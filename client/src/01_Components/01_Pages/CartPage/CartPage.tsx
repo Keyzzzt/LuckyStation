@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import styles from './cart.module.scss'
+import styles from './cartPage.module.scss'
 import { useDispatch } from 'react-redux'
 import { useLocation, useParams } from 'react-router'
 import { Link, useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 import { Button } from '../../02_Chunks/Button/Button'
 import { Fail, Success } from '../../02_Chunks/SuccessAndFail/SuccessAndFail'
 
-export const Cart: FC = () => {
+export const CartPage: FC = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [totalPrice, setTotalPrice] = useState(0)
 
@@ -60,14 +60,13 @@ export const Cart: FC = () => {
 
   useEffect(() => {
     navigate('/cart')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
     setTotalPrice(prev => cartItems.reduce((acc, item) => acc + item.price! * item.qty!, 0))
   }, [cartItems])
 
   return (
-    <div className={styles.container}>
+    <main className={styles.container}>
       {cartItems.length === 0 ? (
         <div className={styles.emptyCart}>
           <div className={styles.emptyCartHeader}>YOUR CART IS EMPTY</div>
@@ -149,6 +148,6 @@ export const Cart: FC = () => {
           </div>
         </>
       )}
-    </div>
+    </main>
   )
 }

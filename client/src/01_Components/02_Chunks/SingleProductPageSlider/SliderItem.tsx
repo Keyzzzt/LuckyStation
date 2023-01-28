@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import styles from './singleProductPageSlider.module.scss'
+import s from './singleProductPageSlider.module.scss'
 
 export type SliderItemProps = {
   imageSrc: string
@@ -8,8 +8,8 @@ export type SliderItemProps = {
 
 export const SliderItem: FC<SliderItemProps> = ({ imageSrc, imageAlt }) => {
   return (
-    <li className={styles.sliderItem}>
-      <img src={imageSrc} alt={imageAlt} className={styles.sliderImage} draggable={false} />
+    <li className={s.sliderItem}>
+      <img src={imageSrc} alt={imageAlt} className={s.sliderImage} draggable={false} />
     </li>
   )
 }

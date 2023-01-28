@@ -22,7 +22,7 @@
  */
 
 import { FC, FormEvent, useEffect, useRef, useState } from 'react'
-import styles from './shippingPage.module.scss'
+import s from './shippingPage.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
@@ -154,81 +154,81 @@ export const ShippingPage: FC = () => {
   }, [orderId, navigate, orderSuccess])
 
   return (
-    <div className={styles.container}>
-      <div onClick={() => setIsOpen(prev => !prev)} className={styles.orderSummaryAccordion}>
-        <div className={styles.accordionTitle}>
+    <div className={s.container}>
+      <div onClick={() => setIsOpen(prev => !prev)} className={s.orderSummaryAccordion}>
+        <div className={s.accordionTitle}>
           <i className="fa-brands fa-opencart" />
           <div>{isOpen ? 'Hide' : 'Show'} order summary</div>
           <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`} />
         </div>
-        <div className={styles.accordionPrice}>
-          <span className={styles.price}>&euro;{cart.itemsPrice}</span>
+        <div className={s.accordionPrice}>
+          <span className={s.price}>&euro;{cart.itemsPrice}</span>
         </div>
       </div>
-      <div className={styles.orderSummary} style={{ height }}>
-        <div className={styles.rightWrapper} ref={contentRef}>
-          <div className={styles.cartItems}>
+      <div className={s.orderSummary} style={{ height }}>
+        <div className={s.rightWrapper} ref={contentRef}>
+          <div className={s.cartItems}>
             {cart?.cartItems.length === 0 ? (
               <div>Cart is empty</div>
             ) : (
               cart.cartItems.map((item, i) => (
-                <div className={styles.item}>
-                  <div className={styles.itemImage}>
+                <div className={s.item}>
+                  <div className={s.itemImage}>
                     <img src={item.images[0].imageSrc} alt={item.images[0].imageAlt} />
-                    <div className={styles.itemQty}>{item.qty}</div>
+                    <div className={s.itemQty}>{item.qty}</div>
                   </div>
-                  <div className={styles.itemName}>{item.name}</div>
-                  <div className={styles.itemPrice}>&euro;{item.price}</div>
+                  <div className={s.itemName}>{item.name}</div>
+                  <div className={s.itemPrice}>&euro;{item.price}</div>
                 </div>
               ))
             )}
           </div>
-          <div className={styles.discount}>
-            <input type="text" className={styles.discountInput} placeholder="Discount code" />
-            <button className={styles.btn}>Apply</button>
+          <div className={s.discount}>
+            <input type="text" className={s.discountInput} placeholder="Discount code" />
+            <button className={s.btn}>Apply</button>
           </div>
-          <div className={styles.subTotal}>
-            <div className={styles.subTotalPrice}>
+          <div className={s.subTotal}>
+            <div className={s.subTotalPrice}>
               <div>Subtotal</div>
-              <div className={styles.price}>&euro;{cart.itemsPrice}</div>
+              <div className={s.price}>&euro;{cart.itemsPrice}</div>
             </div>
-            <div className={styles.shippingPrice}>
+            <div className={s.shippingPrice}>
               <div>Shipping</div>
               <div>{cart.itemsPrice > minPriceForFreeShipping ? freeShippingMessage : 'Calculated at next step'}</div>
             </div>
           </div>
-          <div className={styles.totalPrice}>
-            <div className={styles.totalPriceLeft}>
+          <div className={s.totalPrice}>
+            <div className={s.totalPriceLeft}>
               <div>Total</div>
               <div>Including &euro;{cart.taxPrice} in taxes</div>
             </div>
-            <div className={styles.totalPriceRight}>
+            <div className={s.totalPriceRight}>
               <span>EUR&nbsp;&nbsp;</span>
-              <span className={styles.price}>&euro;{cart.itemsPrice}</span>
+              <span className={s.price}>&euro;{cart.itemsPrice}</span>
             </div>
           </div>
         </div>
       </div>
-      <div className={styles.shipping}>
-        <div className={styles.leftWrapper}>
+      <div className={s.shipping}>
+        <div className={s.leftWrapper}>
           <CheckoutSteps step1 step2 />
           {!userInfo && !continueAsGuest && (
-            <div className={styles.askForLogin}>
+            <div className={s.askForLogin}>
               <div>
-                <button className={styles.btn} onClick={() => navigate('/login?redirect=placeorder')}>
+                <button className={s.btn} onClick={() => navigate('/login?redirect=placeorder')}>
                   Login
                 </button>
               </div>
               <div>OR</div>
               <div>
-                <button className={styles.btn} onClick={() => setContinueAsGuest(true)}>
+                <button className={s.btn} onClick={() => setContinueAsGuest(true)}>
                   Continue as guest
                 </button>
               </div>
             </div>
           )}
-          <form onSubmit={submitHandler} className={styles.contactInfo}>
-            <div className={styles.name}>
+          <form onSubmit={submitHandler} className={s.contactInfo}>
+            <div className={s.name}>
               <CustomInput
                 value={name}
                 returnValue={setName}
@@ -248,7 +248,7 @@ export const ShippingPage: FC = () => {
                 name="lastName"
               />
             </div>
-            <div className={styles.shippingAddress}>Shipping address</div>
+            <div className={s.shippingAddress}>Shipping address</div>
             <div>
               <CustomInput
                 value={country}
@@ -289,7 +289,7 @@ export const ShippingPage: FC = () => {
                 name="postal code"
               />
             </div>
-            <div className={styles.cityAndPhone}>
+            <div className={s.cityAndPhone}>
               <CustomInput
                 value={city}
                 returnValue={setCity}
@@ -319,17 +319,17 @@ export const ShippingPage: FC = () => {
               name="email"
             />
 
-            <div className={styles.subscribe}>
+            <div className={s.subscribe}>
               <input
                 onChange={() => setSetSubscribe(prev => !prev)}
-                className={styles.checkBox}
+                className={s.checkBox}
                 type="checkbox"
                 id="signUpForNewsletter"
               />
               <label htmlFor="signUpForNewsletter">Email me with news and offers</label>
             </div>
             <div>
-              <input className={`${styles.btn} ${styles.btnSubmit}`} type="submit" />
+              <input className={`${s.btn} ${s.btnSubmit}`} type="submit" />
             </div>
           </form>
         </div>
