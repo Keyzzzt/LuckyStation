@@ -1,17 +1,16 @@
 import s from './products.module.scss'
-import globalStyles from './../../../../02_Styles/global.module.scss'
 import { FC, useState } from 'react'
 import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { Product } from '../../../../05_Types/APIResponse'
 import { useNavigate } from 'react-router-dom'
+import { ProductResponseType } from '../../../../05_Types/ResponseTypes'
 
 
 // TODO Add sort
 // TODO Polish styles
 
 type Props = {
-  products: Product[] | null
+  products: ProductResponseType[] | null
   setSortFilter: (filter: string) => void
 }
 
@@ -58,7 +57,7 @@ export const ProductList: FC<Props> = ({ products, setSortFilter }) => {
           <Loader/>
         ) : (
           <>
-            <table className={globalStyles.table}>
+            <table className='stationTable'>
               <thead>
               <tr>
                 <th>
@@ -101,13 +100,13 @@ export const ProductList: FC<Props> = ({ products, setSortFilter }) => {
                   <td>{p.brand}</td>
                   <td>{p.category}</td>
                   <td>
-                    <div className={p.countInStock <= 0 ? globalStyles.danger : globalStyles.success}>
+                    <div className={p.countInStock <= 0 ? 'danger' : 'success'}>
                       {p.countInStock}
                     </div>
                   </td>
                   <td>{p.price}</td>
                   <td>
-                    <button onClick={() => navigate(`/dashboard/products/${p._id}`)} className={globalStyles.success}>More info</button>
+                    <button onClick={() => navigate(`/dashboard/products/${p._id}`)} className='success'>More info</button>
                   </td>
                 </tr>
               ))}

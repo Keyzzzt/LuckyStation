@@ -1,5 +1,4 @@
 import s from './customInput.module.scss'
-import globalStyles from './../../../02_Styles/global.module.scss'
 import { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
@@ -42,7 +41,7 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
           break
         }
       case 'password':
-        if (value.length >= 6) {
+        if (value?.length >= 6) {
           setErrorMessage('')
           break
         } else {
@@ -54,7 +53,7 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
         break
 
       default:
-        if (value.length > 1) {
+        if (value?.length > 1) {
           setErrorMessage('')
           break
         } else {
@@ -67,11 +66,11 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
   return (
     <div className={`${s.field} ${showError ? s.shake : ''}`}>
       <div className={s.inputArea}>
-        {id && <label htmlFor={id} className={globalStyles.label}>{label}</label>}
+        {id && <label htmlFor={id} className='stationLabel'>{label}</label>}
         <input
           id={id}
           onBlur={() => setIsDirty(true)}
-          className={`${showError ? s.borderError : ''} ${s.input}`}
+          className={`${showError ? s.borderError : ''} stationInput`}
           onChange={onChangeHandler}
           type={type}
           placeholder={placeholder}

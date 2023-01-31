@@ -6,6 +6,7 @@ import { Message } from '../../../02_Chunks/Message/Message'
 import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
 import { actions } from '../../../../03_Reducers/product/productInfoReducer'
 import { ProductList } from './ProductsList'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
 
 // TODO Add sort
@@ -60,9 +61,8 @@ export const Products: FC= () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {products?.length === 0 && <Message message='You have no products yet...' type="fail"/>}
-      <div className={s.header}>
-        <h2 className={s.title}>Products</h2>
-      </div>
+      <BreadCrumbs pageTitle='Products' breadcrumbs={['dashboard', 'products']}/>
+
       <ProductList products={productsToRender} setSortFilter={setProductsFilter}/>
     </div>
   )

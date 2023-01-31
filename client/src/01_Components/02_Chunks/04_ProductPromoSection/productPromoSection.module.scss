@@ -1,204 +1,92 @@
 @import '../../../02_Styles/variables';
 
-.newProductsSection {
-  color: $color--dark;
-  padding: $sectionVerticalPaddingMobile;
-  //@include breakpoint(992) {
-  //padding: $sectionVerticalPaddingDesktop;
-  //}
-}
-
-.container {
-  width: 90%;
-  background-color: #74959a;
-  font-size: 1.5rem;
-}
-
-.leftWrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 50px;
-  @include breakpoint(480) {
-    position: relative;
-    margin-bottom: 250px;
-  }
-  @include breakpoint(768) {
-    margin-bottom: 350px;
-  }
-  @include breakpoint(992) {
-    margin-bottom: 150px;
-  }
-  @include breakpoint(1200) {
-    margin-bottom: 250px;
-  }
-  @include breakpoint(1400) {
-    margin-bottom: 380px;
-  }
-}
-
-.leftWrapper .promoDescription {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  font-weight: 100;
-  background-color: #e9e0d2;
-  @include breakpoint(768) {
-    max-width: 85%;
-  }
-  @include breakpoint(992) {
-    max-width: 63%;
-  }
-  @include breakpoint(1200) {
-    max-width: 73%;
-  }
-}
-
+.leftWrapper,
 .rightWrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  position: relative;
-  @include breakpoint(480) {
-    margin-bottom: 250px;
-    flex-direction: row;
+  margin: 50px 0;
+  @include breakpoint(600) {
+    margin-bottom: 350px;
+    position: relative;
   }
   @include breakpoint(768) {
-    margin-bottom: 300px;
-  }
-  @include breakpoint(1400) {
-    margin-bottom: 380px;
-  }
-
-}
-
-.rightWrapper .promoDescription {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  background-color: #e9e0d2;
-  width: 100%;
-  font-weight: 100;
-  @include breakpoint(768) {
-    max-width: 85%;
   }
   @include breakpoint(992) {
-    max-width: 63%;
   }
   @include breakpoint(1200) {
-    max-width: 73%;
+  }
+  @include breakpoint(1400) {
+  }
+}
+
+.leftWrapper .promoDescription,
+.rightWrapper .promoDescription {
+  background-color: #e9e0d2;
+  padding: 20px 0;
+  width: 100%;
+  min-height: 300px;
+  @include breakpoint(600) {
+    text-align: right;
+  }
+  @include breakpoint(768) {
+    width: 85%;
+  }
+  @include breakpoint(992) {
+    width: 63%;
+  }
+  @include breakpoint(1200) {
+    width: 73%;
+  }
+}
+.leftWrapper .promoDescription{
+  @include breakpoint(600) {
+    text-align: left;
+  }
+}
+.rightWrapper .promoDescription{
+  @include breakpoint(768) {
+    margin-left: auto;
   }
 }
 
 .titleLeft,
 .titleRight {
   text-transform: uppercase;
-  background-color: #226057;
   align-self: center;
-  padding: 20px;
+  font-size: 1.5rem;
 }
 
-.titleLeft {
-  @include breakpoint(768) {
-    align-self: flex-end;
-  }
-}
-
-.titleRight {
-  @include breakpoint(768) {
-    align-self: flex-start;
-  }
-}
-
-.descriptionItem {
-  margin-top: 20px;
-  text-align: justify;
-  @include breakpoint(768) {
-    max-width: 85%;
-  }
+.descriptionItemLeft,
+.descriptionItemRight {
+  margin: 20px 0;
+  background-color: #74959a;
   @include breakpoint(992) {
-    max-width: 70%;
+    max-width: 72%;
   }
-  @include breakpoint(1200) {
-    max-width: 70%;
-  }
-
 }
 
-.button {
-  margin: 20px auto;
-  @include breakpoint(480) {
-    margin: 50px 0 0 0;
+.descriptionItemRight {
+  @include breakpoint(992) {
+    margin-left: auto;
   }
-
 }
-
-.imageRight {
-  width: 100%;
-  height: 300px;
+.leftWrapperImage,
+.rightWrapperImage{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   background-color: #00b4b5;
-  @include breakpoint(480) {
+  @include breakpoint(600) {
     position: absolute;
-    right: 20px;
-    width: 270px;
-    height: 270px;
-    bottom: -200px;
-  }
-  @include breakpoint(768) {
     width: 400px;
-    height: 400px;
-    right: 30px;
     bottom: -330px;
   }
   @include breakpoint(992) {
-    width: 470px;
-    height: 470px;
+    width: 500px;
+    bottom: -228px;
+  }
+
+
+}
+.leftWrapperImage {
+
+  @include breakpoint(600) {
     right: 0;
-    top: 110px;
-  }
-  @include breakpoint(1200) {
-    width: 500px;
-    height: 500px;
-  }
-  @include breakpoint(1400) {
-    width: 600px;
-    height: 600px;
   }
 }
-
-.imageLeft {
-  width: 100%;
-  height: 300px;
-  background-color: #00b4b5;
-  @include breakpoint(480) {
-    position: absolute;
-    left: 20px;
-    width: 270px;
-    height: 270px;
-    bottom: -200px;
-  }
-  @include breakpoint(768) {
-    width: 400px;
-    height: 400px;
-    left: 30px;
-    bottom: -330px;
-  }
-  @include breakpoint(992) {
-    width: 470px;
-    height: 470px;
-    left: 0;
-    top: 110px;
-  }
-  @include breakpoint(1200) {
-    width: 500px;
-    height: 500px;
-  }
-  @include breakpoint(1400) {
-    width: 600px;
-    height: 600px;
-  }
-
-}
-
-//object-fit: cover

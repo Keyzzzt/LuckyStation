@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import s from './productEdit.module.scss'
-import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
@@ -12,6 +11,7 @@ import { EditableSpan } from '../../../02_Chunks/EditableSpan/EditableSpan'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
 
 // TODO Если что то изменили, то нужно перед выходом спросить, не забыл ли сохранить
@@ -40,8 +40,8 @@ export const ProductEdit: FC = () => {
   const [includes, setIncludes] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
   const [countInStock, setCountInStock] = useState<number>(0)
-  const [createdDate, setCreatedDate] = useState<Date>()
-  const [lastUpdatedDate, setLastUpdatedDate] = useState<Date>()
+  const [createdDate, setCreatedDate] = useState('')
+  const [lastUpdatedDate, setLastUpdatedDate] = useState('')
 
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
@@ -115,7 +115,9 @@ export const ProductEdit: FC = () => {
         <Loader/>
       ) : (
         <>
-          <table className={globalStyles.table}>
+          <BreadCrumbs pageTitle={productInfo.brand + ' ' + productInfo.name}
+                       breadcrumbs={['dashboard', 'products', 'product']}/>
+          <table className='stationTable'>
             <thead>
             <tr>
               <th>
@@ -134,7 +136,7 @@ export const ProductEdit: FC = () => {
             <tr>
               <td>Created by</td>
               <td>{user ? (
-                <button onClick={() => handleShowUser(user._id)} className={globalStyles.success}>{userName}</button>
+                <button onClick={() => handleShowUser(user._id)} className='success'>{userName}</button>
               ) : 'User that created this product is no longer in database.'}</td>
             </tr>
             <tr>
@@ -204,7 +206,7 @@ export const ProductEdit: FC = () => {
             <tr>
               <td>In stock</td>
               <td>
-                <div className={countInStock <= 0 ? globalStyles.danger : globalStyles.success}>
+                <div className={countInStock <= 0 ? 'danger' : 'success'}>
                   {countInStock}
                 </div>
               </td>
@@ -252,15 +254,14 @@ export const ProductEdit: FC = () => {
             <tr>
               <td>Reviews</td>
               <td>{productInfo.reviews.length > 0 ? <button
-                className={globalStyles.success}>{productInfo.reviews.length} Reviews</button> : 'No reviews'} </td>
+                className='success'>{productInfo.reviews.length} Reviews</button> : 'No reviews'} </td>
             </tr>
             </tbody>
           </table>
           <div className={s.buttons}>
-            <button className={globalStyles.success} onClick={handleUpdate}>Update</button>
-            <button className={globalStyles.danger} onClick={handleUpdate}>Reset</button>
-            <button className={globalStyles.danger} onClick={() => handleDelete(productId!, productInfo.name!)}>Delete
-            </button>
+            <button className='success' onClick={handleUpdate}>Update</button>
+            <button className='danger' onClick={handleUpdate}>Reset</button>
+            <button className='danger' onClick={() => handleDelete(productId!, productInfo.name!)}>Delete</button>
           </div>
         </>
       )}

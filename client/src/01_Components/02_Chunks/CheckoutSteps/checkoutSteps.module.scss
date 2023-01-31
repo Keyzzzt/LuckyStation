@@ -1,13 +1,24 @@
 @import '../../../02_Styles/variables';
 
 .container {
+  font-size: .8em;
   display: flex;
   justify-content: center;
-  padding: 10px;
-  border-bottom: 1px solid #d6d6d6;
-  margin-bottom: 25px;
+  padding: 10px 0;
+  border-bottom: 1px solid $greyLight;
 }
-.container a {
-  color: $color--dark;
-  font-weight: 700;
+.activeStep a {
+  color: $greenLight;
+}
+
+.activeStep a::after {
+  content: '\003e';
+  margin: 0 5px;
+}
+.passiveStep {
+  color: $grey;
+}
+.passiveStep:not(:last-child)::after {
+  content: '\003e';
+  margin: 0 5px;
 }

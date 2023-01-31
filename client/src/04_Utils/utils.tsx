@@ -7,3 +7,8 @@ export const isEmail = (email: string) => {
     return false
   }
 }
+
+export let toLocal = {
+  style: 'currency',
+  currency: 'eur',
+}

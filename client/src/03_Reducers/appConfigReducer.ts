@@ -1,6 +1,6 @@
 import { API } from '../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
-import { ConfigType } from '../05_Types/APIResponse'
+import { ConfigResponseType } from '../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -35,7 +35,7 @@ export const appConfigReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  success: (config: ConfigType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
+  success: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
   fail: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
 }
 

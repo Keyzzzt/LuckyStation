@@ -36,11 +36,11 @@ export const API: FC = () => {
               return (
                 <div key={i} className={`${s.item} ${s[item.access]}`}>
                   <div onClick={() => toggleHandler(i)} className={s.title}>
-                    <h2>{item.action}</h2>
+                    <span>{item.action}</span>
                     <span>{selected === i ? '-' : '+'}</span>
                   </div>
                   <div className={`${s.content} ${selected === i ? s.show : ''}`}>
-                    <pre>{JSON.stringify(item, null, 7)}</pre>
+                    <pre>{JSON.stringify(item, null, 2)}</pre>
                   </div>
                 </div>
               )

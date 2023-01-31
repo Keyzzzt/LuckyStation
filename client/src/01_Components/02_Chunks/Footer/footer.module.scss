@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-background-color: #74959a;
+  background-color: #74959a;
   position: relative;
 }
 
@@ -18,17 +18,17 @@ background-color: #74959a;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: $spacing-md;
+    margin-bottom: 20px;
 
     &__headline {
       color: green;
       font-size: 1.6rem;
-      letter-spacing: $letter-spacing;
+      letter-spacing: $letterSpacing;
     }
     span {
       color: green;
       font-size: 1.1rem;
-      margin-bottom: $spacing-md;
+      margin-bottom: 20px;
     }
 
     &__form {
@@ -48,17 +48,17 @@ background-color: #74959a;
       }
       input,
       button {
-        letter-spacing: $letter-spacing;
+        letter-spacing: $letterSpacing;
         font-family: inherit;
         font-size: 1.1rem;
-        margin-bottom: $spacing-sm;
-        padding: $spacing-sm $spacing-md;
-        border-radius: $borderRadius;
+        margin-bottom: 20px;
+        padding: 20px 20px;
+        border-radius: $bRadius5;
 
         @include breakpoint(md) {
           width: 300px;
           margin-bottom: 0;
-          margin-right: $spacing-sm;
+          margin-right: 20px;
         }
         &:focus {
           outline: 0;
@@ -71,9 +71,9 @@ background-color: #74959a;
     min-height: 20vh;
     display: grid;
     grid-template-columns: 1fr;
-    gap: $spacing-md;
+    gap: 20px;
     text-align: center;
-    margin-bottom: $spacing-xl;
+    margin-bottom: 20px;
     @include breakpoint(sm) {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -86,14 +86,14 @@ background-color: #74959a;
         color: green;
         font-size: 1.6rem;
         margin-bottom: $spacing-md;
-        letter-spacing: $letter-spacing;
+        letter-spacing: $letterSpacing;
       }
 
       &__links {
         li {
           margin-bottom: $spacing-sm;
           a {
-            letter-spacing: $letter-spacing;
+            letter-spacing: $letterSpacing;
             width: 100%;
             color: green;
           }
@@ -130,7 +130,7 @@ background-color: #74959a;
     &__year {
       display: flex;
       justify-content: center;
-      letter-spacing: $letter-spacing;
+      letter-spacing: $letterSpacing;
       font-size: 0.9rem;
     }
     &__socials {

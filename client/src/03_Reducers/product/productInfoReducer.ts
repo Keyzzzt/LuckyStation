@@ -1,13 +1,13 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Product } from '../../05_Types/APIResponse'
+import { ProductResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  productInfo: null as null | Product,
+  productInfo: null as null | ProductResponseType,
   fail: '',
 }
 
@@ -25,7 +25,7 @@ export const productInfoReducer = (state = initialState, action: ActionType): In
 }
 
 export const actions = {
-  success: (product: Product) => ({ type: 'PRODUCT_INFO_SUCCESS' as const, payload: product }),
+  success: (product: ProductResponseType) => ({ type: 'PRODUCT_INFO_SUCCESS' as const, payload: product }),
   fail: (errMessage: string) => ({ type: 'PRODUCT_INFO_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'PRODUCT_INFO_RESET' as const }),
 }

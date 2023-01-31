@@ -1,15 +1,14 @@
 import s from './bestProductsSection.module.scss'
-import globalStyle from './../../../02_Styles/global.module.scss'
 import React, { FC } from 'react'
-import { Button } from '../Button/Button'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { Product } from '../../../05_Types/APIResponse'
 import Loader from '../Loader/Loader'
 import { ProductCard } from '../ProductCard/ProductCard'
+import { Link } from 'react-router-dom'
+import { ProductResponseType } from '../../../05_Types/ResponseTypes'
 
 type Props = {
   favoriteHandler: (productId: string, isFavorite: boolean) => void
-  products: Product[] | null
+  products: ProductResponseType[] | null
   favorite: string[] | undefined
 }
 
@@ -34,11 +33,11 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
   // }
 
   return (
-    <section className={s.newProductsSection}>
-      <div className={globalStyle.container + ' ' + s.container}>
-        <h2 className={s.title}>{title}</h2>
-        <h3 className={s.subTitle}>{subTitle}</h3>
-        <div className={s.productsWrapper}>
+    <section className='stationSectionMain'>
+      <div className='stationContainer'>
+        <h2 className='stationSectionTitle'>{title}</h2>
+        <h3 className='stationSectionSubtitle'>{subTitle}</h3>
+        <div className='row mt50 mh200'>
           {!products ? (
             <Loader />
           ) : (
@@ -48,8 +47,6 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
                   key={i}
                   _id={product._id}
                   name={product.name}
-                  favoriteHandler={favoriteHandler}
-                  isFavorite={false}
                   price={product.price}
                   image={product.images[0]}
                 />
@@ -57,8 +54,8 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
             })
           )}
         </div>
-        <div className={s.button}>
-          <Button path="products" colorTheme="dark">{buttonText}</Button>
+        <div className='stationSectionButton'>
+          <Link  to="/products">{buttonText}</Link>
         </div>
       </div>
     </section>

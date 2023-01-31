@@ -1,12 +1,12 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Product } from '../../05_Types/APIResponse'
+import { ProductResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
-type ContactInfo = {
+export type ContactInfo = {
   name: string
   lastName: string
   address: string
@@ -18,7 +18,7 @@ type ContactInfo = {
 }
 
 const initialState = {
-  cartItems: [] as Product[],
+  cartItems: [] as ProductResponseType[],
   shippingAddress: {
     name: '',
   } as ContactInfo,
@@ -57,7 +57,7 @@ export const cartReducer = (state = initialState, action: ActionType): InitialSt
 }
 
 export const actions = {
-  cartAddAC: (product: Product) => ({ type: 'CART_ADD' as const, payload: product }),
+  cartAddAC: (product: ProductResponseType) => ({ type: 'CART_ADD' as const, payload: product }),
   cartRemoveAC: (productId: string) => ({ type: 'CART_REMOVE' as const, payload: productId }),
   cartResetAC: () => ({ type: 'CART_RESET' as const }),
   cartFailAC: (error: string) => ({ type: 'CART_FAIL' as const, payload: error }),

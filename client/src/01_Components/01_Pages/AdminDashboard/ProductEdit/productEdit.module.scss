@@ -4,7 +4,10 @@
   margin: 5px;
   width: 100%;
 }
-.image {
+.image:not(:last-of-type) {
+  margin-right: 10px;
+}
+.image{
   height: 100px;
   width: 100px;
   margin-right: 10px;

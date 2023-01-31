@@ -1,5 +1,5 @@
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
-import { TermsAndConditions } from '../05_Types/APIResponse'
+import { TermsAndConditionsResponseType } from '../05_Types/ResponseTypes'
 import { API } from '../API'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -7,7 +7,7 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  data: null as null | TermsAndConditions,
+  data: null as null | TermsAndConditionsResponseType,
   fail: '',
 }
 
@@ -23,7 +23,7 @@ export const termsAndConditionsReducer = (state = initialState, action: ActionTy
 }
 
 export const actions = {
-  success: (data: TermsAndConditions) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_SUCCESS' as const, payload: data }),
+  success: (data: TermsAndConditionsResponseType) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_FAIL' as const, payload: errMessage }),
 }
 

@@ -27,19 +27,6 @@
   font-size: 0.8rem;
 }
 
-.input {
-  width: 100%;
-  border: 1px solid $grey;
-  border-radius: $bRadius3;
-  padding: 10px;
-  font-size: 0.8rem;
-  &::placeholder {
-    color: $grey;
-
-  }
-}
-
-
 
 .borderError {
   border-color: $color--error;

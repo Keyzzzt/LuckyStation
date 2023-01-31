@@ -9,7 +9,7 @@ import { Routes, Route } from 'react-router-dom'
 import { PageNotFound404 } from './01_Components/01_Pages/PageNotFound404/PageNotFound404'
 import { AdminDashboard } from './01_Components/01_Pages/AdminDashboard/AdminDashboard'
 import { API } from './01_Components/01_Pages/AdminDashboard/API/API'
-import { Users } from './01_Components/01_Pages/AdminDashboard/UsersByAdmin/Users'
+import { Users } from './01_Components/01_Pages/AdminDashboard/Users/Users'
 import { UserEdit } from './01_Components/01_Pages/AdminDashboard/UserEdit/UserEdit'
 import { Main } from './01_Components/01_Pages/AdminDashboard/01_Main/Main'
 import { Settings } from './01_Components/01_Pages/AdminDashboard/Settings/Settings'
@@ -17,8 +17,8 @@ import { OrderEdit } from './01_Components/01_Pages/AdminDashboard/OrderEdit/Ord
 import { ProductEdit } from './01_Components/01_Pages/AdminDashboard/ProductEdit/ProductEdit'
 import { Orders } from './01_Components/01_Pages/AdminDashboard/Orders/Orders'
 import { Products } from './01_Components/01_Pages/AdminDashboard/Products/Products'
-import { AddProduct } from './01_Components/01_Pages/AdminDashboard/CreateProduct/AddProduct'
-import { LoginPage } from './01_Components/01_Pages/LoginPage/LoginPage'
+import { AddProduct } from './01_Components/01_Pages/AdminDashboard/AddProduct/AddProduct'
+import { SignInPage } from './01_Components/01_Pages/SignInPage/SignInPage'
 import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
 import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { ShippingPage } from './01_Components/01_Pages/ShippingPage/ShippingPage'
@@ -41,8 +41,10 @@ export const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    setIsAdmin(!!userInfo?.isAdmin)
-    setIsAuth(!!userInfo)
+    if(userInfo){
+      setIsAdmin(userInfo.isAdmin)
+      setIsAuth(true)
+    }
   }, [userInfo])
   const header = <Route path='/' element={<Header isAuth={isAuth} isAdmin={isAdmin}/>}/>
   return (
@@ -69,14 +71,14 @@ export const App = () => {
           <Route path='users' element={<Users/>}/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='products' element={<Products/>}/>
-          <Route path='products/create' element={<AddProduct/>}/>
+          <Route path='products/add' element={<AddProduct/>}/>
           <Route path='users/:userId' element={<UserEdit/>}/>
           <Route path='orders/:orderId' element={<OrderEdit/>}/>
           <Route path='products/:productId' element={<ProductEdit/>}/>
         </Route>
-        <Route path={'/login'} element={<LoginPage/>}/>
+        <Route path={'/login'} element={<SignInPage/>}/>
       </Routes>
-      <Footer isSubscribed={userInfo?.isSubscribed ? true : false}/>
+      <Footer isSubscribed={!!userInfo?.isSubscribed}/>
     </>
   )
 }

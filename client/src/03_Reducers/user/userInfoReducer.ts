@@ -1,13 +1,13 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { User } from '../../05_Types/APIResponse'
+import { UserResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  userInfo: null as null | User,
+  userInfo: null as null | UserResponseType,
   error: '',
 }
 
@@ -45,7 +45,7 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
 }
 
 export const actions = {
-  userInfoSuccessAC: (data: User) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
+  userInfoSuccessAC: (data: UserResponseType) => ({ type: 'USER_INFO_SUCCESS' as const, payload: data }),
   userInfoFailAC: (errMessage: string) => ({ type: 'USER_INFO_FAIL' as const, payload: errMessage }),
   userInfoResetAC: () => ({ type: 'USER_INFO_RESET' as const }),
 

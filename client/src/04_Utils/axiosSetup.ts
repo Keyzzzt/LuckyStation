@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LoginResponse } from '../05_Types/APIResponse'
+import { LoginResponseType } from '../05_Types/ResponseTypes'
 
 export const API_URL = 'http://localhost:5000/api'
 
@@ -22,7 +22,7 @@ $api.interceptors.response.use(
     if (err.response.status === 401 && err.config && !err.config._isRetry) {
       originalRequest._isRetry = true
       try {
-        const { data } = await axios.get<LoginResponse>(`${API_URL}/refresh`, { withCredentials: true })
+        const { data } = await axios.get<LoginResponseType>(`${API_URL}/refresh`, { withCredentials: true })
         localStorage.setItem('token', data.accessToken)
         return $api.request(originalRequest)
       } catch (error) {

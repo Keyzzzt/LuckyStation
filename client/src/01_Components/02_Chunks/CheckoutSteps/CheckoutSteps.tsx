@@ -11,46 +11,32 @@ type Props = {
 export const CheckoutSteps: FC<Props> = ({ step1, step2, step3 }) => {
   return (
     <div className={s.container}>
-      {step1 ? (
-        <div>
+      {step1 && (
+        <div className={s.activeStep}>
           <Link to="/cart">
             Cart&nbsp;
-            <i className={`fa-solid fa-chevron-right`} />
           </Link>
-        </div>
-      ) : (
-        <div>
-          <div>
-            &nbsp;
-            <i className={`fa-solid fa-chevron-right`} />
-          </div>
         </div>
       )}
       {step2 ? (
-        <div>
+        <div className={s.activeStep}>
           <Link to="/shipping">
             &nbsp;Shipping&nbsp;
-            <i className={`fa-solid fa-chevron-right`} />
           </Link>
         </div>
       ) : (
-        <div>
-          <div>
-            &nbsp;Shipping&nbsp;
-            <i className={`fa-solid fa-chevron-right`} />
-          </div>
+        <div className={s.passiveStep}>
+          &nbsp;Shipping&nbsp;
         </div>
       )}
       {step3 ? (
-        <div>
+        <div className={s.activeStep}>
           <Link className={s.link} to="/payment">
             &nbsp;Payment&nbsp;
           </Link>
         </div>
       ) : (
-        <div>
-          <div>&nbsp;Payment&nbsp;</div>
-        </div>
+        <div className={s.passiveStep}>&nbsp;Payment&nbsp;</div>
       )}
     </div>
   )

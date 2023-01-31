@@ -3,8 +3,9 @@ import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
-import { usersListThunk } from '../../../../03_Reducers/user/userListReducer'
+import { usersListThunk } from '../../../../03_Reducers/admin/userListReducer'
 import { UsersList } from './UsersList'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
 
 // TODO Add sort
@@ -61,9 +62,7 @@ export const Users: FC = () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {users?.length === 0 && <Message message='You have no users yet...' type="fail"/>}
-      <div className={s.header}>
-        <h2 className={s.title}>Users</h2>
-      </div>
+      <BreadCrumbs pageTitle='Users' breadcrumbs={['dashboard', 'users']}/>
       <UsersList users={usersToRender} setSortFilter={setUsersFilter}/>
     </div>
   )

@@ -1,31 +1,29 @@
 import $api, { API_URL } from './04_Utils/axiosSetup'
 import axios, { AxiosResponse } from 'axios'
 import {
-  LoginResponse,
-  GetAllUsersResponse,
-  Product,
-  OrderFromAPI,
-  User,
+  LoginResponseType,
+  UsersListResponseType,
+  ProductResponseType,
+  OrderResponseType,
+  UserResponseType,
   GetAllOrdersResponse,
   GetAllProductsResponse,
-  OrderToAPI,
-  SurveysList,
-  SurveyFromDB,
-  UpdateProfile,
-  TermsAndConditions,
-  ConfigType,
-} from './05_Types/APIResponse'
+  OrderCreateRequestType,
+  UpdateProfileRequestType,
+  TermsAndConditionsResponseType,
+  ConfigResponseType,
+} from './05_Types/ResponseTypes'
 import { Survey } from './05_Types/01_Base'
 
 export const API = {
   config: {
     getConfig: async () => {
-      return $api.get<ConfigType>('/config')
+      return $api.get<ConfigResponseType>('/config')
     },
   },
   auth: {
     login: async (email: string, password: string) => {
-      return $api.post<LoginResponse>('/login', { email, password })
+      return $api.post<LoginResponseType>('/login', { email, password })
     },
     // No data in response, test for response status
     registration: async (email: string, password: string) => {
@@ -36,19 +34,19 @@ export const API = {
       return $api.post('/logout')
     },
     authenticate: async () => {
-      return axios.get<LoginResponse>(`${API_URL}/refresh`, { withCredentials: true })
+      return axios.get<LoginResponseType>(`${API_URL}/refresh`, { withCredentials: true })
     },
   },
   user: {
-    getProfile: async (): Promise<AxiosResponse<User>> => {
-      return $api.get<User>('/user/profile')
+    getProfile: async (): Promise<AxiosResponse<UserResponseType>> => {
+      return $api.get<UserResponseType>('/user/profile')
     },
     // TODO: endpoint
-    getTermsAndConditions: async (lang: string): Promise<AxiosResponse<TermsAndConditions>> => {
-      return $api.get<TermsAndConditions>(`/user/terms/${lang}`)
+    getTermsAndConditions: async (lang: string): Promise<AxiosResponse<TermsAndConditionsResponseType>> => {
+      return $api.get<TermsAndConditionsResponseType>(`/user/terms/${lang}`)
     },
-    updateOwnProfile: async (formData: UpdateProfile) => {
-      return $api.put<User>(`/user/profile`, formData)
+    updateOwnProfile: async (formData: UpdateProfileRequestType) => {
+      return $api.put<UserResponseType>(`/user/profile`, formData)
     },
     myOrders: async (page: number, limit: number): Promise<AxiosResponse<any>> => {
       return $api.get<any>(`/order/myorders/${page}/${limit}`)
@@ -61,7 +59,7 @@ export const API = {
     },
   },
   order: {
-    createOrder: async (newOrder: OrderToAPI): Promise<AxiosResponse<string>> => {
+    createOrder: async (newOrder: OrderCreateRequestType): Promise<AxiosResponse<string>> => {
       return $api.post<string>('/order', newOrder)
     },
     payOrder: async (orderId: string, paymentResult: any): Promise<AxiosResponse<any>> => {
@@ -72,11 +70,11 @@ export const API = {
     getApiInfo: async () => {
       return $api.get(`/apiinfo`)
     },
-    getUser: async (userId: string): Promise<AxiosResponse<User>> => {
-      return $api.get<User>(`admin/user/${userId}`)
+    getUser: async (userId: string): Promise<AxiosResponse<UserResponseType>> => {
+      return $api.get<UserResponseType>(`admin/user/${userId}`)
     },
-    getUsers: async (page: number, limit: number): Promise<AxiosResponse<GetAllUsersResponse>> => {
-      return $api.get<GetAllUsersResponse>(`admin/user/${page}/${limit}`)
+    getUsers: async (page: number, limit: number): Promise<AxiosResponse<UsersListResponseType>> => {
+      return $api.get<UsersListResponseType>(`admin/user/${page}/${limit}`)
     },
     deleteUser: async (userId: string): Promise<void> => {
       return $api.delete(`admin/user/${userId}`)
@@ -84,8 +82,8 @@ export const API = {
     updateProfileByAdmin: async (userId: string, formData: any): Promise<AxiosResponse<any>> => {
       return $api.put<any>(`admin/user/${userId}`, formData)
     },
-    getSingleProduct: async (productId: string): Promise<AxiosResponse<Product>> => {
-      return $api.get<Product>(`product/${productId}`)
+    getSingleProduct: async (productId: string): Promise<AxiosResponse<ProductResponseType>> => {
+      return $api.get<ProductResponseType>(`product/${productId}`)
     },
     getProducts: async (
       keyword: string,
@@ -103,8 +101,8 @@ export const API = {
     updateProduct: async (productId: string, product: any): Promise<AxiosResponse<any>> => {
       return $api.put<any>(`admin/product/${productId}`, { ...product })
     },
-    getSingleOrder: async (orderId: string): Promise<AxiosResponse<OrderFromAPI>> => {
-      return $api.get<OrderFromAPI>(`order/${orderId}`)
+    getSingleOrder: async (orderId: string): Promise<AxiosResponse<OrderResponseType>> => {
+      return $api.get<OrderResponseType>(`order/${orderId}`)
     },
     getOrders: async (page: number, limit: number): Promise<AxiosResponse<GetAllOrdersResponse>> => {
       return $api.get<GetAllOrdersResponse>(`admin/order/${page}/${limit}`)
@@ -129,18 +127,6 @@ export const API = {
     },
     removeEmailFromList: async (email: string): Promise<void> => {
       return $api.put('admin/statistic/email', { email })
-    },
-    createSurvey: async (survey: Survey): Promise<void> => {
-      return $api.post('admin/survey', { ...survey })
-    },
-    getSurveys: async (): Promise<AxiosResponse<SurveysList>> => {
-      return $api.get<SurveysList>(`admin/survey/1/15`)
-    },
-    getSingleSurvey: async (surveyID: string): Promise<AxiosResponse<SurveyFromDB>> => {
-      return $api.get<SurveyFromDB>(`admin/survey/${surveyID}`)
-    },
-    deleteSurvey: async (surveyId: string): Promise<void> => {
-      return $api.delete(`admin/survey/${surveyId}`)
     },
   },
   product: {

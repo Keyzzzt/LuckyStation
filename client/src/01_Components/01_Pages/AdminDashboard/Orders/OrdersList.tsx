@@ -1,12 +1,11 @@
 import { FC } from 'react'
 import s from './orders.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { OrderFromAPI } from '../../../../05_Types/APIResponse'
-import globalStyles from '../../../../02_Styles/global.module.scss'
+import { OrderResponseType } from '../../../../05_Types/ResponseTypes'
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
-  orders: OrderFromAPI[]
+  orders: OrderResponseType[]
   setSortFilter: (filter: string) => void
 }
 
@@ -18,7 +17,7 @@ export const OrdersList: FC<Props> = ({ orders }) => {
       {!orders ? (
         <Loader/>
       ) : (
-        <table className={globalStyles.table}>
+        <table className='stationTable'>
           <thead>
           <tr>
             <th>
@@ -40,18 +39,18 @@ export const OrdersList: FC<Props> = ({ orders }) => {
           {orders.map(o => (
             <tr key={o._id}>
               <td>{o._id}</td>
-              <td>{o.isPaid ? <div className={globalStyles.success}>Paid</div> :
-                <div className={globalStyles.danger}>Unpaid</div>}
+              <td>{o.isPaid ? <div className='success'>Paid</div> :
+                <div className='danger'>Unpaid</div>}
                 <span className={s.paymentMethod}>{o.paymentMethod}</span>
               </td>
               <td>
-                {o.isDelivered ? <div className={globalStyles.success}>Delivered</div> :
-                  <div className={globalStyles.danger}>Not delivered</div>}
+                {o.isDelivered ? <div className='success'>Delivered</div> :
+                  <div className='danger'>Not delivered</div>}
               </td>
               <td>
                 {o.orderItems.length}
               </td>
-              <button onClick={() => navigate(`/dashboard/orders/${o._id}`)} className={globalStyles.success}>More info</button>
+              <button onClick={() => navigate(`/dashboard/orders/${o._id}`)} className='success'>More info</button>
             </tr>
           ))}
           </tbody>

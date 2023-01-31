@@ -1,13 +1,13 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { User } from '../../05_Types/APIResponse'
+import { UserResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 export const initialState = {
-  user: null as null | User,
+  user: null as null | UserResponseType,
   fail: '',
 }
 
@@ -25,7 +25,7 @@ export const getUserReducer = (state = initialState, action: ActionType): Initia
 }
 
 export const actions = {
-  success: (user: any) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
+  success: (user: UserResponseType) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
   fail: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
   reset: () => ({ type: 'GET_USER_RESET' as const }),
 }
@@ -36,6 +36,7 @@ export function getUserThunk(userId: string): ThunkType {
       const { data } = await API.admin.getUser(userId)
       dispatch(actions.success(data))
     } catch (err: any) {
+      console.log(err)
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')

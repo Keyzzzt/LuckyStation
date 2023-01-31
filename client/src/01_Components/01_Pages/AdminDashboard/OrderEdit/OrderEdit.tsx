@@ -13,9 +13,10 @@ import {
   notPaidThunk,
   paidThunk,
 } from '../../../../03_Reducers/order/orderManageReducer'
-import globalStyles from '../../../../02_Styles/global.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
+import { toLocal } from '../../../../04_Utils/utils'
 
 
 
@@ -53,6 +54,7 @@ export const OrderEdit: FC = () => {
     })()
   }
 
+
   useEffect(() => {
     if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
       orderId && dispatch(orderInfoThunk(orderId))
@@ -66,7 +68,9 @@ export const OrderEdit: FC = () => {
         <Loader/>
       ) : (
         <>
-          <table className={globalStyles.table}>
+          <BreadCrumbs pageTitle={'Total price ' + orderInfo.totalPrice.toLocaleString('en', toLocal)} breadcrumbs={['dashboard', 'orders', 'order']} />
+
+          <table className='stationTable'>
             <thead>
             <tr>
               <th>
@@ -101,19 +105,19 @@ export const OrderEdit: FC = () => {
               <td>{orderInfo.isPaid
                 ? (
                   <div>
-                    <button onClick={() => manageOrderHandler('notPaid')} className={globalStyles.success}>Paid</button>
+                    <button onClick={() => manageOrderHandler('notPaid')} className='success'>Paid</button>
                     <span className={s.paymentMethod}> {orderInfo.paymentMethod} </span>
                     <span className={s.paymentMethod}>{orderInfo.paidAt}</span>
                   </div>
                 ) :
-                <button onClick={() => manageOrderHandler('paid')} className={globalStyles.danger}>Unpaid</button>}
+                <button onClick={() => manageOrderHandler('paid')} className='danger'>Unpaid</button>}
               </td>
             </tr>
             <tr>
               <td>Shipping</td>
               <td>
-                {orderInfo.isDelivered ? <button onClick={() => manageOrderHandler('notDelivered')} className={globalStyles.success}>Delivered</button> :
-                  <button onClick={() => manageOrderHandler('delivered')} className={globalStyles.danger}>Not delivered</button>}
+                {orderInfo.isDelivered ? <button onClick={() => manageOrderHandler('notDelivered')} className='success'>Delivered</button> :
+                  <button onClick={() => manageOrderHandler('delivered')} className='danger'>Not delivered</button>}
               </td>
             </tr>
             <tr>
@@ -143,7 +147,7 @@ export const OrderEdit: FC = () => {
             </tbody>
           </table>
           <div className={s.buttons}>
-            <button className={globalStyles.danger} onClick={() => manageOrderHandler('delete')}>Delete</button>
+            <button className='danger' onClick={() => manageOrderHandler('delete')}>Delete</button>
           </div>
         </>
       )}

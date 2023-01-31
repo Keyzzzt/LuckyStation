@@ -3,8 +3,8 @@ import s from './singleProductPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
 import { productInfoThunk } from '../../../03_Reducers/product/productInfoReducer'
-import { useParams} from 'react-router'
-import {useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { SingleProductPageSlider } from '../../02_Chunks/SingleProductPageSlider/SingleProductPageSlider'
 import { Accordion } from '../../02_Chunks/Accordion/Accordion'
@@ -32,8 +32,8 @@ export const ProductScreen: FC = () => {
   // }
 
   useEffect(() => {
-    if (!productInfo || productId !== productInfo._id || successReview ) {
-      if(productId){
+    if (!productInfo || productId !== productInfo._id || successReview) {
+      if (productId) {
         dispatch(productInfoThunk(productId))
       }
     }
@@ -105,13 +105,13 @@ export const ProductScreen: FC = () => {
     }
   }, [productInfo])
   return (
-    <main className={s.container}>
+    <main className='stationContainer'>
       {!productInfo ? (
-        <Loader />
+        <Loader/>
       ) : (
         <div className={s.product}>
           <div className={s.productSlider}>
-            <SingleProductPageSlider images={productInfo.images} isNew={productInfo.isNewProduct} />
+            <SingleProductPageSlider images={productInfo.images} isNew={productInfo.isNewProduct}/>
           </div>
           <div className={s.productInfo}>
             <h1 className={s.name}>{productInfo.name}</h1>
@@ -122,13 +122,8 @@ export const ProductScreen: FC = () => {
                 <div className={s.buyPrice}>Out of stock</div>
               ) : (
                 <div className={s.buyPrice}>
-                  {/* <Button path={`/cart/${productId}?qty=${qty}`} colorTheme="light">
-                      Add to CartPage
-                    </Button> */}
-                  <button onClick={addToCartHandler} className={s.addToCartBtn}>
-                    <span>ADD TO CART</span>
-                    <span>&euro; {productInfo.price}</span>
-                  </button>
+                  <input onClick={addToCartHandler} className='stationSubmitBtn' type="button"
+                         value="Add to cart"/>
                 </div>
               )}
               {/* <div>
@@ -184,7 +179,7 @@ export const ProductScreen: FC = () => {
           )} */}
         </div>
       )}
-      <Accordion items={accordionData} />
+      <Accordion items={accordionData}/>
     </main>
   )
 }

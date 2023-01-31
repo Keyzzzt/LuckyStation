@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import s from './addProduct.module.scss'
-import globalStyles from './../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +8,7 @@ import Loader from '../../../02_Chunks/Loader/Loader'
 import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
 import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
 // TODO
 // Display images when selected
@@ -119,7 +119,8 @@ export const AddProduct: FC = () => {
   return (
     <div className={s.container}>
       {uploading && <Loader/>}
-      <table className={globalStyles.table}>
+      <BreadCrumbs pageTitle='New Product' breadcrumbs={['dashboard', 'products', 'add new product']}/>
+      <table className='stationTable'>
         <thead>
         <tr>
           <th>
@@ -133,41 +134,41 @@ export const AddProduct: FC = () => {
         <tbody>
         <tr>
           <td>Name</td>
-          <td><input type="text" value={name} onChange={(e) => setName(e.target.value)}/></td>
+          <td><input className='stationTableInput' type="text" value={name} onChange={(e) => setName(e.target.value)}/></td>
         </tr>
         <tr>
           <td>Brand</td>
-          <td><input type="text" value={brand} onChange={(e) => setBrand(e.target.value)}/>
+          <td><input className='stationTableInput' type="text" value={brand} onChange={(e) => setBrand(e.target.value)}/>
           </td>
         </tr>
         <tr>
           <td>Category</td>
-          <td><input type="text" value={category} onChange={(e) => setCategory(e.target.value)}/>
+          <td><input className='stationTableInput' type="text" value={category} onChange={(e) => setCategory(e.target.value)}/>
           </td>
         </tr>
         <tr>
           <td>Description</td>
-          <td><textarea value={description} onChange={(e) => setDescription(e.target.value)}/></td>
+          <td><textarea className='stationTableInput' value={description} onChange={(e) => setDescription(e.target.value)}/></td>
         </tr>
         <tr>
           <td>Price</td>
-          <td><input type="text" value={price} onChange={(e) => setPrice(e.target.value)}/></td>
+          <td><input className='stationTableInput' type="text" value={price} onChange={(e) => setPrice(e.target.value)}/></td>
         </tr>
         <tr>
           <td>In stock</td>
-          <td><input type="text" value={countInStock} onChange={(e) => setCountInStock(e.target.value)}/></td>
+          <td><input className='stationTableInput' type="text" value={countInStock} onChange={(e) => setCountInStock(e.target.value)}/></td>
         </tr>
         <tr>
           <td>Colors</td>
-          <td><input type="text" value={colors} onChange={(e) => setColors(e.target.value)}/></td>
+          <td><input className='stationTableInput' type="text" value={colors} onChange={(e) => setColors(e.target.value)}/></td>
         </tr>
         <tr>
           <td>Sizes</td>
-          <td><input type="text" value={sizes} onChange={(e) => setSizes(e.target.value)}/></td>
+          <td><input className='stationTableInput' type="text" value={sizes} onChange={(e) => setSizes(e.target.value)}/></td>
         </tr>
         <tr>
           <td>Mark as new</td>
-          <td><input onChange={e => setIsNewProduct(prev => !prev)} type="checkbox"/></td>
+          <td><input className='stationTableInput' onChange={e => setIsNewProduct(prev => !prev)} type="checkbox"/></td>
         </tr>
         <tr>
           <td>Images</td>
@@ -175,7 +176,7 @@ export const AddProduct: FC = () => {
             <input onChange={e => setImage(e.target.value)} type="text" value={image} placeholder="Image"/>
             <button onClick={handleFilePick} className={s.uploadImageButton}>Choose file</button>
             <input
-              className={globalStyles.hidden}
+              className='stationHidden'
               ref={fileInputRef}
               onChange={handleUpload}
               type="file"

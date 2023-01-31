@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import s from './header.module.scss'
-import globalStyle from './../../../02_Styles/global.module.scss'
+
 import { Link, useNavigate } from 'react-router-dom'
 import { useWindowSize } from '../../../04_Utils/hooks'
 import { useDispatch } from 'react-redux'
@@ -16,7 +16,7 @@ type Props = {
 
 export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
   const { header } = useTypedSelector((state) => state.components)
-  const {menuItems, subtitle, title} = header
+  const { menuItems, subtitle, title } = header
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,18 +46,18 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
         <Link to={el.link}>{el.title}</Link>
       </li>
     )))
-  const privateMenu = menuItems.filter(el=> el.type === 'private').map((el, i) => (
+  const privateMenu = menuItems.filter(el => el.type === 'private').map((el, i) => (
     el.title === 'Logout' ? (
       <li key={i} onClick={logoutHandler} className={s.menuItem}>
         <Link to={el.link}>{el.title}</Link>
       </li>
     ) : (
-      <li key={i} onClick={() => setMenuOpen(false)} className={s.menuItem} >
+      <li key={i} onClick={() => setMenuOpen(false)} className={s.menuItem}>
         <Link to={el.link}>{el.title}</Link>
       </li>
     )),
   )
-  const adminMenu = menuItems.filter(el => el.type === 'admin').map((el, i)=> (
+  const adminMenu = menuItems.filter(el => el.type === 'admin').map((el, i) => (
     <li key={i} onClick={dashboardHandler} className={s.menuItem}>
       <Link to={el.link}>{el.title}</Link>
     </li>
@@ -67,13 +67,11 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
   return (
     <>
       <header className={s.header}>
-        <div className={globalStyle.container + ' ' + s.container}>
+        <div className={`stationContainer ${s.container}`}>
           <div className={s.logo}>
-            <div className={s.logoTitle}>
-              <Link to="/" className={s.logo}>
-                {title}
-              </Link>
-            </div>
+            <Link to="/" className={s.logoTitle}>
+              {title}
+            </Link>
             <div className={s.logoSubtitle}>{subtitle}</div>
           </div>
 

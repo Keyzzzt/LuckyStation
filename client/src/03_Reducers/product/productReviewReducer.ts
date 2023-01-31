@@ -1,6 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { ReviewToAPI } from '../../05_Types/APIResponse'
+import { ReviewRequestType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -31,7 +31,7 @@ export const actions = {
   fail: (errMessage: string) => ({ type: 'PRODUCT_REVIEW_FAIL' as const, payload: errMessage }),
 }
 
-export function productReviewThunk(productId: string, review: ReviewToAPI): ThunkType {
+export function productReviewThunk(productId: string, review: ReviewRequestType): ThunkType {
   return async (dispatch) => {
     try {
       dispatch(actions.request())

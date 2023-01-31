@@ -1,6 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { OrderToAPI } from '../../05_Types/APIResponse'
+import { OrderCreateRequestType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -32,7 +32,7 @@ export const actions = {
   reset: () => ({ type: 'ORDER_CREATE_RESET' as const }),
 }
 
-export function createOrderThunk(newOrder: OrderToAPI): ThunkType {
+export function createOrderThunk(newOrder: OrderCreateRequestType): ThunkType {
   return async function (dispatch) {
     try {
       const { data } = await API.order.createOrder(newOrder)

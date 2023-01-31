@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react'
-import styles from './cartPage.module.scss'
+import React, { FC, useEffect, useState } from 'react'
+import s from './cartPage.module.scss'
 import { useDispatch } from 'react-redux'
 import { useLocation, useParams } from 'react-router'
 import { Link, useNavigate } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/c
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { Button } from '../../02_Chunks/Button/Button'
 import { Fail, Success } from '../../02_Chunks/SuccessAndFail/SuccessAndFail'
+import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 
 export const CartPage: FC = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
@@ -66,37 +67,38 @@ export const CartPage: FC = () => {
   }, [cartItems])
 
   return (
-    <main className={styles.container}>
+    <main className='stationContainer'>
       {cartItems.length === 0 ? (
-        <div className={styles.emptyCart}>
-          <div className={styles.emptyCartHeader}>YOUR CART IS EMPTY</div>
-          <div className={styles.emptyCartText}>Spend €1000 more and get free shipping!</div>
+        <div className={s.emptyCart}>
+          <div className={s.emptyCartHeader}>YOUR CART IS EMPTY</div>
+          <div className={s.emptyCartText}>Spend €1000 more and get free shipping!</div>
           <Button path="/" colorTheme="light">
             SHOP OUR PRODUCTS
           </Button>
         </div>
       ) : (
         <>
-          <div className={styles.cart}>
-            <div className={styles.cartHeader}>CART</div>
-            <div className={styles.cartDeliveryMessage}>{shippingMessage}</div>
-            <div className={styles.productList}>
-              <div className={styles.productListHeader}>
-                <div className={styles.headerProduct}>PRODUCT</div>
-                <div className={styles.headerQuantity}>QUANTITY</div>
-                <div className={styles.headerTotal}>PRICE</div>
+          <div className={s.cart}>
+            <h2 className={s.cartHeader}>CART</h2>
+            <div className={s.cartDeliveryMessage}>{shippingMessage}</div>
+            <CheckoutSteps step1 />
+            <div className={s.productList}>
+              <div className={s.productListHeader}>
+                <div className={s.headerProduct}>PRODUCT</div>
+                <div className={s.headerQuantity}>QUANTITY</div>
+                <div className={s.headerTotal}>PRICE</div>
               </div>
               {cartItems.map(item => (
-                <div className={styles.productItem} key={item._id}>
-                  <div className={styles.productName}>
+                <div className={s.productItem} key={item._id}>
+                  <div className={s.productName}>
                     <Link to={`/product/${item._id}`}>
-                      <div className={styles.productNameWrapper}>
+                      <div className={s.productNameWrapper}>
                         <img src={item.images[0].imageSrc} alt=""/>
-                        <div className={styles.productNameTitle}>{item.name}</div>
+                        <div className={s.productNameTitle}>{item.name}</div>
                       </div>
                     </Link>
                   </div>
-                  <div className={styles.productQuantity}>
+                  <div className={s.productQuantity}>
                     {/* <select
                         value={item.qty}
                         onChange={e => dispatch(addToCartThunk(item._id, Number(e.target.value)))}
@@ -107,35 +109,35 @@ export const CartPage: FC = () => {
                           </option>
                         ))}
                       </select> */}
-                    <div className={styles.productQuantitySelect}>
+                    <div className={s.productQuantitySelect}>
                       <div
                         onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'add')}
-                        className={styles.plus}
+                        className={s.plus}
                       >
                         <i className="fa-solid fa-plus"/>
                       </div>
                       <div>{item.qty}</div>
                       <div
                         onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'remove')}
-                        className={styles.minus}
+                        className={s.minus}
                       >
                         <i className="fa-solid fa-minus"/>
                       </div>
                     </div>
 
-                    <div className={styles.removeFromCart} onClick={() => removeFromCartHandler(item._id)}>
+                    <div className={s.removeFromCart} onClick={() => removeFromCartHandler(item._id)}>
                       Remove
                     </div>
                   </div>
-                  <div className={styles.productPrice}>&euro; {item.price}</div>
+                  <div className={s.productPrice}>&euro; {item.price}</div>
                 </div>
               ))}
             </div>
           </div>
-          <div className={styles.checkout}>
-            <div className={styles.checkoutPrice}>TOTAL: &euro; {totalPrice}</div>
-            <div className={styles.checkoutText}>Shipping &#38; taxes calculated at checkout</div>
-            <div className={styles.checkoutTerms}>
+          <div className={s.checkout}>
+            <div className={s.checkoutPrice}>TOTAL: &euro; {totalPrice}</div>
+            <div className={s.checkoutText}>Shipping &#38; taxes calculated at checkout</div>
+            <div className={s.checkoutTerms}>
               {/* <input type="checkbox" checked={acceptedTerms} onClick={() => setAcceptedTerms(!acceptedTerms)} /> */}
               <div onClick={() => setAcceptedTerms(!acceptedTerms)}>{acceptedTerms ? <Success/> : <Fail/>}</div>
               <Link to="/terms">

@@ -1,41 +1,37 @@
 import s from './productPromoSection.module.scss'
-import globalStyle from './../../../02_Styles/global.module.scss'
 import React, { FC } from 'react'
-import { Button } from '../Button/Button'
-import { useTypedSelector } from '../../../05_Types/01_Base'
+import noImage from './../../../06_img/noImage.png'
+import { useNavigate } from 'react-router-dom'
+import { ProductResponseType } from '../../../05_Types/ResponseTypes'
 
-type Promo = {
-  title: string,
-  description: string[]
-  image: string,
-  buttonText: string,
-  path: string
+type PromoProps = {
+  promoProducts: ProductResponseType[] | undefined
 }
 
-export const ProductPromoSection: FC = () => {
-  const productPromo: Promo[] = useTypedSelector(state => state.components.landingPage.productPromo)
+export const ProductPromoSection: FC<PromoProps> = ({ promoProducts }) => {
+  const navigate = useNavigate()
   return (
-    <section className={s.newProductsSection}>
-      <div className={globalStyle.container + ' ' + s.container}>
-        {productPromo.map((promo, i) => (
-          <div key={i} className={i % 2 === 0 ? s.leftWrapper : s.rightWrapper}>
-            <div className={i % 2 === 0 ? s.imageRight : s.imageLeft}>
-              <img src="" alt=""/>
+    <section className='stationSectionMain'>
+      <div className='stationContainer'>
+        <h2 className='stationSectionTitle'>Promo</h2>
+        {promoProducts?.map((product, index) => (
+          <article key={index} className={index % 2 === 0 ? s.leftWrapper : s.rightWrapper}>
+            <div className={index % 2 === 0 ? s.leftWrapperImage : s.rightWrapperImage}>
+              <img src={product?.images[index]?.imageSrc ? product.images[index].imageSrc : noImage} alt=""/>
             </div>
             <div className={s.promoDescription}>
-              <h2 className={i % 2 === 0 ? s.titleLeft : s.titleRight}>{promo.title}</h2>
-              {promo.description.map((el, i) => (
-                <div key={i} className={s.descriptionItem}>
-                  {el}
-                </div>
-              ))}
-              <div className={s.button}>
-                <Button  path={promo.path}>{promo.buttonText}</Button>
+              <h3 className={index % 2 === 0 ? s.titleLeft : s.titleRight}>{product.isPromo}</h3>
+              <div className={index % 2 === 0 ? s.descriptionItemLeft : s.descriptionItemRight}>
+                {product.description}
               </div>
-
+              <div className={index % 2 === 0 ? s.descriptionItemLeft : s.descriptionItemRight}>
+                {product.description2}
+              </div>
+              <div onClick={() => navigate(`/products/ID`)} className='stationSectionButton'>
+                <span>Explore</span>
+              </div>
             </div>
-
-          </div>
+          </article>
         ))}
       </div>
     </section>

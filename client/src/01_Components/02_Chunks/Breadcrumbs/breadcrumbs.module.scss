@@ -1,0 +1,43 @@
+@import '../../../02_Styles/variables';
+
+
+.breadcrumbs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid $greyLight;
+  color: $greyDark;
+}
+
+
+.breadcrumbs__link,
+.breadcrumbs__item
+{
+  text-transform: capitalize;
+  font-size: .8rem;
+}
+
+.pageTitle {
+  text-transform: uppercase;
+  letter-spacing: .8px;
+}
+
+.breadcrumbs__item {
+  display: inline-block;
+}
+
+.breadcrumbs__item:not(:last-of-type)::after {
+  content: '\003e';
+  margin: 0 5px;
+}
+
+.breadcrumbs__link {
+  text-decoration: none;
+  color: $greyDark;
+  text-transform: capitalize;
+}
+
+.activeBreadcrumb:hover {
+  text-decoration: underline;
+}

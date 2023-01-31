@@ -1,6 +1,5 @@
-import s from './loginPage.module.scss'
-import globalStyles from './../../../02_Styles/global.module.scss'
-import { FormEvent, FC, useEffect, useState } from 'react'
+import s from './signInPage.module.scss'
+import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -8,10 +7,10 @@ import { actions, loginThunk } from '../../../03_Reducers/authReducer'
 import { isEmail } from '../../../04_Utils/utils'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 
-export const LoginPage: FC = () => {
+export const SignInPage: FC = () => {
   const [inputError, setInputError] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('1@1.com')
+  const [password, setPassword] = useState('123456')
 
   const { fail: loginFail } = useTypedSelector(state => state.login)
   const { userInfo } = useTypedSelector(state => state.userInfo)
@@ -19,7 +18,7 @@ export const LoginPage: FC = () => {
   const location = useLocation()
   const dispatch = useDispatch()
 
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const redirect = location.search && location.search.split('=')[1]
 
   const resetLoginFail = () => {
     if (loginFail) {
@@ -29,12 +28,11 @@ export const LoginPage: FC = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect)
+      redirect === 'shipping' ? navigate('/shipping') : navigate('/')
     }
-  }, [navigate, userInfo, redirect])
+  }, [userInfo])
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSignIn = () => {
     if (isEmail(email) && password.length >= 6) {
       setInputError(false)
     } else {
@@ -53,7 +51,7 @@ export const LoginPage: FC = () => {
       <main className={s.authContainer}>
         <p className={s.signInTitle}>Welcome Back !</p>
         <p className={s.signInSubtitle}>Sign in to continue to Station</p>
-        <form onSubmit={submitHandler} className={s.form}>
+        <form className={s.form}>
           <CustomInput
             id={'loginEmail'}
             label='Username'
@@ -80,14 +78,14 @@ export const LoginPage: FC = () => {
         <div className={s.rememberRestore}>
           <div className={s.rememberMe}>
             <input type="checkbox" id='rememberMeLogin'/>
-            <label className={globalStyles.label} htmlFor="rememberMeLogin">Remember me</label>
+            <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
           </div>
           <div className={s.restorePassword}>
             <Link className={s.restorePasswordLink} to="/restore">Forgot password?</Link>
           </div>
         </div>
-        <input className={s.submitButton} type="submit" value="Sign In"/>
-        <div className={globalStyles.label + ' ' + s.signInWith}>
+        <input onClick={handleSignIn} className='stationSubmitBtn' type="button" value="Sign In"/>
+        <div className={`stationLabel ${s.signInWith}`}>
           <p>Sign In with</p>
         </div>
         <div className={s.socialsSignIn}>

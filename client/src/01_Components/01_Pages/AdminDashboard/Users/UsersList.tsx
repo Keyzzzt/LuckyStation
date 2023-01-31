@@ -1,8 +1,7 @@
 import { FC } from 'react'
 import s from './users.module.scss'
-import globalStyles from '../../../../02_Styles/global.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { UserTypeForList } from '../../../../05_Types/APIResponse'
+import { UserDataForListType } from '../../../../05_Types/ResponseTypes'
 import { useNavigate } from 'react-router-dom'
 
 // TODO Add sort
@@ -10,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 type Props = {
   setSortFilter: (filter: string) => void
-  users: UserTypeForList[] | null
+  users: UserDataForListType[] | null
 }
 
 
@@ -22,7 +21,7 @@ export const UsersList: FC<Props> = ({ users, setSortFilter }) => {
       {!users ? (
         <Loader/>
       ) : (
-        <table className={globalStyles.table}>
+        <table className='stationTable'>
           <thead>
           <tr>
             <th>
@@ -45,10 +44,10 @@ export const UsersList: FC<Props> = ({ users, setSortFilter }) => {
             <tr key={u._id}>
               <td>{u.name}</td>
               <td>{u.email}</td>
-              <td>{u.isAdmin ? <div className={globalStyles.success}>Admin</div> : 'Customer'}</td>
-              <td>{u.isActivated ? <div className={globalStyles.success}>Confirmed</div> : <div className={globalStyles.danger}>Not confirmed</div>}</td>
+              <td>{u.isAdmin ? <div className='success'>Admin</div> : 'Customer'}</td>
+              <td>{u.isActivated ? <div className='success'>Confirmed</div> : <div className='danger'>Not confirmed</div>}</td>
               <td>
-                <button onClick={() => navigate(`/dashboard/users/${u._id}`)} className={globalStyles.success}>More info</button>
+                <button onClick={() => navigate(`/dashboard/users/${u._id}`)} className='success'>More info</button>
               </td>
             </tr>
           ))}

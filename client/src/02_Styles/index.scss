@@ -1,26 +1,258 @@
-@import './reset.scss';
+@import 'normilize';
+@import 'reset';
 @import 'variables';
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+
 body {
-  font-family: $Roboto;
+  font-family: $Poppins, sans-serif;
   font-size: 16px;
   color: $greyDark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+h1, h2, h3, .h1, .h2, .h3,{
+
+}
+
+h1, .h1 {
+
+}
+h2, .h2 {
+
+}
+h3, .h3 {
+
+}
+
+p {
+  margin: 10px 0;
+}
 a {
-  color: $color--dark;
+  color: $white;
 }
 button {
   cursor: pointer;
 }
 textarea,
 input{
+  border: 1px solid $greyLight;
+}
+
+.stationContainer {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.row{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+  position: relative;
+}
+.col{
+  margin: 10px;
+}
+
+.success,
+.danger {
+  display: inline-block;
+  font-size: 0.8rem;
+  border-radius: 3px;
+  padding: 5px;
+  min-width: 50px;
+  text-align: center;
   border: 0;
-  outline: 0;
+}
+
+.success {
+  background-color: $color--success--light;
+  color: $color--success;
+  transition: .5s all;
+}
+
+.danger {
+  background-color: $color--error--light;
+  color: $color--error;
+  transition: .5s all;
+}
+
+.stationTable {
+  overflow: hidden;
+  width: 100%;
+  text-align: left;
+
+  thead tr {
+  }
+
+  th {
+    padding: 12px 12px;
+    font-weight: 600;
+
+    & div {
+      cursor: pointer;
+      display: inline-block;
+    }
+  }
+
+  td {
+    padding: 12px 12px;
+    text-align: left;
+    position: relative;
+  }
+
+  tbody tr {
+    transition: .5s;
+    min-width: 50%;
+    border-top: 1px solid $greyLight;
+
+  }
+
+  tbody tr:hover {
+    box-shadow: $boxShadow;
+  }
+}
+
+.stationSubmitBtn {
+  width: 100%;
+  color: $white;
+  background-color: $greenLight;
+  padding: 10px;
+  border-radius: $bRadius3;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $green;
+  }
+
+  &:active {
+    background-color: $greenDark;
+  }
+}
+.stationDangerBtn {
+  width: 100%;
+  color: $white;
+  background-color: $redLight;
+  padding: 10px;
+  border-radius: $bRadius3;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $red;
+  }
+
+  &:active {
+    background-color: $redDark;
+  }
+}
+
+.stationTableInput {
+  padding: 5px;
+  vertical-align: middle;
+  &:focus {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  }
+}
+
+.stationLabel {
+  display: inline-block;
+  font-weight: $fw-lg;
+  margin-bottom: 10px;
+  color: $greyDark;
+}
+
+.stationInput {
+  width: 100%;
+  border-radius: $bRadius3;
+  padding: 10px;
+
+  &::placeholder {
+    color: $greyDark;
+  }
+}
+
+.stationHidden {
+  opacity: 0;
+  height: 0;
+  width: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
+button.danger:hover {
+  background-color: $color--error;
+  color: azure;
+}
+
+button.success:hover {
+  background-color: $color--success;
+  color: azure;
+}
+// Section common styles
+.stationSectionMain {
+  text-align: center;
+  padding: $sectionVerticalPaddingMobile;
+  @include breakpoint(992) {
+    padding: $sectionVerticalPaddingDesktop;
+  }
+}
+.stationSectionTitle {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  @include breakpoint(768) {
+    font-size: 2.5rem;
+  }
+  @include breakpoint(992) {
+    font-size: 3rem;
+  }
+}
+
+.stationSectionSubtitle {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
+  @include breakpoint(768) {
+    font-size: 2rem;
+  }
+  @include breakpoint(992) {
+    font-size: 2.3rem;
+  }
+}
+
+.stationSectionText {
+  margin-top: 20px;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  @include breakpoint(768) {
+    font-size: 1.3rem;
+  }
+}
+
+.stationSectionButton{
+  margin-top: 50px;
+  display: inline-block;
+  padding:  10px;
+  background-color: $greenLight;
+  cursor: pointer;
+    & a {
+      color: $greyDark;
+
+    }
+}
+
+// Margin
+.mt20{
+  margin-top: 20px;
+}
+.mt30{
+  margin-top: 30px;
+}
+.mt40{
+  margin-top: 40px;
+}
+.mt50{
+  margin-top: 50px;
+}
+.mh200 {
+  min-height: 350px;
 }

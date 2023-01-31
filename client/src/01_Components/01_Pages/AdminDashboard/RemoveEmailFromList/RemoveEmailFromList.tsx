@@ -1,4 +1,4 @@
-import styles from './removeEmailFromList.module.scss'
+import s from './removeEmailFromList.module.scss'
 import { FC, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { isEmail } from '../../../../04_Utils/utils'
@@ -18,7 +18,7 @@ export const RemoveEmailFromList: FC = () => {
     setEmail('')
   }
   return (
-    <div className={styles.container}>
+    <div className={s.container}>
       <div>
         <div>This option used for remove email from data base, once you removed it you can't roll this back</div>
         <input onChange={e => setEmail(e.target.value)} type="text" value={email} />

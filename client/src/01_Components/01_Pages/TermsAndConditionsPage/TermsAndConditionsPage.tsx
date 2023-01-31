@@ -15,7 +15,7 @@ export const TermsAndConditionsPage: FC = () => {
   }, [])
 
   return (
-    <main className={s.container}>
+    <main className='stationContainer'>
       {!data ? (
         <Loader />
       ) : (

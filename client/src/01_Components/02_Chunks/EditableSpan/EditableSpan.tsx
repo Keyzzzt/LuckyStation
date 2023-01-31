@@ -24,7 +24,7 @@ export const EditableSpan: FC<PropsType> = ({ value, changeValue, asTextArea }) 
   return (
     isEditMode && !asTextArea
       ? <input
-        className={s.inputField}
+        className='stationTableInput'
         onBlur={offEditMode}
         onChange={(e) => setTitle(e.currentTarget.value)}
         onKeyDown={onEnter}
@@ -33,7 +33,7 @@ export const EditableSpan: FC<PropsType> = ({ value, changeValue, asTextArea }) 
       />
       : isEditMode && asTextArea
       ? <textarea
-        className={s.textareaField}
+        className={`stationTableInput ${s.textareaField}`}
         onBlur={offEditMode}
         onChange={(e) => setTitle(e.currentTarget.value)}
         onKeyDown={onEnter}

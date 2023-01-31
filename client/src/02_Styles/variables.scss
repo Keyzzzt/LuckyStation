@@ -1,14 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@100;400;500&display=swap');
 
 
-$Roboto: 'Poppins', sans-serif;
+$Poppins: 'Poppins', sans-serif;
+$letterSpacing: 1px;
+$boxShadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+$sectionBoxShadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 
-// Adaptive
-$mediaMax480:  80%;
-$mediaMax768:  80%;
-$mediaMax1024: 80%;
-$mediaMax1200: 80%;
-$mediaMin1201: 80%;
 
 // Section vertical padding
 $sectionVerticalPaddingMobile: 40px 0;
@@ -18,9 +15,9 @@ $sectionVerticalPaddingDesktop: 80px 0;
 $color--dark: #181a1b;
 $color--grey: #494f52;
 $color--success: #7ebdb7;
-$color--success--light: rgba(10,179,156,.1);
+$color--success--light: rgba(155, 236, 224, 0.1);
 $color--error: #f06548;
-$color--error--light: rgba(240,101,72,.1);
+$color--error--light: rgba(240, 101, 72, .1);
 
 $color--light: #e8e6e3;
 $color--golden: #81786a;
@@ -28,21 +25,27 @@ $color--border: #dedede;
 
 $colorLightBlue: #e9f5f9;
 
+$tableRow: #F2FEFF;
 
+$blueLight: #91d1e9;
 $blue: #2596be;
 $blueDark: #16536a;
 $white: #fff;
 $greyLight: #eaeaea;
 $grey: #bbbbbb;
 $greyDark: #444;
-$greenLight: #0ab39c;
+
+$greenLight: #0ebeb0;
 $green: #0ca296;
 $greenDark: #0a8f85;
+
+$redLight: #C95445;
+$red: #Ba4536;
+$redDark: #B13c34;
 
 $orangeLight: #f06548;
 $orange: #Ee4d2b;
 $orangeDark: #A6260d;
-
 
 
 // Border radius
@@ -71,10 +74,6 @@ $fz-lg: 1.5rem;
 $fz-xl: 2rem;
 $fz-xxl: 2.5rem;
 
-$letter-spacing: 2px;
-
-$borderRadius: 12px;
-
 
 $m10: 10px;
 $m20: 20px;
@@ -88,12 +87,20 @@ $m20: 20px;
     @media (min-width: 1200px) {
       @content;
     }
+  } @else if $point == 1024 {
+    @media (min-width: 992px) {
+      @content;
+    }
   } @else if $point == 992 {
     @media (min-width: 992px) {
       @content;
     }
   } @else if $point == 768 {
     @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point == 600 {
+    @media (min-width: 600px) {
       @content;
     }
   } @else if $point == 480 {

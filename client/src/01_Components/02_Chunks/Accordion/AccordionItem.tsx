@@ -22,7 +22,7 @@ export const AccordionItem = ({ data, isOpen, btnOnClick }: AccordionItemProps) 
     }
   }, [isOpen])
   return (
-    <li className={`${s.accordionItem} ${isOpen ? s.active : ''}`}>
+    <li className={`stationContainer ${s.accordionItem} ${isOpen ? s.active : ''}`}>
       <h2 className={s.accordionItemTitle}>
         <button onClick={btnOnClick} className={s.accordionItemBtn}>
           {data.title}

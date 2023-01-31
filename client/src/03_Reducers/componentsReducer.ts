@@ -1,6 +1,6 @@
 import { API } from '../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
-import { ConfigType } from '../05_Types/APIResponse'
+import { ConfigResponseType } from '../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -8,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   header: {
-    title: 'Lucky Station',
+    title: 'Station',
     subtitle: 'Craft furniture shop',
     menuItems: [
       { title: 'Products', link: '/products', type: 'public' },
@@ -44,12 +44,12 @@ const initialState = {
         path: '',
       },
       {
-        title: 'WEIGHTED PRODUCTS',
-        description: ['The products are tested against the highest standards, and safety is at the core of their design. They are suitable for babies and children of different ages, from 8 months to 5 years.','The products are tested against the highest standards, and safety is at the core of their design. They are suitable for babies and children of different ages, from 8 months to 5 years.'],
+        title: 'WHITE NOISE SPEAKER',
+        description: ['Babies like white noise. They are used to it. Before the baby is born, it spends its days and nights inside the womb, closely enveloped by the soothing human hum of its mother\'s body. The beating of the mother\'s heart, the sound of blood rushing through her body, and the rhythmic breathing combine to create a reassuring mix of sounds.','Our brand-new Moonboon White Noise Speaker comes with 10 relaxing sleep sounds, including womb sounds, brown noise, white noise and pink noise.'],
         image: '',
         buttonText: 'Explore',
         path: '',
-      }
+      },
     ]
   }
 
@@ -68,7 +68,7 @@ export const componentsReducer = (state = initialState, action: ActionType): Ini
 }
 
 export const actions = {
-  success: (config: ConfigType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
+  success: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
   fail: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
 }
 

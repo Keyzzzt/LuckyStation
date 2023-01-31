@@ -1,11 +1,12 @@
 import s from './orders.module.scss'
-import globalStyles from './../../../../02_Styles/global.module.scss'
 import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
 import { orderListThunk } from '../../../../03_Reducers/order/orderListReducer'
 import { OrdersList } from './OrdersList'
+import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
+import { DashboardSVG } from '../../../02_Chunks/svg/DashboardSVG'
 
 
 export const Orders: FC = () => {
@@ -57,9 +58,7 @@ export const Orders: FC = () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {orders?.length === 0 && <Message message='You have no orders yet...' type="fail"/>}
-      <div className={s.header}>
-        <h2 className={s.title}>Orders</h2>
-      </div>
+      <BreadCrumbs pageTitle='Orders' breadcrumbs={['dashboard', 'orders']}/>
       <OrdersList orders={ordersToRender} setSortFilter={setOrdersFilter} />
     </div>
   )

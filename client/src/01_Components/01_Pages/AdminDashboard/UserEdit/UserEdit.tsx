@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react'
 import s from './userEdit.module.scss'
-import globalStyles from '../../../../02_Styles/global.module.scss'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
-import { userDeleteThunk } from '../../../../03_Reducers/user/userDeleteReducer'
+import { userDeleteThunk } from '../../../../03_Reducers/admin/userDeleteReducer'
 import { updateProfileByAdminThunk } from '../../../../03_Reducers/admin/updateProfileByAdminReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { useParams } from 'react-router'
@@ -58,7 +57,7 @@ export const UserEdit: FC = () => {
         <Loader/>
       ) : (
         <>
-          <table className={globalStyles.table}>
+          <table className='stationTable'>
             <thead>
             <tr>
               <th>
@@ -89,20 +88,20 @@ export const UserEdit: FC = () => {
             <tr>
               <td>Status</td>
               <td>
-                {user.isAdmin ? <div className={globalStyles.success}>Admin</div> : 'Customer'}
+                {user.isAdmin ? <div className='success'>Admin</div> : 'Customer'}
                 <input onChange={handleToggleAdminStatus} type="checkBox" id="role" checked={role}/>
               </td>
             </tr>
             <tr>
               <td>Email confirmation</td>
-              <td>{user.isActivated ? <div className={globalStyles.success}>Confirmed</div> :
-                <div className={globalStyles.danger}>Not confirmed</div>}
+              <td>{user.isActivated ? <div className='success'>Confirmed</div> :
+                <div className='danger'>Not confirmed</div>}
               </td>
             </tr>
             <tr>
               <td>Subscription</td>
-              <td>{user.isSubscribed ? <div className={globalStyles.success}>Subscribed for newsletter</div> :
-                <div className={globalStyles.danger}>Not subscribed</div>}</td>
+              <td>{user.isSubscribed ? <div className='success'>Subscribed for newsletter</div> :
+                <div className='danger'>Not subscribed</div>}</td>
             </tr>
             <tr>
               <td>Favorites count</td>
@@ -115,8 +114,8 @@ export const UserEdit: FC = () => {
             </tbody>
           </table>
           <div className={s.buttons}>
-            <button className={globalStyles.success} onClick={handleUpdate}>Update</button>
-            <button className={globalStyles.danger} onClick={() => handleDelete(user._id, user.email)}>Delete User</button>
+            <button className='success' onClick={handleUpdate}>Update</button>
+            <button className='danger' onClick={() => handleDelete(user._id, user.email)}>Delete User</button>
           </div>
         </>
       )}

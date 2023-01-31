@@ -10,6 +10,7 @@
  * ! FIXME Реализовать функционал с кодом скидки
  * ! FIXME Налоговая ставка должна хранится на серваке
  * ! FIXME сумма после которой идет бесплатная доставка должна хранится на серваке
+ * ! TODO добавить header
  *
  * * Принцип аккардиона на этой странице.
  * * Изначальная высота orderSummary 0, но если окно больше чем 1200 то дается значение auto
@@ -21,46 +22,39 @@
  * *  при уменьшении появится шапка аккордиона и orderSummary будет открыт, так как ранее в useEffect мы меняли значение.
  */
 
-import { FC, FormEvent, useEffect, useRef, useState } from 'react'
+import React, { FC, FormEvent, useEffect, useRef, useState } from 'react'
 import s from './shippingPage.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
-import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
-import { isEmail } from '../../../04_Utils/utils'
+import { isEmail, toLocal } from '../../../04_Utils/utils'
 import { saveContactInfoThunk } from '../../../03_Reducers/cart/cartReducer'
-import { subscribeThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { API } from '../../../API'
 import { getRefValue } from '../../../04_Utils/getRefValue'
 import { useWindowSize } from '../../../04_Utils/hooks'
 import { useNavigate } from 'react-router-dom'
+import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 
 export const ShippingPage: FC = () => {
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { shippingAddress } = useTypedSelector(state => state.cart)
   const { cart } = useTypedSelector(state => state)
-
   // Here orderId and orderSuccess works together to avoid redirect if order once has been created,
   // we simply set orderSuccess to false before we redirect to payment, and so we easily can return.
   const { orderId } = useTypedSelector(state => state.orderCreate)
   const [orderSuccess, setOrderSuccess] = useState(false)
-
   const { minPriceForFreeShipping, freeShippingMessage, taxRate } = useTypedSelector(state => state.appConfig.config!)
-
   const contentRef = useRef<HTMLDivElement>(null)
-
   const [subscribe, setSetSubscribe] = useState(false)
-
   const [isOpen, setIsOpen] = useState(false)
   const [height, setHeight] = useState<string | number>(0)
   const size = useWindowSize()
-
   const [inputError, setInputError] = useState(false)
 
   const [continueAsGuest, setContinueAsGuest] = useState(false)
-  const [email, setEmail] = useState('2342@235454.com')
-  const [name, setName] = useState(shippingAddress.name)
+  const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [lastName, setLastName] = useState(shippingAddress.lastName)
   const [country, setCountry] = useState(shippingAddress.country)
   const [address, setAddress] = useState(shippingAddress.address)
@@ -85,7 +79,7 @@ export const ShippingPage: FC = () => {
       price: item.price,
       product: item._id,
     }))
-    const order = {
+    return {
       email,
       orderItems,
       shippingAddress: cart.shippingAddress,
@@ -95,10 +89,10 @@ export const ShippingPage: FC = () => {
       taxPrice: cart.taxPrice,
       totalPrice: cart.totalPrice,
     }
-    return order
   }
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    // Пытается создать заказ без телефона, плюс формат телефона проверить
     e.preventDefault()
     if (isEmail(email) && name.length >= 2 && lastName.length >= 2) {
       setInputError(false)
@@ -131,7 +125,7 @@ export const ShippingPage: FC = () => {
   useEffect(() => {
     if (isOpen) {
       const contentEl = getRefValue(contentRef)
-      setHeight(contentEl.scrollHeight - 30)
+      setHeight(contentEl.scrollHeight)
     } else {
       setHeight(0)
     }
@@ -145,6 +139,14 @@ export const ShippingPage: FC = () => {
     }
   }, [size])
 
+  // If window
+  useEffect(() => {
+    if (userInfo) {
+      setName(userInfo.name)
+      setEmail(userInfo.email)
+    }
+  }, [userInfo])
+
   // If order created and flag is true then redirect to next step
   useEffect(() => {
     if (orderId && orderSuccess) {
@@ -154,81 +156,60 @@ export const ShippingPage: FC = () => {
   }, [orderId, navigate, orderSuccess])
 
   return (
-    <div className={s.container}>
-      <div onClick={() => setIsOpen(prev => !prev)} className={s.orderSummaryAccordion}>
+    <div className={`stationContainer ${s.container}`}>
+      <div onClick={() => setIsOpen(prev => !prev)} className={s.accordionHeader}>
         <div className={s.accordionTitle}>
-          <i className="fa-brands fa-opencart" />
-          <div>{isOpen ? 'Hide' : 'Show'} order summary</div>
-          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`} />
+          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`}/>
+          <span>{isOpen ? 'Hide' : 'Show'} order summary</span>
         </div>
-        <div className={s.accordionPrice}>
-          <span className={s.price}>&euro;{cart.itemsPrice}</span>
-        </div>
+        <div className={s.price}>{cart.itemsPrice.toLocaleString('en', toLocal)}</div>
       </div>
       <div className={s.orderSummary} style={{ height }}>
-        <div className={s.rightWrapper} ref={contentRef}>
-          <div className={s.cartItems}>
-            {cart?.cartItems.length === 0 ? (
-              <div>Cart is empty</div>
-            ) : (
-              cart.cartItems.map((item, i) => (
-                <div className={s.item}>
-                  <div className={s.itemImage}>
-                    <img src={item.images[0].imageSrc} alt={item.images[0].imageAlt} />
-                    <div className={s.itemQty}>{item.qty}</div>
-                  </div>
-                  <div className={s.itemName}>{item.name}</div>
-                  <div className={s.itemPrice}>&euro;{item.price}</div>
+        <div className={s.orderSummaryWrapper} ref={contentRef}>
+          {cart?.cartItems.length === 0 ? (
+            <div>Cart is empty</div>
+          ) : (
+            cart.cartItems.map(item => (
+              <div key={item._id} className={s.orderItems}>
+                <div className={s.orderItemImage}>
+                  <img src={item.images[0].imageSrc} alt={item.images[0].imageAlt}/>
+                  <div className={s.orderItemQuantity}>{item.qty}</div>
                 </div>
-              ))
-            )}
-          </div>
+                <div className={s.itemName}>{item.name}</div>
+                <div className={s.itemPrice}>{item.price.toLocaleString('en', toLocal)}</div>
+              </div>
+            ))
+          )}
           <div className={s.discount}>
-            <input type="text" className={s.discountInput} placeholder="Discount code" />
-            <button className={s.btn}>Apply</button>
+            <input type="text" className={`stationInput ${s.discountCode}`} placeholder="Discount code"/>
+            <input type='button' className='stationSubmitBtn' value='Apply'/>
           </div>
-          <div className={s.subTotal}>
-            <div className={s.subTotalPrice}>
-              <div>Subtotal</div>
-              <div className={s.price}>&euro;{cart.itemsPrice}</div>
-            </div>
-            <div className={s.shippingPrice}>
-              <div>Shipping</div>
-              <div>{cart.itemsPrice > minPriceForFreeShipping ? freeShippingMessage : 'Calculated at next step'}</div>
-            </div>
+
+          <div className={s.subTotalPrice}>
+            <div>Subtotal</div>
+            <div>Incl. {cart.taxPrice.toLocaleString('en', toLocal)} in taxes</div>
+            <p>{cart.itemsPrice.toLocaleString('en', toLocal)}</p>
           </div>
-          <div className={s.totalPrice}>
-            <div className={s.totalPriceLeft}>
-              <div>Total</div>
-              <div>Including &euro;{cart.taxPrice} in taxes</div>
-            </div>
-            <div className={s.totalPriceRight}>
-              <span>EUR&nbsp;&nbsp;</span>
-              <span className={s.price}>&euro;{cart.itemsPrice}</span>
-            </div>
+          <div className={s.shippingPrice}>
+            <div>Shipping</div>
+            <div>{cart.itemsPrice > minPriceForFreeShipping ? freeShippingMessage : 'Calculated at next step'}</div>
           </div>
         </div>
       </div>
-      <div className={s.shipping}>
-        <div className={s.leftWrapper}>
-          <CheckoutSteps step1 step2 />
-          {!userInfo && !continueAsGuest && (
+      <div className={s.collectData}>
+        <div className={s.collectDataWrapper}>
+          <CheckoutSteps step1 step2/>
+          {!userInfo && !continueAsGuest ? (
             <div className={s.askForLogin}>
-              <div>
-                <button className={s.btn} onClick={() => navigate('/login?redirect=placeorder')}>
-                  Login
-                </button>
-              </div>
-              <div>OR</div>
-              <div>
-                <button className={s.btn} onClick={() => setContinueAsGuest(true)}>
-                  Continue as guest
-                </button>
-              </div>
+              <input type='button' className='stationSubmitBtn' value='Continue as guest'
+                     onClick={() => setContinueAsGuest(true)}/>
+              <input type='button' className='stationSubmitBtn'
+                     onClick={() => navigate('/login?redirect=shipping')} value='Login'/>
             </div>
-          )}
-          <form onSubmit={submitHandler} className={s.contactInfo}>
-            <div className={s.name}>
+          ) : null}
+          <form onSubmit={submitHandler} className={s.form}>
+            <div className={s.contacts}>
+              <div className={s.customerDataTitle}>Contacts</div>
               <CustomInput
                 value={name}
                 returnValue={setName}
@@ -247,18 +228,27 @@ export const ShippingPage: FC = () => {
                 placeholder="Last name"
                 name="lastName"
               />
-            </div>
-            <div className={s.shippingAddress}>Shipping address</div>
-            <div>
               <CustomInput
-                value={country}
-                returnValue={setCountry}
+                value={phone}
+                returnValue={setPhone}
                 setInputError={setInputError}
                 inputError={inputError}
                 type="text"
-                placeholder="Country"
-                name="country"
+                placeholder="Phone"
+                name="phone"
               />
+              <CustomInput
+                value={email}
+                returnValue={setEmail}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Email"
+                name="email"
+              />
+            </div>
+            <div className={s.customerDataTitle}>Shipping address</div>
+            <div className={s.address}>
               <CustomInput
                 value={address}
                 returnValue={setAddress}
@@ -268,28 +258,6 @@ export const ShippingPage: FC = () => {
                 placeholder="Address"
                 name="address"
               />
-            </div>
-            <div>
-              <CustomInput
-                value={apartment}
-                returnValue={setApartment}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Apartment, suite, etc. (optional)"
-                name="apartment"
-              />
-              <CustomInput
-                value={postalCode}
-                returnValue={setPostalCode}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Postal code"
-                name="postal code"
-              />
-            </div>
-            <div className={s.cityAndPhone}>
               <CustomInput
                 value={city}
                 returnValue={setCity}
@@ -300,25 +268,33 @@ export const ShippingPage: FC = () => {
                 name="city"
               />
               <CustomInput
-                value={phone}
-                returnValue={setPhone}
+                value={postalCode}
+                returnValue={setPostalCode}
                 setInputError={setInputError}
                 inputError={inputError}
                 type="text"
-                placeholder="Phone"
-                name="phone"
+                placeholder="Postal code"
+                name="postal code"
+              />
+              <CustomInput
+                value={country}
+                returnValue={setCountry}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Country"
+                name="country"
+              />
+              <CustomInput
+                value={apartment}
+                returnValue={setApartment}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Apartment, suite, etc. (optional)"
+                name="apartment"
               />
             </div>
-            <CustomInput
-              value={email}
-              returnValue={setEmail}
-              setInputError={setInputError}
-              inputError={inputError}
-              type="text"
-              placeholder="Email"
-              name="email"
-            />
-
             <div className={s.subscribe}>
               <input
                 onChange={() => setSetSubscribe(prev => !prev)}
@@ -328,8 +304,9 @@ export const ShippingPage: FC = () => {
               />
               <label htmlFor="signUpForNewsletter">Email me with news and offers</label>
             </div>
-            <div>
-              <input className={`${s.btn} ${s.btnSubmit}`} type="submit" />
+            <div className={s.formSubmitButtons}>
+
+              <input className='stationSubmitBtn' type="submit"/>
             </div>
           </form>
         </div>

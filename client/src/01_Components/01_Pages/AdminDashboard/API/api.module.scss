@@ -1,17 +1,8 @@
 @import '../../../../02_Styles/variables';
 
 .api {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: $color--grey;
+  padding: 15px;
 }
-.accordion{
-  width: 100%;
-  padding: 5px;
-}
-
 .item:not(:last-child) {
   margin-bottom: 10px;
 }
@@ -20,22 +11,21 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
   cursor: pointer;
 }
 
+.public {
+  background-color: $greenLight;
+}
+
 .admin {
-  background-color: #415171;
+  background-color: $blueLight;
 }
 
 .private {
-  background-color: #74959a;
+  background-color: $blue;
 }
-
-.public {
-  background-color: #f1e0ac;
-}
-
 
 .content {
   max-height: 0;
@@ -44,7 +34,9 @@
 }
 
 .content.show {
-  height: auto;
+  //height: auto;
   max-height: 3000px;
   transition: all 0.5s ease;
+  width: 100%;
+  padding: 15px;
 }

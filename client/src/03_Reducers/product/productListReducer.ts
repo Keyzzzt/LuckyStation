@@ -1,6 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Product } from '../../05_Types/APIResponse'
+import { ProductResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -15,7 +15,7 @@ type NextPage = {
 }
 
 const initialState = {
-  products: null as null | Product[],
+  products: null as null | ProductResponseType[],
   next: null as null | NextPage,
   prev: null as null | PrevPage,
   totalPages: 0,

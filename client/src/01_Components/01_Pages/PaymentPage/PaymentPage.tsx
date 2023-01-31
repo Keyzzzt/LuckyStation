@@ -10,6 +10,7 @@ import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
 import { actions } from '../../../03_Reducers/order/orderPayReducer'
+import { toLocal } from '../../../04_Utils/utils'
 
 export const PaymentPage: FC = () => {
   const { orderInfo, fail } = useTypedSelector(state => state.orderInfo)
@@ -17,6 +18,7 @@ export const PaymentPage: FC = () => {
   const [sdkReady, setSdkReady] = useState(false)
   const dispatch = useDispatch()
   const params = useParams<{ orderId: string }>()
+
   const successPaymentHandler = (paymentResult: any) => {
     if (!orderInfo) {
       return
@@ -50,59 +52,86 @@ export const PaymentPage: FC = () => {
 
   // Fetch order
   useEffect(() => {
-    if(params.orderId)
-    dispatch(orderInfoThunk(params.orderId))
+    if (params.orderId)
+      dispatch(orderInfoThunk(params.orderId))
   }, [params.orderId])
 
+
+  const deliveryAddressString = `${orderInfo?.shippingAddress.address}, ${orderInfo?.shippingAddress.city}, ${orderInfo?.shippingAddress.postalCode}, ${orderInfo?.shippingAddress.country} `
+  const dateCreated = orderInfo?.createdAt.split('T')[0]
+  const timeCreate = orderInfo?.createdAt.split('T')[1].slice(0,8)
+
   return (
-    <main className={s.container}>
-      {fail && <Message message={fail} type="fail" />}
+    <main className={`stationContainer ${s.container}`}>
+      {fail && <Message message={fail} type="fail"/>}
       {!orderInfo ? (
-        <Loader />
+        <Loader/>
       ) : (
         <>
-          <div>
-            <h1 style={{ fontSize: '100px' }}>TODO</h1>
-            <div>Order Items</div>
-            {orderInfo.orderItems.map(item => (
-              <div key={item.id}>
-                <div>Name: {item.name}</div>
-                <div>
-                  <img src={item.image} alt="Product" />
-                </div>
-                <div>Quantity: {item.quantity}</div>
-                <div>Product price: {item.price}</div>
+          <div className={s.paypal}>
+            <div className={s.left}>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Payment method</p>
+                <p>PayPal</p>
               </div>
-            ))}
-          </div>
-          <div>
-            <div>Order Summary</div>
-            <div>Tax price: {orderInfo.taxPrice}</div>
-            <div>Shipping price: {orderInfo.shippingPrice}</div>
-            <div>Total price: {orderInfo.totalPrice}</div>
-            <div>
-              Shipping address:{' '}
-              {`${orderInfo.shippingAddress.address}, ${orderInfo.shippingAddress.postalCode}, ${orderInfo.shippingAddress.city}, ${orderInfo.shippingAddress.country}`}
+              <div className={s.item}>
+                <p className={s.itemTitle}>Amount</p>
+                <p>{orderInfo.itemsPrice.toLocaleString('en', toLocal)}</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Shipping price</p>
+                <p>{orderInfo.shippingPrice.toLocaleString('en', toLocal)}</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Total price</p>
+                <p>{orderInfo.totalPrice.toLocaleString('en', toLocal)} incl. tax</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Delivery address</p>
+                <span>{deliveryAddressString}</span>
+              </div>
             </div>
-            <div>Created at: {orderInfo.createdAt}</div>
-            <div>{orderInfo.isPaid ? 'Paid' : 'Not paid'}</div>
-            <div>{orderInfo.isDelivered ? 'Delivered' : 'Not delivered'}</div>
-            {orderInfo.paidAt && <div>Paid at: {orderInfo.paidAt}</div>}
-            <div>Payment method: {orderInfo.paymentMethod}</div>
-          </div>
-          {/* {!orderInfo.isPaid && <button onClick={paymentHandler}>Pay Order</button>} */}
-          {!orderInfo.isPaid && (
-            <div>
-              {loadingPay && <Loader />}
-              {!sdkReady ? (
-                <Loader />
-              ) : (
-                <PayPalButton amount={orderInfo.totalPrice} onSuccess={successPaymentHandler} />
+            <div className={s.right}>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Order ID</p>
+                <p>{orderInfo._id}</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Created</p>
+                <p>{dateCreated + ' / ' + timeCreate}</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Status</p>
+                {orderInfo.isPaid ? <span className='success'>Paid</span> : <span className='danger'>Not paid</span>}
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Contacts</p>
+                <p>TODO</p>
+              </div>
+              <div className={s.item}>
+                <p className={s.itemTitle}>Contacts</p>
+                <p>TODO</p>
+              </div>
+            </div>
+            <div className={s.paypalButtons}>
+              {!orderInfo?.isPaid && (
+                <div>
+                  {loadingPay && <Loader/>}
+                  {!sdkReady ? (
+                    <Loader/>
+                  ) : (
+                    <PayPalButton  amount={orderInfo?.totalPrice} onSuccess={successPaymentHandler}/>
+                  )}
+                </div>
               )}
             </div>
-          )}
+
+          </div>
+          {/*{!orderInfo.isPaid && <button onClick={paymentHandler}>Pay Order</button>}*/}
+
         </>
       )}
+
     </main>
   )
 }

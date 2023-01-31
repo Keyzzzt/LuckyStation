@@ -1,27 +1,87 @@
 import s from './AdminDashboard.module.scss'
-import { FC } from 'react'
+import appsIcon from '../../../06_img/apps.svg'
+import burger from '../../../06_img/burger.svg'
+import close from '../../../06_img/close.svg'
+import cartIcon from '../../../06_img/cart.svg'
+import fullsScreenEnterIcon from '../../../06_img/fullscreenEnter.svg'
+import fullsScreenExitIcon from '../../../06_img/fullscreenExit.svg'
+import lightModeIcon from '../../../06_img/lightMode.svg'
+import darkModeIcon from '../../../06_img/darkMode.svg'
+import bell from '../../../06_img/bell.svg'
+import lang from '../../../06_img/lang.svg'
+import globalStyles from './../../../02_Styles/global.module.scss'
+import { FC, useState } from 'react'
 import { useScrollToTop } from '../../../04_Utils/hooks'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
+
 
 export const AdminDashboard: FC = () => {
-  const navigate = useNavigate()
+  const [fullscreen, setFullScreen] = useState(false)
+  const [colorMode, setColorMode] = useState(true) // true === light mode
+  const [sideMenu, setSideMenu] = useState(true) // false === icons
   useScrollToTop()
 
+  const handleFullScreen = () => {
+    setFullScreen(prev => !prev)
+  }
+  const handleColorMOde = () => {
+    setColorMode(prev => !prev)
+  }
+  const handleSearch = () => {
+
+  }
+  const handleSideMenu = () => {
+    setSideMenu(prev => !prev)
+  }
+
   return (
-    <div className={s.container}>
-      <aside className={s.navbar}>
+    <div className={`stationContainer ${s.container}`}>
+      <aside className={s.aside}>
         <ul className={s.navbarMenu}>
-          <li onClick={() => navigate('/dashboard')} className={s.luckyStation}>Lucky Station</li>
-          <li onClick={() => navigate('/dashboard/products/add')} className={s.menuItem}>Add product</li>
-          <li onClick={() => navigate('/dashboard/products')} className={s.menuItem}>Products</li>
-          <li onClick={() => navigate('/dashboard/users')} className={s.menuItem}>Users</li>
-          <li onClick={() => navigate('/dashboard/orders')} className={s.menuItem}>Orders</li>
-          <li onClick={() => navigate('/dashboard/settings')} className={s.menuItem}>Settings</li>
-          <li onClick={() => navigate('/dashboard/api')} className={s.menuItem}>API</li>
+          <li className={s.station}>
+            <Link to='/'>Station</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard'>MENU</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/products/add'>Add product</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/products'>Products</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/users'>Users</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/orders'>Orders</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/settings'>Settings</Link>
+          </li>
+          <li className={s.menuItem}>
+            <Link to='/dashboard/api'>API</Link>
+          </li>
         </ul>
       </aside>
       <main className={s.content}>
-        <Outlet />
+        <nav className={s.headerNav}>
+          <div className={s.rightNav}>
+            <img onClick={handleSideMenu} src={sideMenu ? burger : close} alt="menu"/>
+            <input className={`stationInput ${s.input}`} onChange={handleSearch} type="text"
+                   placeholder='Search...'/>
+          </div>
+          <ul className={s.leftNav}>
+            <li><img src={lang} alt='icon'/></li>
+            <li><img src={appsIcon} alt='icon'/></li>
+            <li><img src={cartIcon} alt='icon'/></li>
+            <li onClick={handleFullScreen}><img src={fullscreen ? fullsScreenExitIcon : fullsScreenEnterIcon}
+                                                alt='icon'/></li>
+            <li onClick={handleColorMOde}><img src={colorMode ? lightModeIcon : darkModeIcon} alt='icon'/></li>
+            <li><img src={bell} alt='icon'/></li>
+          </ul>
+        </nav>
+        <Outlet/>
       </main>
     </div>
   )
