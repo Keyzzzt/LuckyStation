@@ -18,15 +18,16 @@ import { ProductEdit } from './01_Components/01_Pages/AdminDashboard/ProductEdit
 import { Orders } from './01_Components/01_Pages/AdminDashboard/Orders/Orders'
 import { Products } from './01_Components/01_Pages/AdminDashboard/Products/Products'
 import { AddProduct } from './01_Components/01_Pages/AdminDashboard/AddProduct/AddProduct'
-import { SignInPage } from './01_Components/01_Pages/SignInPage/SignInPage'
+import { SignInPage } from './01_Components/01_Pages/Auth/SignInPage'
 import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
-import { Register } from './01_Components/02_Chunks/Auth/Register'
 import { ShippingPage } from './01_Components/01_Pages/ShippingPage/ShippingPage'
 import { ProductScreen } from './01_Components/01_Pages/SingleProductPage/SingleProductPage'
 import { CartPage } from './01_Components/01_Pages/CartPage/CartPage'
 import { PaymentPage } from './01_Components/01_Pages/PaymentPage/PaymentPage'
 import { TermsAndConditionsPage } from './01_Components/01_Pages/TermsAndConditionsPage/TermsAndConditionsPage'
 import { ProfilePage } from './01_Components/01_Pages/ProfilePage/ProfilePage'
+import { SignUpPage } from './01_Components/01_Pages/Auth/SignUpPage'
+import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery'
 
 export const App = () => {
   const dispatch = useDispatch()
@@ -55,7 +56,10 @@ export const App = () => {
         <Route path='/' element={<LandingPage />}>
           {header}
         </Route>
-        <Route path='/signup' element={<Register/>}/>
+
+        <Route path='/signup' element={<SignUpPage/>}/>
+        <Route path={'/signin'} element={<SignInPage/>}/>
+        <Route path={'/recovery'} element={<PasswordRecovery/>}/>
         <Route path='/shipping' element={<ShippingPage/>}/>
         <Route path='/product/:productId' element={<ProductScreen/>}/>
         <Route path='/cart/:productId?' element={<CartPage/>}/>
@@ -76,7 +80,6 @@ export const App = () => {
           <Route path='orders/:orderId' element={<OrderEdit/>}/>
           <Route path='products/:productId' element={<ProductEdit/>}/>
         </Route>
-        <Route path={'/login'} element={<SignInPage/>}/>
       </Routes>
       <Footer isSubscribed={!!userInfo?.isSubscribed}/>
     </>

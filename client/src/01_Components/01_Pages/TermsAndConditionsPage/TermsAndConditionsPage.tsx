@@ -15,11 +15,11 @@ export const TermsAndConditionsPage: FC = () => {
   }, [])
 
   return (
-    <main className='stationContainer'>
+    <main className='stationSectionMain'>
       {!data ? (
         <Loader />
       ) : (
-        <div className={s.terms}>
+        <div className={`stationContainer`}>
           <div className={s.mainTitle}>{data.mainTitle}</div>
           <div className={s.paragraphTitle}>General information</div>
           <div className={s.text}>{data.companyAddress.companyName}</div>
@@ -35,7 +35,7 @@ export const TermsAndConditionsPage: FC = () => {
                 {textSeparation.map((text, i) => (
                   <div key={i} className={s.text}>
                     {text.includes('<strong>') ? (
-                      <div className={s.boldText}>{text.trim().slice(8)}</div>
+                      <div ><strong>{text.trim().slice(8)}</strong></div>
                     ) : (
                       text.trim()
                     )}

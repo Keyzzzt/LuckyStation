@@ -1,4 +1,4 @@
-import s from './productPromoSection.module.scss'
+import s from './promoSection.module.scss'
 import React, { FC } from 'react'
 import noImage from './../../../06_img/noImage.png'
 import { useNavigate } from 'react-router-dom'
@@ -8,7 +8,7 @@ type PromoProps = {
   promoProducts: ProductResponseType[] | undefined
 }
 
-export const ProductPromoSection: FC<PromoProps> = ({ promoProducts }) => {
+export const PromoSection: FC<PromoProps> = ({ promoProducts }) => {
   const navigate = useNavigate()
   return (
     <section className='stationSectionMain'>

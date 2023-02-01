@@ -1,74 +1,19 @@
 @import '../../../02_Styles/variables';
 
 .container {
-  max-width: 30vw;
-  max-height: 50vh;
-  padding: 40px 30px 45px 30px;
-  background-color: $white;
-  border-radius: $bRadius3;
-  text-align: center;
-  color: $color--dark;
-  & .regLink {
-    color: $color--dark;
-    & a {
-      color: $color--dark;
-      &:hover {
-        text-decoration: underline;
-        color: $color--error;
-      }
-    }
-  }
+
 }
 
 .title {
-  font-size: $fz-md;
-  font-weight: $fw-lg;
+
 }
 
 .container form {
-  margin: 40px 0;
-  input {
-    height: 50px;
-    width: 100%;
-    border: 1px solid $color--grey;
-    border-radius: $bRadius5;
-    padding: 0 45px;
-    font-size: $fz-md;
-    color: inherit;
-    &::placeholder {
-      color: $color--grey;
-      font-size: $fz-md;
-    }
-    &[type='submit'] {
-      border: none;
-      color: $color--light;
-      background-color: $color--dark;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      &:hover {
-        background-color: $color--error;
-      }
-    }
-  }
+
 }
 .passLink {
-  margin-top: -10px;
-  padding-bottom: 10px;
-  & a {
-    color: inherit;
-    &:hover {
-      text-decoration: underline;
-      color: $color--error;
-    }
-  }
+
 }
 .google {
-  margin-top: $m10;
-  & a {
-    color: inherit;
-  }
-  &:hover {
-    text-decoration: underline;
-    color: $color--error;
-  }
+
 }

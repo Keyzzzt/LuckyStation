@@ -7,7 +7,7 @@ import { HeroSection } from '../../02_Chunks/02_HeroSection/HeroSection'
 import { useParams } from 'react-router'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
 import { BestProductsSection } from '../../02_Chunks/03_BestProductsSection/BestProductsSection'
-import { ProductPromoSection } from '../../02_Chunks/04_ProductPromoSection/ProductPromoSection'
+import { PromoSection } from '../../02_Chunks/04_PromoSection/PromoSection'
 import { Outlet } from 'react-router-dom'
 
 type Params = {
@@ -51,7 +51,7 @@ export const LandingPage: FC<LandingPageProps> = () => {
       <main>
         <HeroSection />
         <BestProductsSection products={products} favoriteHandler={favoriteHandler} favorite={userInfo?.favorite}/>
-        <ProductPromoSection promoProducts={promoProducts}/>
+        <PromoSection promoProducts={promoProducts}/>
         {/*<Pagination page={Number(page)} limit={Number(limit)} keyword={keyword} setPageHandler={setPageHandler} />*/}
       </main>
     </>

@@ -3,22 +3,16 @@
 .leftWrapper,
 .rightWrapper {
   margin: 50px 0;
+  transition: all .5s;
   @include breakpoint(600) {
     margin-bottom: 350px;
     position: relative;
-  }
-  @include breakpoint(768) {
-  }
-  @include breakpoint(992) {
-  }
-  @include breakpoint(1200) {
-  }
-  @include breakpoint(1400) {
   }
 }
 
 .leftWrapper .promoDescription,
 .rightWrapper .promoDescription {
+  transition: all .5s;
   background-color: #e9e0d2;
   padding: 20px 0;
   width: 100%;
@@ -70,6 +64,7 @@
 }
 .leftWrapperImage,
 .rightWrapperImage{
+  transition: all .3s;
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
   background-color: #00b4b5;
   @include breakpoint(600) {

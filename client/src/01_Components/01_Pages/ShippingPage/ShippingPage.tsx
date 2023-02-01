@@ -204,7 +204,7 @@ export const ShippingPage: FC = () => {
               <input type='button' className='stationSubmitBtn' value='Continue as guest'
                      onClick={() => setContinueAsGuest(true)}/>
               <input type='button' className='stationSubmitBtn'
-                     onClick={() => navigate('/login?redirect=shipping')} value='Login'/>
+                     onClick={() => navigate('/signin?redirect=shipping')} value='Login'/>
             </div>
           ) : null}
           <form onSubmit={submitHandler} className={s.form}>

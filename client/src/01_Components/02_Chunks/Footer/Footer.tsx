@@ -4,30 +4,6 @@ import { Link } from 'react-router-dom'
 import { isEmail } from '../../../04_Utils/utils'
 import { useDispatch } from 'react-redux'
 import { subscribeThunk } from '../../../03_Reducers/user/userInfoReducer'
-const footerColumns = [
-  {
-    id: 1,
-    headline: 'About us',
-    links: ['Pricing', 'Our Story', 'Testimonials', 'Investors', 'Terms of Service'],
-  },
-  {
-    id: 2,
-    headline: 'Contact us',
-    links: ['Contact', 'Support', 'Destinations', 'Careers', 'Refund policy'],
-  },
-  {
-    id: 3,
-    headline: 'Content',
-    links: ['Submit Video', 'Submit Photo', 'Influencer', 'Marketing', 'Privacy Policy'],
-  },
-  {
-    id: 4,
-    headline: 'Socials',
-    links: ['Youtube', 'Facebook', 'Snapchat', 'Twitter', 'Instagram'],
-  },
-]
-
-// const socials = [<FaYoutube />, <FaInstagram />, <FaTwitter />, <FaSnapchatGhost />, <FaFacebook />]
 
 interface Props {
   isSubscribed: boolean
@@ -47,44 +23,49 @@ export const Footer: FC<Props> = ({ isSubscribed }) => {
     }
   }
   return (
-    <div className={s.container}>
-      <footer className={s.footer}>
-        {!isSubscribed && (
-          <div className={s.footer__newsletter}>
-            <h4 className={s.footer__newsletter__headline}>Join the Station newsletter to receive groundbreaking rewards</h4>
-            <span>Unsubscribe at any time</span>
-            <form onSubmit={submitHandler} className={s.footer__newsletter__form}>
-              <input onChange={(e) => setEmail(e.target.value)} className={s.input} type="text" placeholder="Your Email" value={email} />
-              <input type="submit" value="Subscribe" />
-            </form>
+    <footer className={s.footer}>
+      <div className={`stationContainer ${s.container}`}>
+        <div className={s.topContent}>
+          <div className={s.subscribeInput}>
+            <div className={s.subtitle}>Let's get to work!</div>
+            <h3
+              className={s.title}>{!isSubscribed ? 'Subscribe to our newsletter and stay updated' : 'Make the right design-driven decisions, to move your inspiration forward.'}</h3>
+            {!isSubscribed && <input type="text" placeholder='Your Email'/>}
           </div>
-        )}
-        <div className={s.footer__content}>
-          {footerColumns.map(({ id, headline, links }) => (
-            <div key={id} className={s.footer__content__col}>
-              <div className={s.footer__content__col__headline}>{headline}</div>
-              <ul className={s.footer__content__col__links}>
-                {links.map((link, i) => (
-                  <li key={i + 1}>
-                    <a href="/">{link}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className={s.customerService}>
+            <div className={s.title}>Customer Service</div>
+            <div className={s.phone}><a href="tel:+372 55 51 91 24">+372 55 51 91 24</a></div>
+            <div className={s.time}>Mon - Fri: 10-17</div>
+          </div>
         </div>
-        <div className={s.footer__base}>
-          <Link to="/">Logo</Link>
-          <span className={s.footer__base__year}>Station&nbsp;&copy;&nbsp;{new Date().getFullYear()}</span>
-          <ul className={s.footer__base__socials}>
-            {/* {socials.map((socialIcon, i) => (
-              <li key={i + 1}>
-                <a href="/">{socialIcon}</a>
-              </li>
-            ))} */}
+        <div className={s.bottomContent}>
+          <ul className={s.menu}>
+            <li><Link to='/'>Jobs</Link></li>
+            <li><Link to='/'>Docs</Link></li>
+            <li><Link to='/'>Contacts</Link></li>
+          </ul>
+          <ul className={s.menu}>
+            <li><Link to='/'>FAQ</Link></li>
+            <li><Link to='/'>About Us</Link></li>
+            <li><Link to='/terms'>Terms of Service</Link></li>
+          </ul>
+          <ul className={s.menu}>
+            <li><Link to='/'>Refund Policy</Link></li>
+            <li><Link to='/'>Cookie Preferences</Link></li>
+            <li><Link to='/'>Shipping</Link></li>
+          </ul>
+          <ul className={s.menu}>
+            <li>Let's chat!</li>
+            <li>idea@station.app</li>
+            <li className={s.socials}>
+              <i className="fa-brands fa-facebook-f"/>
+              <i className="fa-brands fa-twitter"/>
+              <i className="fa-brands fa-linkedin-in"/>
+              <i className="fa-brands fa-instagram"/>
+            </li>
           </ul>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   )
 }

@@ -45,13 +45,17 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
           setErrorMessage('')
           break
         } else {
-          setErrorMessage('Enter a valid password')
+          setErrorMessage('At least 6 characters')
           break
         }
-      case 'apartment':
-        setErrorMessage('')
-        break
-
+      case 'confirmPassword':
+        if (value?.length >= 6) {
+          setErrorMessage('')
+          break
+        } else {
+          setErrorMessage('At least 6 characters')
+          break
+        }
       default:
         if (value?.length > 1) {
           setErrorMessage('')

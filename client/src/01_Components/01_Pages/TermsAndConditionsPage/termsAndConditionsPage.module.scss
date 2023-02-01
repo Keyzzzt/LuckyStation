@@ -1,33 +1,25 @@
 @import '../../../02_Styles/variables';
 
-.container {
-
-}
-
 .mainTitle {
   text-align: center;
-  font-size: $fz-xxl;
+  font-size: 3rem;
   text-transform: uppercase;
 }
 
 .paragraphTitle {
   margin-top: 50px;
   margin-bottom: 25px;
-  font-size: $fz-xl;
+  font-size: 2rem;
   text-transform: uppercase;
 }
 
 .text {
+  text-align: justify;
+  font-size: 20px;
   letter-spacing: 1.5px;
   line-height: 1.5;
-  font-size: $fz-lg;
-  font-weight: $fw-sm;
 }
 
 .text:not(:last-child) {
   margin-bottom: 20px;
-}
-
-.boldText {
-  font-weight: normal;
 }
