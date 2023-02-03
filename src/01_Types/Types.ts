@@ -40,6 +40,7 @@ export type ProductType = {
   countInStock: number
   reviews: ReviewType[]
   numReviews: number
+  isPromo
 }
 
 export type SurveyType = {

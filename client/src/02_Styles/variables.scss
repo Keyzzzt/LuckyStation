@@ -1,10 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@100;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@200;400;500&display=swap');
 
-
+$base: 10px;
+$offset: 10px;
 $Poppins: 'Poppins', sans-serif;
 $letterSpacing: 1px;
-$boxShadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-$sectionBoxShadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+$boxShadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+$boxShadowHover: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+$bRadius: 5px;
+$headerHeight: 120px;
+$loaderColor: #00b4b5;
+
+
 
 
 // Section vertical padding
@@ -12,73 +18,17 @@ $sectionVerticalPaddingMobile: 40px 0;
 $sectionVerticalPaddingDesktop: 80px 0;
 
 // Colors
-$color--dark: #181a1b;
-$color--grey: #494f52;
-$color--success: #7ebdb7;
-$color--success--light: rgba(155, 236, 224, 0.1);
-$color--error: #f06548;
-$color--error--light: rgba(240, 101, 72, .1);
+$footerBg: #1b1c1c;
+$borderColor: #a8aaae;
+$success: #0ebeb0;
+$successHover: #0ca296;
+$successActive: #0a8f85;
+$danger: #C95445;
+$dangerHover: #Ba4536;
+$dangerActive: #B13c34;
+$white: #f3f3f3;
+$textColor: #1b1c1c;
 
-$color--light: #e8e6e3;
-$color--golden: #81786a;
-$color--border: #dedede;
-
-$colorLightBlue: #e9f5f9;
-
-$tableRow: #F2FEFF;
-
-$blueLight: #91d1e9;
-$blue: #2596be;
-$blueDark: #16536a;
-$white: #fff;
-$greyLight: #eaeaea;
-$grey: #bbbbbb;
-$greyDark: #444;
-
-$greenLight: #0ebeb0;
-$green: #0ca296;
-$greenDark: #0a8f85;
-
-$redLight: #C95445;
-$red: #Ba4536;
-$redDark: #B13c34;
-
-$orangeLight: #f06548;
-$orange: #Ee4d2b;
-$orangeDark: #A6260d;
-
-$black: #1b1c1c;
-
-
-// Border radius
-$bRadius10: 10px;
-$bRadius5: 5px;
-$bRadius3: 3px;
-
-// spacing
-$spacing-sm: 12px;
-$spacing-md: 24px;
-$spacing-lg: 32px;
-$spacing-xl: 64px;
-
-// Font weight
-$fw-sm: 100;
-$fw-md: 400;
-$fw-lg: 500;
-
-// 01_Header
-$headerHeight: 120px;
-
-// Font size
-$fz-sm: 0.5rem;
-$fz-md: 1.2rem;
-$fz-lg: 1.5rem;
-$fz-xl: 2rem;
-$fz-xxl: 2.5rem;
-
-
-$m10: 10px;
-$m20: 20px;
 
 @mixin breakpoint($point) {
   @if $point == 1400 {

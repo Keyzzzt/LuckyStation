@@ -2,30 +2,20 @@
 
 .authContainer {
   max-width: 340px;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
   padding: 10px;
   box-shadow: $boxShadow;
 }
 
-.signInTitle, .signInSubtitle {
-  color: $blueDark;
-  font-weight: $fw-lg;
+.signInTitle, .signInSubtitle, .restorePasswordLink {
+  color: $successActive;
 }
 
-.signInSubtitle,
-.restorePasswordLink {
-  color: $grey;
-  font-size: 0.9rem;
-}
 
 .signInSubtitle {
   margin-top: 10px;
 }
 
-.restorePassword {
-  cursor: pointer;
-  display: inline-block;
-}
 
 .form {
   margin-top: 20px;
@@ -43,19 +33,19 @@
 .submitButton {
   width: 100%;
   color: $white;
-  background-color: $greenLight;
+  background-color: $success;
   padding: 10px;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
   cursor: pointer;
   margin-top: 15px;
 }
 
 .submitButton:hover {
-  background-color: $green;
+  background-color: $success;
 }
 
 .submitButton:active {
-  background-color: $greenDark;
+  background-color: $successActive;
 }
 
 .signInWith {
@@ -71,7 +61,7 @@
   position: absolute;
   height: 1px;
   width: 100px;
-  background: $greyLight;
+  background: $borderColor;
 
 }
 
@@ -94,12 +84,12 @@
 
 .googleIcon{
   color: $white;
-  background-color: $orangeLight;
+  background-color: $success;
   padding: 10px;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
 }
 .googleIcon:hover{
-  background-color: $orange;
+  background-color: $white;
 }
 
 
@@ -107,6 +97,6 @@
   align-content: flex-start;
 }
 .signUpLink a{
-  color: $blueDark;
+  color: $successActive;
   text-decoration: underline;
 }

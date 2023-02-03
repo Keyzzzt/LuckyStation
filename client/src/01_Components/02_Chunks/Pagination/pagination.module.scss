@@ -1,11 +1,5 @@
 @import '../../../02_Styles/variables';
 
-// Блоку не задаем внешние отступы, чтобы уго можно было переиспользовать
-// Блоки можно вкладывать друг в друга
-// Элемент всегда наследуется от блока
-// Элемент можно вкладывать в другой элемент, но название класса всегда начинаем с блока см. ниже:
-// Нельзя - имяБлока__имяЭлемента__имяЭлемента
-
 .pagination {
   display: flex;
   align-items: center;
@@ -13,7 +7,7 @@
   padding: 10px;
   .list {
     display: flex;
-    background-color: $color--grey;
+    background-color: $borderColor;
     padding: 8px;
     border-radius: 50px;
     & i {
@@ -49,8 +43,8 @@
     & li.btn:hover,
     & li.numb:hover,
     & li.active {
-      background: $color--light;
-      color: $color--grey;
+      background: $white;
+      color: $borderColor;
     }
   }
 }

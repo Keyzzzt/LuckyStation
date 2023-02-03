@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-bottom: 1px solid $greyLight;
+  border-bottom: 1px solid $borderColor;
 
   img {
     height: 20px;
@@ -37,15 +37,15 @@
 }
 
 .input {
-  background-color: $greyLight;
+  background-color: $borderColor;
   margin-left: 15px;
 }
 
 .aside{
   display: none;
-  background-color: $blueDark;
+  background-color: $successActive;
   padding: 20px;
-  color: $greyLight;
+  color: $white;
   min-height: 100vh;
   @include breakpoint(768){
     display: block;

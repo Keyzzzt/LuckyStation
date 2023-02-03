@@ -1,4 +1,4 @@
-@import '../../../02_Styles/variables';
+@import '../../../../02_Styles/variables';
 
 .leftWrapper,
 .rightWrapper {
@@ -13,7 +13,7 @@
 .leftWrapper .promoDescription,
 .rightWrapper .promoDescription {
   transition: all .5s;
-  background-color: #e9e0d2;
+  background-color: red;
   padding: 20px 0;
   width: 100%;
   min-height: 300px;
@@ -51,7 +51,7 @@
 .descriptionItemLeft,
 .descriptionItemRight {
   margin: 20px 0;
-  background-color: #74959a;
+  background-color: red;
   @include breakpoint(992) {
     max-width: 72%;
   }
@@ -65,8 +65,8 @@
 .leftWrapperImage,
 .rightWrapperImage{
   transition: all .3s;
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
-  background-color: #00b4b5;
+  box-shadow: $boxShadow;
+  background-color: fuchsia;
   @include breakpoint(600) {
     position: absolute;
     width: 400px;

@@ -45,6 +45,7 @@ export interface ProductDocType extends Document {
   countViewed: number
   isNewProduct: boolean
   isDirty: boolean
+  isPromo: boolean
 }
 const ReviewSchema = new Schema<ReviewDocType>(
   {
@@ -148,6 +149,10 @@ const ProductSchema = new Schema<ProductDocType>(
       default: false,
     },
     isDirty: {
+      type: Boolean,
+      default: false,
+    },
+    isPromo: {
       type: Boolean,
       default: false,
     },

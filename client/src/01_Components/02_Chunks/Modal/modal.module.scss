@@ -15,8 +15,8 @@
   pointer-events: none;
   & .content {
     padding: 20px;
-    background-color: $color--light;
-    border-radius: $bRadius5;
+    background-color: $white;
+    border-radius: $bRadius;
     min-width: 250px;
     transform: scale(0);
     transition: all 0.5s;

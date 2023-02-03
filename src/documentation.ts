@@ -135,7 +135,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
+      status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -190,7 +190,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - not found, 500 - other error',
+      status: 'PageNotFound404 - not found, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -217,7 +217,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '400; 401; 404; 500',
+      status: '400; 401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -244,7 +244,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '400; 401; 404; 500',
+      status: '400; 401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -352,7 +352,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
+      status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -611,7 +611,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - users not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - users not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -651,7 +651,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
+      status: 'PageNotFound404 - user not found, 401 - not admin, 500 - id not valid / server error',
       error: 'Error message',
       errors: [
         {
@@ -690,7 +690,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - id not valid / server error',
+      status: 'PageNotFound404 - user not found, 401 - not admin, 500 - id not valid / server error',
       error: 'Error message',
       errors: [
         {
@@ -717,7 +717,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - user not found, 401 - not admin, 500 - server error',
+      status: 'PageNotFound404 - user not found, 401 - not admin, 500 - server error',
       error: 'Error message',
       errors: [
         {
@@ -780,7 +780,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - orders not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - orders not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -827,7 +827,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - surveys not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - surveys not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -900,7 +900,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
+      status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -927,7 +927,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -954,7 +954,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -981,7 +981,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -1008,7 +1008,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -1259,7 +1259,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '401; 404; 500',
+      status: '401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -1286,7 +1286,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '401; 404; 500',
+      status: '401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -1356,7 +1356,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '401; 404; 500',
+      status: '401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -1398,7 +1398,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '401; 404; 500',
+      status: '401; PageNotFound404; 500',
       error: 'Error message',
       errors: [
         {
@@ -1475,7 +1475,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - not found, 401 - not authorized, 500 - other error',
+      status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
       error: 'Error message',
       errors: [
         {
@@ -1508,7 +1508,7 @@ const apiDocumentation = [
       status: 200,
     },
     errorResponse: {
-      status: '404 - order not found, 401 - not admin, 500 - other error',
+      status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
       error: 'Error message',
       errors: [
         {

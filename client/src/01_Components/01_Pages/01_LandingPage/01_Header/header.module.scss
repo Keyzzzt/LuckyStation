@@ -1,10 +1,10 @@
-@import '../../../02_Styles/variables';
+@import '../../../../02_Styles/variables';
 
 .header {
   transition: 0.3s ease all;
   padding: 10px 0;
   text-align: center;
-  box-shadow: $sectionBoxShadow;
+  box-shadow: $boxShadow;
 
 }
 
@@ -25,9 +25,8 @@
 .logoTitle {
   text-transform: uppercase;
   font-size: 2rem;
-  letter-spacing: $letterSpacing;
   cursor: pointer;
-  color: $greyDark;
+  //color: $greyDark;
 }
 
 .logoSubtitle {
@@ -46,10 +45,9 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  background: rgba($greyDark, 0.9);
+  background: rgba(0,0,0, 0.6);
   transform: translate(0);
   transition: 0.3s ease transform;
-  letter-spacing: $letterSpacing;
 
   @include breakpoint(992) {
     flex-direction: row;
@@ -74,7 +72,7 @@
 
 .menuItem {
   padding: 10px;
-  border-radius: $bRadius10;
+  border-radius: $bRadius;
   @include breakpoint(992) {
     padding: 5px;
   }
@@ -83,7 +81,7 @@
     transition: 0.3s ease all;
     text-transform: uppercase;
     @include breakpoint(768) {
-      color: $greyDark;
+      //color: $greyDark;
     }
     &:hover {
       //TODO
@@ -95,7 +93,7 @@
 }
 
 .menuItem:not(:last-child) {
-  margin-bottom: $spacing-sm;
+  //margin-bottom: $spacing-sm;
   @include breakpoint(768) {
     margin-bottom: 0;
     margin-right: 10px;

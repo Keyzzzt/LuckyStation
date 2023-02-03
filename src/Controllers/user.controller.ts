@@ -19,13 +19,14 @@ export async function getProfile(req: RequestCustom, res: Response, next: NextFu
     }
     return res.status(200).json(profile)
   } catch (error) {
+
     return next(error.message)
   }
 }
 export async function getTermsAndConditions(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const { lang } = req.params
-    const doc = await TermsAndConditionsModel.findOne({ lang })
+    const doc = await TermsAndConditionsModel.findOne({ lang }).select('-__v')
 
     return res.status(200).json(doc)
   } catch (error) {

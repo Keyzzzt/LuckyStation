@@ -136,6 +136,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       whatShouldYouKnow,
       quality,
       isNewProduct,
+      isPromo
     } = req.body
     const product = new ProductModel({
       name,
@@ -159,6 +160,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       whatShouldYouKnow,
       quality,
       isNewProduct,
+      isPromo
     })
 
     const createdProduct = await product.save()

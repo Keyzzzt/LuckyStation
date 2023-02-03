@@ -1,10 +1,10 @@
 import s from './bestProductsSection.module.scss'
 import React, { FC } from 'react'
-import { useTypedSelector } from '../../../05_Types/01_Base'
-import Loader from '../Loader/Loader'
-import { ProductCard } from '../ProductCard/ProductCard'
+import { useTypedSelector } from '../../../../05_Types/01_Base'
+import Loader from '../../../02_Chunks/Loader/Loader'
+import { ProductCard } from '../../../02_Chunks/ProductCard/ProductCard'
 import { Link } from 'react-router-dom'
-import { ProductResponseType } from '../../../05_Types/ResponseTypes'
+import { ProductResponseType } from '../../../../05_Types/ResponseTypes'
 
 type Props = {
   favoriteHandler: (productId: string, isFavorite: boolean) => void
@@ -12,8 +12,8 @@ type Props = {
   favorite: string[] | undefined
 }
 
-export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHandler}) => {
-  const {title, subTitle, buttonText} = useTypedSelector(state => state.components.landingPage.bestProducts)
+export const BestProductsSection: FC<Props> = ({ products, favorite, favoriteHandler }) => {
+  const { title, subTitle, buttonText } = useTypedSelector(state => state.components.landingPage.bestProducts)
 
   // // By default - not favorite
   // let isFavorite = false
@@ -39,7 +39,7 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
         <h3 className='stationSectionSubtitle'>{subTitle}</h3>
         <div className='row mt50 mh200'>
           {!products ? (
-            <Loader />
+            <Loader/>
           ) : (
             products.map((product, i) => {
               return (
@@ -54,9 +54,7 @@ export const BestProductsSection: FC<Props> = ({products, favorite, favoriteHand
             })
           )}
         </div>
-        <div className='stationSectionButton'>
-          <Link  to="/products">{buttonText}</Link>
-        </div>
+        <Link className='stationSectionButton' to="/products">{buttonText}</Link>
       </div>
     </section>
   )

@@ -80,6 +80,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 // @ts-ignore
 const store = createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)))
 
+
+
 export type StateType = ReturnType<typeof rootReducer>
 // export type AppStoreType = ReturnType<typeof createStore>
 

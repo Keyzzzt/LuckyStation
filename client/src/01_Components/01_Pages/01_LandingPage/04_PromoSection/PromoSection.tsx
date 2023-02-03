@@ -1,8 +1,8 @@
 import s from './promoSection.module.scss'
 import React, { FC } from 'react'
-import noImage from './../../../06_img/noImage.png'
+import noImage from '../../../../06_img/noImage.png'
 import { useNavigate } from 'react-router-dom'
-import { ProductResponseType } from '../../../05_Types/ResponseTypes'
+import { ProductResponseType } from '../../../../05_Types/ResponseTypes'
 
 type PromoProps = {
   promoProducts: ProductResponseType[] | undefined

@@ -6,8 +6,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  border-bottom: 1px solid $greyLight;
-  color: $greyDark;
+  border-bottom: 1px solid $borderColor;
+  color: $successActive;
 }
 
 
@@ -34,7 +34,7 @@
 
 .breadcrumbs__link {
   text-decoration: none;
-  color: $greyDark;
+  color: red;
   text-transform: capitalize;
 }
 

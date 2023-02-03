@@ -8,12 +8,12 @@
 }
 
 .paypal {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: $boxShadow;
   margin: 0 auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: $bRadius5;
+  border-radius: $bRadius;
 
   @include breakpoint(768) {
     flex-direction: row;
@@ -23,16 +23,10 @@
   padding: 10px;
   flex: 1;
 }
-//.left, .paypalButtons {
-//  padding: 10px;
-//  @include breakpoint(768) {
-//    width: calc(100% / 3);
-//  }
-//}
 .left{
   padding: 10px;
   & .item {
-    border-bottom: 1px solid $greyLight;
+    border-bottom: 1px solid $borderColor;
   }
   @include breakpoint(768) {
     & .item:last-of-type{
@@ -43,7 +37,7 @@
 .right {
   padding: 0 10px 10px;
   & .item:not(:last-of-type) {
-    border-bottom: 1px solid $greyLight;
+    border-bottom: 1px solid $borderColor;
   }
   @include breakpoint(768) {
     padding: 10px;

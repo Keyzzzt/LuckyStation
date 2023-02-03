@@ -4,7 +4,7 @@ import ApiError from '@src/middleware/error.middleware'
 
 export async function getConfig(req: Request, res: Response, next: NextFunction) {
   try {
-    const config = await AppConfigModel.findOne({ name: 'Config' })
+    const config = await AppConfigModel.findOne({ name: 'Config' }).select('-__v')
     if (!config) {
       return next(
         ApiError.NotFound('App config not found, please check app.ts / database connection / contact developer')

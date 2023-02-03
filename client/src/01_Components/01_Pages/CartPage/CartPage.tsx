@@ -6,8 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { Button } from '../../02_Chunks/Button/Button'
-import { Fail, Success } from '../../02_Chunks/SuccessAndFail/SuccessAndFail'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
+import { toLocal } from '../../../04_Utils/utils'
 
 export const CartPage: FC = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
@@ -30,7 +30,7 @@ export const CartPage: FC = () => {
   const handleQuantity = (productId: string, quantity: number, countInStock: number, action: string) => {
     if (action === 'add') {
       quantity += 1
-      quantity = quantity > countInStock ? countInStock : quantity
+      quantity = quantity <= countInStock ? quantity : countInStock
       dispatch(addToCartThunk(productId, quantity))
     } else {
       quantity -= 1
@@ -40,14 +40,12 @@ export const CartPage: FC = () => {
   }
   const checkoutHandler = () => {
     if (!acceptedTerms) {
-      if (window.confirm('Click OK to accept terms and conditions')) {
-        setAcceptedTerms(true)
-        navigate('/shipping')
+      alert('Please accept terms and conditions')
         return
       }
-    }
     navigate('/shipping')
   }
+
   const shippingMessage =
     totalPrice > minPriceForFreeShipping
       ? freeShippingMessage
@@ -67,39 +65,29 @@ export const CartPage: FC = () => {
   }, [cartItems])
 
   return (
-    <main className='stationContainer'>
-      {cartItems.length === 0 ? (
-        <div className={s.emptyCart}>
-          <div className={s.emptyCartHeader}>YOUR CART IS EMPTY</div>
-          <div className={s.emptyCartText}>Spend €1000 more and get free shipping!</div>
-          <Button path="/" colorTheme="light">
-            SHOP OUR PRODUCTS
-          </Button>
-        </div>
-      ) : (
-        <>
+    <div className='stationSectionMain'>
+      <main className={`stationContainer ${s.container}`}>
+        {cartItems.length === 0 ? (
+          <div className={s.emptyCart}>
+            <div className={`stationSectionTitle ${s.emptyCartHeader}`}>Your cart is empty</div>
+            <div className={`stationSectionSubtitle ${s.emptyCartText}`}>Spend €1000 more and get free shipping!</div>
+            <Link className='stationSubmitBtn' to='/products'>Check our products</Link>
+          </div>
+        ) : (
           <div className={s.cart}>
-            <h2 className={s.cartHeader}>CART</h2>
-            <div className={s.cartDeliveryMessage}>{shippingMessage}</div>
-            <CheckoutSteps step1 />
+            <h2 className='stationSectionTitle'>CART</h2>
+            <div className='stationSectionSubtitle'>{shippingMessage}</div>
+            <CheckoutSteps step1/>
             <div className={s.productList}>
-              <div className={s.productListHeader}>
-                <div className={s.headerProduct}>PRODUCT</div>
-                <div className={s.headerQuantity}>QUANTITY</div>
-                <div className={s.headerTotal}>PRICE</div>
-              </div>
-              {cartItems.map(item => (
-                <div className={s.productItem} key={item._id}>
-                  <div className={s.productName}>
-                    <Link to={`/product/${item._id}`}>
-                      <div className={s.productNameWrapper}>
-                        <img src={item.images[0].imageSrc} alt=""/>
-                        <div className={s.productNameTitle}>{item.name}</div>
-                      </div>
-                    </Link>
-                  </div>
-                  <div className={s.productQuantity}>
-                    {/* <select
+              {cartItems.map(p => (
+                <div className={s.productItem} key={p._id}>
+                  <div className={s.top}>
+                    <div className={s.product}>
+                      <img className={s.image} src={p.images[0].imageSrc} alt=""/>
+                    </div>
+                    <div className={s.info}>
+                      <div className={s.quantity}>
+                        {/* <select
                         value={item.qty}
                         onChange={e => dispatch(addToCartThunk(item._id, Number(e.target.value)))}
                       >
@@ -109,47 +97,49 @@ export const CartPage: FC = () => {
                           </option>
                         ))}
                       </select> */}
-                    <div className={s.productQuantitySelect}>
-                      <div
-                        onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'add')}
-                        className={s.plus}
-                      >
-                        <i className="fa-solid fa-plus"/>
+                        <div className={s.productQuantitySelect}>
+                          <div
+                            onClick={() => handleQuantity(p._id, p.qty!, +p.countInStock, 'add')}
+                            className={s.plus}
+                          >
+                            <i className="fa-solid fa-plus"/>
+                          </div>
+                          <div>{p.qty}</div>
+                          <div
+                            onClick={() => handleQuantity(p._id, p.qty!, +p.countInStock, 'remove')}
+                            className={s.minus}
+                          >
+                            <i className="fa-solid fa-minus"/>
+                          </div>
+                        </div>
                       </div>
-                      <div>{item.qty}</div>
-                      <div
-                        onClick={() => handleQuantity(item._id, item.qty!, +item.countInStock, 'remove')}
-                        className={s.minus}
-                      >
-                        <i className="fa-solid fa-minus"/>
-                      </div>
-                    </div>
-
-                    <div className={s.removeFromCart} onClick={() => removeFromCartHandler(item._id)}>
-                      Remove
+                      <div className={s.prices}>{(p.price * p.qty!).toLocaleString('en', toLocal)}</div>
+                      <div className={s.removeFromCart} onClick={() => removeFromCartHandler(p._id)}>Remove</div>
                     </div>
                   </div>
-                  <div className={s.productPrice}>&euro; {item.price}</div>
+                  <div className={s.bottom}>
+                    <Link className={s.name} to={`/product/${p._id}`}>{p.name}</Link>
+                    <div className={s.prices}>{p.price.toLocaleString('en', toLocal)}</div>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-          <div className={s.checkout}>
-            <div className={s.checkoutPrice}>TOTAL: &euro; {totalPrice}</div>
-            <div className={s.checkoutText}>Shipping &#38; taxes calculated at checkout</div>
-            <div className={s.checkoutTerms}>
-              {/* <input type="checkbox" checked={acceptedTerms} onClick={() => setAcceptedTerms(!acceptedTerms)} /> */}
-              <div onClick={() => setAcceptedTerms(!acceptedTerms)}>{acceptedTerms ? <Success/> : <Fail/>}</div>
-              <Link to="/terms">
-                &nbsp;I accept <span>terms &#38; conditions</span>
-              </Link>
+            <div className={s.checkout}>
+              <div className={s.checkoutPrice}>TOTAL: &euro; {totalPrice}</div>
+              <div className={s.checkoutText}>Shipping &#38; Taxes calculated at next step</div>
+              <div className={s.checkoutText}>*Free shipping does not apply for all countries</div>
+              <div>
+                <input type="checkbox" onChange={() => setAcceptedTerms(!acceptedTerms)}/>
+                <span> I accept <Link to="/terms">terms &#38; conditions</Link></span>
+              </div>
+              <div>
+                <input className={`stationSubmitBtn ${s.checkoutBtn}`} type='button' onClick={checkoutHandler} disabled={totalPrice === 0} value='Checkout' />
+              </div>
             </div>
-            <button onClick={checkoutHandler} disabled={totalPrice === 0}>
-              CHECKOUT SECURELY
-            </button>
           </div>
-        </>
-      )}
-    </main>
+
+        )}
+      </main>
+    </div>
   )
 }

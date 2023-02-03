@@ -36,12 +36,12 @@
     height: 15px;
     width: 15px;
     border-radius: 50%;
-    border: 3px solid $greyLight;
+    border: 3px solid $borderColor;
     margin: 10px 10px 0 0;
     cursor: pointer;
     &.active {
-      background-color: $greyDark;
-      border-color: $greyDark;
+      background-color: $successActive;
+      border-color: $successActive;
     }
   }
 }
@@ -53,6 +53,6 @@
   left: 10px;
   text-transform: uppercase;
   padding: 10px 15px;
-  background-color: $greyLight;
+  background-color: $white;
   z-index: 1;
 }

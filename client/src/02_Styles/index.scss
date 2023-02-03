@@ -2,11 +2,14 @@
 @import 'reset';
 @import 'variables';
 
-
+html {
+  font-size: 10px;
+}
 body {
-  font-family: $Poppins, sans-serif;
+  font-family: $Poppins;
+  letter-spacing: $letterSpacing;
   font-size: 16px;
-  color: $greyDark;
+  color: $textColor;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,31 +31,31 @@ p {
   margin: 10px 0;
 }
 a {
-  color: $white;
+  color: $textColor;
 }
 button {
   cursor: pointer;
 }
 textarea,
 input{
-  border: 1px solid $greyLight;
+  border: 1px solid $borderColor;
 }
 
 .stationContainer {
-  //background: #eaeaea;
+  background: #eaeaea;
   max-width: 1170px;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 0 $offset;
 }
 
 .row{
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -10px;
+  margin: 0 calc(#{$offset} * -1);
   position: relative;
 }
 .col{
-  margin: 10px;
+  margin: $offset;
 }
 
 .success,
@@ -67,14 +70,14 @@ input{
 }
 
 .success {
-  background-color: $color--success--light;
-  color: $color--success;
+  background-color: $success;
+  color: $white;
   transition: .5s all;
 }
 
 .danger {
-  background-color: $color--error--light;
-  color: $color--error;
+  background-color: $danger;
+  color: $white;
   transition: .5s all;
 }
 
@@ -105,7 +108,7 @@ input{
   tbody tr {
     transition: .5s;
     min-width: 50%;
-    border-top: 1px solid $greyLight;
+    border-top: 1px solid $borderColor;
 
   }
 
@@ -117,33 +120,33 @@ input{
 .stationSubmitBtn {
   width: 100%;
   color: $white;
-  background-color: $greenLight;
+  background-color: $success;
   padding: 10px;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
   cursor: pointer;
 
   &:hover {
-    background-color: $green;
+    background-color: $successHover;
   }
 
   &:active {
-    background-color: $greenDark;
+    background-color: $successActive;
   }
 }
 .stationDangerBtn {
   width: 100%;
   color: $white;
-  background-color: $redLight;
+  background-color: $danger;
   padding: 10px;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
   cursor: pointer;
 
   &:hover {
-    background-color: $red;
+    background-color: $dangerHover;
   }
 
   &:active {
-    background-color: $redDark;
+    background-color: $dangerActive;
   }
 }
 
@@ -151,24 +154,22 @@ input{
   padding: 5px;
   vertical-align: middle;
   &:focus {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    box-shadow: $boxShadow;
   }
 }
 
 .stationLabel {
   display: inline-block;
-  font-weight: $fw-lg;
   margin-bottom: 10px;
-  color: $greyDark;
 }
 
 .stationInput {
   width: 100%;
-  border-radius: $bRadius3;
+  border-radius: $bRadius;
   padding: 10px;
 
   &::placeholder {
-    color: $greyDark;
+    color: $borderColor;
   }
 }
 
@@ -181,12 +182,12 @@ input{
 }
 
 button.danger:hover {
-  background-color: $color--error;
+  background-color: $danger;
   color: azure;
 }
 
 button.success:hover {
-  background-color: $color--success;
+  background-color: $successHover;
   color: azure;
 }
 // Section common styles
@@ -198,23 +199,16 @@ button.success:hover {
   }
 }
 .stationSectionTitle {
-  font-size: 2rem;
+  font-size: 3rem;
+  font-weight: 200;
   letter-spacing: 2px;
-  @include breakpoint(768) {
-    font-size: 2.5rem;
-  }
-  @include breakpoint(992) {
-    font-size: 3rem;
-  }
+
 }
 
 .stationSectionSubtitle {
   margin-top: 20px;
   font-size: 1.5rem;
   letter-spacing: 2px;
-  @include breakpoint(768) {
-    font-size: 2rem;
-  }
 
 }
 
@@ -222,36 +216,16 @@ button.success:hover {
   margin-top: 20px;
   font-size: 1rem;
   letter-spacing: 2px;
-  @include breakpoint(768) {
-    font-size: 1.3rem;
-  }
 }
 
 .stationSectionButton{
   margin-top: 50px;
   display: inline-block;
   padding:  10px;
-  background-color: $greenLight;
+  background-color: $success;
   cursor: pointer;
     & a {
-      color: $greyDark;
+      color: $textColor;
 
     }
-}
-
-// Margin
-.mt20{
-  margin-top: 20px;
-}
-.mt30{
-  margin-top: 30px;
-}
-.mt40{
-  margin-top: 40px;
-}
-.mt50{
-  margin-top: 50px;
-}
-.mh200 {
-  min-height: 350px;
 }

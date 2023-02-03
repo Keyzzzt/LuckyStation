@@ -89,7 +89,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
     await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
 
-    const activationToken = jwt.sign({ email }, process.env.JWT_ACTIVATION_KEY, { expiresIn: '24h' })
+    const activationToken = jwt.sign({ email }, `${process.env.JWT_ACTIVATION_KEY}`, { expiresIn: '24h' })
 
     const name = email.split('@')[0]
 

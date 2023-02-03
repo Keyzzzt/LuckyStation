@@ -5,7 +5,7 @@
 .accordionHeader,
 .askForLogin,
 {
-  border-bottom: 1px solid $greyLight;
+  border-bottom: 1px solid $borderColor;
 }
 
 .container {
@@ -101,7 +101,7 @@
     padding: 15px 0;
 
     .discountCode {
-      border: 1px solid #d6d6d6;
+      border: 1px solid $borderColor;
     }
 
     & input {
@@ -123,7 +123,7 @@
     & img {
       width: 100%;
       height: auto;
-      border-radius: $bRadius3;
+      border-radius: $bRadius;
     }
   }
 
@@ -136,7 +136,7 @@
     top: -5px;
     right: -5px;
     color: $white;
-    background-color: $greyDark;
+    background-color: $successActive;
     height: 25px;
     width: 25px;
     border-radius: 50px;

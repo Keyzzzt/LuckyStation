@@ -21,7 +21,7 @@
 .errorText {
   position: absolute;
   right: 0;
-  color: $color--error;
+  color: $danger;
   margin: 5px 0;
   text-align: left;
   font-size: 0.8rem;
@@ -32,5 +32,5 @@
 
 
 .borderError {
-  border-color: $color--error;
+  border-color: $danger;
 }

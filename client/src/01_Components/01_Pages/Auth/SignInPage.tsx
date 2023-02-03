@@ -1,5 +1,5 @@
 import s from './auth.module.scss'
-import { FC, useEffect, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -32,7 +32,8 @@ export const SignInPage: FC = () => {
     }
   }, [userInfo])
 
-  const handleSignIn = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (isEmail(email) && password.length >= 6) {
       setInputError(false)
     } else {
@@ -47,7 +48,7 @@ export const SignInPage: FC = () => {
       <main className={`stationContainer ${s.authContainer}`}>
         <p className={s.signInTitle}>Welcome Back !</p>
         <p className={s.signInSubtitle}>Sign in to continue to Station</p>
-        <form className={s.form}>
+        <form className={s.form} onSubmit={handleSubmit}>
           <CustomInput
             id={'loginEmail'}
             label='Username'
@@ -70,17 +71,15 @@ export const SignInPage: FC = () => {
             name="password"
             value={password}
           />
+          <div className={s.rememberRestore}>
+            <div className={s.rememberMe}>
+              <input type="checkbox" id='rememberMeLogin'/>
+              <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
+            </div>
+          </div>
+          <input className='stationSubmitBtn' type="submit" value="Sign In"/>
         </form>
-        <div className={s.rememberRestore}>
-          <div className={s.rememberMe}>
-            <input type="checkbox" id='rememberMeLogin'/>
-            <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
-          </div>
-          <div className={s.restorePassword}>
-            <Link className={s.restorePasswordLink} to="/recovery">Forgot password?</Link>
-          </div>
-        </div>
-        <input onClick={handleSignIn} className='stationSubmitBtn' type="button" value="Sign In"/>
+
         <div className={`stationLabel ${s.signInWith}`}>Sign In with</div>
         <div className={s.socialsSignIn}>
           <a href="http://localhost:5000/api/auth/google/redirect">
@@ -88,6 +87,9 @@ export const SignInPage: FC = () => {
           </a>
         </div>
         <p className={s.signUpLink}>Don't have an account ? <Link to='/signup'>Signup</Link></p>
+        <div className={s.restorePassword}>
+          <Link className={s.restorePasswordLink} to="/recovery">Forgot password?</Link>
+        </div>
       </main>
     </div>
   )

@@ -3,13 +3,13 @@
 
 .footer {
   padding-top: 20px;
-  background-color: $black;
-  color: $greyLight;
+  background-color: $footerBg;
+  color: $white;
   letter-spacing: 1.6px;
   line-height: 22px;
 
   a {
-    color: $greyLight;
+    color: $white;
   }
 
 }
@@ -55,7 +55,7 @@
     width: 100%;
     background: 0;
     border: 0;
-    border-bottom: 2px solid $greyDark;
+    border-bottom: 2px solid $borderColor;
     margin-top: 20px;
     color: $white;
     @include breakpoint(768) {
@@ -71,7 +71,7 @@
 
   .subtitle {
     text-transform: uppercase;
-    color: $greenLight
+    color: $success
   }
 
 }
@@ -111,7 +111,7 @@
 
   .socials {
     font-size: 1.2rem;
-    color: $greenLight;
+    color: $success;
     margin-top: 12px;
 
     & i:not(:last-of-type) {

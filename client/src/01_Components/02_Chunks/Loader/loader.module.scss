@@ -1,3 +1,5 @@
+@import '../../../02_Styles/variables';
+
 .loader_1:before,
 .loader_2:before {
   content: '';
@@ -13,13 +15,13 @@
   z-index: 100;
 }
 .loader_1:before {
-  border-top-color: #00b4b5;
-  border-bottom-color: #00b4b5;
+  border-top-color: $loaderColor;
+  border-bottom-color: $loaderColor;
   animation: spinner 0.7s linear infinite;
 }
 
 .loader_2:before {
-  border-top: 2px solid #00b4b5;
+  border-top: 2px solid $loaderColor;
   border-right: 2px solid transparent;
   animation: spinner 0.7s linear infinite;
 }
