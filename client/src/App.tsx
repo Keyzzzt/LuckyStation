@@ -7,17 +7,17 @@ import { useTypedSelector } from './05_Types/01_Base'
 import { configThunk } from './03_Reducers/appConfigReducer'
 import { Routes, Route } from 'react-router-dom'
 import { PageNotFound404 } from './01_Components/01_Pages/PageNotFound404/PageNotFound404'
-import { AdminDashboard } from './01_Components/01_Pages/AdminDashboard/AdminDashboard'
-import { API } from './01_Components/01_Pages/AdminDashboard/API/API'
-import { Users } from './01_Components/01_Pages/AdminDashboard/Users/Users'
-import { UserEdit } from './01_Components/01_Pages/AdminDashboard/UserEdit/UserEdit'
-import { Main } from './01_Components/01_Pages/AdminDashboard/01_Main/Main'
-import { Settings } from './01_Components/01_Pages/AdminDashboard/Settings/Settings'
-import { OrderEdit } from './01_Components/01_Pages/AdminDashboard/OrderEdit/OrderEdit'
-import { ProductEdit } from './01_Components/01_Pages/AdminDashboard/ProductEdit/ProductEdit'
-import { Orders } from './01_Components/01_Pages/AdminDashboard/Orders/Orders'
-import { Products } from './01_Components/01_Pages/AdminDashboard/Products/Products'
-import { AddProduct } from './01_Components/01_Pages/AdminDashboard/AddProduct/AddProduct'
+import { AdminDashboard } from './01_Components/01_Pages/000_AdminDashboard/AdminDashboard'
+import { API } from './01_Components/01_Pages/000_AdminDashboard/API/API'
+import { Users } from './01_Components/01_Pages/000_AdminDashboard/Users/Users'
+import { UserEdit } from './01_Components/01_Pages/000_AdminDashboard/UserEdit/UserEdit'
+import { Main } from './01_Components/01_Pages/000_AdminDashboard/01_Main/Main'
+import { Settings } from './01_Components/01_Pages/000_AdminDashboard/Settings/Settings'
+import { OrderEdit } from './01_Components/01_Pages/000_AdminDashboard/OrderEdit/OrderEdit'
+import { ProductEdit } from './01_Components/01_Pages/000_AdminDashboard/ProductEdit/ProductEdit'
+import { Orders } from './01_Components/01_Pages/000_AdminDashboard/Orders/Orders'
+import { Products } from './01_Components/01_Pages/000_AdminDashboard/Products/Products'
+import { AddProduct } from './01_Components/01_Pages/000_AdminDashboard/AddProduct/AddProduct'
 import { SignInPage } from './01_Components/01_Pages/Auth/SignInPage'
 import { LandingPage } from './01_Components/01_Pages/01_LandingPage/LandingPage'
 import { ShippingPage } from './01_Components/01_Pages/ShippingPage/ShippingPage'
@@ -30,6 +30,7 @@ import { SignUpPage } from './01_Components/01_Pages/Auth/SignUpPage'
 import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery'
 
 export const App = () => {
+  console.log('APP')
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const [isAuth, setIsAuth] = useState(false)
@@ -37,12 +38,14 @@ export const App = () => {
 
   // Auth on every page refresh / start
   useEffect(() => {
+    console.log('APP: authenticate')
     dispatch(authenticateThunk())
     dispatch(configThunk())
-  }, [dispatch])
+  }, [])
 
   useEffect(() => {
     if(userInfo){
+      console.log('APP: userInfo changed!')
       setIsAdmin(userInfo.isAdmin)
       setIsAuth(true)
     }

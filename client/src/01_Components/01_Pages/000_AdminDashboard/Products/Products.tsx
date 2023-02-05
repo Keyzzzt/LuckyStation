@@ -1,11 +1,11 @@
 import s from './products.module.scss'
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
 import { productListThunk } from '../../../../03_Reducers/product/productListReducer'
 import { actions } from '../../../../03_Reducers/product/productInfoReducer'
-import { ProductList } from './ProductsList'
+import { MemoizedProductsList, ProductsList } from './ProductsList'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
 
@@ -13,17 +13,20 @@ import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 // TODO Polish styles
 
 export const Products: FC= () => {
+  console.log('PRODUCTS')
   const dispatch = useDispatch()
   const { products, fail } = useTypedSelector(state => state.productList)
   const [productsFilter, setProductsFilter] = useState<string>('all')
   const [productsToRender, setProductsToRender] = useState<any>(null)
 
   useEffect(() => {
+    console.log('PRODUCTS: Fetching products list')
     dispatch(productListThunk('', 1, 100))
     dispatch(actions.reset())
   }, [])
 
   useEffect(() => {
+    console.log('PRODUCTS: products list received')
     if (products) setProductsToRender(products)
   }, [products])
 
@@ -63,7 +66,7 @@ export const Products: FC= () => {
       {products?.length === 0 && <Message message='You have no products yet...' type="fail"/>}
       <BreadCrumbs pageTitle='Products' breadcrumbs={['dashboard', 'products']}/>
 
-      <ProductList products={productsToRender} setSortFilter={setProductsFilter}/>
+      <ProductsList products={productsToRender} setSortFilter={setProductsFilter}/>
     </div>
   )
 }

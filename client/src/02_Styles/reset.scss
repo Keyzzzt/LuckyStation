@@ -1,3 +1,6 @@
+@import 'variables';
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,6 +8,7 @@
 }
 
 img {
+  display: block;
   max-width: 100%;
   height: auto;
 }
@@ -23,4 +27,6 @@ a {
 textarea,
 input{
   outline: 0;
+  border: 1px solid $borderColor;
+  font-size: 14px;
 }

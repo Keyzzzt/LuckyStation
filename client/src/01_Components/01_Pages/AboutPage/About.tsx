@@ -1,11 +1,11 @@
-import s from './termsAndConditionsPage.module.scss'
+import s from './about.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { termsAndConditionsThunk } from '../../../03_Reducers/termsAndConditionsReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import Loader from '../../02_Chunks/Loader/Loader'
 
-export const TermsAndConditionsPage: FC = () => {
+export const About: FC = () => {
   const { data } = useTypedSelector(state => state.termsAndConditions)
   const dispatch = useDispatch()
   const lang = 'en' // todo useState
@@ -20,7 +20,7 @@ export const TermsAndConditionsPage: FC = () => {
         <Loader />
       ) : (
         <div className={`stationContainer ${s.container}`}>
-          <div className='stationSectionTitle'>{data.mainTitle}</div>
+          <div className={s.mainTitle}>{data.mainTitle}</div>
           <div className={s.paragraphTitle}>General information</div>
           <div className={s.text}>{data.companyAddress.companyName}</div>
           <div className={s.text}>{data.companyAddress.companyId}</div>

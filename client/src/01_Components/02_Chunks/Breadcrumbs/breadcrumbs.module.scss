@@ -8,6 +8,7 @@
   padding: 15px;
   border-bottom: 1px solid $borderColor;
   color: $successActive;
+  font-size: 14px;
 }
 
 
@@ -15,7 +16,6 @@
 .breadcrumbs__item
 {
   text-transform: capitalize;
-  font-size: .8rem;
 }
 
 .pageTitle {
@@ -34,7 +34,6 @@
 
 .breadcrumbs__link {
   text-decoration: none;
-  color: red;
   text-transform: capitalize;
 }
 

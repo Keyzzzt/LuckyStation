@@ -39,7 +39,7 @@ export const ProfilePage: FC = () => {
   }, [dispatch])
 
   return (
-    <main className={s.container}>
+    <main className={`stationContainer ${s.container}`}>
       <div className={s.profile}>
         {fail && <Message message={fail} type="fail" />}
         {success && <Message message={'Profile updated'} type="success" />}

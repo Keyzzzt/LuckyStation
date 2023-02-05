@@ -19,6 +19,7 @@ export type ReviewRequestType = {
   rating: number
   comment: string
 }
+// TODO UpdateProductRequestType
 
 // Response
 export type LoginResponseType = {
@@ -104,6 +105,7 @@ export type ProductResponseType = {
   rating: number
   isDirty: boolean // TODO WTF
   isPromo: boolean
+  isShowOnMainPage: boolean
   reviews: ReviewResponseType[]
   createdAt: string
   updatedAt: string

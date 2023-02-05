@@ -9,16 +9,17 @@ import lightModeIcon from '../../../06_img/lightMode.svg'
 import darkModeIcon from '../../../06_img/darkMode.svg'
 import bell from '../../../06_img/bell.svg'
 import lang from '../../../06_img/lang.svg'
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import { useScrollToTop } from '../../../04_Utils/hooks'
 import { Link, Outlet } from 'react-router-dom'
 
 
 export const AdminDashboard: FC = () => {
+  console.log('ADMIN DASHBOARD')
   const [fullscreen, setFullScreen] = useState(false)
   const [colorMode, setColorMode] = useState(true) // true === light mode
   const [sideMenu, setSideMenu] = useState(true) // false === icons
-  useScrollToTop()
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleFullScreen = () => {
     setFullScreen(prev => !prev)
@@ -26,8 +27,8 @@ export const AdminDashboard: FC = () => {
   const handleColorMOde = () => {
     setColorMode(prev => !prev)
   }
-  const handleSearch = () => {
-
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value)
   }
   const handleSideMenu = () => {
     setSideMenu(prev => !prev)

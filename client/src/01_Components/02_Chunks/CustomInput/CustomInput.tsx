@@ -15,6 +15,8 @@ type CustomInputProps = {
 }
 
 export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inputError, returnValue, setInputError, label, value, id = '' }) => {
+  console.log('CUSTOM INPUT')
+
   const [errorMessage, setErrorMessage] = useState('Empty field')
   const [isDirty, setIsDirty] = useState(false)
   const showError = errorMessage && isDirty

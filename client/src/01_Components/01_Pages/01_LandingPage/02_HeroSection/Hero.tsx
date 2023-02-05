@@ -1,9 +1,9 @@
-import s from './heroSection.module.scss'
+import s from './hero.module.scss'
 import { FC } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Link } from 'react-router-dom'
 
-export const HeroSection: FC = () => {
+export const Hero: FC = () => {
   const { title, subTitle, text, buttonText } = useTypedSelector((state) => state.components.landingPage.hero)
   return (
     <section className='stationSectionMain'>

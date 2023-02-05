@@ -27,23 +27,16 @@ h3, .h3 {
 
 }
 
-p {
-  margin: 10px 0;
-}
 a {
   color: $textColor;
 }
 button {
   cursor: pointer;
 }
-textarea,
-input{
-  border: 1px solid $borderColor;
-}
 
 .stationContainer {
-  background: #eaeaea;
-  max-width: 1170px;
+  //background: #eaeaea;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 $offset;
 }
@@ -61,7 +54,7 @@ input{
 .success,
 .danger {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 14px;
   border-radius: 3px;
   padding: 5px;
   min-width: 50px;
@@ -207,7 +200,7 @@ button.success:hover {
 
 .stationSectionSubtitle {
   margin-top: 20px;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   letter-spacing: 2px;
 
 }

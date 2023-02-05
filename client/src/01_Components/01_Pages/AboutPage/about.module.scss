@@ -4,15 +4,23 @@
   max-width: 760px;
 }
 
+.mainTitle {
+  text-align: center;
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+
 .paragraphTitle {
   margin-top: 50px;
   margin-bottom: 25px;
-  font-size: 20px;
+  font-size: 2rem;
   text-transform: uppercase;
 }
 
 .text {
   text-align: justify;
+  font-size: 20px;
+  letter-spacing: 1.5px;
   line-height: 1.5;
 }
 

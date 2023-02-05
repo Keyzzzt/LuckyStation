@@ -156,161 +156,163 @@ export const ShippingPage: FC = () => {
   }, [orderId, navigate, orderSuccess])
 
   return (
-    <div className={`stationContainer ${s.container}`}>
-      <div onClick={() => setIsOpen(prev => !prev)} className={s.accordionHeader}>
-        <div className={s.accordionTitle}>
-          <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`}/>
-          <span>{isOpen ? 'Hide' : 'Show'} order summary</span>
+    <main className='stationSectionMain'>
+      <div className={`stationContainer ${s.container}`}>
+        <div onClick={() => setIsOpen(prev => !prev)} className={s.accordionHeader}>
+          <div className={s.accordionTitle}>
+            <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`}/>
+            <span>{isOpen ? 'Hide' : 'Show'} order summary</span>
+          </div>
+          <div className={s.price}>{cart.itemsPrice.toLocaleString('en', toLocal)}</div>
         </div>
-        <div className={s.price}>{cart.itemsPrice.toLocaleString('en', toLocal)}</div>
-      </div>
-      <div className={s.orderSummary} style={{ height }}>
-        <div className={s.orderSummaryWrapper} ref={contentRef}>
-          {cart?.cartItems.length === 0 ? (
-            <div>Cart is empty</div>
-          ) : (
-            cart.cartItems.map(item => (
-              <div key={item._id} className={s.orderItems}>
-                <div className={s.orderItemImage}>
-                  <img src={item.images[0].imageSrc} alt={item.images[0].imageAlt}/>
-                  <div className={s.orderItemQuantity}>{item.qty}</div>
+        <div className={s.orderSummary} style={{ height }}>
+          <div className={s.orderSummaryWrapper} ref={contentRef}>
+            {cart?.cartItems.length === 0 ? (
+              <div>Cart is empty</div>
+            ) : (
+              cart.cartItems.map(item => (
+                <div key={item._id} className={s.orderItem}>
+                  <div className={s.orderItemImage}>
+                    <img src={item.images[0].imageSrc} alt={item.images[0].imageAlt}/>
+                  </div>
+                  <div className={s.itemName}>{item.name}</div>
+                  <div>x {item.qty}</div>
+                  <div className={s.itemPrice}>{item.price.toLocaleString('en', toLocal)}</div>
                 </div>
-                <div className={s.itemName}>{item.name}</div>
-                <div className={s.itemPrice}>{item.price.toLocaleString('en', toLocal)}</div>
+              ))
+            )}
+            <div className={s.discount}>
+              <input type="text" className={`stationInput ${s.discountCode}`} placeholder="Discount code"/>
+              <input type='button' className='stationSubmitBtn' value='Apply'/>
+            </div>
+
+            <div className={s.subTotalPrice}>
+              <div>Subtotal</div>
+              <div>Incl. {cart.taxPrice.toLocaleString('en', toLocal)} in taxes</div>
+              <p>{cart.itemsPrice.toLocaleString('en', toLocal)}</p>
+            </div>
+            <div className={s.shippingPrice}>
+              <div>Shipping</div>
+              <div>{cart.itemsPrice > minPriceForFreeShipping ? freeShippingMessage : 'Calculated at next step'}</div>
+            </div>
+          </div>
+        </div>
+        <div className={s.collectData}>
+          <div className={s.collectDataWrapper}>
+            <CheckoutSteps step1 step2/>
+            {!userInfo && !continueAsGuest ? (
+              <div className={s.askForLogin}>
+                <input type='button' className='stationSubmitBtn' value='Continue as guest'
+                       onClick={() => setContinueAsGuest(true)}/>
+                <input type='button' className='stationSubmitBtn'
+                       onClick={() => navigate('/signin?redirect=shipping')} value='Login'/>
               </div>
-            ))
-          )}
-          <div className={s.discount}>
-            <input type="text" className={`stationInput ${s.discountCode}`} placeholder="Discount code"/>
-            <input type='button' className='stationSubmitBtn' value='Apply'/>
-          </div>
+            ) : null}
+            <form onSubmit={submitHandler} className={s.form}>
+              <div className={s.contacts}>
+                <div className={s.customerDataTitle}>Contacts</div>
+                <CustomInput
+                  value={name}
+                  returnValue={setName}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                />
+                <CustomInput
+                  value={lastName}
+                  returnValue={setLastName}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Last name"
+                  name="lastName"
+                />
+                <CustomInput
+                  value={phone}
+                  returnValue={setPhone}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Phone"
+                  name="phone"
+                />
+                <CustomInput
+                  value={email}
+                  returnValue={setEmail}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Email"
+                  name="email"
+                />
+              </div>
+              <div className={s.customerDataTitle}>Shipping address</div>
+              <div className={s.address}>
+                <CustomInput
+                  value={address}
+                  returnValue={setAddress}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Address"
+                  name="address"
+                />
+                <CustomInput
+                  value={city}
+                  returnValue={setCity}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="City"
+                  name="city"
+                />
+                <CustomInput
+                  value={postalCode}
+                  returnValue={setPostalCode}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Postal code"
+                  name="postal code"
+                />
+                <CustomInput
+                  value={country}
+                  returnValue={setCountry}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Country"
+                  name="country"
+                />
+                <CustomInput
+                  value={apartment}
+                  returnValue={setApartment}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Apartment, suite, etc. (optional)"
+                  name="apartment"
+                />
+              </div>
+              <div className={s.subscribe}>
+                <input
+                  onChange={() => setSetSubscribe(prev => !prev)}
+                  className={s.checkBox}
+                  type="checkbox"
+                  id="signUpForNewsletter"
+                />
+                <label htmlFor="signUpForNewsletter">Email me with news and offers</label>
+              </div>
+              <div className={s.formSubmitButtons}>
 
-          <div className={s.subTotalPrice}>
-            <div>Subtotal</div>
-            <div>Incl. {cart.taxPrice.toLocaleString('en', toLocal)} in taxes</div>
-            <p>{cart.itemsPrice.toLocaleString('en', toLocal)}</p>
-          </div>
-          <div className={s.shippingPrice}>
-            <div>Shipping</div>
-            <div>{cart.itemsPrice > minPriceForFreeShipping ? freeShippingMessage : 'Calculated at next step'}</div>
+                <input className='stationSubmitBtn' type="submit"/>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <div className={s.collectData}>
-        <div className={s.collectDataWrapper}>
-          <CheckoutSteps step1 step2/>
-          {!userInfo && !continueAsGuest ? (
-            <div className={s.askForLogin}>
-              <input type='button' className='stationSubmitBtn' value='Continue as guest'
-                     onClick={() => setContinueAsGuest(true)}/>
-              <input type='button' className='stationSubmitBtn'
-                     onClick={() => navigate('/signin?redirect=shipping')} value='Login'/>
-            </div>
-          ) : null}
-          <form onSubmit={submitHandler} className={s.form}>
-            <div className={s.contacts}>
-              <div className={s.customerDataTitle}>Contacts</div>
-              <CustomInput
-                value={name}
-                returnValue={setName}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Name"
-                name="name"
-              />
-              <CustomInput
-                value={lastName}
-                returnValue={setLastName}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Last name"
-                name="lastName"
-              />
-              <CustomInput
-                value={phone}
-                returnValue={setPhone}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Phone"
-                name="phone"
-              />
-              <CustomInput
-                value={email}
-                returnValue={setEmail}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Email"
-                name="email"
-              />
-            </div>
-            <div className={s.customerDataTitle}>Shipping address</div>
-            <div className={s.address}>
-              <CustomInput
-                value={address}
-                returnValue={setAddress}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Address"
-                name="address"
-              />
-              <CustomInput
-                value={city}
-                returnValue={setCity}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="City"
-                name="city"
-              />
-              <CustomInput
-                value={postalCode}
-                returnValue={setPostalCode}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Postal code"
-                name="postal code"
-              />
-              <CustomInput
-                value={country}
-                returnValue={setCountry}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Country"
-                name="country"
-              />
-              <CustomInput
-                value={apartment}
-                returnValue={setApartment}
-                setInputError={setInputError}
-                inputError={inputError}
-                type="text"
-                placeholder="Apartment, suite, etc. (optional)"
-                name="apartment"
-              />
-            </div>
-            <div className={s.subscribe}>
-              <input
-                onChange={() => setSetSubscribe(prev => !prev)}
-                className={s.checkBox}
-                type="checkbox"
-                id="signUpForNewsletter"
-              />
-              <label htmlFor="signUpForNewsletter">Email me with news and offers</label>
-            </div>
-            <div className={s.formSubmitButtons}>
-
-              <input className='stationSubmitBtn' type="submit"/>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+    </main>
   )
 }

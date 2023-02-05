@@ -8,6 +8,8 @@ import { isEmail } from '../../../04_Utils/utils'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 
 export const SignInPage: FC = () => {
+  console.log('SIGN IN')
+
   const [inputError, setInputError] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

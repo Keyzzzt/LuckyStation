@@ -1,12 +1,13 @@
 import React, { useState, KeyboardEvent, FC, useEffect } from 'react'
 import s from './editableSpan.module.scss'
-
+// TODO wrap in React.memo ?
 type PropsType = {
   value: string
   changeValue: (title: string) => void
   asTextArea?: boolean
 }
 export const EditableSpan: FC<PropsType> = ({ value, changeValue, asTextArea }) => {
+  console.log('EDITABLE SPAN')
   const [isEditMode, setIsEditMode] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
 

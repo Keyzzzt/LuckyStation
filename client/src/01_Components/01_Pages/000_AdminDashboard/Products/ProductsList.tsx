@@ -1,26 +1,22 @@
 import s from './products.module.scss'
-import { FC, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
 import { ProductResponseType } from '../../../../05_Types/ResponseTypes'
-
-
-// TODO Add sort
-// TODO Polish styles
 
 type Props = {
   products: ProductResponseType[] | null
   setSortFilter: (filter: string) => void
 }
 
-export const ProductList: FC<Props> = ({ products, setSortFilter }) => {
+export const ProductsList: FC<Props> = ({ products, setSortFilter }) => {
+  console.log('PRODUCTS LIST')
   const [isNameAZ, setIsNameAZ] = useState(false)
   const [isCategoryAZ, setIsCategoryAZ] = useState(false)
   const [isBrandAZ, setIsBrandAZ] = useState(false)
   const [isInStockAZ, setIsInStockAZ] = useState(false)
   const [isPriceAZ, setIsPriceAZ] = useState(false)
-
   const navigate = useNavigate()
 
 
@@ -118,3 +114,5 @@ export const ProductList: FC<Props> = ({ products, setSortFilter }) => {
     </>
   )
 }
+
+export const MemoizedProductsList = React.memo(ProductsList)
