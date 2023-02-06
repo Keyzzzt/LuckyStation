@@ -1,0 +1,45 @@
+@import './../../../02_Styles/variables.scss';
+
+.storyCard {
+  position: relative;
+  text-transform: uppercase;
+  margin: $offset;
+  cursor: pointer;
+  text-align: center;
+  overflow: hidden;
+  //flex: 1;
+
+  @include breakpoint(768){
+    margin-bottom: 10px;
+    width: calc(100% / 2 - (#{$offset}*2));
+    &:last-of-type{
+      display: none;
+    }
+  }  @include breakpoint(1024){
+         &:last-of-type{
+           display: block;
+         }
+     }
+
+  @include breakpoint(1024){
+    width: calc(100% / 3 - (#{$offset}*2));
+  }
+}
+
+.storyCard img {
+  transition: transform 5s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.storyLink {
+  position: absolute;
+  background: $white;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  padding: 10px;
+  z-index: 100;
+}

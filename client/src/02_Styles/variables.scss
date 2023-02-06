@@ -4,14 +4,12 @@ $base: 10px;
 $offset: 10px;
 
 $Poppins: 'Poppins', sans-serif;
-$letterSpacing: 1px;
+$letterSpacing: .7px;
 $boxShadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
 $boxShadowHover: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
 $bRadius: 5px;
 $headerHeight: 120px;
 $loaderColor: #00b4b5;
-
-
 
 
 // Section vertical padding
@@ -20,6 +18,7 @@ $sectionVerticalPaddingDesktop: 80px 0;
 
 // Colors
 $footerBg: #1b1c1c;
+$subscribeBg: #dadada;
 $borderColor: #a8aaae;
 $success: #0ebeb0;
 $successHover: #0ca296;
@@ -56,9 +55,14 @@ $textColor: #1b1c1c;
     @media (min-width: 600px) {
       @content;
     }
+  } @else if $point == calc(640 + #{$offset}*2) {
+    @media (min-width: 600px) {
+      @content;
+    }
   } @else if $point == 480 {
     @media (min-width: 480px) {
       @content;
     }
   }
 }
+

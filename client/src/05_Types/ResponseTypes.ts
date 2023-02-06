@@ -28,7 +28,7 @@ export type LoginResponseType = {
 }
 export type ConfigResponseType = {
   _id: boolean
-  name: string
+  companyName: string
   adminColorTheme: string
   customersColorTheme: string
   darkThemeColors: []
@@ -38,6 +38,7 @@ export type ConfigResponseType = {
   defaultShippingPriceToNonEUCountries: number
   freeShippingMessage: string
   taxRate: number
+  aboutSectionParagraphs: string[]
 }
 export type UserResponseType = {
   _id: string

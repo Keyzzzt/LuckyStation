@@ -8,6 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   config: {
+    companyName: '',
     adminColorTheme: 'light',
     customersColorTheme: 'light',
     darkThemeColors: [],
@@ -17,7 +18,7 @@ const initialState = {
     defaultShippingPriceToNonEUCountries: 100,
     freeShippingMessage: 'You are eligible for free shipping in EU',
     taxRate: 0.2,
-
+    aboutSectionParagraphs: ['']
   },
   fail: '',
 }

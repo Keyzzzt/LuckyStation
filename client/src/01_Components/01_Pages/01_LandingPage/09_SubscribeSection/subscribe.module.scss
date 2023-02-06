@@ -1,0 +1,71 @@
+@import '../../../../02_Styles/variables';
+
+.localSection {
+  background: #dadada;
+  text-align: center;
+  padding: 5rem 0;
+  @include breakpoint(992) {
+    padding-bottom: 0;
+  }
+}
+
+.localContainer {
+  display: flex;
+}
+
+.leftSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px;
+  @include breakpoint(768) {
+    margin-left: 10px;
+
+  }
+}
+
+.form {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 99%;
+  @include breakpoint(768) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  & input {
+    border-radius: 0;
+    height: 50px;
+    width: 90%;
+    border: 2px solid transparent;
+
+    &:focus {
+      border: 2px solid $success;
+
+    }
+    @include breakpoint(460) {
+      min-width: 280px;
+
+    }
+
+
+  }
+
+}
+
+.image {
+  display: none;
+  @include breakpoint(992) {
+    flex: 1;
+    display: block;
+  }
+
+  & img {
+  }
+
+}

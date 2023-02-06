@@ -187,7 +187,11 @@ export async function handleEmailInStatistics(email: string, field: string, acti
     }
     if (action === 'remove') {
       statistic[field] = statistic[field].filter(x => x !== email)
+      // statistic.totalUnSubscribed += 1
+
     }
+    console.log(statistic)
+    // statistic.totalSubscribed = statistic.allSubscribersEmailList.length
     await statistic.save()
   } catch (error) {
     throw new Error(error.message)

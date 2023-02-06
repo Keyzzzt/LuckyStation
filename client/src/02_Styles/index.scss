@@ -3,8 +3,17 @@
 @import 'variables';
 
 html {
-  font-size: 10px;
+  font-size: 8px;
+  caret-color: transparent;
+
+  @include breakpoint(768) {
+    font-size: 9px;
+  }
+  @include breakpoint(992) {
+    font-size: 10px;
+  }
 }
+
 body {
   font-family: $Poppins;
   letter-spacing: $letterSpacing;
@@ -13,16 +22,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-h1, h2, h3, .h1, .h2, .h3,{
+
+h1, h2, h3, .h1, .h2, .h3, {
 
 }
 
 h1, .h1 {
 
 }
+
 h2, .h2 {
 
 }
+
 h3, .h3 {
 
 }
@@ -30,24 +42,26 @@ h3, .h3 {
 a {
   color: $textColor;
 }
+
 button {
   cursor: pointer;
 }
 
 .stationContainer {
   //background: #eaeaea;
-  max-width: 1440px;
+  max-width: 1170px;
   margin: 0 auto;
   padding: 0 $offset;
 }
 
-.row{
+.row {
   display: flex;
   flex-wrap: wrap;
   margin: 0 calc(#{$offset} * -1);
   position: relative;
 }
-.col{
+
+.col {
   margin: $offset;
 }
 
@@ -126,6 +140,7 @@ button {
     background-color: $successActive;
   }
 }
+
 .stationDangerBtn {
   width: 100%;
   color: $white;
@@ -146,6 +161,7 @@ button {
 .stationTableInput {
   padding: 5px;
   vertical-align: middle;
+
   &:focus {
     box-shadow: $boxShadow;
   }
@@ -183,6 +199,7 @@ button.success:hover {
   background-color: $successHover;
   color: azure;
 }
+
 // Section common styles
 .stationSectionMain {
   text-align: center;
@@ -191,34 +208,36 @@ button.success:hover {
     padding: $sectionVerticalPaddingDesktop;
   }
 }
+
 .stationSectionTitle {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 200;
   letter-spacing: 2px;
-
+  margin-bottom: 5rem;
 }
 
 .stationSectionSubtitle {
   margin-top: 20px;
   font-size: 2.5rem;
   letter-spacing: 2px;
+  margin-bottom: 3rem;
+
 
 }
 
 .stationSectionText {
   margin-top: 20px;
-  font-size: 1rem;
   letter-spacing: 2px;
 }
 
-.stationSectionButton{
-  margin-top: 50px;
+.stationSectionButton {
   display: inline-block;
-  padding:  10px;
+  padding: 10px;
   background-color: $success;
   cursor: pointer;
-    & a {
-      color: $textColor;
+  margin-top: 5rem;
+  & a {
+    color: $textColor;
 
-    }
+  }
 }

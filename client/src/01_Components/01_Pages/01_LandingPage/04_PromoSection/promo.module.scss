@@ -13,7 +13,6 @@
 .leftWrapper .promoDescription,
 .rightWrapper .promoDescription {
   transition: all .5s;
-  background-color: red;
   padding: 20px 0;
   width: 100%;
   min-height: 300px;
@@ -51,7 +50,6 @@
 .descriptionItemLeft,
 .descriptionItemRight {
   margin: 20px 0;
-  background-color: red;
   @include breakpoint(992) {
     max-width: 72%;
   }
@@ -60,13 +58,13 @@
 .descriptionItemRight {
   @include breakpoint(992) {
     margin-left: auto;
+    text-align: left;
   }
 }
 .leftWrapperImage,
 .rightWrapperImage{
   transition: all .3s;
   box-shadow: $boxShadow;
-  background-color: fuchsia;
   @include breakpoint(600) {
     position: absolute;
     width: 400px;

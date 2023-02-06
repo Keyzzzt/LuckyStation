@@ -44,7 +44,7 @@ export async function subscribe(req: RequestCustom, res: Response, next: NextFun
     await utils.handleEmailInStatistics(email, 'allSubscribersEmailList', 'add')
     await utils.handleEmailInStatistics(email, 'allUsersEmailList', 'add')
 
-    await UserModel.findOneAndUpdate({ email }, { isSubscribed: true })
+    UserModel.findOneAndUpdate({ email }, { isSubscribed: true })
 
     return res.sendStatus(200)
   } catch (error) {

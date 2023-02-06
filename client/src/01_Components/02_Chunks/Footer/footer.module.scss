@@ -2,7 +2,7 @@
 
 
 .footer {
-  padding-top: 20px;
+  padding: 20px 0;
   background-color: $footerBg;
   color: $white;
   letter-spacing: 1.6px;
@@ -18,74 +18,7 @@
   text-align: center;
 }
 
-.topContent {
-  @include breakpoint(992) {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .customerService {
-    margin-top: 30px;
-    @include breakpoint(992) {
-      margin-top: 0;
-    }
-
-    .title {
-      font-size: 2rem;
-      font-weight: 200;
-    }
-
-    .phone {
-      font-size: 1.5rem;
-      font-weight: 200;
-      margin-top: 25px;
-    }
-
-    .time {
-      margin-top: 20px;
-
-    }
-
-  }
-}
-
-.subscribeInput {
-  & input {
-    padding: 10px 0;
-    width: 100%;
-    background: 0;
-    border: 0;
-    border-bottom: 2px solid $borderColor;
-    margin-top: 20px;
-    color: $white;
-    @include breakpoint(768) {
-      width: 100%;
-    }
-
-  }
-
-  .title {
-    margin-top: 20px;
-    font-size: 1.3rem;
-  }
-
-  .subtitle {
-    text-transform: uppercase;
-    color: $success
-  }
-
-}
-
-.subscribeImage {
-  display: none;
-  background: red;
-  width: 25%;
-  @include breakpoint(768) {
-    display: block;
-  }
-}
-
-.bottomContent {
+.content {
   padding: 20px 0;
   display: flex;
   flex-direction: column;
@@ -98,29 +31,29 @@
 
 }
 
-.menu {
-  @include breakpoint(768) {
+.menu{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  @include breakpoint(480) {
+    flex-direction: row;
   }
+}
 
+.subMenu {
+  flex: 1;
+  @include breakpoint(480) {
+    flex-direction: row;
+  }
   & li {
-    display: block;
-    margin-top: 10px;
-    @include breakpoint(768) {
-    }
+    margin-top: 5px;
   }
 
   .socials {
-    font-size: 1.2rem;
     color: $success;
-    margin-top: 12px;
 
     & i:not(:last-of-type) {
       margin-right: 15px;
-    }
-
-    @include breakpoint(768) {
-      display: flex;
-      justify-content: space-between;
     }
   }
 }

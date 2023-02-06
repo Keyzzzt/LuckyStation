@@ -33,6 +33,7 @@ export const App = () => {
   console.log('APP')
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
+  const { companyName, aboutSectionParagraphs} = useTypedSelector(state => state.appConfig.config)
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
@@ -56,7 +57,7 @@ export const App = () => {
       <Routes>
         {/*Public*/}
         <Route path='/*' element={<PageNotFound404/>}/>
-        <Route path='/' element={<LandingPage />}>
+        <Route path='/' element={<LandingPage companyName={companyName} aboutSectionParagraphs={aboutSectionParagraphs} />}>
           {header}
         </Route>
         <Route path='/signup' element={<SignUpPage/>}/>

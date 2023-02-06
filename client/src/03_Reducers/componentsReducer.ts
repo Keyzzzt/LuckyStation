@@ -6,6 +6,8 @@ type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
+// TODO REFACTOR TO config
+
 const initialState = {
   header: {
     title: 'Station',

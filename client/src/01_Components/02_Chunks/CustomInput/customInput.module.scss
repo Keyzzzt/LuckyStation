@@ -1,9 +1,9 @@
 @import '../../../02_Styles/variables';
 
 .field {
-  position: relative;
   width: 100%;
-  margin-bottom: 20px;
+  position: relative;
+  margin-bottom: 25px;
   &.shake {
     animation: shake 0.3s ease-in-out;
   }
@@ -20,17 +20,14 @@
 }
 .errorText {
   position: absolute;
+  left: 0;
   right: 0;
+  transform: translateX(25%);
   color: $danger;
   margin: 5px 0;
   text-align: left;
-  font-size: 0.8rem;
+  font-size: 14px;
 }
-.inputArea{
-  text-align: left;
-}
-
-
 .borderError {
   border-color: $danger;
 }

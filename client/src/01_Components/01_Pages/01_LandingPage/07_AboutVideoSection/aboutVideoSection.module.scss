@@ -1,0 +1,51 @@
+@import '../../../../02_Styles/variables';
+
+
+.localSection {
+  background-image: url('./../../../../06_img/videoAbout.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  min-height: 500px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.localContainer{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.playButton{
+  margin-bottom: 5rem;
+  position: relative;
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  background: $white;
+  cursor: pointer;
+  &::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -45%);
+    content: '';
+    display: inline-block;
+    border-top: 7px solid transparent;     /* Change truangle form */
+    border-bottom: 7px solid transparent;   /* Change truangle form */
+    border-left: 12px solid $textColor;         /* Change truangle form */
+    //opacity: 0;
+    //transition: opacity .5s, transform 1s;
+    z-index: 100;
+  }
+  &::before{
+    margin-right: 5px;
+
+  }
+
+}
+.title{
+  color: $white;
+}

@@ -1,0 +1,12 @@
+@import '../../../../02_Styles/variables';
+
+.localContainer{
+  max-width: 768px;
+}
+
+.text {
+  margin-top: 50px;
+  & p {
+    margin-top: 25px;
+  }
+}

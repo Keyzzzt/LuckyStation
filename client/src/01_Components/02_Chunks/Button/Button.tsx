@@ -8,7 +8,7 @@ type Props = {
   padding?: string
   fontSize?: string
 }
-export const Button: FC<Props> = ({ children, path, colorTheme = 'light', disabled = false, padding = '10px', fontSize = '1rem' }) => {
+export const Button: FC<Props> = ({ children, path, colorTheme = 'light', disabled = false, padding = '15px', fontSize = '14px' }) => {
   const navigate = useNavigate()
   const returnHandler = () => {
     navigate(path)
@@ -16,8 +16,8 @@ export const Button: FC<Props> = ({ children, path, colorTheme = 'light', disabl
   return (
     <button
       style={{
-        color: colorTheme === 'dark' ? '#e8e6e3' : '#181a1b',
-        backgroundColor: colorTheme === 'dark' ? '#181a1b' : '#e8e6e3',
+        color: colorTheme === 'dark' ? '#1b1c1c' : '#f3f3f3',
+        backgroundColor: colorTheme === 'dark' ? '#f3f3f3' : '#1b1c1c',
         padding,
         outline: 'none',
         border: '0',

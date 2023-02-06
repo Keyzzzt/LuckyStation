@@ -1,5 +1,5 @@
 import s from './customInput.module.scss'
-import { FC, ChangeEvent, useState, useEffect } from 'react'
+import React, { FC, ChangeEvent, useState, useEffect } from 'react'
 import { isEmail } from '../../../04_Utils/utils'
 
 type CustomInputProps = {
@@ -10,11 +10,12 @@ type CustomInputProps = {
   name: string
   inputError: boolean
   value: string
+  resetIsDirty: boolean
   returnValue(value: string): void
   setInputError(value: boolean): void
 }
 
-export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inputError, returnValue, setInputError, label, value, id = '' }) => {
+export const CustomInput: FC<CustomInputProps> = React.memo(({resetIsDirty, type, placeholder, name, inputError, returnValue, setInputError, label, value, id = '' }) => {
   console.log('CUSTOM INPUT')
 
   const [errorMessage, setErrorMessage] = useState('Empty field')
@@ -26,6 +27,11 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
     returnValue(e.target.value)
   }
 
+  useEffect(() => {
+    if (resetIsDirty) {
+      setIsDirty(false)
+    }
+  }, [resetIsDirty])
   useEffect(() => {
     if (inputError) {
       setIsDirty(true)
@@ -87,4 +93,4 @@ export const CustomInput: FC<CustomInputProps> = ({ type, placeholder, name, inp
       {showError && <div className={s.errorText}>{errorMessage}</div>}
     </div>
   )
-}
+})
