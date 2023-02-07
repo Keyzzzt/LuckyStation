@@ -16,7 +16,7 @@ const initialState = {
       { title: 'Products', link: '/products', type: 'public' },
       { title: 'Services', link: '/services', type: 'public' },
       { title: 'About', link: '/about', type: 'public' },
-      { title: 'Help', link: '/help', type: 'public' },
+      { title: 'Gallery', link: '/gallery', type: 'public' },
       { title: 'Cart', link: '/cart', type: 'public' },
       { title: 'Login', link: '/signin', type: 'public' },
       { title: 'Logout', link: '/', icon: false, type: 'private' },

@@ -1,6 +1,7 @@
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 import { TermsAndConditionsResponseType } from '../05_Types/ResponseTypes'
 import { API } from '../API'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -28,9 +29,8 @@ export const actions = {
 }
 
 export function termsAndConditionsThunk(lang: string): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
-      // todo Нет такого ендпоинта - сделать на сервере модель и тд и тп
       const { data } = await API.user.getTermsAndConditions(lang)
       dispatch(actions.success(data))
     } catch (err: any) {

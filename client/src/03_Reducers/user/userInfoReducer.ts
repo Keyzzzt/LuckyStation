@@ -1,6 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { UserResponseType } from '../../05_Types/ResponseTypes'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -65,7 +66,7 @@ export const actions = {
 // Мы отправляем запрос на базу и меняем стейт
 // Таким образом данные в базе и на фронте сопадают без запроса пользователя с новыми даннми
 export function toggleFavoriteThunk(productId: string, isFavorite: boolean): ThunkType {
-  return async dispatch => {
+  return async (dispatch: Dispatch) => {
     try {
       await API.product.toggleFavorite(productId, isFavorite)
       if (isFavorite) {
@@ -85,7 +86,7 @@ export function toggleFavoriteThunk(productId: string, isFavorite: boolean): Thu
   }
 }
 export function subscribeThunk(email: string): ThunkType {
-  return async dispatch => {
+  return async (dispatch: Dispatch) => {
     try {
       await API.user.subscribe(email)
       dispatch(actions.subscribeAC(email))
@@ -102,7 +103,7 @@ export function subscribeThunk(email: string): ThunkType {
 }
 
 export function userInfoThunk(): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
       const { data } = await API.user.getProfile()
       dispatch(actions.userInfoSuccessAC(data))
@@ -119,23 +120,25 @@ export function userInfoThunk(): ThunkType {
 }
 
 export function logoutThunk(): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
       await API.auth.logout()
       dispatch(actions.userInfoResetAC())
       dispatch(actions.logoutSuccessAC())
       localStorage.removeItem('token')
     } catch (err: any) {
+      // FIXME
       alert('Logout Fail')
     }
   }
 }
 
 export function authenticateThunk(): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
       const { data } = await API.auth.authenticate()
-      dispatch(userInfoThunk())
+      // FIXME
+      userInfoThunk()
       localStorage.setItem('token', data.accessToken)
     } catch (err: any) {
       console.log('Authentication failed, please log in.')

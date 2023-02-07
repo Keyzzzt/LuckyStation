@@ -1,6 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { ReviewRequestType } from '../../05_Types/ResponseTypes'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -32,7 +33,7 @@ export const actions = {
 }
 
 export function productReviewThunk(productId: string, review: ReviewRequestType): ThunkType {
-  return async (dispatch) => {
+  return async (dispatch: Dispatch) => {
     try {
       dispatch(actions.request())
       await API.user.createReview(productId, review)

@@ -1,6 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { ProductResponseType } from '../../05_Types/ResponseTypes'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -22,7 +23,7 @@ const initialState = {
   fail: '',
 }
 
-export const productListReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const productsListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_LIST_SUCCESS':
       return {
@@ -45,7 +46,7 @@ export const actions = {
 }
 
 export function productListThunk(keyword = '', page: number, limit: number): ThunkType {
-  return async (dispatch) => {
+  return async (dispatch: Dispatch) => {
     try {
       const { data } = await API.admin.getProducts(keyword, page, limit)
       dispatch(actions.success(data))

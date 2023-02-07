@@ -1,4 +1,5 @@
 import { ContactInfo } from '../03_Reducers/cart/cartReducer'
+import { GalleryListItemType } from '../03_Reducers/galleryListReducer'
 
 // Request
 export type OrderCreateRequestType = {
@@ -64,7 +65,7 @@ export type UserDataForListType = {
   activationToken: string
   passwordResetToken: string
 }
-export interface UsersListResponseType {
+export type UsersListResponseType = {
   next?: {
     page: number
     limit: number
@@ -75,6 +76,10 @@ export interface UsersListResponseType {
   }
   totalPages: number
   items: UserDataForListType[]
+}
+
+export type GalleryListResponseType = {
+  items: GalleryListItemType[]
 }
 export type ProductResponseType = {
   _id: string

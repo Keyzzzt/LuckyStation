@@ -57,6 +57,9 @@ export const AdminDashboard: FC = () => {
             <Link to='/dashboard/orders'>Orders</Link>
           </li>
           <li className={s.menuItem}>
+            <Link to='/dashboard/gallery'>Gallery</Link>
+          </li>
+          <li className={s.menuItem}>
             <Link to='/dashboard/settings'>Settings</Link>
           </li>
           <li className={s.menuItem}>

@@ -1,5 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -34,7 +35,7 @@ export const actions = {
 }
 
 export function registerThunk(email: string, password: string, confirmPassword: string): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
       dispatch(actions.registerRequestAC())
       await API.auth.registration(email, password)

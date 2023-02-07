@@ -2,6 +2,7 @@ import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { userInfoThunk } from './userInfoReducer'
 import { UpdateProfileRequestType } from '../../05_Types/ResponseTypes'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -36,12 +37,11 @@ export const actions = {
 }
 
 export function updateOwnProfileThunk(formData: UpdateProfileRequestType): ThunkType {
-  return async function (dispatch, getState) {
+  return async function (dispatch: Dispatch, getState) {
     try {
       dispatch(actions.updateOwnProfileRequestAC())
       const { data } = await API.user.updateOwnProfile(formData)
-      //@ts-ignore
-      localStorage.setItem('token', data.accessToken)
+      localStorage.setItem('token', JSON.stringify(data.accessToken))
       userInfoThunk()
       dispatch(actions.updateOwnProfileSuccessAC())
     } catch (err: any) {

@@ -11,7 +11,7 @@ import {
   OrderCreateRequestType,
   UpdateProfileRequestType,
   TermsAndConditionsResponseType,
-  ConfigResponseType,
+  ConfigResponseType, GalleryListResponseType,
 } from './05_Types/ResponseTypes'
 import { Survey } from './05_Types/01_Base'
 
@@ -75,6 +75,9 @@ export const API = {
     },
     getUsers: async (page: number, limit: number): Promise<AxiosResponse<UsersListResponseType>> => {
       return $api.get<UsersListResponseType>(`admin/user/${page}/${limit}`)
+    },
+    getGalleryList: async (): Promise<AxiosResponse<GalleryListResponseType>> => {
+      return $api.get<GalleryListResponseType>(`admin/gallery`)
     },
     deleteUser: async (userId: string): Promise<void> => {
       return $api.delete(`admin/user/${userId}`)

@@ -10,7 +10,7 @@ type CustomInputProps = {
   name: string
   inputError: boolean
   value: string
-  resetIsDirty: boolean
+  resetIsDirty?: boolean
   returnValue(value: string): void
   setInputError(value: boolean): void
 }

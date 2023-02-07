@@ -55,7 +55,7 @@ export const Subscribe: FC<Props> = ({ setIsSubscribed}) => {
               value={email}
               resetIsDirty={resetIsDirty}
             />
-            <input className='stationSubmitBtn' type="submit" value='Subscribe'/>
+            <input className='stationSubmitBtn' type="submit" value='Gallery'/>
 
           </form>
         </div>

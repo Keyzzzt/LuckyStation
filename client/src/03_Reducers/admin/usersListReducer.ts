@@ -1,6 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { UserDataForListType } from '../../05_Types/ResponseTypes'
+import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -11,7 +12,7 @@ const initialState = {
   fail: '',
 }
 
-export const userListReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const usersListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'USER_LIST_SUCCESS':
       return { ...initialState, users: action.payload }
@@ -28,7 +29,7 @@ export const actions = {
 }
 
 export function usersListThunk(page: number, limit: number): ThunkType {
-  return async function (dispatch) {
+  return async function (dispatch: Dispatch) {
     try {
       const { data } = await API.admin.getUsers(page, limit)
       dispatch(actions.getUsersSuccessAC(data.items))

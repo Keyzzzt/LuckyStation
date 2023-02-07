@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import s from './landingPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
-import { productListThunk } from '../../../03_Reducers/product/productListReducer'
+import { productListThunk } from '../../../03_Reducers/product/productsListReducer'
 import { Hero } from './02_HeroSection/Hero'
 import { useParams } from 'react-router'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
@@ -15,6 +15,7 @@ import { AboutVideoSection } from './07_AboutVideoSection/AboutVideoSection'
 import { fakeStore } from '../../../04_Utils/fake'
 import { Stories } from './08_StoriesSection/Stories'
 import { Subscribe } from './09_SubscribeSection/Subscribe'
+import { Gallery } from '../GalleryPage/Gallery'
 
 
 type Params = {

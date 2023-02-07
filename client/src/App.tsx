@@ -6,7 +6,7 @@ import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'
 import { configThunk } from './03_Reducers/appConfigReducer'
 import { Routes, Route } from 'react-router-dom'
-import { PageNotFound404 } from './01_Components/01_Pages/PageNotFound404/PageNotFound404'
+import { Page404 } from './01_Components/01_Pages/PageNotFound404/Page404'
 import { AdminDashboard } from './01_Components/01_Pages/000_AdminDashboard/AdminDashboard'
 import { API } from './01_Components/01_Pages/000_AdminDashboard/API/API'
 import { Users } from './01_Components/01_Pages/000_AdminDashboard/Users/Users'
@@ -28,6 +28,8 @@ import { TermsAndConditionsPage } from './01_Components/01_Pages/TermsAndConditi
 import { ProfilePage } from './01_Components/01_Pages/ProfilePage/ProfilePage'
 import { SignUpPage } from './01_Components/01_Pages/Auth/SignUpPage'
 import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery'
+import { Gallery } from './01_Components/01_Pages/GalleryPage/Gallery'
+import { GalleryAdmin } from './01_Components/01_Pages/000_AdminDashboard/GalleryAdmin/GalleryAdmin'
 
 export const App = () => {
   console.log('APP')
@@ -56,11 +58,12 @@ export const App = () => {
     <>
       <Routes>
         {/*Public*/}
-        <Route path='/*' element={<PageNotFound404/>}/>
+        <Route path='/*' element={<Page404 companyName={companyName}/>}/>
         <Route path='/' element={<LandingPage companyName={companyName} aboutSectionParagraphs={aboutSectionParagraphs} />}>
           {header}
         </Route>
         <Route path='/signup' element={<SignUpPage/>}/>
+        <Route path='/gallery' element={<Gallery />}/>
         <Route path={'/signin'} element={<SignInPage/>}/>
         <Route path={'/recovery'} element={<PasswordRecovery/>}/>
         <Route path='/shipping' element={<ShippingPage/>}/>
@@ -77,6 +80,7 @@ export const App = () => {
           <Route path='settings' element={<Settings/>}/>
           <Route path='users' element={<Users/>}/>
           <Route path='orders' element={<Orders/>}/>
+          <Route path='gallery' element={<GalleryAdmin />}/>
           <Route path='products' element={<Products/>}/>
           <Route path='products/add' element={<AddProduct/>}/>
           <Route path='users/:userId' element={<UserEdit/>}/>

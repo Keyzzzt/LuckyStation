@@ -1,18 +1,17 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import { cartReducer } from './03_Reducers/cart/cartReducer'
-import { colorThemeReducer } from './03_Reducers/colorThemeReducer'
 import { orderCreateReducer } from './03_Reducers/order/orderCreateReducer'
 import { orderInfoReducer } from './03_Reducers/order/orderInfoReducer'
-import { orderListReducer } from './03_Reducers/order/orderListReducer'
+import { ordersListReducer } from './03_Reducers/order/ordersListReducer'
 import { orderPayReducer } from './03_Reducers/order/orderPayReducer'
 import { productDeleteReducer } from './03_Reducers/admin/productDeleteReducer'
 import { productInfoReducer } from './03_Reducers/product/productInfoReducer'
-import { productListReducer } from './03_Reducers/product/productListReducer'
+import { productsListReducer } from './03_Reducers/product/productsListReducer'
 import { myOrdersReducer } from './03_Reducers/user/myOrdersReducer'
 import { userDeleteReducer } from './03_Reducers/admin/userDeleteReducer'
 import { userInfoReducer } from './03_Reducers/user/userInfoReducer'
-import { userListReducer } from './03_Reducers/admin/userListReducer'
+import { usersListReducer } from './03_Reducers/admin/usersListReducer'
 import { userRegisterReducer } from './03_Reducers/user/userRegisterReducer'
 import { userUpdateOwnProfileReducer } from './03_Reducers/user/userUpdateOwnProfileReducer'
 import { updateProfileByAdminReducer } from './03_Reducers/admin/updateProfileByAdminReducer'
@@ -34,24 +33,23 @@ const rootReducer = combineReducers({
   getUser: getUserReducer,
   userRegister: userRegisterReducer,
   userInfo: userInfoReducer,
-  userList: userListReducer,
+  userList: usersListReducer,
   userDelete: userDeleteReducer,
   updateProfileByAdmin: updateProfileByAdminReducer,
   userUpdateOwnProfile: userUpdateOwnProfileReducer,
   productInfo: productInfoReducer,
-  productList: productListReducer,
+  productList: productsListReducer,
   productDelete: productDeleteReducer,
   productReview: productReviewReducer,
   updateProduct: updateProductReducer,
   createProduct: createProductReducer,
   orderInfo: orderInfoReducer,
-  orderList: orderListReducer,
+  orderList: ordersListReducer,
   orderCreate: orderCreateReducer,
   orderPay: orderPayReducer,
   orderManage: orderManageReducer,
   myOrders: myOrdersReducer,
   cart: cartReducer,
-  colorTheme: colorThemeReducer,
   statistic: statisticReducer,
   api: apiReducer,
   termsAndConditions: termsAndConditionsReducer,

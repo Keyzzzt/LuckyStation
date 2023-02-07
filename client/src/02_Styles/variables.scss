@@ -17,6 +17,7 @@ $sectionVerticalPaddingMobile: 40px 0;
 $sectionVerticalPaddingDesktop: 80px 0;
 
 // Colors
+$Page404Bg: #776F64;
 $footerBg: #1b1c1c;
 $subscribeBg: #dadada;
 $borderColor: #a8aaae;
@@ -59,7 +60,11 @@ $textColor: #1b1c1c;
     @media (min-width: 600px) {
       @content;
     }
-  } @else if $point == 480 {
+  } @else if $point == 560 {
+    @media (min-width: 560px) {
+      @content;
+    }
+  }@else if $point == 480 {
     @media (min-width: 480px) {
       @content;
     }
