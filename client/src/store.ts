@@ -26,6 +26,7 @@ import { apiReducer } from './03_Reducers/admin/apiReducer'
 import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
 import { appConfigReducer } from './03_Reducers/appConfigReducer'
 import { componentsReducer } from './03_Reducers/componentsReducer'
+import { galleryReducer } from './03_Reducers/galleryReducer'
 
 const rootReducer = combineReducers({
   appConfig: appConfigReducer,
@@ -54,6 +55,7 @@ const rootReducer = combineReducers({
   api: apiReducer,
   termsAndConditions: termsAndConditionsReducer,
   components: componentsReducer,
+  gallery: galleryReducer,
 })
 
 // @ts-ignore

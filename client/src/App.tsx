@@ -30,18 +30,21 @@ import { SignUpPage } from './01_Components/01_Pages/Auth/SignUpPage'
 import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery'
 import { Gallery } from './01_Components/01_Pages/GalleryPage/Gallery'
 import { GalleryAdmin } from './01_Components/01_Pages/000_AdminDashboard/GalleryAdmin/GalleryAdmin'
+import { galleryListThunk } from './03_Reducers/galleryReducer'
 
 export const App = () => {
   console.log('APP')
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const { companyName, aboutSectionParagraphs} = useTypedSelector(state => state.appConfig.config)
+  const { gallery} = useTypedSelector(state => state)
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
   // Auth on every page refresh / start
   useEffect(() => {
     console.log('APP: authenticate')
+    dispatch(galleryListThunk())
     dispatch(authenticateThunk())
     dispatch(configThunk())
   }, [])
@@ -63,7 +66,7 @@ export const App = () => {
           {header}
         </Route>
         <Route path='/signup' element={<SignUpPage/>}/>
-        <Route path='/gallery' element={<Gallery />}/>
+        <Route path='/gallery' element={<Gallery items={gallery.galleryListItems} item={gallery.item}/>}/>
         <Route path={'/signin'} element={<SignInPage/>}/>
         <Route path={'/recovery'} element={<PasswordRecovery/>}/>
         <Route path='/shipping' element={<ShippingPage/>}/>

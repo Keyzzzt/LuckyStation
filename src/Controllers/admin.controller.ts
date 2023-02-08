@@ -1,4 +1,4 @@
-/* eslint-disable array-callback-return */
+/* eslint-disable array-callback-return,prettier/prettier */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
@@ -136,7 +136,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       whatShouldYouKnow,
       quality,
       isNewProduct,
-      isPromo
+      isPromo,
     } = req.body
     const product = new ProductModel({
       name,
@@ -160,7 +160,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       whatShouldYouKnow,
       quality,
       isNewProduct,
-      isPromo
+      isPromo,
     })
 
     const createdProduct = await product.save()

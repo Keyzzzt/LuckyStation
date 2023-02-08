@@ -115,7 +115,7 @@ export async function refresh(refreshToken: string) {
   await saveToken(user._id, tokens.refreshToken)
   return {
     ...tokens,
-    id: user._id,
+    _id: user._id,
   }
 }
 

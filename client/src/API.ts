@@ -13,7 +13,6 @@ import {
   TermsAndConditionsResponseType,
   ConfigResponseType, GalleryListResponseType,
 } from './05_Types/ResponseTypes'
-import { Survey } from './05_Types/01_Base'
 
 export const API = {
   config: {
@@ -77,7 +76,10 @@ export const API = {
       return $api.get<UsersListResponseType>(`admin/user/${page}/${limit}`)
     },
     getGalleryList: async (): Promise<AxiosResponse<GalleryListResponseType>> => {
-      return $api.get<GalleryListResponseType>(`admin/gallery`)
+      return $api.get<GalleryListResponseType>(`gallery`)
+    },
+    getGalleryItem: async (galleryItemId: string): Promise<AxiosResponse<GalleryListResponseType>> => {
+      return $api.get<GalleryListResponseType>(`gallery/${galleryItemId}`)
     },
     deleteUser: async (userId: string): Promise<void> => {
       return $api.delete(`admin/user/${userId}`)

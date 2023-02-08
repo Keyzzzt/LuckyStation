@@ -1,5 +1,5 @@
 import { ContactInfo } from '../03_Reducers/cart/cartReducer'
-import { GalleryListItemType } from '../03_Reducers/galleryListReducer'
+import { GalleryListItemType } from '../03_Reducers/galleryReducer'
 
 // Request
 export type OrderCreateRequestType = {

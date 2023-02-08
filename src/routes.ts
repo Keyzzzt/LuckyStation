@@ -1,5 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { getApiInfo } from '@src/documentation'
 import * as Auth from '@src/Controllers/auth.controller'
+import * as Gallery from '@src/Controllers/gallery.controller'
 import * as Admin from '@src/Controllers/admin.controller'
 import * as User from '@src/Controllers/user.controller'
 import * as Order from '@src/Controllers/order.controller'
@@ -33,6 +35,13 @@ export function routes(app) {
   app.put('/api/admin/user/:id', Validation.updateProfileByAdmin, privateRoute, adminRoute, Admin.setUsersAdminStatus)
   app.delete('/api/admin/user/:id', privateRoute, adminRoute, Admin.deleteUser)
   app.post('/api/admin/terms', privateRoute, adminRoute, Admin.termsAndConditions)
+
+  // Gallery
+  app.post('/api/admin/gallery', privateRoute, adminRoute, Gallery.addGalleryItem)
+  app.put('/api/admin/gallery/:id', privateRoute, adminRoute, Gallery.updateGalleryItem)
+  app.get('/api/gallery', Gallery.getGalleryItems)
+  app.get('/api/gallery/:id', Gallery.getGallerySingleItem)
+
 
   app.get(
     '/api/admin/order/:page/:limit',

@@ -257,9 +257,9 @@ const apiDocumentation = [
     },
     comment: '',
   },
-  'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
+  'Gallery and add to allSubscribersEmailList and allUsersEmailList',
   {
-    action: 'Subscribe and add to allSubscribersEmailList and allUsersEmailList',
+    action: 'Gallery and add to allSubscribersEmailList and allUsersEmailList',
     method: 'GET',
     path: '/api/subscribe',
     access: 'public',
@@ -1423,7 +1423,7 @@ const apiDocumentation = [
     },
     successResponse: {
       data: {
-        items: [
+        gallery: [
           {
             _id: 'string',
             user: 'string',
