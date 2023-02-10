@@ -85,7 +85,6 @@ export const AddProduct: FC = () => {
   }
 
   const handleCreate = () => {
-
     dispatch(
       createProductThunk({
         name,

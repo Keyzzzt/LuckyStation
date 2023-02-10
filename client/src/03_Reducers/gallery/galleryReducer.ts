@@ -1,5 +1,5 @@
-import { API } from '../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
+import { API } from '../../API'
+import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>

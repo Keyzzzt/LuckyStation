@@ -13,6 +13,8 @@ import {
   TermsAndConditionsResponseType,
   ConfigResponseType, GalleryListResponseType,
 } from './05_Types/ResponseTypes'
+import { GalleryListItemType } from './03_Reducers/gallery/galleryReducer'
+import { UpdateData } from './03_Reducers/gallery/editGalleryItemReducer'
 
 export const API = {
   config: {
@@ -78,8 +80,11 @@ export const API = {
     getGalleryList: async (): Promise<AxiosResponse<GalleryListResponseType>> => {
       return $api.get<GalleryListResponseType>(`gallery`)
     },
-    getGalleryItem: async (galleryItemId: string): Promise<AxiosResponse<GalleryListResponseType>> => {
-      return $api.get<GalleryListResponseType>(`gallery/${galleryItemId}`)
+    getGalleryItem: async (itemId: string): Promise<AxiosResponse<GalleryListItemType>> => {
+      return $api.get<GalleryListItemType>(`gallery/${itemId}`)
+    },
+    editGalleryItem: async (updateData: UpdateData, itemId: string): Promise<AxiosResponse<GalleryListItemType>> => {
+      return $api.put<GalleryListItemType>(`admin/gallery/${itemId}`, updateData)
     },
     deleteUser: async (userId: string): Promise<void> => {
       return $api.delete(`admin/user/${userId}`)

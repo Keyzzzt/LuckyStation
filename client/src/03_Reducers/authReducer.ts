@@ -36,14 +36,14 @@ export const actions = {
 }
 
 export function loginThunk(email: string, password: string): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function (dispatch) {
     try {
       dispatch(actions.request())
       const { data } = await API.auth.login(email, password)
 
       dispatch(actions.success())
       localStorage.setItem('token', data.accessToken)
-      userInfoThunk()
+      dispatch(userInfoThunk())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {

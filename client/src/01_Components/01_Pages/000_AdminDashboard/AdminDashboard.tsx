@@ -19,7 +19,6 @@ export const AdminDashboard: FC = () => {
   const [fullscreen, setFullScreen] = useState(false)
   const [colorMode, setColorMode] = useState(true) // true === light mode
   const [sideMenu, setSideMenu] = useState(true) // false === icons
-  const [searchQuery, setSearchQuery] = useState('')
 
   const handleFullScreen = () => {
     setFullScreen(prev => !prev)
@@ -28,7 +27,6 @@ export const AdminDashboard: FC = () => {
     setColorMode(prev => !prev)
   }
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
   }
   const handleSideMenu = () => {
     setSideMenu(prev => !prev)

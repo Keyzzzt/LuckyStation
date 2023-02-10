@@ -56,6 +56,7 @@ export const ProductEdit: FC = () => {
   }
 
   const handleUpdate = () => {
+    // TODO check fields
     dispatch(
       updateProductThunk(productInfo?._id!, {
         name,

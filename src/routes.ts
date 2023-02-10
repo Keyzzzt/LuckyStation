@@ -11,7 +11,6 @@ import { privateRoute, adminRoute, paginatedResult } from '@src/middleware'
 import { UserModel } from './models/user.model'
 import { ProductModel } from './models/product.model'
 import { OrderModel } from './models/order.model'
-import { SurveyModel } from './models/survey.model'
 import { getConfig } from './Controllers/config.controller'
 
 export function routes(app) {
@@ -60,24 +59,7 @@ export function routes(app) {
   app.delete('/api/admin/product/:id', privateRoute, adminRoute, Admin.deleteProduct)
   app.get('/api/admin/statistic', privateRoute, adminRoute, Admin.getStatistic)
   app.put('/api/admin/statistic/email', privateRoute, adminRoute, Validation.emailOnly, Admin.removeEmailFromList)
-  app.get(
-    '/api/admin/survey/:page/:limit',
-    privateRoute,
-    adminRoute,
-    paginatedResult(SurveyModel, null),
-    Admin.getAllSurveys
-  )
-  app.get('/api/admin/survey/:id', privateRoute, adminRoute, Admin.getSurveyById)
-  app.delete('/api/admin/survey/:id', privateRoute, adminRoute, Admin.deleteSurvey)
-  app.post('/api/admin/survey', Validation.createSurvey, privateRoute, adminRoute, Admin.createSurvey)
-  app.post('/api/admin/survey/webhook', Admin.manageSendgridEvents)
-  app.get('/api/survey/unsubscribe/:email', User.unSubscribe, (req, res) => {
-    res.send('Unsubscribed!')
-  })
-  // This route is pure backend logic
-  app.get('/api/survey/:surveyId/:choice', (req, res) => {
-    res.send('Thanks')
-  })
+
 
   app.get('/api/user/profile', privateRoute, User.getProfile)
   app.put('/api/user/profile', Validation.updateProfileByUser, privateRoute, User.updateProfile)

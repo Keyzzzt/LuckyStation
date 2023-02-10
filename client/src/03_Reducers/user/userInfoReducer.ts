@@ -134,11 +134,10 @@ export function logoutThunk(): ThunkType {
 }
 
 export function authenticateThunk(): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function (dispatch) {
     try {
       const { data } = await API.auth.authenticate()
-      // FIXME
-      userInfoThunk()
+      dispatch(userInfoThunk())
       localStorage.setItem('token', data.accessToken)
     } catch (err: any) {
       console.log('Authentication failed, please log in.')

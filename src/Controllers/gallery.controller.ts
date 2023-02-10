@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier,no-underscore-dangle */
 import { NextFunction, Request, Response } from 'express'
-import { validationResult } from 'express-validator'
+// import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
 import ApiError from '@src/middleware/error.middleware'
 import { GalleryModel } from '@src/models/gallery.model'
@@ -47,10 +47,10 @@ export async function getGallerySingleItem(req: RequestCustom, res: Response, ne
 
 export async function updateGalleryItem(req: Request, res: Response, next: NextFunction) {
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
+    // const errors = validationResult(req)
+    // if (!errors.isEmpty()) {
+    //   return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
+    // }
 
     const {title, src, className, description, } = req.body
     const item = await GalleryModel.findById(req.params.id).select('-__v')

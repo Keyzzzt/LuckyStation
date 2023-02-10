@@ -3,16 +3,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-underscore-dangle */
 import { NextFunction, Request, Response } from 'express'
-import _ from 'lodash'
 import { validationResult } from 'express-validator'
-import { URL } from 'url'
-import { Path } from 'path-parser'
 import { RequestCustom } from '@src/custom'
 import { ProductModel } from '@src/models/product.model'
 import { OrderModel } from '@src/models/order.model'
-import { SurveyModel } from '@src/models/survey.model'
-import { Mailer } from '@src/services/Mailer'
-import { surveyTemplate } from '@src/services/emailTemplates/surveyTemplate'
 import ApiError from '@src/middleware/error.middleware'
 import { UserModel } from '@src/models/user.model'
 import { TokenModel } from '@src/models/TokenModel'
@@ -295,108 +289,6 @@ export async function setOrderToNotDelivered(req: Request, res: Response, next: 
   }
 }
 
-export async function createSurvey(req: RequestCustom, res: Response, next: NextFunction) {
-  try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
-    }
-
-    const { title, subject, body, recipients } = req.body
-
-    const survey = new SurveyModel({
-      title,
-      subject,
-      body,
-      recipients: recipients.split(',').map(email => ({ email: email.trim() })),
-      user: req.user._id,
-      dateSent: Date.now(),
-    })
-
-    const mailer = new Mailer(survey, surveyTemplate(survey))
-    await mailer.send()
-    await survey.save()
-
-    return res.sendStatus(201)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-
-export async function getAllSurveys(req: RequestCustom, res: Response, next: NextFunction) {
-  try {
-    return res.status(200).json(req.paginatedResponse)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-
-export async function getSurveyById(req: RequestCustom, res: Response, next: NextFunction) {
-  try {
-    const survey = await SurveyModel.findById(req.params.id).select('-recipients -__v -createdAt -updatedAt')
-    if (!survey) {
-      return next(ApiError.NotFound('Survey not found'))
-    }
-    return res.status(200).json(survey)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-
-export async function manageSendgridEvents(req: RequestCustom, res: Response, next: NextFunction) {
-  // TODO: Заменить Path на модуль qs и удалить parth-parser
-  try {
-    const p = new Path('/api/survey/:surveyId/:choice')
-    _.chain(req.body)
-      .map(({ url, email }) => {
-        const match = p.test(new URL(url).pathname)
-        if (match) {
-          return {
-            email,
-            surveyId: match.surveyId,
-            choice: match.choice,
-          }
-        }
-      })
-      .compact()
-      .uniqBy('email', 'surveyId')
-      .each(({ surveyId, email, choice }) => {
-        SurveyModel.updateOne(
-          {
-            _id: surveyId,
-            recipients: {
-              $elemMatch: { email, responded: false },
-            },
-          },
-          {
-            $inc: { [choice]: 1 },
-            $set: { 'recipients.$.responded': true, 'recipients.$.response': choice },
-            lastResponded: new Date(),
-          }
-        ).exec()
-      })
-      .value()
-
-    return res.sendStatus(200)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-
-export async function deleteSurvey(req: Request, res: Response, next: NextFunction) {
-  try {
-    const survey = await SurveyModel.findById(req.params.id)
-    if (!survey) {
-      return next(ApiError.NotFound('Survey not found'))
-    }
-
-    await survey.remove()
-    return res.sendStatus(200)
-  } catch (error) {
-    return next(error.message)
-  }
-}
-
 export async function termsAndConditions(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     // const errors = validationResult(req)
@@ -426,31 +318,6 @@ export async function getAllSubscribers(req: RequestCustom, res: Response, next:
   }
 }
 
-export async function allUsersEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
-  try {
-    // TODO:
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function subscribersEmailStringForSurvey(req: RequestCustom, res: Response, next: NextFunction) {
-  try {
-    // TODO:
-  } catch (error) {
-    return next(error.message)
-  }
-}
-export async function usersThatBoughtProductEmailStringForSurvey(
-  req: RequestCustom,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    // TODO:
-  } catch (error) {
-    return next(error.message)
-  }
-}
 export async function getReviewsList(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     // TODO:
