@@ -3,7 +3,8 @@
 .field {
   width: 100%;
   position: relative;
-  margin-bottom: 25px;
+  margin-bottom: 25px; // Reserved for error message
+  text-align: left;
   &.shake {
     animation: shake 0.3s ease-in-out;
   }
@@ -20,12 +21,9 @@
 }
 .errorText {
   position: absolute;
-  left: 0;
   right: 0;
-  transform: translateX(25%);
   color: $danger;
-  margin: 5px 0;
-  text-align: left;
+  margin-top: 5px;
   font-size: 14px;
 }
 .borderError {

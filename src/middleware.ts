@@ -102,7 +102,7 @@ export const paginatedResult = (model, flag) => {
       response.items = await model
         .find({ ...keyword })
         .select(
-          '-password -__v -recipients -activationLink -googleId -logo -isSubscribed -credits -favorite -createdAt -updatedAt'
+          '-password -__v -recipients -activationLink -googleId -logo -isSubscribed -credits -favorite'
         )
         .limit(limit)
         .skip(startIndex)

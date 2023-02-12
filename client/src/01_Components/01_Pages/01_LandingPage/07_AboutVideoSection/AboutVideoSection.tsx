@@ -1,6 +1,6 @@
 import s from './aboutVideoSection.module.scss'
 import React, { FC } from 'react'
-import { Button } from '../../../02_Chunks/Button/Button'
+import { Button } from '../../../02_Chunks/ButtonToDelete/Button'
 
 type PromoProps = {
 

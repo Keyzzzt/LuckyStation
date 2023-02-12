@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router'
 import { Link, useNavigate } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { Button } from '../../02_Chunks/Button/Button'
+import { Button } from '../../02_Chunks/ButtonToDelete/Button'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 import { toLocal } from '../../../04_Utils/utils'
 

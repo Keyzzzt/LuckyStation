@@ -15,7 +15,7 @@ interface ButtonProps {
    */
   size?: 'small' | 'medium' | 'large';
   /**
-   * Button contents
+   * ButtonToDelete contents
    */
   label: string;
   /**

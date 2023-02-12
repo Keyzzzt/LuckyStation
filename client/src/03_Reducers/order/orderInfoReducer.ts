@@ -15,9 +15,9 @@ const initialState = {
 export const orderInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'ORDER_INFO_SUCCESS':
-      return { ...initialState, orderInfo: action.payload }
+      return { ...state, orderInfo: action.payload }
     case 'ORDER_INFO_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload }
     case 'ORDER_INFO_RESET':
       return { ...initialState }
     default:

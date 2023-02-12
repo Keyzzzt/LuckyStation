@@ -127,10 +127,10 @@ export const createReview = [
   body('rating')
     .trim()
     .notEmpty()
-    .withMessage('Rating is required.')
+    .withMessage('Button is required.')
     .bail()
     .isNumeric()
-    .withMessage('Rating must contain only numbers.'),
+    .withMessage('Button must contain only numbers.'),
   body('comment').trim().notEmpty().withMessage('Comment is required.'),
 ]
 

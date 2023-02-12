@@ -1,8 +1,10 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import s from './orders.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { OrderResponseType } from '../../../../05_Types/ResponseTypes'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '../../../02_Chunks/Button/Button'
+import { parseCreatedUpdated } from '../../../../04_Utils/utils'
 
 type Props = {
   orders: OrderResponseType[]
@@ -21,7 +23,7 @@ export const OrdersList: FC<Props> = ({ orders }) => {
           <thead>
           <tr>
             <th>
-              <div>ID</div>
+              <div>Date</div>
             </th>
             <th>
               <div>Payment</div>
@@ -38,19 +40,25 @@ export const OrdersList: FC<Props> = ({ orders }) => {
           <tbody>
           {orders.map(o => (
             <tr key={o._id}>
-              <td>{o._id}</td>
-              <td>{o.isPaid ? <div className='success'>Paid</div> :
-                <div className='danger'>Unpaid</div>}
-                <span className={s.paymentMethod}>{o.paymentMethod}</span>
+              <td>{parseCreatedUpdated(o.createdAt).date}</td>
+              <td>{o.isPaid
+                ? <Button title='Paid' type='button' color='success' marginTop='0' width='110px'  padding='3px'/>
+                : <Button title='Not paid' type='button' color='danger' marginTop='0' width='110px'  padding='3px'/>
+              }
               </td>
               <td>
-                {o.isDelivered ? <div className='success'>Delivered</div> :
-                  <div className='danger'>Not delivered</div>}
+                {o.isDelivered
+                  ? <Button title='Delivered' type='button' color='success' marginTop='0' width='110px' padding='3px'/>
+                  : <Button title='Not delivered' type='button' color='danger' marginTop='0' width='110px'  padding='3px'/>
+                }
               </td>
               <td>
                 {o.orderItems.length}
               </td>
-              <button onClick={() => navigate(`/dashboard/orders/${o._id}`)} className='success'>More info</button>
+              <td>
+                <Button onClick={() => navigate(`/dashboard/orders/${o._id}`)} title='More info' type='button'
+                        color='success' marginTop='0' width='120px'/>
+              </td>
             </tr>
           ))}
           </tbody>

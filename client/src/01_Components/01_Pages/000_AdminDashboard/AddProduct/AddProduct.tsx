@@ -9,6 +9,7 @@ import { createProductThunk } from '../../../../03_Reducers/admin/createProductR
 import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
+import { Button } from '../../../02_Chunks/Button/Button'
 
 // TODO
 // Display images when selected
@@ -42,19 +43,6 @@ export const AddProduct: FC = () => {
 
 
   const fileInputRef = useRef(null)
-
-  const handleClear = () => {
-    setName('')
-    setBrand('')
-    setCategory('')
-    setDescription('')
-    setPrice('')
-    setImage('')
-    setCountInStock('')
-    setColors('')
-    setSizes('')
-  }
-
   const handleUpload = async (e: any) => {
     const file = e.target.files[0]
     const formData = new FormData()
@@ -84,7 +72,7 @@ export const AddProduct: FC = () => {
       .map(item => item.trim())
   }
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     dispatch(
       createProductThunk({
         name,
@@ -119,90 +107,98 @@ export const AddProduct: FC = () => {
     <div className={s.container}>
       {uploading && <Loader/>}
       <BreadCrumbs pageTitle='New Product' breadcrumbs={['dashboard', 'products', 'add new product']}/>
-      <table className='stationTable'>
-        <thead>
-        <tr>
-          <th>
-            <div>Field</div>
-          </th>
-          <th>
-            <div>Value</div>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td>Name</td>
-          <td><input className='stationTableInput' type="text" value={name} onChange={(e) => setName(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>Brand</td>
-          <td><input className='stationTableInput' type="text" value={brand} onChange={(e) => setBrand(e.target.value)}/>
-          </td>
-        </tr>
-        <tr>
-          <td>Category</td>
-          <td><input className='stationTableInput' type="text" value={category} onChange={(e) => setCategory(e.target.value)}/>
-          </td>
-        </tr>
-        <tr>
-          <td>Description</td>
-          <td><textarea className='stationTableInput' value={description} onChange={(e) => setDescription(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>Price</td>
-          <td><input className='stationTableInput' type="text" value={price} onChange={(e) => setPrice(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>In stock</td>
-          <td><input className='stationTableInput' type="text" value={countInStock} onChange={(e) => setCountInStock(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>Colors</td>
-          <td><input className='stationTableInput' type="text" value={colors} onChange={(e) => setColors(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>Sizes</td>
-          <td><input className='stationTableInput' type="text" value={sizes} onChange={(e) => setSizes(e.target.value)}/></td>
-        </tr>
-        <tr>
-          <td>Mark as new</td>
-          <td><input className='stationTableInput' onChange={e => setIsNewProduct(prev => !prev)} type="checkbox"/></td>
-        </tr>
-        <tr>
-          <td>Images</td>
-          <td>
-            <input onChange={e => setImage(e.target.value)} type="text" value={image} placeholder="Image"/>
-            <button onClick={handleFilePick} className={s.uploadImageButton}>Choose file</button>
-            <input
-              className='stationHidden'
-              ref={fileInputRef}
-              onChange={handleUpload}
-              type="file"
-              accept='image/*, .png, .jpg, .gif, .web'
-              // multiple
-              id="image-file"
-            />
-          </td>
-        </tr>
+      <form onSubmit={handleSubmit}>
+        <table className='stationTable'>
+          <thead>
+          <tr>
+            <th>
+              <div>Field</div>
+            </th>
+            <th>
+              <div>Value</div>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Name</td>
+            <td><input className='stationTableInput' type="text" value={name}
+                       onChange={(e) => setName(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>Brand</td>
+            <td><input className='stationTableInput' type="text" value={brand}
+                       onChange={(e) => setBrand(e.target.value)}/>
+            </td>
+          </tr>
+          <tr>
+            <td>Category</td>
+            <td><input className='stationTableInput' type="text" value={category}
+                       onChange={(e) => setCategory(e.target.value)}/>
+            </td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td><textarea className='stationTableInput' value={description}
+                          onChange={(e) => setDescription(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>Price</td>
+            <td><input className='stationTableInput' type="text" value={price}
+                       onChange={(e) => setPrice(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>In stock</td>
+            <td><input className='stationTableInput' type="text" value={countInStock}
+                       onChange={(e) => setCountInStock(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>Colors</td>
+            <td><input className='stationTableInput' type="text" value={colors}
+                       onChange={(e) => setColors(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>Sizes</td>
+            <td><input className='stationTableInput' type="text" value={sizes}
+                       onChange={(e) => setSizes(e.target.value)}/></td>
+          </tr>
+          <tr>
+            <td>Mark as new</td>
+            <td><input className='stationTableInput' onChange={e => setIsNewProduct(prev => !prev)} type="checkbox"/>
+            </td>
+          </tr>
+          <tr>
+            <td>Images</td>
+            <td>
+              <input onChange={e => setImage(e.target.value)} type="text" value={image} placeholder="Image"/>
+              <Button onClick={handleFilePick} title='Choose file' type='submit' color='success' marginTop='0'/>
+              <input
+                className='stationHidden'
+                ref={fileInputRef}
+                onChange={handleUpload}
+                type="file"
+                accept='image/*, .png, .jpg, .gif, .web'
+                // multiple
+                id="image-file"
+              />
+            </td>
+          </tr>
 
 
-        </tbody>
-      </table>
-      <div className={s.uploadedImage}>
-        {uploadedFile.filePath ? (
-          <>
-            <div>{uploadedFile.fileName}</div>
-            <img src={uploadedFile.filePath} alt="img"/>
-          </>
-        ) : (
-          <div>No image uploaded</div>
-        )}
-      </div>
-      <div className={s.buttons}>
-        <input type='button' onClick={handleClear} value='Clear form'/>
-        <input type='button' onClick={handleCreate} value='Create'/>
-      </div>
+          </tbody>
+        </table>
+        <div className={s.uploadedImage}>
+          {uploadedFile.filePath ? (
+            <>
+              <div>{uploadedFile.fileName}</div>
+              <img src={uploadedFile.filePath} alt="img"/>
+            </>
+          ) : (
+            <div>No image uploaded</div>
+          )}
+        </div>
+        <Button title='Create' type='submit' color='success' marginTop='0'/>
+      </form>
     </div>
   )
 }

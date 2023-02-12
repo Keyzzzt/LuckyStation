@@ -1,34 +1,21 @@
-import { FC } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { FC } from 'react'
+import s from './button.module.scss'
 
 type Props = {
-  path: string
-  colorTheme?: string
-  disabled?: boolean
-  padding?: string
-  fontSize?: string
+  title: string
+  type: 'submit' | 'button'
+  color: 'success' | 'danger'
+  marginTop: string
+  onClick?: any
+  width?: string | undefined
+  padding?: string | undefined
+
 }
-export const Button: FC<Props> = ({ children, path, colorTheme = 'light', disabled = false, padding = '15px', fontSize = '14px' }) => {
-  const navigate = useNavigate()
-  const returnHandler = () => {
-    navigate(path)
-  }
+
+export const Button: FC<Props> = ({title, type, color, marginTop, onClick, width = undefined, padding = undefined}) => {
+  const className = color === 'success' ? s.success : s.danger
+
   return (
-    <button
-      style={{
-        color: colorTheme === 'dark' ? '#1b1c1c' : '#f3f3f3',
-        backgroundColor: colorTheme === 'dark' ? '#f3f3f3' : '#1b1c1c',
-        padding,
-        outline: 'none',
-        border: '0',
-        cursor: 'pointer',
-        letterSpacing: '2px',
-        fontSize,
-      }}
-      onClick={returnHandler}
-      disabled={disabled}
-    >
-      {children}
-    </button>
+    <input onClick={onClick} style={{marginTop, width, padding}} className={className} type={type} value={title}/>
   )
 }

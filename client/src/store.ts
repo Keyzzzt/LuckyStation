@@ -28,6 +28,9 @@ import { appConfigReducer } from './03_Reducers/appConfigReducer'
 import { componentsReducer } from './03_Reducers/componentsReducer'
 import { galleryReducer } from './03_Reducers/gallery/galleryReducer'
 import { galleryItemInfoReducer } from './03_Reducers/gallery/galleryItemInfoReducer'
+import { editGalleryItemReducer } from './03_Reducers/gallery/editGalleryItemReducer'
+import { deleteGalleryItemReducer } from './03_Reducers/gallery/deleteGalleryItemReducer'
+import { addGalleryItemReducer } from './03_Reducers/gallery/addGalleryItemReducer'
 
 const rootReducer = combineReducers({
   appConfig: appConfigReducer,
@@ -56,8 +59,12 @@ const rootReducer = combineReducers({
   api: apiReducer,
   termsAndConditions: termsAndConditionsReducer,
   components: componentsReducer,
+  // Gallery
   gallery: galleryReducer,
   galleryItemInfo: galleryItemInfoReducer,
+  editGalleryItem: editGalleryItemReducer,
+  deleteGalleryItem: deleteGalleryItemReducer,
+  addGalleryItem: addGalleryItemReducer,
 })
 
 // @ts-ignore

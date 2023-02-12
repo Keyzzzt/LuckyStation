@@ -21,23 +21,23 @@ const initialState = {
 export const orderManageReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'MANAGE_ORDER_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, loading: true }
     case 'DELIVERED_SUCCESS':
-      return { ...initialState, successDelivered: true }
+      return { ...state, successDelivered: true, loading: false }
     case 'NOT_DELIVERED_SUCCESS':
-      return { ...initialState, successNotDelivered: true }
+      return { ...state, successNotDelivered: true, loading: false }
     case 'PAID_SUCCESS':
-      return { ...initialState, successPaid: true }
+      return { ...state, successPaid: true, loading: false }
     case 'NOT_PAID_SUCCESS':
-      return { ...initialState, successNotPaid: true }
+      return { ...state, successNotPaid: true, loading: false }
     case 'ORDER_DELETE_SUCCESS':
-      return { ...initialState, successNotPaid: true }
+      return { ...state, successNotPaid: true, loading: false }
     case 'DELIVERED_FAIL':
     case 'PAID_FAIL':
     case 'NOT_DELIVERED_FAIL':
     case 'NOT_PAID_FAIL':
     case 'ORDER_DELETE_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     case 'ORDER_MANAGE_RESET':
       return { ...initialState }
     default:

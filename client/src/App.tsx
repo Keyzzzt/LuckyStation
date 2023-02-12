@@ -29,8 +29,6 @@ import { ProfilePage } from './01_Components/01_Pages/ProfilePage/ProfilePage'
 import { SignUpPage } from './01_Components/01_Pages/Auth/SignUpPage'
 import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery'
 import { Gallery } from './01_Components/01_Pages/GalleryPage/Gallery'
-import { GalleryAdmin } from './01_Components/01_Pages/000_AdminDashboard/GalleryAdmin/GalleryAdmin'
-import { galleryListThunk } from './03_Reducers/gallery/galleryReducer'
 
 export const App = () => {
   console.log('APP')
@@ -44,7 +42,6 @@ export const App = () => {
   // Auth on every page refresh / start
   useEffect(() => {
     console.log('APP: authenticate')
-    dispatch(galleryListThunk())
     dispatch(authenticateThunk())
     dispatch(configThunk())
   }, [])
@@ -66,7 +63,7 @@ export const App = () => {
           {header}
         </Route>
         <Route path='/signup' element={<SignUpPage/>}/>
-        <Route path='/gallery' element={<Gallery items={gallery.galleryListItems} item={gallery.item} isAdmin={isAdmin}/>}/>
+        <Route path='/gallery' element={<Gallery isAdmin={isAdmin}/>}/>
         <Route path={'/signin'} element={<SignInPage/>}/>
         <Route path={'/recovery'} element={<PasswordRecovery/>}/>
         <Route path='/shipping' element={<ShippingPage/>}/>q1q
@@ -83,7 +80,7 @@ export const App = () => {
           <Route path='settings' element={<Settings/>}/>
           <Route path='users' element={<Users/>}/>
           <Route path='orders' element={<Orders/>}/>
-          <Route path='gallery' element={<Gallery items={gallery.galleryListItems} item={gallery.item} isAdmin={isAdmin} isAdminPage/>}/>
+          <Route path='gallery' element={<Gallery isAdmin={isAdmin} isAdminPage/>}/>
           <Route path='products' element={<Products/>}/>
           <Route path='products/add' element={<AddProduct/>}/>
           <Route path='users/:userId' element={<UserEdit/>}/>

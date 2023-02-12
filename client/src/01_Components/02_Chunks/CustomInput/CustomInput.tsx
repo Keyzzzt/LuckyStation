@@ -57,7 +57,7 @@ export const CustomInput: FC<CustomInputProps> = React.memo(({resetIsDirty, type
           break
         }
       case 'confirmPassword':
-        if (value?.length >= 6) {
+        if (value.length >= 6) {
           setErrorMessage('')
           break
         } else {
@@ -65,8 +65,9 @@ export const CustomInput: FC<CustomInputProps> = React.memo(({resetIsDirty, type
           break
         }
       default:
-        if (value?.length > 1) {
+        if (value.length > 1) {
           setErrorMessage('')
+          setInputError(false)
           break
         } else {
           setErrorMessage('Field is required')
@@ -78,7 +79,7 @@ export const CustomInput: FC<CustomInputProps> = React.memo(({resetIsDirty, type
   return (
     <div className={`${s.field} ${showError ? s.shake : ''}`}>
       <div className={s.inputArea}>
-        {id && <label htmlFor={id} className='stationLabel'>{label}</label>}
+        {id && <label htmlFor={id}>{label}</label>}
         <input
           id={id}
           onBlur={() => setIsDirty(true)}

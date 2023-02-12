@@ -1,5 +1,5 @@
 import s from './auth.module.scss'
-import { FC, useEffect, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
@@ -7,6 +7,7 @@ import { actions } from '../../../03_Reducers/user/userRegisterReducer'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
 import { isEmail } from '../../../04_Utils/utils'
+import { Button } from '../../02_Chunks/Button/Button'
 
 export const SignUpPage: FC = () => {
   const [inputError, setInputError] = useState(false)
@@ -51,7 +52,8 @@ export const SignUpPage: FC = () => {
       alert(registerFail)
     }
   }, [registerFail])
-  const handleSignUp = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (isEmail(email) && password.length >= 6 && password === confirmPassword) {
       setInputError(false)
     } else {
@@ -65,7 +67,7 @@ export const SignUpPage: FC = () => {
       <main className={`stationContainer ${s.authContainer}`}>
         <p className={s.signInTitle}>Welcome!</p>
         <p className={s.signInSubtitle}>Sign up to Station</p>
-        <form className={s.form}>
+        <form className={s.form} onSubmit={handleSubmit}>
           <CustomInput
             id={'signUpEmail'}
             label='Email'
@@ -99,17 +101,18 @@ export const SignUpPage: FC = () => {
             name="confirmPassword"
             value={confirmPassword}
           />
+          <div className={s.rememberRestore}>
+            <div className={s.rememberMe}>
+              <input type="checkbox" id='rememberMeLogin'/>
+              <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
+            </div>
+            <div className={s.restorePassword}>
+              <Link className={s.restorePasswordLink} to="/recovery">Forgot password?</Link>
+            </div>
+          </div>
+          <Button title='Sign Up' type='submit' color='success' marginTop='20px'/>
         </form>
-        <div className={s.rememberRestore}>
-          <div className={s.rememberMe}>
-            <input type="checkbox" id='rememberMeLogin'/>
-            <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
-          </div>
-          <div className={s.restorePassword}>
-            <Link className={s.restorePasswordLink} to="/recovery">Forgot password?</Link>
-          </div>
-        </div>
-        <input onClick={handleSignUp} className='stationSubmitBtn' type="button" value="Sign Up"/>
+
         <div className={`stationLabel ${s.signInWith}`}>Sign Up with</div>
         <div className={s.socialsSignIn}>
           <a href="http://localhost:5000/api/auth/google/redirect">

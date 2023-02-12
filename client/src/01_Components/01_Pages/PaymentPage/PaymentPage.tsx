@@ -9,7 +9,7 @@ import Loader from '../../02_Chunks/Loader/Loader'
 import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
 import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
-import { actions } from '../../../03_Reducers/order/orderPayReducer'
+// import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { toLocal } from '../../../04_Utils/utils'
 
 export const PaymentPage: FC = () => {
@@ -40,7 +40,7 @@ export const PaymentPage: FC = () => {
       document.body.appendChild(script)
     }
     if (successPay) {
-      dispatch(actions.reset())
+      // dispatch(actions.reset())
     } else if (orderInfo && !orderInfo.isPaid) {
       if (!window.paypal) {
         addPayPalScript()

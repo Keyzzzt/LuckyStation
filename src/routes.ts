@@ -40,6 +40,7 @@ export function routes(app) {
   app.put('/api/admin/gallery/:id', privateRoute, adminRoute, Gallery.updateGalleryItem)
   app.get('/api/gallery', Gallery.getGalleryItems)
   app.get('/api/gallery/:id', Gallery.getGallerySingleItem)
+  app.delete('/api/admin/gallery/:id', Gallery.deleteGalleryItem)
 
 
   app.get(
@@ -47,7 +48,7 @@ export function routes(app) {
     privateRoute,
     adminRoute,
     paginatedResult(OrderModel, null),
-    Admin.getAllOrders
+    Admin.getAllOrders,
   )
   app.post('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
   app.delete('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToNotPaid)

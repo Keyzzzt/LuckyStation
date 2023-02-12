@@ -1,10 +1,11 @@
 import s from './auth.module.scss'
-import { FC, useEffect, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
 import { isEmail } from '../../../04_Utils/utils'
+import { Button } from '../../02_Chunks/Button/Button'
 
 export const PasswordRecovery: FC = () => {
   const [inputError, setInputError] = useState(false)
@@ -18,7 +19,8 @@ export const PasswordRecovery: FC = () => {
   }, [])
 
 
-  const handleRecoverPassword = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (isEmail(email)) {
       setInputError(false)
     } else {
@@ -35,7 +37,7 @@ export const PasswordRecovery: FC = () => {
       <main className={`stationContainer ${s.authContainer}`}>
         <p className={s.signInTitle}>Welcome to Station!</p>
         <p className={s.signInSubtitle}>Passsword recovery</p>
-        <form className={s.form}>
+        <form className={s.form} onSubmit={handleSubmit}>
           <CustomInput
             id={'recoveryEmail'}
             label='Email'
@@ -47,9 +49,11 @@ export const PasswordRecovery: FC = () => {
             name="email"
             value={email}
           />
+
+          <Button title='Email me' type='submit' color='success' marginTop='0'/>
+
         </form>
 
-        <input onClick={handleRecoverPassword} className='stationSubmitBtn' type="button" value="Email me"/>
         <div className={`stationLabel ${s.signInWith}`}>Sign Up with</div>
         <div className={s.socialsSignIn}>
           <a href="http://localhost:5000/api/auth/google/redirect">

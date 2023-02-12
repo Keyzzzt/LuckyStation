@@ -12,3 +12,11 @@ export let toLocal = {
   style: 'currency',
   currency: 'eur',
 }
+
+export const parseCreatedUpdated = (str: string) => {
+  const arr = str.split('T')
+  return {
+    date: arr[0].split('-').reverse().join('.'),
+    time: arr[1].slice(0, 8),
+  }
+}

@@ -15,11 +15,11 @@ const initialState = {
 export const orderPayReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'ORDER_PAY_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, success: false, loading: true }
     case 'ORDER_PAY_SUCCESS':
-      return { ...initialState, success: true }
+      return { ...state, success: true, loading: false }
     case 'ORDER_PAY_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     case 'ORDER_PAY_RESET':
       return { ...initialState }
     default:

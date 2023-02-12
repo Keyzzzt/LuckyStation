@@ -26,7 +26,7 @@ export type UpdateData = {
 export const editGalleryItemReducer = (state = initialState, action: ActionType): InitialState => {
   switch (action.type) {
     case 'GALLERY_ITEM_EDIT_REQUEST':
-      return { ...state, loading: true }
+      return { ...state, loading: true, success: false }
     case 'GALLERY_ITEM_EDIT_SUCCESS':
       console.log(action)
       return { ...state, loading: false, success: true }

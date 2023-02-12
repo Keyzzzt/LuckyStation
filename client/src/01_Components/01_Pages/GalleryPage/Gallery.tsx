@@ -1,25 +1,35 @@
 import s from './gallery.module.scss'
 import React, { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import { GalleryListItemType } from '../../../03_Reducers/gallery/galleryReducer'
+import { galleryListThunk } from '../../../03_Reducers/gallery/galleryReducer'
 import { useDispatch } from 'react-redux'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 import { galleryItemInfoThunk } from '../../../03_Reducers/gallery/galleryItemInfoReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import $api from '../../../04_Utils/axiosSetup'
 import { editGalleryItemThunk } from '../../../03_Reducers/gallery/editGalleryItemReducer'
+import { parseCreatedUpdated } from '../../../04_Utils/utils'
+import Loader from '../../02_Chunks/Loader/Loader'
+import { deleteGalleryItemThunk } from '../../../03_Reducers/gallery/deleteGalleryItemReducer'
+import { addGalleryItemThunk } from '../../../03_Reducers/gallery/addGalleryItemReducer'
+import { Button } from '../../02_Chunks/Button/Button'
 
 // TODO Close on Esc & click outside
 type GalleryProps = {
-  items: GalleryListItemType[]
-  item?: GalleryListItemType | null
   isAdmin: boolean
   isAdminPage?: boolean
 }
-export const Gallery: FC<GalleryProps> = ({ items, item, isAdmin, isAdminPage = false }) => {
+export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
   const dispatch = useDispatch()
+  const { galleryListItems, fail: galleryListItemsFail } = useTypedSelector(state => state.gallery)
   const { itemInfo } = useTypedSelector(state => state.galleryItemInfo)
-  const [modal, setModal] = useState(false)
+  const { success: editSuccess, loading: editLoading, fail: editFail } = useTypedSelector(state => state.editGalleryItem)
+  const { success: deleteSuccess, loading: deleteLoading, fail: deleteFail } = useTypedSelector(state => state.deleteGalleryItem)
+  const { success: addSuccess, loading: addLoading, fail: addFail } = useTypedSelector(state => state.addGalleryItem)
+  const [zoomModal, setZoomModal] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const [addModal, setAddModal] = useState(false)
+  const [resetIsDirty, setResetIsDirty] = useState(false)
+
 
   const [inputError, setInputError] = useState(false)
   const [title, setTitle] = useState('')
@@ -28,16 +38,16 @@ export const Gallery: FC<GalleryProps> = ({ items, item, isAdmin, isAdminPage = 
   const [image, setImage] = useState('')
   const [uploading, setUploading] = useState(false)
 
-  const handleShowModal = (itemId: string, action: 'image' | 'edit') => {
-    dispatch(galleryItemInfoThunk(itemId))
-    if (action === 'image') {
-      setModal(true)
-      setEditModal(false)
-      return
-    }
-    if (action === 'edit') {
-      setEditModal(true)
-    }
+  const handleCloseModal = () => {
+    setResetIsDirty(true)
+    setEditModal(false)
+    setZoomModal(false)
+    setAddModal(false)
+    setInputError(false)
+    setTitle('')
+    setDescription('')
+    setImage('')
+    setClassName('small')
   }
   const handleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
@@ -61,64 +71,169 @@ export const Gallery: FC<GalleryProps> = ({ items, item, isAdmin, isAdminPage = 
       }
     }
   }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>, itemId: string) => {
+
+  const handleDelete = (itemId: string) => {
+    // Ask if OK
+    dispatch(deleteGalleryItemThunk(itemId))
+    handleCloseModal()
+  }
+  const handleAddImage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!title || !description || !image) {
+      setInputError(true)
+      return
+    }
+    const newImage = {
+      title,
+      description,
+      src: {
+        small: image,
+        large: image,
+      },
+      className,
+    }
+    dispatch(addGalleryItemThunk(newImage))
+    handleCloseModal()
+  }
+  const handleEditImage = (e: FormEvent<HTMLFormElement>, itemId: string) => {
+    e.preventDefault()
+    if (!title || !description || !image) {
+      setInputError(true)
+      return
+    }
     const updateData = {
       title,
       description,
       className,
       src: {
         small: image,
-        large: image
-      }
+        large: image,
+      },
+
     }
     dispatch(editGalleryItemThunk(updateData, itemId))
+    handleCloseModal()
   }
-
-
+  const handleShowModal = (itemId: string, modal: 'image' | 'edit') => {
+    setResetIsDirty(false)
+    dispatch(galleryItemInfoThunk(itemId))
+    if (modal === 'image') {
+      setZoomModal(true)
+      return
+    }
+    if (modal === 'edit') {
+      setEditModal(true)
+    }
+  }
+  const handleShowAddModal = () => {
+    setResetIsDirty(false)
+    setAddModal(true)
+  }
+  // Get gallery items
+  useEffect(() => {
+    if (!galleryListItems) {
+      dispatch(galleryListThunk())
+    }
+  }, [galleryListItems])
+  // Get single item
   useEffect(() => {
     if (itemInfo) {
       setTitle(itemInfo.title)
       setDescription(itemInfo.description)
       setClassName(itemInfo.className)
+      setImage(itemInfo.src.small)
+
     }
   }, [itemInfo])
+  // On edit success / fail
+  useEffect(() => {
+    if (editSuccess) {
+      // Show OK message
+      dispatch(galleryListThunk())
+      return
+    }
+    if (editFail) {
+      // Show ERROR message
+    }
+  }, [editSuccess, editFail])
+  // On add success / fail
+  useEffect(() => {
+    if (addSuccess) {
+      // Show OK message
+      dispatch(galleryListThunk())
+      return
+    }
+    if (addFail) {
+      // Show ERROR message
+    }
+  }, [addSuccess, addFail])
+  // On delete success / fail
+  useEffect(() => {
+    if (deleteSuccess) {
+      // Show OK message
+      dispatch(galleryListThunk())
+      return
+    }
+    if (deleteFail) {
+      // Show ERROR message
+    }
+  }, [deleteSuccess, deleteFail])
+
   return (
-    <main className='stationSectionMain'>
+    <main className=''>
       <div className={`stationContainer ${s.localContainer}`}>
-        <div className={modal ? `${s.modal} ${s.open}` : s.modal}>
-          <div className={s.imageWrapper}>
-            <img src={itemInfo?.src.large} alt=""/>
-            <div onClick={() => setModal(false)} className={s.closeImage}>close</div>
+        {isAdminPage && (isAdmin) ? (
+          <div onClick={handleShowAddModal} className={s.addImageButton}>
+            <svg xmlns="http://www.w3.org/2000/svg" height="48" width="48">
+              <path
+                d="M9 42q-1.25 0-2.125-.875T6 39V9q0-1.25.875-2.125T9 6h20.45v3H9v30h30V18.6h3V39q0 1.25-.875 2.125T39 42Zm26-24.9v-4.05h-4.05v-3H35V6h3v4.05h4.05v3H38v4.05ZM12 33.9h24l-7.2-9.6-6.35 8.35-4.7-6.2ZM9 9v30V9Z"/>
+            </svg>
+            <span>Add new image</span>
           </div>
-          {/*<p>{item?.title}</p>*/}
-          {/*<p>{item?.description}{item?.description}</p>*/}
+        ) : (
+          <div className={s.addImageLoaderPlaceholder}><Loader/></div>
+        )}
+        <div className={zoomModal ? `${s.modal} ${s.open}` : s.modal}>
+          {itemInfo && <div className={s.modalContent}>
+            <div className={s.modalImage}>
+              <img src={itemInfo.src.large} alt=""/>
+              <div onClick={handleCloseModal} className={s.closeModal}>close</div>
+            </div>
+            <div className={s.modalImageInfo}>
+              <p className={s.imageTitle}> {itemInfo.title}</p>
+              <p className={s.imageDescription}>{itemInfo.description}{itemInfo.description}</p>
+            </div>
+          </div>}
         </div>
         {isAdmin && isAdminPage && itemInfo && <div className={editModal ? `${s.editModal} ${s.open}` : s.editModal}>
-          <form className={s.form} onSubmit={(e) => handleSubmit(e, itemInfo._id)}>
-            <div onClick={() => setEditModal(false)} className={s.closeEdit}>close</div>
-            <CustomInput
-              id={'imageTile'}
-              label='Title'
-              returnValue={setTitle}
-              setInputError={setInputError}
-              inputError={inputError}
-              type="text"
-              placeholder="Enter title"
-              name="title"
-              value={title}
-            />
-            <CustomInput
-              id={'imageDescription'}
-              label='Image description'
-              returnValue={setDescription}
-              setInputError={setInputError}
-              inputError={inputError}
-              type="text"
-              placeholder="Enter description"
-              name="description"
-              value={description}
-            />
+          <div onClick={handleCloseModal} className={s.closeModal}>close</div>
+          <form className={s.form} onSubmit={(e) => handleEditImage(e, itemInfo._id)}>
+            <div className={s.titleDescription}>
+              <CustomInput
+                resetIsDirty={resetIsDirty}
+                id={'imageTile'}
+                label='Title'
+                returnValue={setTitle}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Enter title"
+                name="title"
+                value={title}
+              />
+              <CustomInput
+                resetIsDirty={resetIsDirty}
+                id={'imageDescription'}
+                label='Image description'
+                returnValue={setDescription}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Enter description"
+                name="description"
+                value={description}
+              />
+            </div>
             <fieldset className={s.radioWrapper}>
               <legend>Select size of image:</legend>
               <div className={s.radioItem}>
@@ -144,66 +259,154 @@ export const Gallery: FC<GalleryProps> = ({ items, item, isAdmin, isAdminPage = 
                 <label htmlFor="horizontalGalleryImage">Horizontal</label>
               </div>
             </fieldset>
-            <label htmlFor="imageUrl">Image</label>
-            <input id='imageUrl' onChange={(e) => setImage(e.target.value)} type="text" placeholder='Enter image url'
-                   value={image}/>
-            <label htmlFor="image-file">Choose File</label>
-            <input
-              className={s.file}
-              type="file"
-              accept='image/*, .png, .jpg, .gif, .web'
-              // multiple
-              id="image-file"
-              onChange={handleFileUpload}
-            />
-
-
-            <p>Created: {itemInfo?.createdAt}</p>
-            {itemInfo?.updatedAt === itemInfo?.createdAt ? null : <p>Updated: {item?.updatedAt}</p>}
+            <div className={s.addImage}>
+              <div>
+                <CustomInput
+                  resetIsDirty={resetIsDirty}
+                  id={'imageTile'}
+                  label='You can enter image url here'
+                  returnValue={setImage}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Enter image url"
+                  name="image"
+                  value={image}
+                />
+              </div>
+              <div>
+                <input
+                  className='stationInput'
+                  type="file"
+                  accept='image/*, .png, .jpg, .gif, .web'
+                  // multiple
+                  id="image-file"
+                  onChange={handleFileUpload}
+                />
+              </div>
+            </div>
+            <div className={s.addedUpdated}>
+              <p>Added: {parseCreatedUpdated(itemInfo.createdAt).date}</p>
+              {itemInfo.updatedAt === itemInfo.createdAt ? null :
+                <p>Updated: {parseCreatedUpdated(itemInfo.updatedAt).date}</p>}
+            </div>
             <div className={s.buttons}>
-              <input className='stationSubmitBtn' type="submit" value='Submit'/>
-              <input className='stationDangerBtn' type="button" value='Delete'/>
+              <Button title='Submit' type='submit' color='success' marginTop='20px'/>
+              <Button title='Delete' type='button' color='danger' marginTop='20px'
+                      onClick={() => handleDelete(itemInfo._id)}/>
             </div>
           </form>
         </div>}
+        {isAdmin && isAdminPage && <div className={addModal ? `${s.editModal} ${s.open}` : s.editModal}>
+          <div onClick={handleCloseModal} className={s.closeModal}>close</div>
+          <form className={s.form} onSubmit={handleAddImage}>
+            <div className={s.titleDescription}>
+              <CustomInput
+                resetIsDirty={resetIsDirty}
+                id={'imageTile'}
+                label='Title'
+                returnValue={setTitle}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Enter title"
+                name="title"
+                value={title}
+              />
+              <CustomInput
+                resetIsDirty={resetIsDirty}
+                id={'imageDescription'}
+                label='Image description'
+                returnValue={setDescription}
+                setInputError={setInputError}
+                inputError={inputError}
+                type="text"
+                placeholder="Enter description"
+                name="description"
+                value={description}
+              />
+            </div>
+            <fieldset className={s.radioWrapper}>
+              <legend>Select size of image:</legend>
+              <div className={s.radioItem}>
+                <input onChange={() => setClassName('small')} type="radio" id="smallGalleryImage" name='imageSize'
+                       value="small" checked={className === 'small'}/>
+                <label htmlFor="smallGalleryImage">Small</label>
+              </div>
+
+              <div className={s.radioItem}>
+                <input onChange={() => setClassName('big')} type="radio" id="bigGalleryImage" name='imageSize'
+                       value='big' checked={className === 'big'}/>
+                <label htmlFor="bigGalleryImage">Big</label>
+              </div>
+
+              <div className={s.radioItem}>
+                <input onChange={() => setClassName('v_stretch')} type="radio" id="verticalGalleryImage"
+                       name='imageSize' value="v_stretch" checked={className === 'v_stretch'}/>
+                <label htmlFor="verticalGalleryImage">Vertical</label>
+              </div>
+              <div className={s.radioItem}>
+                <input onChange={() => setClassName('h_stretch')} type="radio" id="horizontalGalleryImage"
+                       name='imageSize' value="h_stretch" checked={className === 'h_stretch'}/>
+                <label htmlFor="horizontalGalleryImage">Horizontal</label>
+              </div>
+            </fieldset>
+            <div>
+              <div>
+                <CustomInput
+                  resetIsDirty={resetIsDirty}
+                  id={'imageTile'}
+                  label='You can enter image url here'
+                  returnValue={setImage}
+                  setInputError={setInputError}
+                  inputError={inputError}
+                  type="text"
+                  placeholder="Enter image url"
+                  name="image"
+                  value={image}
+                />
+              </div>
+              <div>
+                <label htmlFor="addGalleryImage">Or you can upload image from your PC</label>
+                <input
+                  className='stationInput'
+                  type="file"
+                  accept='image/*, .png, .jpg, .gif, .web'
+                  // multiple
+                  id="addGalleryImage"
+                  onChange={handleFileUpload}
+                />
+              </div>
+            </div>
+            <Button title='Add' type='submit' color='success' marginTop='20px'/>
+          </form>
+        </div>}
         <div className={s.gallery}>
-          {items.map(item => {
+
+          {galleryListItems && galleryListItems.length === 0 && <span>Gallery is empty, please add new images.</span>}
+          {!galleryListItems && !galleryListItemsFail && <Loader/>}
+          {!galleryListItems && galleryListItemsFail && <span>{galleryListItemsFail}</span>}
+          {galleryListItems && galleryListItems.map(item => {
             const classname = item.className === 'h_stretch'
               ? s.h_stretch : item.className === 'v_stretch'
                 ? s.v_stretch : item.className === 'big' ? s.big : s.small
 
             return (
-              <>
-                {isAdmin ? (
-                  <div className={classname} key={item._id}>
-                    {}
-                    <img src={item.src.small} alt=""/>
-                    {isAdmin && isAdminPage && (
-                      <div className={s.editIcons}>
-                        <svg onClick={() => handleShowModal(item._id, 'image')} xmlns="http://www.w3.org/2000/svg"
-                             height="48"
-                             width="48">
-                          <path
-                            d="M39.8 41.95 26.65 28.8q-1.5 1.3-3.5 2.025-2 .725-4.25.725-5.4 0-9.15-3.75T6 18.75q0-5.3 3.75-9.05 3.75-3.75 9.1-3.75 5.3 0 9.025 3.75 3.725 3.75 3.725 9.05 0 2.15-.7 4.15-.7 2-2.1 3.75L42 39.75Zm-20.95-13.4q4.05 0 6.9-2.875Q28.6 22.8 28.6 18.75t-2.85-6.925Q22.9 8.95 18.85 8.95q-4.1 0-6.975 2.875T9 18.75q0 4.05 2.875 6.925t6.975 2.875ZM17.3 24.3v-4.1h-4.1v-3h4.1v-4.05h3v4.05h4.05v3H20.3v4.1Z"/>
-                        </svg>
-                        <svg onClick={() => handleShowModal(item._id, 'edit')} xmlns="http://www.w3.org/2000/svg"
-                             height="48" width="48">
-                          <path
-                            d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"/>
-                        </svg>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div onClick={() => handleShowModal(item._id, 'image')} className={classname} key={item._id}>
-                    <img src={item.src.small} alt=""/>
+              <div className={classname} key={item._id}>
+                <img onClick={() => handleShowModal(item._id, 'image')} src={item.src.small} alt=""/>
+                {isAdmin && isAdminPage && (
+                  <div className={s.editIcon}>
+                    <svg onClick={() => handleShowModal(item._id, 'edit')} xmlns="http://www.w3.org/2000/svg"
+                         height="48" width="48">
+                      <path
+                        d="M9 39h2.2l22.15-22.15-2.2-2.2L9 36.8Zm30.7-24.3-6.4-6.4 2.1-2.1q.85-.85 2.1-.85t2.1.85l2.2 2.2q.85.85.85 2.1t-.85 2.1Zm-2.1 2.1L12.4 42H6v-6.4l25.2-25.2Zm-5.35-1.05-1.1-1.1 2.2 2.2Z"/>
+                    </svg>
                   </div>
                 )}
-              </>
+              </div>
 
             )
           })}
-
         </div>
       </div>
     </main>

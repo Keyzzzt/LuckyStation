@@ -22,7 +22,7 @@ export async function addGalleryItem(req: RequestCustom, res: Response, next: Ne
 
     await galleryImage.save()
 
-    return res.status(201)
+    return res.sendStatus(201)
   } catch (error) {
     return next(error.message)
   }
@@ -31,6 +31,15 @@ export async function getGalleryItems(req: RequestCustom, res: Response, next: N
   try {
     const items = await GalleryModel.find({}).select('-__v')
     return res.status(200).json(items)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+
+export async function deleteGalleryItem(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    await GalleryModel.findOneAndDelete({ _id: req.params.id })
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }

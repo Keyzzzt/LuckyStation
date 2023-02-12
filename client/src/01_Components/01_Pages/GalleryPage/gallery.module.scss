@@ -6,15 +6,38 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-auto-rows: 250px;
   grid-auto-flow: dense;
+  transition: all $transitionTime;
+
   & div img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     cursor: pointer;
+  }
 
+}
+.addImageLoaderPlaceholder{
+  min-height: 70px;
+  position: relative;
+  max-width: 250px;
+
+}
+.addImageButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  max-width: 250px;
+  min-height: 70px;
+  & span {
+    font-size: 20px;
+  }
+  & svg {
+    margin: 0;
   }
 }
-.editIcons{
+
+
+.editIcon {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -23,6 +46,7 @@
   padding: 10px;
   border-radius: $bRadius;
   cursor: pointer;
+
 
 }
 
@@ -58,99 +82,130 @@
     grid-column: span 2;
   }
 }
+
 .small {
   position: relative;
 }
+
 .editModal,
 .modal {
+  background-color: rgba(0, 0, 0, 0.9);
+  height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity .4s ease, transform .4s ease-in-out, visibility .4s ease;
+  transition: opacity $transitionTime ease, transform $transitionTime ease-in-out, visibility $transitionTime ease;
   visibility: hidden;
   opacity: 0;
   transform: scale(0);
   overflow: hidden;
   z-index: 500;
-
-}
-.editModal{
-  top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background-color: $white;
-  border-radius: $bRadius;
   margin: auto auto;
-  max-width: 50%;
-  max-height: 70%;
-  &.open{
+
+  &.open {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
   }
 }
-.modal,
-{
+.form {
+  background-color: #fff;
+  border-radius: $bRadius;
+  padding: 20px;
   width: 100%;
-  height: 100vh;
-  background-color: #000;
-  &.open{
+  @include breakpoint(480) {
+    max-width: 768px;
+  }
+  .radioWrapper {
+    margin-bottom: 20px;
+    .radioItem:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
+
+    & input {
+      margin-right: 10px;
+    }
+
+  }
+
+  & .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include breakpoint(768) {
+      flex-direction: row;
+      justify-content: space-between;
+      :first-child{
+        margin-right: 20px;
+      }
+    }
+
+  }
+  .addedUpdated p {
+    margin-top: 20px;
+  }
+
+
+}
+
+
+.modal {
+  width: 100%;
+
+  &.open {
     visibility: visible;
     opacity: 1;
     transform: scale(1);
   }
-  & .imageWrapper{
+
+  & .modalContent {
+    color: $white;
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & .modalImage {
+
+      img {
+        max-height: 80vh;
+      }
+    }
+
     & p:first-child {
       font-size: 20px;
       font-weight: 100;
     }
+
     & p {
       margin-top: 20px;
       font-weight: 100;
-      color: $white;
     }
   }
 
 }
-
-
-.closeImage,
-.closeEdit{
-  height: 20px;
+.closeModal{
+  height: 50px;
   width: 50px;
   position: fixed;
   top: 50px;
   right: 50px;
   cursor: pointer;
   transition: transform .5s ease-in-out;
+  background-color: $white;
+  color: $textColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+
   &:hover {
     transform: scale(1.1);
   }
 }
-.closeImage,{
-  color: $white;
-}
 
-.form {
-  text-align: left;
-  .radioWrapper {
-    .radioItem:not(:last-of-type) {
-      margin-bottom: 10px;
-    }
-    & input {
-      margin-right: 10px;
-    }
-
-  }
-  & p, .file {
-    margin-top: 20px;
-  }
-  & .buttons{
-    display: flex;
-  }
-}

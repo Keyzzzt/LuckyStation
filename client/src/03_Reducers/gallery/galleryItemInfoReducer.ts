@@ -9,27 +9,21 @@ export type InitialState = typeof initialState
 
 const initialState = {
   itemInfo: null as null | GalleryListItemType,
-  success: false,
-  loading: false,
   fail: '',
 }
 
 export const galleryItemInfoReducer = (state = initialState, action: ActionType): InitialState => {
   switch (action.type) {
-    case 'GALLERY_ITEM_INFO_REQUEST':
-      return { ...state, loading: true }
     case 'GALLERY_ITEM_INFO_SUCCESS':
-      console.log(action)
-      return { ...state, itemInfo: action.payload, loading: false, success: true }
+      return { ...state, itemInfo: action.payload }
     case 'GALLERY_ITEM_INFO_FAIL':
-      return { ...state, loading: false, fail: action.payload }
+      return { ...state, fail: action.payload }
     default:
       return state
   }
 }
 
 export const actions = {
-  galleryItemInfoRequestAC: () => ({ type: 'GALLERY_ITEM_INFO_REQUEST' as const }),
   galleryItemInfoSuccessAC: (data: GalleryListItemType) => ({
     type: 'GALLERY_ITEM_INFO_SUCCESS' as const,
     payload: data,
@@ -40,9 +34,7 @@ export const actions = {
 export function galleryItemInfoThunk(itemId: string): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch(actions.galleryItemInfoRequestAC())
       const { data } = await API.admin.getGalleryItem(itemId)
-      console.log(data)
       dispatch(actions.galleryItemInfoSuccessAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data

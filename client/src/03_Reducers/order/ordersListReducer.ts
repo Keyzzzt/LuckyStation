@@ -15,9 +15,9 @@ const initialState = {
 export const ordersListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'ORDER_LIST_SUCCESS':
-      return { ...initialState, orders: action.payload }
+      return { ...state, orders: action.payload }
     case 'ORDER_LIST_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload }
     default:
       return state
   }

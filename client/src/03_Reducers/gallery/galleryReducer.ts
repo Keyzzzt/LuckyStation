@@ -22,21 +22,14 @@ export type GalleryListItemType = {
 export type GalleryPageType = typeof initialState
 
 const initialState = {
-  galleryListItems: [] as GalleryListItemType[],
-  item: null as null | GalleryListItemType,
+  galleryListItems: null as null | GalleryListItemType[],
   fail: '',
 }
 
 export const galleryReducer = (state = initialState, action: ActionType): GalleryPageType => {
   switch (action.type) {
     case 'GALLERY_LIST_SUCCESS':
-      return {
-        ...state, galleryListItems: action.payload,
-      }
-    case 'GALLERY_ITEM_SUCCESS':
-      return {
-        ...state, item: action.payload,
-      }
+      return { ...state, galleryListItems: action.payload }
     case 'GALLERY_LIST_FAIL':
       return { ...state, fail: action.payload }
     default:
@@ -45,8 +38,7 @@ export const galleryReducer = (state = initialState, action: ActionType): Galler
 }
 
 export const actions = {
-  successList: (data: any) => ({ type: 'GALLERY_LIST_SUCCESS' as const, payload: data }),
-  successItem: (data: any) => ({ type: 'GALLERY_ITEM_SUCCESS' as const, payload: data }),
+  success: (data: any) => ({ type: 'GALLERY_LIST_SUCCESS' as const, payload: data }),
   fail: (errMessage: string) => ({ type: 'GALLERY_LIST_FAIL' as const, payload: errMessage }),
 }
 
@@ -54,24 +46,7 @@ export function galleryListThunk(): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
       const { data } = await API.admin.getGalleryList()
-      dispatch(actions.successList(data))
-    } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
-      if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
-        return
-      }
-      dispatch(actions.fail(error))
-    }
-  }
-}
-
-export function gallerySingleItemThunk(itemId: string): ThunkType {
-  return async (dispatch: Dispatch) => {
-    try {
-      const { data } = await API.admin.getGalleryItem(itemId)
-      dispatch(actions.successItem(data))
+      dispatch(actions.success(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {

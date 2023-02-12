@@ -15,6 +15,7 @@ import {
 } from './05_Types/ResponseTypes'
 import { GalleryListItemType } from './03_Reducers/gallery/galleryReducer'
 import { UpdateData } from './03_Reducers/gallery/editGalleryItemReducer'
+import { AddGalleryItemType } from './03_Reducers/gallery/addGalleryItemReducer'
 
 export const API = {
   config: {
@@ -42,7 +43,6 @@ export const API = {
     getProfile: async (): Promise<AxiosResponse<UserResponseType>> => {
       return $api.get<UserResponseType>('/user/profile')
     },
-    // TODO: endpoint
     getTermsAndConditions: async (lang: string): Promise<AxiosResponse<TermsAndConditionsResponseType>> => {
       return $api.get<TermsAndConditionsResponseType>(`/user/terms/${lang}`)
     },
@@ -85,6 +85,12 @@ export const API = {
     },
     editGalleryItem: async (updateData: UpdateData, itemId: string): Promise<AxiosResponse<GalleryListItemType>> => {
       return $api.put<GalleryListItemType>(`admin/gallery/${itemId}`, updateData)
+    },
+    addGalleryItem: async (newImage: AddGalleryItemType) => {
+      return $api.post(`admin/gallery`, newImage)
+    },
+    deleteGalleryItem: async (itemId: string)=> {
+      return $api.delete(`admin/gallery/${itemId}`)
     },
     deleteUser: async (userId: string): Promise<void> => {
       return $api.delete(`admin/user/${userId}`)
@@ -130,7 +136,7 @@ export const API = {
       return $api.delete(`admin/order/${orderId}/pay`)
     },
     deleteOrder: async (orderId: string): Promise<void> => {
-      return $api.delete(`admin/order/${orderId}/delete`)
+      return $api.delete(`admin/order/${orderId}`)
     },
     getStatistic: async (): Promise<AxiosResponse<any>> => {
       return $api.get<any>(`admin/statistic`)

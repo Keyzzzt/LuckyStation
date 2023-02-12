@@ -15,9 +15,9 @@ const initialState = {
 export const orderCreateReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'ORDER_CREATE_SUCCESS':
-      return { ...initialState, orderId: action.payload }
+      return { ...state, orderId: action.payload }
     case 'ORDER_CREATE_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload }
     case 'ORDER_CREATE_RESET':
       return { ...initialState }
     default:

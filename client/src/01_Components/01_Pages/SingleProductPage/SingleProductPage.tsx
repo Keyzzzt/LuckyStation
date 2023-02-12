@@ -143,7 +143,7 @@ export const ProductScreen: FC = () => {
             <div className={s.description}>{productInfo.description2}</div>
           </div>
 
-          {/* <Rating value={productInfo.rating} reviews={productInfo.numReviews} /> */}
+          {/* <Button value={productInfo.rating} reviews={productInfo.numReviews} /> */}
 
           {/* {productInfo.reviews.length === 0 ? (
             <div>No reviews</div>
@@ -165,7 +165,7 @@ export const ProductScreen: FC = () => {
           ) : (
             <form onSubmit={submitHandler} className={styles.reviewForm}>
               <input onChange={e => setComment(e.target.value)} type="text" value={comment} />
-              <label htmlFor="rating">Rating</label>
+              <label htmlFor="rating">Button</label>
               <select onChange={e => setRating(Number(e.target.value))} id="rating" value={rating}>
                 <option value="0">0</option>
                 <option value="1">1</option>

@@ -1,5 +1,5 @@
 import s from './orderEdit.module.scss'
-import { FC, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
@@ -16,12 +16,12 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
-import { toLocal } from '../../../../04_Utils/utils'
-
+import { parseCreatedUpdated, toLocal } from '../../../../04_Utils/utils'
+import { Button } from '../../../02_Chunks/Button/Button'
 
 
 export const OrderEdit: FC = () => {
-  const {orderId} = useParams()
+  const { orderId } = useParams()
   useScrollToTop()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -47,10 +47,8 @@ export const OrderEdit: FC = () => {
     (() => {
       if (window.confirm('Are you sure you want to delete?')) {
         orderId && dispatch(deleteOrderThunk(orderId))
-        navigate('/dashboard')
-        return
+        navigate('/dashboard/orders')
       }
-      return
     })()
   }
 
@@ -68,7 +66,8 @@ export const OrderEdit: FC = () => {
         <Loader/>
       ) : (
         <>
-          <BreadCrumbs pageTitle={'Total price ' + orderInfo.totalPrice.toLocaleString('en', toLocal)} breadcrumbs={['dashboard', 'orders', 'order']} />
+          <BreadCrumbs pageTitle={'Total price ' + orderInfo.totalPrice.toLocaleString('en', toLocal)}
+                       breadcrumbs={['dashboard', 'orders', 'order']}/>
 
           <table className='stationTable'>
             <thead>
@@ -87,37 +86,39 @@ export const OrderEdit: FC = () => {
               <td>{orderInfo._id}</td>
             </tr>
             <tr>
-              <td>Date created</td>
-              <td>{orderInfo.createdAt}</td>
+              <td>Created</td>
+              <td>{parseCreatedUpdated(orderInfo.createdAt).date} / {parseCreatedUpdated(orderInfo.createdAt).time}</td>
             </tr>
             {orderInfo.createdAt !== orderInfo.updatedAt && (
               <tr>
-                <td>Date updated</td>
-                <td>{orderInfo.updatedAt}</td>
+                <td>Last updated</td>
+                <td>{parseCreatedUpdated(orderInfo.updatedAt).date} / {parseCreatedUpdated(orderInfo.updatedAt).time}</td>
               </tr>
             )}
             <tr>
-              <td>Customer</td>
-              <td>{orderInfo.user}</td>
+              <td>Customer </td>
+              <td>TODO link to customers profile</td>
             </tr>
             <tr>
               <td>Payment</td>
               <td>{orderInfo.isPaid
-                ? (
-                  <div>
-                    <button onClick={() => manageOrderHandler('notPaid')} className='success'>Paid</button>
-                    <span className={s.paymentMethod}> {orderInfo.paymentMethod} </span>
-                    <span className={s.paymentMethod}>{orderInfo.paidAt}</span>
-                  </div>
-                ) :
-                <button onClick={() => manageOrderHandler('paid')} className='danger'>Unpaid</button>}
+                ? <Button onClick={() => manageOrderHandler('notPaid')} title='Paid' type='button' color='success'
+                          marginTop='0' width='110px' padding='3px'/>
+                : <Button onClick={() => manageOrderHandler('paid')} title='Unpaid' type='button' color='danger'
+                          marginTop='0' width='110px' padding='3px'/>
+              }
+
               </td>
             </tr>
             <tr>
               <td>Shipping</td>
               <td>
-                {orderInfo.isDelivered ? <button onClick={() => manageOrderHandler('notDelivered')} className='success'>Delivered</button> :
-                  <button onClick={() => manageOrderHandler('delivered')} className='danger'>Not delivered</button>}
+                {orderInfo.isDelivered
+                  ? <Button onClick={() => manageOrderHandler('notDelivered')} title='Delivered' type='button'
+                            color='success' marginTop='0' width='110px' padding='3px'/>
+                  : <Button onClick={() => manageOrderHandler('delivered')} title='Not delivered' type='button'
+                            color='danger' marginTop='0' width='110px' padding='3px'/>
+                }
               </td>
             </tr>
             <tr>
@@ -146,9 +147,7 @@ export const OrderEdit: FC = () => {
             </tr>
             </tbody>
           </table>
-          <div className={s.buttons}>
-            <button className='danger' onClick={() => manageOrderHandler('delete')}>Delete</button>
-          </div>
+          <Button onClick={() => manageOrderHandler('delete')} title='Delete' type='submit' color='danger' marginTop='20px' width='100px'/>
         </>
       )}
     </div>

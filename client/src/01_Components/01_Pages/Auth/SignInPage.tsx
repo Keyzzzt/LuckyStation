@@ -6,10 +6,9 @@ import { useTypedSelector } from '../../../05_Types/01_Base'
 import { actions, loginThunk } from '../../../03_Reducers/authReducer'
 import { isEmail } from '../../../04_Utils/utils'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
+import { Button } from '../../02_Chunks/Button/Button'
 
 export const SignInPage: FC = () => {
-  console.log('SIGN IN')
-
   const [inputError, setInputError] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -79,7 +78,7 @@ export const SignInPage: FC = () => {
               <label className='stationLabel' htmlFor="rememberMeLogin">Remember me</label>
             </div>
           </div>
-          <input className='stationSubmitBtn' type="submit" value="Sign In"/>
+          <Button title='Sign In' type='submit' color='success' marginTop='20px' />
         </form>
 
         <div className={`stationLabel ${s.signInWith}`}>Sign In with</div>
