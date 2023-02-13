@@ -3,6 +3,7 @@ import s from './users.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { UserDataForListType } from '../../../../05_Types/ResponseTypes'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '../../../02_Chunks/Button/Button'
 
 // TODO Add sort
 // TODO Polish styles
@@ -44,10 +45,19 @@ export const UsersList: FC<Props> = ({ users, setSortFilter }) => {
             <tr key={u._id}>
               <td>{u.name}</td>
               <td>{u.email}</td>
-              <td>{u.isAdmin ? <div className='success'>Admin</div> : 'Customer'}</td>
-              <td>{u.isActivated ? <div className='success'>Confirmed</div> : <div className='danger'>Not confirmed</div>}</td>
+              <td>{u.isAdmin ? (
+                <Button title='Admin' type='button' color='success' width='120px' padding='3px'/>
+              ) : (
+                'Customer'
+              )}</td>
+              <td>{u.isActivated ? (
+                <Button title='Confirmed' type='button' color='success' width='120px' padding='3px'/>
+              ) : (
+                <Button title='Not confirmed' type='button' color='danger' width='120px' padding='3px'/>
+              )}</td>
               <td>
-                <button onClick={() => navigate(`/dashboard/users/${u._id}`)} className='success'>More info</button>
+                <Button onClick={() => navigate(`/dashboard/users/${u._id}`)} title='More info' type='button'
+                        color='success' width='110px'/>
               </td>
             </tr>
           ))}

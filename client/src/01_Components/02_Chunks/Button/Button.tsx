@@ -5,14 +5,14 @@ type Props = {
   title: string
   type: 'submit' | 'button'
   color: 'success' | 'danger'
-  marginTop: string
+  marginTop?: string
   onClick?: any
   width?: string | undefined
   padding?: string | undefined
 
 }
 
-export const Button: FC<Props> = ({title, type, color, marginTop, onClick, width = undefined, padding = undefined}) => {
+export const Button: FC<Props> = ({title, type, color, marginTop = undefined, onClick, width = undefined, padding = undefined}) => {
   const className = color === 'success' ? s.success : s.danger
 
   return (

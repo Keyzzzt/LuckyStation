@@ -23,38 +23,43 @@ export type GalleryPageType = typeof initialState
 
 const initialState = {
   galleryListItems: null as null | GalleryListItemType[],
+  loading: false,
   fail: '',
 }
 
 export const galleryReducer = (state = initialState, action: ActionType): GalleryPageType => {
   switch (action.type) {
+    case 'GALLERY_LIST_REQUEST':
+      return { ...state, galleryListItems: null, loading: false }
     case 'GALLERY_LIST_SUCCESS':
-      return { ...state, galleryListItems: action.payload }
+      return { ...state, galleryListItems: action.payload, loading: false }
     case 'GALLERY_LIST_FAIL':
-      return { ...state, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (data: any) => ({ type: 'GALLERY_LIST_SUCCESS' as const, payload: data }),
-  fail: (errMessage: string) => ({ type: 'GALLERY_LIST_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'GALLERY_LIST_REQUEST' as const }),
+  successAC: (data: GalleryListItemType[]) => ({ type: 'GALLERY_LIST_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'GALLERY_LIST_FAIL' as const, payload: errMessage }),
 }
 
 export function galleryListThunk(): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.admin.getGalleryList()
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

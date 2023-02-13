@@ -70,8 +70,8 @@ export const componentsReducer = (state = initialState, action: ActionType): Ini
 }
 
 export const actions = {
-  success: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
-  fail: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
+  successAC: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
+  failAC: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
 }
 
 // export function configThunk(): ThunkType {

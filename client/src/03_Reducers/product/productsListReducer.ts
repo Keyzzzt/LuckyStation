@@ -16,7 +16,8 @@ type NextPage = {
 }
 
 const initialState = {
-  products: null as null | ProductResponseType[],
+  productsList: null as null | ProductResponseType[],
+  loading: false,
   next: null as null | NextPage,
   prev: null as null | PrevPage,
   totalPages: 0,
@@ -25,39 +26,52 @@ const initialState = {
 
 export const productsListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'PRODUCT_LIST_REQUEST':
+      return {
+        ...state,
+        productsList:null,
+        next: null,
+        prev: null,
+        totalPages: 0,
+        fail: '',
+        loading: true
+      }
     case 'PRODUCT_LIST_SUCCESS':
       return {
-        ...initialState,
-        products: action.payload.items,
+        ...state,
+        productsList: action.payload.items,
         next: action.payload.next,
         prev: action.payload.prev,
         totalPages: action.payload.totalPages,
+        loading: false
       }
     case 'PRODUCT_LIST_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (data: any) => ({ type: 'PRODUCT_LIST_SUCCESS' as const, payload: data }),
-  fail: (errMessage: string) => ({ type: 'PRODUCT_LIST_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'PRODUCT_LIST_REQUEST' as const}),
+  successAC: (data: any) => ({ type: 'PRODUCT_LIST_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'PRODUCT_LIST_FAIL' as const, payload: errMessage }),
 }
 
-export function productListThunk(keyword = '', page: number, limit: number): ThunkType {
+export function productListTC(keyword = '', page: number, limit: number): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.admin.getProducts(keyword, page, limit)
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

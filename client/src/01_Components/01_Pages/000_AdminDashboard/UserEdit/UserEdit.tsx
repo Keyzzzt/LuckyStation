@@ -1,23 +1,25 @@
-import { FC, useEffect, useState } from 'react'
 import s from './userEdit.module.scss'
+import { useParams } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useTypedSelector } from '../../../../05_Types/01_Base'
+import Loader from '../../../02_Chunks/Loader/Loader'
+import { Button } from '../../../02_Chunks/Button/Button'
+import { FC, useEffect } from 'react'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
+import { useTypedSelector } from '../../../../05_Types/01_Base'
+import { parseCreatedUpdated } from '../../../../04_Utils/utils'
 import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
 import { userDeleteThunk } from '../../../../03_Reducers/admin/userDeleteReducer'
-import { updateProfileByAdminThunk } from '../../../../03_Reducers/admin/updateProfileByAdminReducer'
-import Loader from '../../../02_Chunks/Loader/Loader'
-import { useParams } from 'react-router'
+import { toggleAdminStatusTC } from '../../../../03_Reducers/admin/toggleAdminStatusReducer'
 
 export const UserEdit: FC = () => {
-  const navigate = useNavigate()
+  const {success, loading, fail} = useTypedSelector(state => state.toggleAdminStatus)
+  const { user } = useTypedSelector(state => state.getUser)
   const { userId } = useParams<string>()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   useScrollToTop()
-  const { user } = useTypedSelector(state => state.getUser)
-  const [role, setRole] = useState(false)
 
   const handleDelete = (userId: string, email: string) => {
     if (window.confirm(`Are you sure you want to delete ${email}?`)) {
@@ -27,29 +29,29 @@ export const UserEdit: FC = () => {
     }
     return
   }
-  const handleUpdate = () => {
-    if(userId) {
-      dispatch(updateProfileByAdminThunk(userId, { isAdmin: role }))
+
+  const handleSetAsAdmin = (userId: string) => {
+    if (userId && window.confirm('Are toy sure?')) {
+      const role = !user?.isAdmin
+      dispatch(toggleAdminStatusTC(userId, { isAdmin: role }))
+
     }
-  }
-  const handleToggleAdminStatus = () => {
-    // Ask in modal about confirmation
     // If confirmed, request server, if there is more than 1 admin,
     // if not, return with message that before this can be done, give Admin right to another user
     // setRole(role => !role)
     // When done, redirect to main page
   }
   useEffect(() => {
-    if(userId) {
+    if (userId) {
       dispatch(getUserThunk(userId))
     }
   }, [userId])
 
   useEffect(() => {
-    if (user) {
-      setRole(() => user.isAdmin)
+    if (success && userId) {
+      dispatch(getUserThunk(userId))
     }
-  }, [user])
+  }, [success])
 
   return (
     <div className={s.container}>
@@ -57,6 +59,7 @@ export const UserEdit: FC = () => {
         <Loader/>
       ) : (
         <>
+          <div>{fail}</div>
           <table className='stationTable'>
             <thead>
             <tr>
@@ -89,19 +92,25 @@ export const UserEdit: FC = () => {
               <td>Status</td>
               <td>
                 {user.isAdmin ? <div className='success'>Admin</div> : 'Customer'}
-                <input onChange={handleToggleAdminStatus} type="checkBox" id="role" checked={role}/>
               </td>
             </tr>
             <tr>
               <td>Email confirmation</td>
-              <td>{user.isActivated ? <div className='success'>Confirmed</div> :
-                <div className='danger'>Not confirmed</div>}
+              <td>{user.isActivated ? (
+                <Button title='Confirmed' type='button' color='success' width='120px' padding='3px'/>
+              ) : (
+                <Button title='Not confirmed' type='button' color='danger' width='120px' padding='3px'/>
+              )}
               </td>
             </tr>
             <tr>
               <td>Subscription</td>
-              <td>{user.isSubscribed ? <div className='success'>Subscribed for newsletter</div> :
-                <div className='danger'>Not subscribed</div>}</td>
+              <td>{user.isSubscribed ? (
+                <Button title='Subscribed' type='button' color='success' width='120px' padding='3px'/>
+              ) : (
+                <Button title='Not subscribed' type='button' color='danger' width='120px' padding='3px'/>
+              )
+              }</td>
             </tr>
             <tr>
               <td>Favorites count</td>
@@ -109,13 +118,22 @@ export const UserEdit: FC = () => {
             </tr>
             <tr>
               <td>Created</td>
-              <td>{user.createdAt}</td>
+              <td>{parseCreatedUpdated(user.createdAt).date} / {parseCreatedUpdated(user.createdAt).time}</td>
             </tr>
             </tbody>
           </table>
           <div className={s.buttons}>
-            <button className='success' onClick={handleUpdate}>Update</button>
-            <button className='danger' onClick={() => handleDelete(user._id, user.email)}>Delete User</button>
+
+            <Button onClick={() => handleDelete(user._id, user.email)} title='Delete User' type='submit' color='danger'
+                    width='120px'/>
+            {user.isAdmin ? (
+              <Button onClick={() => handleSetAsAdmin(user._id)} title='Set as user' type='submit' color='danger'
+                      width='120px'/>
+            ) : (
+              <Button onClick={() => handleSetAsAdmin(user._id)} title='Set as admin' type='submit' color='danger'
+                      width='120px'/>
+
+            )}
           </div>
         </>
       )}

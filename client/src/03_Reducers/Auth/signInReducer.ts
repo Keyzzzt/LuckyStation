@@ -1,6 +1,6 @@
-import { API } from '../../API'
+import { userInfoThunk } from '../user/userInfoReducer'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
+import { API } from '../../API'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -12,13 +12,13 @@ const initialState = {
   fail: '',
 }
 
-export const createProductReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const signInReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'CREATE_PRODUCT_REQUEST':
+    case 'LOGIN_REQUEST':
       return { ...state, success: false, fail: '', loading: true }
-    case 'CREATE_PRODUCT_SUCCESS':
+    case 'LOGIN_SUCCESS':
       return { ...state, success: true, loading: false }
-    case 'CREATE_PRODUCT_FAIL':
+    case 'LOGIN_FAIL':
       return { ...state, fail: action.payload, loading: false }
     default:
       return state
@@ -26,20 +26,22 @@ export const createProductReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  requestAC: () => ({ type: 'CREATE_PRODUCT_REQUEST' as const }),
-  successAC: () => ({ type: 'CREATE_PRODUCT_SUCCESS' as const }),
-  failAC: (errMessage: string) => ({ type: 'CREATE_PRODUCT_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'LOGIN_REQUEST' as const }),
+  successAC: () => ({ type: 'LOGIN_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'LOGIN_FAIL' as const, payload: errMessage }),
 }
 
-export function createProductThunk(product: any): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function signInTC(email: string, password: string): ThunkType {
+  return async function(dispatch: any) {
     try {
       dispatch(actions.requestAC())
-      await API.admin.createProduct(product)
+      const { data } = await API.auth.signIn(email, password)
       dispatch(actions.successAC())
+      localStorage.setItem('token', data.accessToken)
+      dispatch(userInfoThunk())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
-      if (errors && errors.length > 0) {
+      if (errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return

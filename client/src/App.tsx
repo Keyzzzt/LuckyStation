@@ -31,11 +31,9 @@ import { PasswordRecovery } from './01_Components/01_Pages/Auth/PasswordRecovery
 import { Gallery } from './01_Components/01_Pages/GalleryPage/Gallery'
 
 export const App = () => {
-  console.log('APP')
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
-  const { companyName, aboutSectionParagraphs} = useTypedSelector(state => state.appConfig.config)
-  const { gallery} = useTypedSelector(state => state)
+  const {companyName, aboutSectionParagraphs} = useTypedSelector(state => state.appConfig.appConfig)
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
@@ -48,11 +46,11 @@ export const App = () => {
 
   useEffect(() => {
     if(userInfo){
-      console.log('APP: userInfo changed!')
       setIsAdmin(userInfo.isAdmin)
       setIsAuth(true)
     }
   }, [userInfo])
+
   const header = <Route path='/' element={<Header isAuth={isAuth} isAdmin={isAdmin}/>}/>
   return (
     <>

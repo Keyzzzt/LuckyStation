@@ -15,39 +15,36 @@ const initialState = {
 export const productDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_DELETE_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, success: false, fail: '', loading: true }
     case 'PRODUCT_DELETE_SUCCESS':
-      return { ...initialState, success: true }
+      return { ...state, success: true, loading: false }
     case 'PRODUCT_DELETE_FAIL':
-      return { ...initialState, fail: action.payload }
-    case 'PRODUCT_DELETE_RESET':
-      return { ...initialState }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  request: () => ({ type: 'PRODUCT_DELETE_REQUEST' as const }),
-  success: () => ({ type: 'PRODUCT_DELETE_SUCCESS' as const }),
-  fail: (errMessage: string) => ({ type: 'PRODUCT_DELETE_FAIL' as const, payload: errMessage }),
-  reset: () => ({ type: 'PRODUCT_DELETE_RESET' as const }),
+  requestAC: () => ({ type: 'PRODUCT_DELETE_REQUEST' as const }),
+  successAC: () => ({ type: 'PRODUCT_DELETE_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'PRODUCT_DELETE_FAIL' as const, payload: errMessage }),
 }
 
 export function productDeleteThunk(productId: string): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch(actions.request())
+      dispatch(actions.requestAC())
       await API.admin.deleteProduct(productId)
-      dispatch(actions.success())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

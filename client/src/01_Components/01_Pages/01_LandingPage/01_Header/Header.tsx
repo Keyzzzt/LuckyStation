@@ -37,7 +37,6 @@ export const Header: FC<Props> = ({ isAuth, isAdmin }) => {
     navigate('/')
     dispatch(logoutThunk())
     dispatch(myOrdersActions.myOrdersResetAC())
-    dispatch(orderInfoActions.reset())
     //TODO: Здесь нужно сбросить все приватные данные
   }
   const publicMenu = menuItems.filter(el => el.type === 'public').map((el, i) => (

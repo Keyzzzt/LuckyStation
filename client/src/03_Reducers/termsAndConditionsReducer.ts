@@ -9,38 +9,43 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   data: null as null | TermsAndConditionsResponseType,
+  loading: false,
   fail: '',
 }
 
 export const termsAndConditionsReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'LOAD_TERMS_AND_CONDITIONS_REQUEST':
+      return { ...initialState, data: null, fail: '', loading: true }
     case 'LOAD_TERMS_AND_CONDITIONS_SUCCESS':
-      return { ...initialState, data: action.payload }
+      return { ...initialState, data: action.payload, loading: false }
     case 'LOAD_TERMS_AND_CONDITIONS_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...initialState, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (data: TermsAndConditionsResponseType) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_SUCCESS' as const, payload: data }),
-  fail: (errMessage: string) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'LOAD_TERMS_AND_CONDITIONS_REQUEST' as const }),
+  successAC: (data: TermsAndConditionsResponseType) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_FAIL' as const, payload: errMessage }),
 }
 
 export function termsAndConditionsThunk(lang: string): ThunkType {
   return async function (dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.user.getTermsAndConditions(lang)
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

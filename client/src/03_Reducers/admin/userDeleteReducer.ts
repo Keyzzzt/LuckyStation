@@ -15,11 +15,11 @@ const initialState = {
 export const userDeleteReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'USER_DELETE_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, success: false, fail: '', loading: true }
     case 'USER_DELETE_SUCCESS':
-      return { ...initialState, success: true }
+      return { ...state, success: true, loading: false }
     case 'USER_DELETE_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
 
     default:
       return state
@@ -27,25 +27,25 @@ export const userDeleteReducer = (state = initialState, action: ActionType): Ini
 }
 
 export const actions = {
-  deleteUserRequestAC: () => ({ type: 'USER_DELETE_REQUEST' as const }),
-  deleteUserSuccessAC: () => ({ type: 'USER_DELETE_SUCCESS' as const }),
-  deleteUserFailAC: (errMessage: string) => ({ type: 'USER_DELETE_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'USER_DELETE_REQUEST' as const }),
+  successAC: () => ({ type: 'USER_DELETE_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'USER_DELETE_FAIL' as const, payload: errMessage }),
 }
 
 export function userDeleteThunk(userId: string): ThunkType {
   return async function (dispatch: Dispatch) {
     try {
-      dispatch(actions.deleteUserRequestAC())
+      dispatch(actions.requestAC())
       await API.admin.deleteUser(userId)
-      dispatch(actions.deleteUserSuccessAC())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.deleteUserFailAC(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.deleteUserFailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

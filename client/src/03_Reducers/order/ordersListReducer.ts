@@ -9,38 +9,43 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   orders: null as null | OrderResponseType[],
+  loading: false,
   fail: '',
 }
 
 export const ordersListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'ORDER_LIST_REQUEST':
+      return { ...state, orders: null, fail: '', loading: true }
     case 'ORDER_LIST_SUCCESS':
-      return { ...state, orders: action.payload }
+      return { ...state, orders: action.payload, loading: false }
     case 'ORDER_LIST_FAIL':
-      return { ...state, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (data: OrderResponseType[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
-  fail: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'ORDER_LIST_REQUEST' as const}),
+  successAC: (data: OrderResponseType[]) => ({ type: 'ORDER_LIST_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'ORDER_LIST_FAIL' as const, payload: errMessage }),
 }
 
 export function orderListThunk(page: number, limit: number): ThunkType {
   return async function (dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.admin.getOrders(page, limit)
-      dispatch(actions.success(data.items))
+      dispatch(actions.successAC(data.items))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

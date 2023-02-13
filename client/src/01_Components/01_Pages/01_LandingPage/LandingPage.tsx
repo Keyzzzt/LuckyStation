@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import s from './landingPage.module.scss'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
-import { productListThunk } from '../../../03_Reducers/product/productsListReducer'
+import { productListTC } from '../../../03_Reducers/product/productsListReducer'
 import { Hero } from './02_HeroSection/Hero'
 import { useParams } from 'react-router'
 import { actions, toggleFavoriteThunk } from '../../../03_Reducers/user/userInfoReducer'
@@ -31,14 +31,14 @@ type LandingPageProps = {
 export const LandingPage: FC<LandingPageProps> = ({companyName, aboutSectionParagraphs}) => {
   const [isSubscribed, setIsSubscribed] = useState(false)
   const { userInfo } = useTypedSelector(state => state.userInfo)
-  const { fail, products } = useTypedSelector(state => state.productList)
+  const { productsList } = useTypedSelector(state => state.productList)
   const dispatch = useDispatch()
   let { page, limit, keyword } = useParams<Params>()
   page = page ? page : '1'
   limit = limit ? limit : '4'
 
-  const promoProducts = products?.filter(p => p.isPromo)
-  const singleProducts = products?.filter(p => p.isShowOnMainPage)
+  const promoProducts = productsList?.filter(p => p.isPromo)
+  const singleProducts = productsList?.filter(p => p.isShowOnMainPage)
 
   // const setPageHandler = (page: number) => {
   //   dispatch(productListThunk(keyword, Number(page), Number(limit)))
@@ -59,7 +59,7 @@ export const LandingPage: FC<LandingPageProps> = ({companyName, aboutSectionPara
   }
 
   useEffect(() => {
-    dispatch(productListThunk(keyword, Number(page), Number(limit)))
+    dispatch(productListTC(keyword, Number(page), Number(limit)))
   }, [keyword, page, limit])
   useEffect(() => {
     checkLocalStorage()
@@ -70,7 +70,7 @@ export const LandingPage: FC<LandingPageProps> = ({companyName, aboutSectionPara
       <Outlet/>
       <main>
         <Hero />
-        <BestProducts products={products} favoriteHandler={favoriteHandler} favorite={userInfo?.favorite}/>
+        <BestProducts products={productsList} favoriteHandler={favoriteHandler} favorite={userInfo?.favorite}/>
         <Promo promoProducts={promoProducts}/>
         {singleProducts && singleProducts.length > 0 && singleProducts.map((p, i) => (
           <SingleProduct key={i} productId={p._id} position={i % 2 === 0 ? 'imageLeft' : 'imageRight'} colors={p.colors} image={p.images[0].imageSrc} />

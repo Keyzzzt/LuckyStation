@@ -37,9 +37,9 @@ export const addGalleryItemReducer = (state = initialState, action: ActionType):
 }
 
 export const actions = {
-  RequestAC: () => ({ type: 'ADD_GALLERY_ITEM_REQUEST' as const }),
-  SuccessAC: () => ({type: 'ADD_GALLERY_ITEM_SUCCESS' as const,}),
-  FailAC: (errMessage: string) => ({ type: 'ADD_GALLERY_ITEM_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'ADD_GALLERY_ITEM_REQUEST' as const }),
+  successAC: () => ({type: 'ADD_GALLERY_ITEM_SUCCESS' as const,}),
+  failAC: (errMessage: string) => ({ type: 'ADD_GALLERY_ITEM_FAIL' as const, payload: errMessage }),
 }
 
 export function addGalleryItemThunk(data: AddGalleryItemType): ThunkType {

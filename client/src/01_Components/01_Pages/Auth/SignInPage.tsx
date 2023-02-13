@@ -3,29 +3,22 @@ import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { actions, loginThunk } from '../../../03_Reducers/authReducer'
 import { isEmail } from '../../../04_Utils/utils'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
 import { Button } from '../../02_Chunks/Button/Button'
+import { signInTC } from '../../../03_Reducers/Auth/signInReducer'
 
 export const SignInPage: FC = () => {
   const [inputError, setInputError] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
-  const { fail: loginFail } = useTypedSelector(state => state.login)
+  const {success: signInSuccess, loading: signInLoading, fail: signInFail} = useTypedSelector(state => state.signIn)
   const { userInfo } = useTypedSelector(state => state.userInfo)
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
 
   const redirect = location.search && location.search.split('=')[1]
-
-  const resetLoginFail = () => {
-    if (loginFail) {
-      dispatch(actions.reset())
-    }
-  }
 
   useEffect(() => {
     if (userInfo) {
@@ -41,7 +34,7 @@ export const SignInPage: FC = () => {
       setInputError(true)
       return
     }
-    dispatch(loginThunk(email, password))
+    dispatch(signInTC(email, password))
   }
 
   return (

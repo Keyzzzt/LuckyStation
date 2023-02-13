@@ -14,13 +14,11 @@ import { userInfoReducer } from './03_Reducers/user/userInfoReducer'
 import { usersListReducer } from './03_Reducers/admin/usersListReducer'
 import { userRegisterReducer } from './03_Reducers/user/userRegisterReducer'
 import { userUpdateOwnProfileReducer } from './03_Reducers/user/userUpdateOwnProfileReducer'
-import { updateProfileByAdminReducer } from './03_Reducers/admin/updateProfileByAdminReducer'
+import { toggleAdminStatusReducer } from './03_Reducers/admin/toggleAdminStatusReducer'
 import { getUserReducer } from './03_Reducers/admin/getUserReducer'
 import { createProductReducer } from './03_Reducers/admin/createProductReducer'
 import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
 import { orderManageReducer } from './03_Reducers/order/orderManageReducer'
-import { productReviewReducer } from './03_Reducers/product/productReviewReducer'
-import { loginReducer } from './03_Reducers/authReducer'
 import { statisticReducer } from './03_Reducers/Statistic/statisticReducer'
 import { apiReducer } from './03_Reducers/admin/apiReducer'
 import { termsAndConditionsReducer } from './03_Reducers/termsAndConditionsReducer'
@@ -31,21 +29,21 @@ import { galleryItemInfoReducer } from './03_Reducers/gallery/galleryItemInfoRed
 import { editGalleryItemReducer } from './03_Reducers/gallery/editGalleryItemReducer'
 import { deleteGalleryItemReducer } from './03_Reducers/gallery/deleteGalleryItemReducer'
 import { addGalleryItemReducer } from './03_Reducers/gallery/addGalleryItemReducer'
+import { signInReducer } from './03_Reducers/Auth/signInReducer'
 
 const rootReducer = combineReducers({
   appConfig: appConfigReducer,
-  login: loginReducer,
+  signIn: signInReducer,
   getUser: getUserReducer,
   userRegister: userRegisterReducer,
   userInfo: userInfoReducer,
   userList: usersListReducer,
   userDelete: userDeleteReducer,
-  updateProfileByAdmin: updateProfileByAdminReducer,
+  toggleAdminStatus: toggleAdminStatusReducer,
   userUpdateOwnProfile: userUpdateOwnProfileReducer,
   productInfo: productInfoReducer,
   productList: productsListReducer,
   productDelete: productDeleteReducer,
-  productReview: productReviewReducer,
   updateProduct: updateProductReducer,
   createProduct: createProductReducer,
   orderInfo: orderInfoReducer,

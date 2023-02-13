@@ -51,8 +51,8 @@ export type UserResponseType = {
   isSubscribed: boolean
   isActivated: boolean
   favorite: string[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
   accessToken?: string // TODO Check
 }
 export type UserDataForListType = {
@@ -78,9 +78,6 @@ export type UsersListResponseType = {
   items: UserDataForListType[]
 }
 
-export type GalleryListResponseType = {
-  items: GalleryListItemType[]
-}
 export type ProductResponseType = {
   _id: string
   user: string

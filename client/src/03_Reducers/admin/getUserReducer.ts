@@ -9,42 +9,43 @@ type ActionType = InferActionTypes<typeof actions>
 
 export const initialState = {
   user: null as null | UserResponseType,
+  loading: false,
   fail: '',
 }
 
 export const getUserReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'GET_USER_REQUEST':
+      return { ...state, user: null, fail: '', loading: true, }
     case 'GET_USER_SUCCESS':
-      return { ...initialState, user: action.payload }
+      return { ...state, user: action.payload, loading: false, }
     case 'GET_USER_FAIL':
-      return { ...initialState, fail: action.payload }
-    case 'GET_USER_RESET':
-      return { ...initialState }
+      return { ...state, fail: action.payload, loading: false, }
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (user: UserResponseType) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
-  fail: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
-  reset: () => ({ type: 'GET_USER_RESET' as const }),
+  requestAC: () => ({ type: 'GET_USER_REQUEST' as const }),
+  successAC: (user: UserResponseType) => ({ type: 'GET_USER_SUCCESS' as const, payload: user }),
+  failAC: (errMessage: string) => ({ type: 'GET_USER_FAIL' as const, payload: errMessage }),
 }
 
 export function getUserThunk(userId: string): ThunkType {
   return async function (dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.admin.getUser(userId)
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
-      console.log(err)
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

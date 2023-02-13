@@ -26,7 +26,7 @@ export async function getAllUsers(req: RequestCustom, res: Response, next: NextF
 export async function getStatistic(req: RequestCustom, res: Response, next: NextFunction) {
   try {
     const statistic = await StatisticModel.findOne({ name: 'Statistic' }).select(
-      '-__v -_id -name -createdAt -updatedAt'
+      '-__v -_id -name -createdAt -updatedAt',
     )
     return res.status(200).json(statistic)
   } catch (error) {
@@ -65,8 +65,8 @@ export async function deleteUser(req: Request, res: Response, next: NextFunction
 export async function getUser(req: Request, res: Response, next: NextFunction) {
   try {
     // No point to check if there is a id, as mongo will return 500 error if no id
-    const user = await await UserModel.findById(req.params.id).select(
-      '-password -__v -activationToken -googleId -passwordResetToken'
+    const user = await UserModel.findById(req.params.id).select(
+      '-password -__v -activationToken -googleId -passwordResetToken',
     )
     if (!user) {
       return next(ApiError.NotFound('User not found'))
@@ -84,10 +84,16 @@ export async function setUsersAdminStatus(req: Request, res: Response, next: Nex
       return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
     }
     const { id } = req.params
-    await UserModel.findByIdAndUpdate(id, { isAdmin: req.body.isAdmin })
-    const user = await getUserProfile(id)
-
-    return res.status(200).json(user)
+    const newStatus = req.body.isAdmin
+    if (!newStatus) {
+      const users = await UserModel.find({})
+      const admins = users.filter(u => u._id.equals(id) )
+      if (admins.length === 1) {
+        return next(ApiError.BadRequest(`${admins[0].name} is the only one admin now. Please grant admin access to another person before make any changes.`))
+      }
+    }
+    await UserModel.findByIdAndUpdate(id, { isAdmin: newStatus })
+    return res.status(200)
   } catch (error) {
     return next(error.message)
   }

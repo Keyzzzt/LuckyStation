@@ -16,36 +16,36 @@ const initialState = {
 export const deleteGalleryItemReducer = (state = initialState, action: ActionType): InitialState => {
   switch (action.type) {
     case 'DELETE_REQUEST':
-      return { ...state, loading: true, success: false }
+      return { ...state, success: false, fail: '', loading: true }
     case 'DELETE_SUCCESS':
-      return { ...state, loading: false, success: true }
+      return { ...state, success: true, loading: false }
     case 'DELETE_FAIL':
-      return { ...state, loading: false, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  deleteRequestAC: () => ({ type: 'DELETE_REQUEST' as const }),
-  deleteSuccessAC: () => ({type: 'DELETE_SUCCESS' as const,}),
-  deleteFailAC: (errMessage: string) => ({ type: 'DELETE_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'DELETE_REQUEST' as const }),
+  successAC: () => ({ type: 'DELETE_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'DELETE_FAIL' as const, payload: errMessage }),
 }
 
 export function deleteGalleryItemThunk(itemId: string): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch(actions.deleteRequestAC())
+      dispatch(actions.requestAC())
       await API.admin.deleteGalleryItem(itemId)
-      dispatch(actions.deleteSuccessAC())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.deleteFailAC(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.deleteFailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

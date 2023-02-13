@@ -26,37 +26,37 @@ export type UpdateData = {
 export const editGalleryItemReducer = (state = initialState, action: ActionType): InitialState => {
   switch (action.type) {
     case 'GALLERY_ITEM_EDIT_REQUEST':
-      return { ...state, loading: true, success: false }
+      return { ...state, success: false, fail: '', loading: true }
     case 'GALLERY_ITEM_EDIT_SUCCESS':
       console.log(action)
-      return { ...state, loading: false, success: true }
+      return { ...state, success: true, loading: false }
     case 'GALLERY_ITEM_EDIT_FAIL':
-      return { ...state, loading: false, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  galleryItemEditRequestAC: () => ({ type: 'GALLERY_ITEM_EDIT_REQUEST' as const }),
-  galleryItemEditSuccessAC: () => ({type: 'GALLERY_ITEM_EDIT_SUCCESS' as const,}),
-  galleryItemEditFailAC: (errMessage: string) => ({ type: 'GALLERY_ITEM_EDIT_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'GALLERY_ITEM_EDIT_REQUEST' as const }),
+  successAC: () => ({type: 'GALLERY_ITEM_EDIT_SUCCESS' as const,}),
+  failAC: (errMessage: string) => ({ type: 'GALLERY_ITEM_EDIT_FAIL' as const, payload: errMessage }),
 }
 
 export function editGalleryItemThunk(updateData: UpdateData, itemId: string): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch(actions.galleryItemEditRequestAC())
+      dispatch(actions.requestAC())
       await API.admin.editGalleryItem(updateData, itemId)
-      dispatch(actions.galleryItemEditSuccessAC())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.galleryItemEditFailAC(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.galleryItemEditFailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

@@ -8,42 +8,45 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  orderId: '',
+  orderId: null as null | string,
+  loading: false,
   fail: '',
 }
 
 export const orderCreateReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'ORDER_CREATE_REQUEST':
+      return { ...state, orderId: null, fail: '', loading: true }
     case 'ORDER_CREATE_SUCCESS':
-      return { ...state, orderId: action.payload }
+      return { ...state, orderId: action.payload, loading: false }
     case 'ORDER_CREATE_FAIL':
-      return { ...state, fail: action.payload }
-    case 'ORDER_CREATE_RESET':
-      return { ...initialState }
+      return { ...state, fail: action.payload, loading: false }
+
     default:
       return state
   }
 }
 
 export const actions = {
-  success: (data: any) => ({ type: 'ORDER_CREATE_SUCCESS' as const, payload: data }),
-  fail: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
-  reset: () => ({ type: 'ORDER_CREATE_RESET' as const }),
+  requestAC: () => ({ type: 'ORDER_CREATE_REQUEST' as const }),
+  successAC: (data: string) => ({ type: 'ORDER_CREATE_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
 }
 
 export function createOrderThunk(newOrder: OrderCreateRequestType): ThunkType {
   return async function (dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.order.createOrder(newOrder)
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

@@ -9,38 +9,43 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   users: null as null | UserDataForListType[],
+  loading: false,
   fail: '',
 }
 
 export const usersListReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'USER_LIST_REQUEST':
+      return { ...state, users: null, fail: '', loading: true }
     case 'USER_LIST_SUCCESS':
-      return { ...initialState, users: action.payload }
+      return { ...state, users: action.payload, loading: false }
     case 'USER_LIST_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  getUsersSuccessAC: (data: UserDataForListType[]) => ({ type: 'USER_LIST_SUCCESS' as const, payload: data }),
-  getUsersFailAC: (errMessage: string) => ({ type: 'USER_LIST_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'USER_LIST_REQUEST' as const }),
+  successAC: (data: UserDataForListType[]) => ({ type: 'USER_LIST_SUCCESS' as const, payload: data }),
+  failAC: (errMessage: string) => ({ type: 'USER_LIST_FAIL' as const, payload: errMessage }),
 }
 
 export function usersListThunk(page: number, limit: number): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function(dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.admin.getUsers(page, limit)
-      dispatch(actions.getUsersSuccessAC(data.items))
+      dispatch(actions.successAC(data.items))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.getUsersFailAC(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.getUsersFailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

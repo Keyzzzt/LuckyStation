@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import { Request, Response, NextFunction } from 'express'
-import { validationResult } from 'express-validator'
+// import { validationResult } from 'express-validator'
 import { RequestCustom } from '@src/custom'
 import ApiError from '@src/middleware/error.middleware'
 import { OrderModel } from '@src/models/order.model'
@@ -34,6 +34,14 @@ export async function createNewOrder(req: RequestCustom, res: Response, next: Ne
       totalPrice,
     })
     return res.status(201).json(order._id)
+  } catch (error) {
+    return next(error.message)
+  }
+}
+export async function deleteOder(req: RequestCustom, res: Response, next: NextFunction) {
+  try {
+    await OrderModel.findOneAndDelete({ _id: req.params.id })
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }

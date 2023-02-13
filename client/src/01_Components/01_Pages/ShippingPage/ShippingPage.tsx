@@ -44,7 +44,7 @@ export const ShippingPage: FC = () => {
   // we simply set orderSuccess to false before we redirect to payment, and so we easily can return.
   const { orderId } = useTypedSelector(state => state.orderCreate)
   const [orderSuccess, setOrderSuccess] = useState(false)
-  const { minPriceForFreeShipping, freeShippingMessage, taxRate } = useTypedSelector(state => state.appConfig.config!)
+  const { minPriceForFreeShipping, freeShippingMessage, taxRate } = useTypedSelector(state => state.appConfig.appConfig)
   const contentRef = useRef<HTMLDivElement>(null)
   const [subscribe, setSetSubscribe] = useState(false)
   const [isOpen, setIsOpen] = useState(false)

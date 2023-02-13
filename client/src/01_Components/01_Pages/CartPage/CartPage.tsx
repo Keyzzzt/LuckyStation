@@ -5,7 +5,6 @@ import { useLocation, useParams } from 'react-router'
 import { Link, useNavigate } from 'react-router-dom'
 import { addToCartThunk, removeFromCartThunk } from '../../../03_Reducers/cart/cartReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { Button } from '../../02_Chunks/ButtonToDelete/Button'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 import { toLocal } from '../../../04_Utils/utils'
 
@@ -13,7 +12,7 @@ export const CartPage: FC = () => {
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [totalPrice, setTotalPrice] = useState(0)
 
-  const { minPriceForFreeShipping, freeShippingMessage } = useTypedSelector(state => state.appConfig.config!)
+  const { minPriceForFreeShipping, freeShippingMessage } = useTypedSelector(state => state.appConfig.appConfig)
   const { cartItems } = useTypedSelector(state => state.cart)
 
   const { productId } = useParams<{ productId: string }>()

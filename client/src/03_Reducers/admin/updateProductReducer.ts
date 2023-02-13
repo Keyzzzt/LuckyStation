@@ -15,39 +15,36 @@ const initialState = {
 export const updateProductReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'UPDATE_PRODUCT_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, updatedProduct: null, fail: '', loading: true }
     case 'UPDATE_PRODUCT_SUCCESS':
-      return { ...initialState, updatedProduct: action.payload }
+      return { ...state, updatedProduct: action.payload, loading: false }
     case 'UPDATE_PRODUCT_FAIL':
-      return { ...initialState, fail: action.payload }
-    case 'UPDATE_PRODUCT_RESET':
-      return { ...initialState }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
 }
 
 export const actions = {
-  request: () => ({ type: 'UPDATE_PRODUCT_REQUEST' as const }),
-  success: (product: any) => ({ type: 'UPDATE_PRODUCT_SUCCESS' as const, payload: product }),
-  fail: (errMessage: string) => ({ type: 'UPDATE_PRODUCT_FAIL' as const, payload: errMessage }),
-  reset: () => ({ type: 'UPDATE_PRODUCT_RESET' as const }),
+  requestAC: () => ({ type: 'UPDATE_PRODUCT_REQUEST' as const }),
+  successAC: (product: any) => ({ type: 'UPDATE_PRODUCT_SUCCESS' as const, payload: product }),
+  failAC: (errMessage: string) => ({ type: 'UPDATE_PRODUCT_FAIL' as const, payload: errMessage }),
 }
 
 export function updateProductThunk(productId: string, product: any): ThunkType {
   return async (dispatch: Dispatch) => {
     try {
-      dispatch(actions.request())
+      dispatch(actions.requestAC())
       const { data } = await API.admin.updateProduct(productId, product)
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

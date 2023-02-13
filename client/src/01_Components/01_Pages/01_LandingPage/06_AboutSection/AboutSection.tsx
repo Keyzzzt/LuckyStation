@@ -12,7 +12,7 @@ export const AboutSection: FC<PromoProps> = ({ companyName, paragraphs}) => {
       <div className={`stationContainer ${s.localContainer}`}>
         <h2 className='stationSectionTitle'>{companyName}</h2>
         <div className={s.text}>
-          {paragraphs.map((p, i) => (
+          {paragraphs && paragraphs.map((p, i) => (
             <p key={i}>{p}</p>
           ))}
         </div>

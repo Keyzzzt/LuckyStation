@@ -102,7 +102,7 @@ export async function register(req: Request, res: Response, next: NextFunction) 
     return next(error.message)
   }
 }
-export async function login(req: Request, res: Response, next: NextFunction) {
+export async function signIn(req: Request, res: Response, next: NextFunction) {
   try {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {

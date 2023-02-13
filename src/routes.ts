@@ -17,7 +17,7 @@ export function routes(app) {
   app.get('/api/config', getConfig)
   app.get('/api/apiinfo', getApiInfo)
 
-  app.post('/api/login', Validation.auth, Auth.login)
+  app.post('/api/login', Validation.auth, Auth.signIn)
   app.post('/api/registration', Validation.auth, Auth.register)
   app.post('/api/logout', Auth.logout)
   app.get('/api/auth/google/redirect', Auth.googleOAuthRedirect)
@@ -42,7 +42,7 @@ export function routes(app) {
   app.get('/api/gallery/:id', Gallery.getGallerySingleItem)
   app.delete('/api/admin/gallery/:id', Gallery.deleteGalleryItem)
 
-
+  // Order
   app.get(
     '/api/admin/order/:page/:limit',
     privateRoute,
@@ -51,6 +51,7 @@ export function routes(app) {
     Admin.getAllOrders,
   )
   app.post('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToPaid)
+  app.delete('/api/admin/order/:id', privateRoute, adminRoute, Order.deleteOder)
   app.delete('/api/admin/order/:id/pay', privateRoute, adminRoute, Admin.setOrderToNotPaid)
   app.post('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToDelivered)
   app.delete('/api/admin/order/:id/delivered', privateRoute, adminRoute, Admin.setOrderToNotDelivered)

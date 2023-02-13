@@ -8,28 +8,19 @@ type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
-  config: {
-    companyName: '',
-    adminColorTheme: 'light',
-    customersColorTheme: 'light',
-    darkThemeColors: [],
-    lightThemeColors: [],
-    defaultLanguage: 'en',
-    minPriceForFreeShipping: 1000,
-    defaultShippingPriceToNonEUCountries: 100,
-    freeShippingMessage: 'You are eligible for free shipping in EU',
-    taxRate: 0.2,
-    aboutSectionParagraphs: ['']
-  },
+  appConfig: {} as ConfigResponseType,
+  loading: false,
   fail: '',
 }
 
 export const appConfigReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
+    case 'CONFIG_REQUEST':
+      return { ...state, fail: '', loading: true }
     case 'CONFIG_SUCCESS':
-      return { ...initialState, config: action.payload }
+      return { ...state, appConfig: action.payload, loading: false }
     case 'CONFIG_FAIL':
-      return { ...initialState, fail: action.payload }
+      return { ...state, fail: action.payload, loading: false }
 
     default:
       return state
@@ -37,24 +28,25 @@ export const appConfigReducer = (state = initialState, action: ActionType): Init
 }
 
 export const actions = {
-  success: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
-  fail: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'CONFIG_REQUEST' as const }),
+  successAC: (config: ConfigResponseType) => ({ type: 'CONFIG_SUCCESS' as const, payload: config }),
+  failAC: (errMessage: string) => ({ type: 'CONFIG_FAIL' as const, payload: errMessage }),
 }
 
 export function configThunk(): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function(dispatch: Dispatch) {
     try {
+      dispatch(actions.requestAC())
       const { data } = await API.config.getConfig()
-
-      dispatch(actions.success(data))
+      dispatch(actions.successAC(data))
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
-        dispatch(actions.fail(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.fail(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

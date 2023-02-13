@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
-import { actions } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 import { Button } from '../../../02_Chunks/Button/Button'
@@ -100,7 +99,6 @@ export const AddProduct: FC = () => {
       return
     }
     navigate('/dashboard')
-    dispatch(actions.reset())
   }, [success])
 
   return (

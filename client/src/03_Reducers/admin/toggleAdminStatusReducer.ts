@@ -12,13 +12,13 @@ const initialState = {
   fail: '',
 }
 
-export const createProductReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const toggleAdminStatusReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'CREATE_PRODUCT_REQUEST':
+    case 'UPDATE_PROFILE_BY_ADMIN_REQUEST':
       return { ...state, success: false, fail: '', loading: true }
-    case 'CREATE_PRODUCT_SUCCESS':
+    case 'UPDATE_PROFILE_BY_ADMIN_SUCCESS':
       return { ...state, success: true, loading: false }
-    case 'CREATE_PRODUCT_FAIL':
+    case 'UPDATE_PROFILE_BY_ADMIN_FAIL':
       return { ...state, fail: action.payload, loading: false }
     default:
       return state
@@ -26,16 +26,19 @@ export const createProductReducer = (state = initialState, action: ActionType): 
 }
 
 export const actions = {
-  requestAC: () => ({ type: 'CREATE_PRODUCT_REQUEST' as const }),
-  successAC: () => ({ type: 'CREATE_PRODUCT_SUCCESS' as const }),
-  failAC: (errMessage: string) => ({ type: 'CREATE_PRODUCT_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'UPDATE_PROFILE_BY_ADMIN_REQUEST' as const }),
+  successAC: () => ({ type: 'UPDATE_PROFILE_BY_ADMIN_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'UPDATE_PROFILE_BY_ADMIN_FAIL' as const, payload: errMessage }),
 }
 
-export function createProductThunk(product: any): ThunkType {
-  return async (dispatch: Dispatch) => {
+export type ToggleAdminStatusType = {
+  isAdmin: boolean
+}
+export function toggleAdminStatusTC(userId: string, status: ToggleAdminStatusType): ThunkType {
+  return async function (dispatch: Dispatch) {
     try {
       dispatch(actions.requestAC())
-      await API.admin.createProduct(product)
+      await API.admin.toggleAdminStatus(userId, status)
       dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data

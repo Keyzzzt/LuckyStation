@@ -11,7 +11,7 @@ type Props = {
 
 export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandler }) => {
   const [activePage, setActivePage] = useState(1)
-  const { totalPages, products } = useTypedSelector((state) => state.productList)
+  const { totalPages, productsList } = useTypedSelector((state) => state.productList)
 
   const pagesCount = []
   for (let i = 1; i <= totalPages; i++) {
@@ -29,7 +29,7 @@ export const Pagination: FC<Props> = ({ limit, page, keyword = '', setPageHandle
 
   return (
     <div className={s.pagination}>
-      {products && products.length !== 0 && totalPages > 1 && (
+      {productsList && productsList.length !== 0 && totalPages > 1 && (
         <ul className={s.list}>
           {activePage > 1 && (
             <li onClick={() => setActivePage((prev) => prev - 1)} className={`${s.prev} ${s.btn}`}>
