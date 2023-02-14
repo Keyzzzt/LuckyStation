@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -35,7 +34,7 @@ export type ToggleAdminStatusType = {
   isAdmin: boolean
 }
 export function toggleAdminStatusTC(userId: string, status: ToggleAdminStatusType): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
       await API.admin.toggleAdminStatus(userId, status)

@@ -1,7 +1,6 @@
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 import { TermsAndConditionsResponseType } from '../05_Types/ResponseTypes'
 import { API } from '../API'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -16,11 +15,11 @@ const initialState = {
 export const termsAndConditionsReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'LOAD_TERMS_AND_CONDITIONS_REQUEST':
-      return { ...initialState, data: null, fail: '', loading: true }
+      return { ...state, data: null, fail: '', loading: true }
     case 'LOAD_TERMS_AND_CONDITIONS_SUCCESS':
-      return { ...initialState, data: action.payload, loading: false }
+      return { ...state, data: action.payload, loading: false }
     case 'LOAD_TERMS_AND_CONDITIONS_FAIL':
-      return { ...initialState, fail: action.payload, loading: false }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
@@ -32,8 +31,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'LOAD_TERMS_AND_CONDITIONS_FAIL' as const, payload: errMessage }),
 }
 
-export function termsAndConditionsThunk(lang: string): ThunkType {
-  return async function (dispatch: Dispatch) {
+export function termsAndConditionsTC(lang: string): ThunkType {
+  return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
       const { data } = await API.user.getTermsAndConditions(lang)

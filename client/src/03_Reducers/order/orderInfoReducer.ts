@@ -1,7 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { OrderResponseType } from '../../05_Types/ResponseTypes'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -32,8 +31,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'ORDER_INFO_FAIL' as const, payload: errMessage }),
 }
 
-export function orderInfoThunk(orderId: string): ThunkType {
-  return async function (dispatch: Dispatch) {
+export function orderInfoTC(orderId: string): ThunkType {
+  return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
       const { data } = await API.admin.getSingleOrder(orderId)

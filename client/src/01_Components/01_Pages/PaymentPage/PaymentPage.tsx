@@ -6,9 +6,9 @@ import { useParams } from 'react-router'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import { Message } from '../../02_Chunks/Message/Message'
 import Loader from '../../02_Chunks/Loader/Loader'
-import { orderInfoThunk } from '../../../03_Reducers/order/orderInfoReducer'
+import { orderInfoTC } from '../../../03_Reducers/order/orderInfoReducer'
 import $api from '../../../04_Utils/axiosSetup'
-import { payOrderThunk } from '../../../03_Reducers/order/orderPayReducer'
+import { orderPayTC } from '../../../03_Reducers/order/orderPayReducer'
 // import { actions } from '../../../03_Reducers/order/orderPayReducer'
 import { toLocal } from '../../../04_Utils/utils'
 
@@ -23,7 +23,7 @@ export const PaymentPage: FC = () => {
     if (!orderInfo) {
       return
     }
-    dispatch(payOrderThunk(orderInfo._id, paymentResult))
+    dispatch(orderPayTC(orderInfo._id, paymentResult))
   }
 
   // Load PayPal button
@@ -53,7 +53,7 @@ export const PaymentPage: FC = () => {
   // Fetch order
   useEffect(() => {
     if (params.orderId)
-      dispatch(orderInfoThunk(params.orderId))
+      dispatch(orderInfoTC(params.orderId))
   }, [params.orderId])
 
 

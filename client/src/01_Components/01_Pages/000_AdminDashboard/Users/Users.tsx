@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
-import { usersListThunk } from '../../../../03_Reducers/admin/usersListReducer'
+import { usersListTC } from '../../../../03_Reducers/admin/usersListReducer'
 import { UsersList } from './UsersList'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
@@ -21,7 +21,7 @@ export const Users: FC = () => {
   const [usersToRender, setUsersToRender] = useState<any>(null)
 
   useEffect(() => {
-    dispatch(usersListThunk(1, 10))
+    dispatch(usersListTC(1, 10))
   }, [dispatch, deleteSuccess])
 
   useEffect(() => {

@@ -12,7 +12,7 @@ import { myOrdersReducer } from './03_Reducers/user/myOrdersReducer'
 import { userDeleteReducer } from './03_Reducers/admin/userDeleteReducer'
 import { userInfoReducer } from './03_Reducers/user/userInfoReducer'
 import { usersListReducer } from './03_Reducers/admin/usersListReducer'
-import { userRegisterReducer } from './03_Reducers/user/userRegisterReducer'
+import { registerReducer } from './03_Reducers/Auth/registerReducer'
 import { userUpdateOwnProfileReducer } from './03_Reducers/user/userUpdateOwnProfileReducer'
 import { toggleAdminStatusReducer } from './03_Reducers/admin/toggleAdminStatusReducer'
 import { getUserReducer } from './03_Reducers/admin/getUserReducer'
@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
   appConfig: appConfigReducer,
   signIn: signInReducer,
   getUser: getUserReducer,
-  userRegister: userRegisterReducer,
+  userRegister: registerReducer,
   userInfo: userInfoReducer,
   userList: usersListReducer,
   userDelete: userDeleteReducer,

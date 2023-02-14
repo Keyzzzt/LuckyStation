@@ -1,6 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
+import { NewProductType } from '../../01_Components/01_Pages/000_AdminDashboard/AddProduct/AddProduct'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -31,8 +31,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'CREATE_PRODUCT_FAIL' as const, payload: errMessage }),
 }
 
-export function createProductThunk(product: any): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function createProductTC(product: any): ThunkType {
+  return async (dispatch) => {
     try {
       dispatch(actions.requestAC())
       await API.admin.createProduct(product)

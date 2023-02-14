@@ -4,7 +4,7 @@ import { Header } from './01_Components/01_Pages/01_LandingPage/01_Header/Header
 import { Footer } from './01_Components/02_Chunks/Footer/Footer'
 import { authenticateThunk } from './03_Reducers/user/userInfoReducer'
 import { useTypedSelector } from './05_Types/01_Base'
-import { configThunk } from './03_Reducers/appConfigReducer'
+import { configTC } from './03_Reducers/appConfigReducer'
 import { Routes, Route } from 'react-router-dom'
 import { Page404 } from './01_Components/01_Pages/PageNotFound404/Page404'
 import { AdminDashboard } from './01_Components/01_Pages/000_AdminDashboard/AdminDashboard'
@@ -41,7 +41,7 @@ export const App = () => {
   useEffect(() => {
     console.log('APP: authenticate')
     dispatch(authenticateThunk())
-    dispatch(configThunk())
+    dispatch(configTC())
   }, [])
 
   useEffect(() => {

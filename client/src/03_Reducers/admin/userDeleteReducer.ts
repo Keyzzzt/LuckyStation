@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -32,8 +31,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'USER_DELETE_FAIL' as const, payload: errMessage }),
 }
 
-export function userDeleteThunk(userId: string): ThunkType {
-  return async function (dispatch: Dispatch) {
+export function userDeleteTC(userId: string): ThunkType {
+  return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
       await API.admin.deleteUser(userId)

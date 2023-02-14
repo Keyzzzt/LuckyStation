@@ -1,7 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
-import { GalleryListItemType } from './galleryReducer'
 
 type ThunkType = BaseThunkType<ActionType>
 type ActionType = InferActionTypes<typeof actions>
@@ -43,8 +41,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'GALLERY_ITEM_EDIT_FAIL' as const, payload: errMessage }),
 }
 
-export function editGalleryItemThunk(updateData: UpdateData, itemId: string): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function editGalleryItemTC(updateData: UpdateData, itemId: string): ThunkType {
+  return async (dispatch) => {
     try {
       dispatch(actions.requestAC())
       await API.admin.editGalleryItem(updateData, itemId)

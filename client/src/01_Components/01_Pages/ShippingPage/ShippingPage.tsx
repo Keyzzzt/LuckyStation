@@ -26,7 +26,7 @@ import React, { FC, FormEvent, useEffect, useRef, useState } from 'react'
 import s from './shippingPage.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { createOrderThunk } from '../../../03_Reducers/order/orderCreateReducer'
+import { createOrderTC } from '../../../03_Reducers/order/orderCreateReducer'
 import { CheckoutSteps } from '../../02_Chunks/CheckoutSteps/CheckoutSteps'
 import { isEmail, toLocal } from '../../../04_Utils/utils'
 import { saveContactInfoThunk } from '../../../03_Reducers/cart/cartReducer'
@@ -118,7 +118,7 @@ export const ShippingPage: FC = () => {
       if (subscribe) {
         API.user.subscribe(email)
       }
-      dispatch(createOrderThunk({ ...order }))
+      dispatch(createOrderTC({ ...order }))
     }
   }
 

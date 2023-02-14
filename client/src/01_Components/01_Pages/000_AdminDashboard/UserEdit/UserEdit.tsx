@@ -8,8 +8,8 @@ import { FC, useEffect } from 'react'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { parseCreatedUpdated } from '../../../../04_Utils/utils'
-import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
-import { userDeleteThunk } from '../../../../03_Reducers/admin/userDeleteReducer'
+import { getUserTC } from '../../../../03_Reducers/admin/getUserReducer'
+import { userDeleteTC } from '../../../../03_Reducers/admin/userDeleteReducer'
 import { toggleAdminStatusTC } from '../../../../03_Reducers/admin/toggleAdminStatusReducer'
 
 export const UserEdit: FC = () => {
@@ -23,7 +23,7 @@ export const UserEdit: FC = () => {
 
   const handleDelete = (userId: string, email: string) => {
     if (window.confirm(`Are you sure you want to delete ${email}?`)) {
-      dispatch(userDeleteThunk(userId))
+      dispatch(userDeleteTC(userId))
       alert(`${email} has been removed`)
       navigate('/dashboard')
     }
@@ -43,13 +43,13 @@ export const UserEdit: FC = () => {
   }
   useEffect(() => {
     if (userId) {
-      dispatch(getUserThunk(userId))
+      dispatch(getUserTC(userId))
     }
   }, [userId])
 
   useEffect(() => {
     if (success && userId) {
-      dispatch(getUserThunk(userId))
+      dispatch(getUserTC(userId))
     }
   }, [success])
 

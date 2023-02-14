@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -17,9 +16,9 @@ export const apiReducer = (state = initialState, action: ActionType): InitialSta
     case 'API_REQUEST':
       return { ...state, apiInfo: null, fail: '', loading: true }
     case 'API_SUCCESS':
-      return { ...initialState, apiInfo: action.payload, loading: false }
+      return { ...state, apiInfo: action.payload, loading: false }
     case 'API_FAIL':
-      return { ...initialState, fail: action.payload, loading: false }
+      return { ...state, fail: action.payload, loading: false }
     default:
       return state
   }
@@ -31,8 +30,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'API_FAIL' as const, payload: errMessage }),
 }
 
-export function apiThunk(): ThunkType {
-  return async function (dispatch: Dispatch) {
+export function apiTC(): ThunkType {
+  return async function (dispatch) {
     try {
       const { data } = await API.admin.getApiInfo()
       dispatch(actions.successAC(data))

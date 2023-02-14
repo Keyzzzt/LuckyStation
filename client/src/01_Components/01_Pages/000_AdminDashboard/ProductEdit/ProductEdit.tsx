@@ -3,12 +3,12 @@ import s from './productEdit.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
-import { productInfoThunk } from '../../../../03_Reducers/product/productInfoReducer'
-import { productDeleteThunk } from '../../../../03_Reducers/admin/productDeleteReducer'
-import { updateProductThunk } from '../../../../03_Reducers/admin/updateProductReducer'
+import { productInfoTC } from '../../../../03_Reducers/product/productInfoReducer'
+import { productDeleteTC } from '../../../../03_Reducers/admin/productDeleteReducer'
+import { updateProductTC } from '../../../../03_Reducers/admin/updateProductReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { EditableSpan } from '../../../02_Chunks/EditableSpan/EditableSpan'
-import { getUserThunk } from '../../../../03_Reducers/admin/getUserReducer'
+import { getUserTC } from '../../../../03_Reducers/admin/getUserReducer'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
@@ -45,7 +45,7 @@ export const ProductEdit: FC = () => {
 
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      dispatch(productDeleteThunk(id))
+      dispatch(productDeleteTC(id))
       alert(`${name} has been removed`)
       navigate('/dashboard')
     }
@@ -58,7 +58,7 @@ export const ProductEdit: FC = () => {
   const handleUpdate = () => {
     // TODO check fields
     dispatch(
-      updateProductThunk(productInfo?._id!, {
+      updateProductTC(productInfo?._id!, {
         name,
         brand,
         description,
@@ -81,12 +81,12 @@ export const ProductEdit: FC = () => {
   }
 
   useEffect(() => {
-    productId && dispatch(productInfoThunk(productId))
+    productId && dispatch(productInfoTC(productId))
   }, [productId])
 
   useEffect(() => {
     if (productInfo) {
-      dispatch(getUserThunk(productInfo.user))
+      dispatch(getUserTC(productInfo.user))
       setName(productInfo.name)
       setBrand(productInfo.brand)
       setDescription(productInfo.description)

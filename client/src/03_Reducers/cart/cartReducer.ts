@@ -1,11 +1,14 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { ProductResponseType } from '../../05_Types/ResponseTypes'
-import { Dispatch } from 'redux'
+import { StateType } from '../../store'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
+
+// TODO decomposition
+
 
 export type ContactInfo = {
   name: string
@@ -70,7 +73,7 @@ export const actions = {
 }
 
 export function addToCartThunk(productId: string, qty: number): ThunkType {
-  return async (dispatch: Dispatch, getState) => {
+  return async (dispatch, getState) => {
     try {
       const { data } = await API.admin.getSingleProduct(productId)
       data.qty = qty

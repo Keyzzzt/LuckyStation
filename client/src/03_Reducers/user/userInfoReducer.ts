@@ -1,7 +1,6 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { UserResponseType } from '../../05_Types/ResponseTypes'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -9,7 +8,7 @@ type ActionType = InferActionTypes<typeof actions>
 
 const initialState = {
   userInfo: null as null | UserResponseType,
-  error: '',
+  fail: '',
 }
 
 export const userInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
@@ -17,7 +16,7 @@ export const userInfoReducer = (state = initialState, action: ActionType): Initi
     case 'USER_INFO_SUCCESS':
       return { ...initialState, userInfo: action.payload }
     case 'USER_INFO_FAIL':
-      return { ...initialState, error: action.payload }
+      return { ...initialState, fail: action.payload }
     case 'USER_INFO_RESET':
       return { ...initialState }
     case 'ADD_TO_FAVORITE':
@@ -66,7 +65,7 @@ export const actions = {
 // Мы отправляем запрос на базу и меняем стейт
 // Таким образом данные в базе и на фронте сопадают без запроса пользователя с новыми даннми
 export function toggleFavoriteThunk(productId: string, isFavorite: boolean): ThunkType {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch) => {
     try {
       await API.product.toggleFavorite(productId, isFavorite)
       if (isFavorite) {
@@ -86,7 +85,7 @@ export function toggleFavoriteThunk(productId: string, isFavorite: boolean): Thu
   }
 }
 export function subscribeThunk(email: string): ThunkType {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch) => {
     try {
       await API.user.subscribe(email)
       dispatch(actions.subscribeAC(email))
@@ -103,7 +102,7 @@ export function subscribeThunk(email: string): ThunkType {
 }
 
 export function userInfoThunk(): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function (dispatch) {
     try {
       const { data } = await API.user.getProfile()
       dispatch(actions.userInfoSuccessAC(data))
@@ -120,7 +119,7 @@ export function userInfoThunk(): ThunkType {
 }
 
 export function logoutThunk(): ThunkType {
-  return async function (dispatch: Dispatch) {
+  return async function (dispatch) {
     try {
       await API.auth.logout()
       dispatch(actions.userInfoResetAC())

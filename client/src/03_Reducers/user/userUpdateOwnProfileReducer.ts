@@ -2,7 +2,6 @@ import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 import { userInfoThunk } from './userInfoReducer'
 import { UpdateProfileRequestType } from '../../05_Types/ResponseTypes'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -17,41 +16,39 @@ const initialState = {
 export const userUpdateOwnProfileReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'UPDATE_OWN_PROFILE_REQUEST':
-      return { ...initialState, loading: true }
+      return { ...state, success: false, fail:'', loading: true }
     case 'UPDATE_OWN_PROFILE_SUCCESS':
-      return { ...initialState, success: true }
+      return { ...state, success: true, loading: false }
     case 'UPDATE_OWN_PROFILE_FAIL':
-      return { ...initialState, fail: action.payload }
-    case 'UPDATE_OWN_PROFILE_RESET':
-      return { ...initialState }
+      return { ...state, fail: action.payload, loading: false }
+
     default:
       return state
   }
 }
 
 export const actions = {
-  updateOwnProfileRequestAC: () => ({ type: 'UPDATE_OWN_PROFILE_REQUEST' as const }),
-  updateOwnProfileSuccessAC: () => ({ type: 'UPDATE_OWN_PROFILE_SUCCESS' as const }),
-  updateOwnProfileFailAC: (errMessage: string) => ({ type: 'UPDATE_OWN_PROFILE_FAIL' as const, payload: errMessage }),
-  updateOwnProfileResetAC: () => ({ type: 'UPDATE_OWN_PROFILE_RESET' as const }),
+  requestAC: () => ({ type: 'UPDATE_OWN_PROFILE_REQUEST' as const }),
+  successAC: () => ({ type: 'UPDATE_OWN_PROFILE_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'UPDATE_OWN_PROFILE_FAIL' as const, payload: errMessage }),
 }
 
-export function updateOwnProfileThunk(formData: UpdateProfileRequestType): ThunkType {
-  return async function (dispatch: Dispatch, getState) {
+export function updateOwnProfileTC(formData: UpdateProfileRequestType): ThunkType {
+  return async function (dispatch) {
     try {
-      dispatch(actions.updateOwnProfileRequestAC())
+      dispatch(actions.requestAC())
       const { data } = await API.user.updateOwnProfile(formData)
       localStorage.setItem('token', JSON.stringify(data.accessToken))
       userInfoThunk()
-      dispatch(actions.updateOwnProfileSuccessAC())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg)
-        dispatch(actions.updateOwnProfileFailAC(errMsg[0]))
+        dispatch(actions.failAC(errMsg[0]))
         return
       }
-      dispatch(actions.updateOwnProfileFailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

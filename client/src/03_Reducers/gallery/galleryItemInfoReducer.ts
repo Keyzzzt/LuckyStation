@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
 import { GalleryListItemType } from './galleryReducer'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -35,8 +34,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'GALLERY_ITEM_INFO_FAIL' as const, payload: errMessage }),
 }
 
-export function galleryItemInfoThunk(itemId: string): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function galleryItemInfoTC(itemId: string): ThunkType {
+  return async (dispatch) => {
     try {
       dispatch(actions.requestAC())
       const { data } = await API.admin.getGalleryItem(itemId)

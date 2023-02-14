@@ -3,7 +3,7 @@ import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
-import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
+import { registerTC } from '../../../03_Reducers/Auth/registerReducer'
 import { isEmail } from '../../../04_Utils/utils'
 import { Button } from '../../02_Chunks/Button/Button'
 
@@ -27,7 +27,7 @@ export const PasswordRecovery: FC = () => {
       setInputError(true)
       return
     }
-    dispatch(registerThunk(email, '', ''))
+    dispatch(registerTC(email, ''))
     alert('This feature is not working yet. But thank you for the effort.')
     navigate('/')
   }
@@ -36,7 +36,7 @@ export const PasswordRecovery: FC = () => {
 
       <main className={`stationContainer ${s.authContainer}`}>
         <p className={s.signInTitle}>Welcome to Station!</p>
-        <p className={s.signInSubtitle}>Passsword recovery</p>
+        <p className={s.signInSubtitle}>Password recovery</p>
         <form className={s.form} onSubmit={handleSubmit}>
           <CustomInput
             id={'recoveryEmail'}

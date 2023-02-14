@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
-import { orderListThunk } from '../../../../03_Reducers/order/ordersListReducer'
+import { orderListTC } from '../../../../03_Reducers/order/ordersListReducer'
 import { OrdersList } from './OrdersList'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 import { DashboardSVG } from '../../../02_Chunks/svg/DashboardSVG'
@@ -17,7 +17,7 @@ export const Orders: FC = () => {
 
 
   useEffect(() => {
-    dispatch(orderListThunk(1, 100))
+    dispatch(orderListTC(1, 100))
   }, [])
 
   useEffect(() => {

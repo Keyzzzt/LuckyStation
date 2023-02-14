@@ -1,7 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
-import { GalleryListItemType } from './galleryReducer'
 
 type ThunkType = BaseThunkType<ActionType>
 type ActionType = InferActionTypes<typeof actions>
@@ -42,20 +40,20 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'ADD_GALLERY_ITEM_FAIL' as const, payload: errMessage }),
 }
 
-export function addGalleryItemThunk(data: AddGalleryItemType): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function addGalleryItemTC(data: AddGalleryItemType): ThunkType {
+  return async (dispatch) => {
     try {
-      dispatch(actions.RequestAC())
+      dispatch(actions.requestAC())
       await API.admin.addGalleryItem(data)
-      dispatch(actions.SuccessAC())
+      dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
-        dispatch(actions.FailAC(errMsg))
+        dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.FailAC(error))
+      dispatch(actions.failAC(error))
     }
   }
 }

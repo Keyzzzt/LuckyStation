@@ -5,7 +5,7 @@ import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
-import { orderInfoThunk } from '../../../../03_Reducers/order/orderInfoReducer'
+import { orderInfoTC } from '../../../../03_Reducers/order/orderInfoReducer'
 import {
   deleteOrderThunk,
   deliveredThunk,
@@ -55,7 +55,7 @@ export const OrderEdit: FC = () => {
 
   useEffect(() => {
     if (!orderInfo || successDelivered || successNotDelivered || successPaid || successNotPaid || successDelete) {
-      orderId && dispatch(orderInfoThunk(orderId))
+      orderId && dispatch(orderInfoTC(orderId))
     }
   }, [dispatch, successDelivered, successNotDelivered, successPaid, successNotPaid, orderId, successDelete])
   return (

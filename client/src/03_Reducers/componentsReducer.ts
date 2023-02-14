@@ -1,4 +1,3 @@
-import { API } from '../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../05_Types/01_Base'
 import { ConfigResponseType } from '../05_Types/ResponseTypes'
 

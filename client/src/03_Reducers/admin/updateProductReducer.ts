@@ -1,6 +1,5 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { Dispatch } from 'redux'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -31,8 +30,8 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'UPDATE_PRODUCT_FAIL' as const, payload: errMessage }),
 }
 
-export function updateProductThunk(productId: string, product: any): ThunkType {
-  return async (dispatch: Dispatch) => {
+export function updateProductTC(productId: string, product: any): ThunkType {
+  return async (dispatch) => {
     try {
       dispatch(actions.requestAC())
       const { data } = await API.admin.updateProduct(productId, product)

@@ -1,16 +1,16 @@
 import s from './gallery.module.scss'
 import React, { FC, useState, useEffect, ChangeEvent, FormEvent } from 'react'
-import { galleryListThunk } from '../../../03_Reducers/gallery/galleryReducer'
+import { galleryListTC } from '../../../03_Reducers/gallery/galleryReducer'
 import { useDispatch } from 'react-redux'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
-import { galleryItemInfoThunk } from '../../../03_Reducers/gallery/galleryItemInfoReducer'
+import { galleryItemInfoTC } from '../../../03_Reducers/gallery/galleryItemInfoReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import $api from '../../../04_Utils/axiosSetup'
-import { editGalleryItemThunk } from '../../../03_Reducers/gallery/editGalleryItemReducer'
+import { editGalleryItemTC } from '../../../03_Reducers/gallery/editGalleryItemReducer'
 import { parseCreatedUpdated } from '../../../04_Utils/utils'
 import Loader from '../../02_Chunks/Loader/Loader'
-import { deleteGalleryItemThunk } from '../../../03_Reducers/gallery/deleteGalleryItemReducer'
-import { addGalleryItemThunk } from '../../../03_Reducers/gallery/addGalleryItemReducer'
+import { deleteGalleryItemTC } from '../../../03_Reducers/gallery/deleteGalleryItemReducer'
+import { addGalleryItemTC } from '../../../03_Reducers/gallery/addGalleryItemReducer'
 import { Button } from '../../02_Chunks/Button/Button'
 
 // TODO Close on Esc & click outside
@@ -74,7 +74,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
 
   const handleDelete = (itemId: string) => {
     // Ask if OK
-    dispatch(deleteGalleryItemThunk(itemId))
+    dispatch(deleteGalleryItemTC(itemId))
     handleCloseModal()
   }
   const handleAddImage = (e: FormEvent<HTMLFormElement>) => {
@@ -92,7 +92,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
       },
       className,
     }
-    dispatch(addGalleryItemThunk(newImage))
+    dispatch(addGalleryItemTC(newImage))
     handleCloseModal()
   }
   const handleEditImage = (e: FormEvent<HTMLFormElement>, itemId: string) => {
@@ -111,12 +111,12 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
       },
 
     }
-    dispatch(editGalleryItemThunk(updateData, itemId))
+    dispatch(editGalleryItemTC(updateData, itemId))
     handleCloseModal()
   }
   const handleShowModal = (itemId: string, modal: 'image' | 'edit') => {
     setResetIsDirty(false)
-    dispatch(galleryItemInfoThunk(itemId))
+    dispatch(galleryItemInfoTC(itemId))
     if (modal === 'image') {
       setZoomModal(true)
       return
@@ -132,7 +132,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
   // Get gallery items
   useEffect(() => {
     if (!galleryListItems) {
-      dispatch(galleryListThunk())
+      dispatch(galleryListTC())
     }
   }, [galleryListItems])
   // Get single item
@@ -149,7 +149,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
   useEffect(() => {
     if (editSuccess) {
       // Show OK message
-      dispatch(galleryListThunk())
+      dispatch(galleryListTC())
       return
     }
     if (editFail) {
@@ -160,7 +160,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
   useEffect(() => {
     if (addSuccess) {
       // Show OK message
-      dispatch(galleryListThunk())
+      dispatch(galleryListTC())
       return
     }
     if (addFail) {
@@ -171,7 +171,7 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
   useEffect(() => {
     if (deleteSuccess) {
       // Show OK message
-      dispatch(galleryListThunk())
+      dispatch(galleryListTC())
       return
     }
     if (deleteFail) {

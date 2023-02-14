@@ -32,7 +32,7 @@ export const actions = {
 }
 
 export function signInTC(email: string, password: string): ThunkType {
-  return async function(dispatch: any) {
+  return async function(dispatch) {
     try {
       dispatch(actions.requestAC())
       const { data } = await API.auth.signIn(email, password)

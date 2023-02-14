@@ -16,6 +16,7 @@ import { GalleryListItemType } from './03_Reducers/gallery/galleryReducer'
 import { UpdateData } from './03_Reducers/gallery/editGalleryItemReducer'
 import { AddGalleryItemType } from './03_Reducers/gallery/addGalleryItemReducer'
 import { ToggleAdminStatusType } from './03_Reducers/admin/toggleAdminStatusReducer'
+import { NewProductType } from './01_Components/01_Pages/000_AdminDashboard/AddProduct/AddProduct'
 
 export const API = {
   config: {
@@ -112,7 +113,7 @@ export const API = {
       return $api.delete<any>(`admin/product/${productId}`)
     },
     createProduct: async (product: any) => {
-      return $api.post<any>(`admin/product`, { ...product })
+      return $api.post(`admin/product`, { ...product })
     },
     updateProduct: async (productId: string, product: any) => {
       return $api.put<any>(`admin/product/${productId}`, { ...product })

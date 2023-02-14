@@ -2,8 +2,8 @@ import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
+type InitialStateType = typeof initialState
 type ActionType = InferActionTypes<typeof actions>
-export type InitialState = typeof initialState
 
 const initialState = {
   success: false,
@@ -11,13 +11,13 @@ const initialState = {
   fail: '',
 }
 
-export const deleteGalleryItemReducer = (state = initialState, action: ActionType): InitialState => {
+export const registerReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
-    case 'DELETE_REQUEST':
+    case 'REGISTER_REQUEST':
       return { ...state, success: false, fail: '', loading: true }
-    case 'DELETE_SUCCESS':
+    case 'REGISTER_SUCCESS':
       return { ...state, success: true, loading: false }
-    case 'DELETE_FAIL':
+    case 'REGISTER_FAIL':
       return { ...state, fail: action.payload, loading: false }
     default:
       return state
@@ -25,21 +25,21 @@ export const deleteGalleryItemReducer = (state = initialState, action: ActionTyp
 }
 
 export const actions = {
-  requestAC: () => ({ type: 'DELETE_REQUEST' as const }),
-  successAC: () => ({ type: 'DELETE_SUCCESS' as const }),
-  failAC: (errMessage: string) => ({ type: 'DELETE_FAIL' as const, payload: errMessage }),
+  requestAC: () => ({ type: 'REGISTER_REQUEST' as const }),
+  successAC: () => ({ type: 'REGISTER_SUCCESS' as const }),
+  failAC: (errMessage: string) => ({ type: 'REGISTER_FAIL' as const, payload: errMessage }),
 }
 
-export function deleteGalleryItemTC(itemId: string): ThunkType {
-  return async (dispatch) => {
+export function registerTC(email: string, password: string): ThunkType {
+  return async function(dispatch) {
     try {
       dispatch(actions.requestAC())
-      await API.admin.deleteGalleryItem(itemId)
+      await API.auth.registration(email, password)
       dispatch(actions.successAC())
     } catch (err: any) {
       const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
-      if (errors && errors.length > 0) {
-        const errMsg = errors.map((e) => e.msg).join('; ')
+      if (errors.length > 0) {
+        const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }

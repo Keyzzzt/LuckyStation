@@ -1,7 +1,7 @@
 import s from './termsAndConditionsPage.module.scss'
 import { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { termsAndConditionsThunk } from '../../../03_Reducers/termsAndConditionsReducer'
+import { termsAndConditionsTC } from '../../../03_Reducers/termsAndConditionsReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import Loader from '../../02_Chunks/Loader/Loader'
 
@@ -11,7 +11,7 @@ export const TermsAndConditionsPage: FC = () => {
   const lang = 'en' // todo useState
 
   useEffect(() => {
-    dispatch(termsAndConditionsThunk(lang))
+    dispatch(termsAndConditionsTC(lang))
   }, [])
 
   return (

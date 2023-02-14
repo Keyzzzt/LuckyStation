@@ -3,9 +3,9 @@ import { FC, FormEvent, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTypedSelector } from '../../../05_Types/01_Base'
-import { actions } from '../../../03_Reducers/user/userRegisterReducer'
+import { actions } from '../../../03_Reducers/Auth/registerReducer'
 import { CustomInput } from '../../02_Chunks/CustomInput/CustomInput'
-import { registerThunk } from '../../../03_Reducers/user/userRegisterReducer'
+import { registerTC } from '../../../03_Reducers/Auth/registerReducer'
 import { isEmail } from '../../../04_Utils/utils'
 import { Button } from '../../02_Chunks/Button/Button'
 
@@ -15,15 +15,15 @@ export const SignUpPage: FC = () => {
   const [password, setPassword] = useState('123456')
   const [confirmPassword, setConfirmPassword] = useState('123456')
 
-  const { registerFail, registerSuccess } = useTypedSelector(state => state.userRegister)
+  const { success, loading, fail } = useTypedSelector(state => state.userRegister)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const registerReset = () => {
-    if (registerFail) {
-      dispatch(actions.registerResetAC())
-    }
-  }
+  // const registerReset = () => {
+  //   if (registerFail) {
+  //     dispatch(actions.registerResetAC())
+  //   }
+  // }
   // Обнуляет ошибки если поля заполнены браузером атоматом
   useEffect(() => {
     email.length > 0 && setInputError(false)
@@ -38,20 +38,19 @@ export const SignUpPage: FC = () => {
   }, [])
 
   useEffect(() => {
-    if (registerSuccess) {
-      dispatch(actions.registerResetAC())
+    if (success) {
       alert(`We have sent confirmation link to ${email}`)
       setEmail('')
       setConfirmPassword('')
       setPassword('')
       navigate('/')
     }
-  }, [registerSuccess])
+  }, [success])
   useEffect(() => {
-    if (registerFail) {
-      alert(registerFail)
+    if (fail) {
+      alert(fail)
     }
-  }, [registerFail])
+  }, [fail])
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isEmail(email) && password.length >= 6 && password === confirmPassword) {
@@ -60,7 +59,7 @@ export const SignUpPage: FC = () => {
       setInputError(true)
       return
     }
-    dispatch(registerThunk(email, password, confirmPassword))
+    dispatch(registerTC(email, password))
   }
   return (
     <div className='stationSectionMain'>

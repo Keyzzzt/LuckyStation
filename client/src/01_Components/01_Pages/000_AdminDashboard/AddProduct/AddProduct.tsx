@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import s from './addProduct.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useNavigate } from 'react-router-dom'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import Loader from '../../../02_Chunks/Loader/Loader'
-import { createProductThunk } from '../../../../03_Reducers/admin/createProductReducer'
+import { createProductTC } from '../../../../03_Reducers/admin/createProductReducer'
 import $api from '../../../../04_Utils/axiosSetup'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 import { Button } from '../../../02_Chunks/Button/Button'
@@ -19,51 +19,78 @@ import { Button } from '../../../02_Chunks/Button/Button'
 // Add new product - stay on Create product
 
 
-// TODO
-// Polish styles
+export type NewProductType = {
+  name: string
+  price: number
+  images: string[]
+  brand: string
+  category: string
+  countInStock: number
+  description: string
+  description2: string
+  includes: string
+  maximumLoadCapacity: string
+  weight: string
+  size: string[]
+  colors: string[]
+  colorsInText: string
+  materials: string
+  careInstructions: string
+  additionalInfo: string
+  whatShouldYouKnow: string
+  quality: string
+  isNewProduct: boolean
+  isPromo: boolean
+  isShowOnMainPage: boolean
+}
 
+// TODO Replace useState with useReducer
 export const AddProduct: FC = () => {
   const { success } = useTypedSelector(state => state.createProduct)
   useScrollToTop()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [name, setName] = useState('')
-  const [brand, setBrand] = useState('')
-  const [category, setCategory] = useState('')
-  const [description, setDescription] = useState('')
-  const [price, setPrice] = useState('')
-  const [countInStock, setCountInStock] = useState('')
-  const [colors, setColors] = useState('')
-  const [sizes, setSizes] = useState('')
-  const [image, setImage] = useState('')
+  const [name, setName] = useState<string>('')
+  const [brand, setBrand] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [price, setPrice] = useState<number>(0)
+  const [countInStock, setCountInStock] = useState<number>(0)
+  const [colors, setColors] = useState<string>('')
+  const [size, setSize] = useState<string>('')
+  const [images, setImages] = useState<string[]>([])
   const [uploadedFile, setUploadedFile] = useState({ fileName: '', filePath: '' })
   const [isNewProduct, setIsNewProduct] = useState(false)
   const [uploading, setUploading] = useState(false)
 
 
-  const fileInputRef = useRef(null)
-  const handleUpload = async (e: any) => {
-    const file = e.target.files[0]
+  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const formData = new FormData()
-    formData.append('file', file)
-    setUploading(true)
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+    if (e.target.files) {
+      const file = e.target.files[0]
+      formData.append('file', file)
+      setUploading(true)
+
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+        const { data } = await $api.post('http://localhost:5000/api/upload', formData, config)
+        const { fileName, filePath } = data
+
+        setImages([filePath])
+        setUploadedFile({ fileName, filePath })
+        setUploading(false)
+      } catch (error) {
+        setUploading(false)
       }
-      const { data } = await $api.post('http://localhost:5000/api/upload', formData, config)
-      const { fileName, filePath } = data
-      setImage(filePath)
-      setUploadedFile({ fileName, filePath })
-      setUploading(false)
-    } catch (error) {
-      setUploading(false)
     }
+
   }
 
-  const stringToArray = (str: string) => {
+  const stringToArray = (str: string): string[] => {
     if (str.length === 0) return []
     return str
       .trim()
@@ -73,26 +100,20 @@ export const AddProduct: FC = () => {
 
   const handleSubmit = () => {
     dispatch(
-      createProductThunk({
+      createProductTC({
         name,
         brand,
         category,
         description,
         price: Number(price),
-        image,
+        images,
         countInStock,
         colors: stringToArray(colors),
-        sizes: stringToArray(sizes),
+        size: stringToArray(size),
         isNewProduct,
       }),
     )
   }
-
-  const handleFilePick = () => {
-    // @ts-ignore
-    fileInputRef.current.click()
-  }
-
   // If product created, redirect to dashboard
   useEffect(() => {
     if (!success) {
@@ -143,12 +164,12 @@ export const AddProduct: FC = () => {
           <tr>
             <td>Price</td>
             <td><input className='stationTableInput' type="text" value={price}
-                       onChange={(e) => setPrice(e.target.value)}/></td>
+                       onChange={(e) => setPrice(+e.target.value)}/></td>
           </tr>
           <tr>
             <td>In stock</td>
             <td><input className='stationTableInput' type="text" value={countInStock}
-                       onChange={(e) => setCountInStock(e.target.value)}/></td>
+                       onChange={(e) => setCountInStock(+e.target.value)}/></td>
           </tr>
           <tr>
             <td>Colors</td>
@@ -157,8 +178,8 @@ export const AddProduct: FC = () => {
           </tr>
           <tr>
             <td>Sizes</td>
-            <td><input className='stationTableInput' type="text" value={sizes}
-                       onChange={(e) => setSizes(e.target.value)}/></td>
+            <td><input className='stationTableInput' type="text" value={size}
+                       onChange={(e) => setSize(e.target.value)}/></td>
           </tr>
           <tr>
             <td>Mark as new</td>
@@ -168,11 +189,8 @@ export const AddProduct: FC = () => {
           <tr>
             <td>Images</td>
             <td>
-              <input onChange={e => setImage(e.target.value)} type="text" value={image} placeholder="Image"/>
-              <Button onClick={handleFilePick} title='Choose file' type='submit' color='success' marginTop='0'/>
+              <input onChange={e => setImages([e.target.value])} type="text" value={images} placeholder="Image"/>
               <input
-                className='stationHidden'
-                ref={fileInputRef}
                 onChange={handleUpload}
                 type="file"
                 accept='image/*, .png, .jpg, .gif, .web'

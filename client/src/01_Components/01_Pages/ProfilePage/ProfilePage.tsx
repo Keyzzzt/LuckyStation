@@ -2,8 +2,8 @@ import s from './profilePage.module.scss'
 import { FormEvent, FC, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { myOrdersThunk } from '../../../03_Reducers/user/myOrdersReducer'
-import { updateOwnProfileThunk } from '../../../03_Reducers/user/userUpdateOwnProfileReducer'
+import { myOrdersTC } from '../../../03_Reducers/user/myOrdersReducer'
+import { updateOwnProfileTC } from '../../../03_Reducers/user/userUpdateOwnProfileReducer'
 import { useTypedSelector } from '../../../05_Types/01_Base'
 import Loader from '../../02_Chunks/Loader/Loader'
 import { Message } from '../../02_Chunks/Message/Message'
@@ -11,7 +11,7 @@ import { Message } from '../../02_Chunks/Message/Message'
 export const ProfilePage: FC = () => {
   const dispatch = useDispatch()
   const { userInfo } = useTypedSelector(state => state.userInfo)
-  const { orders, error: meyOrdersErr } = useTypedSelector(state => state.myOrders)
+  const { orders, fail: meyOrdersErr } = useTypedSelector(state => state.myOrders)
   const { success, fail } = useTypedSelector(state => state.userUpdateOwnProfile)
 
   const [oldPassword, setOldPassword] = useState('')
@@ -25,7 +25,7 @@ export const ProfilePage: FC = () => {
       setMessage('Passwords do not match')
     } else {
       dispatch(
-        updateOwnProfileThunk({
+        updateOwnProfileTC({
           oldPassword,
           newPassword,
           confirmNewPassword,
@@ -35,7 +35,7 @@ export const ProfilePage: FC = () => {
   }
 
   useEffect(() => {
-    dispatch(myOrdersThunk(1, 1))
+    dispatch(myOrdersTC(1, 1))
   }, [dispatch])
 
   return (

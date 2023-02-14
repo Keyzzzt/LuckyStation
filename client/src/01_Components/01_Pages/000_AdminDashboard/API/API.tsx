@@ -2,7 +2,7 @@ import s from './api.module.scss'
 import React, { FC, useEffect, useState } from 'react'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { useDispatch } from 'react-redux'
-import { apiThunk } from '../../../../03_Reducers/admin/apiReducer'
+import { apiTC } from '../../../../03_Reducers/admin/apiReducer'
 import Loader from '../../../02_Chunks/Loader/Loader'
 
 export const API: FC = () => {
@@ -18,7 +18,7 @@ export const API: FC = () => {
   }
 
   useEffect(() => {
-    dispatch(apiThunk())
+    dispatch(apiTC())
   }, [dispatch])
 
   return (
