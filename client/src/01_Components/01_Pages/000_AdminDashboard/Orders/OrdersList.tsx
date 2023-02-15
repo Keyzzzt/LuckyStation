@@ -40,16 +40,16 @@ export const OrdersList: FC<Props> = ({ orders }) => {
           <tbody>
           {orders.map(o => (
             <tr key={o._id}>
-              <td>{parseCreatedUpdated(o.createdAt).date}</td>
+              <td>{parseCreatedUpdated(o.createdAt, 'date')}</td>
               <td>{o.isPaid
-                ? <Button title='Paid' type='button' color='success' marginTop='0' width='110px'  padding='3px'/>
-                : <Button title='Not paid' type='button' color='danger' marginTop='0' width='110px'  padding='3px'/>
+                ? <Button title='Paid' type='button' color='success' marginTop='0' minWidth='110px'  padding='5px'/>
+                : <Button title='Not paid' type='button' color='danger' marginTop='0' minWidth='110px'  padding='5px'/>
               }
               </td>
               <td>
                 {o.isDelivered
-                  ? <Button title='Delivered' type='button' color='success' marginTop='0' width='110px' padding='3px'/>
-                  : <Button title='Not delivered' type='button' color='danger' marginTop='0' width='110px'  padding='3px'/>
+                  ? <Button title='Delivered' type='button' color='success' marginTop='0' minWidth='110px' padding='5px'/>
+                  : <Button title='Not delivered' type='button' color='danger' marginTop='0' minWidth='110px'  padding='5px'/>
                 }
               </td>
               <td>
@@ -57,7 +57,7 @@ export const OrdersList: FC<Props> = ({ orders }) => {
               </td>
               <td>
                 <Button onClick={() => navigate(`/dashboard/orders/${o._id}`)} title='More info' type='button'
-                        color='success' marginTop='0' width='120px'/>
+                        color='success' marginTop='0' minWidth='110px'/>
               </td>
             </tr>
           ))}

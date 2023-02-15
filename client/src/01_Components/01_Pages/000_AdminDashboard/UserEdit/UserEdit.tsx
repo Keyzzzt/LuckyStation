@@ -91,24 +91,24 @@ export const UserEdit: FC = () => {
             <tr>
               <td>Status</td>
               <td>
-                {user.isAdmin ? <div className='success'>Admin</div> : 'Customer'}
+                {user.isAdmin ? <Button title='Admin' type='button' color='success' minWidth='110px' padding='5px'/> : 'Customer'}
               </td>
             </tr>
             <tr>
               <td>Email confirmation</td>
               <td>{user.isActivated ? (
-                <Button title='Confirmed' type='button' color='success' width='120px' padding='3px'/>
+                <Button title='Confirmed' type='button' color='success' minWidth='110px' padding='5px'/>
               ) : (
-                <Button title='Not confirmed' type='button' color='danger' width='120px' padding='3px'/>
+                <Button title='Not confirmed' type='button' color='danger' minWidth='110px' padding='5px'/>
               )}
               </td>
             </tr>
             <tr>
               <td>Subscription</td>
               <td>{user.isSubscribed ? (
-                <Button title='Subscribed' type='button' color='success' width='120px' padding='3px'/>
+                <Button title='Subscribed' type='button' color='success' minWidth='110px' padding='5px'/>
               ) : (
-                <Button title='Not subscribed' type='button' color='danger' width='120px' padding='3px'/>
+                <Button title='Not subscribed' type='button' color='danger' minWidth='110px' padding='5px'/>
               )
               }</td>
             </tr>
@@ -118,20 +118,20 @@ export const UserEdit: FC = () => {
             </tr>
             <tr>
               <td>Created</td>
-              <td>{parseCreatedUpdated(user.createdAt).date} / {parseCreatedUpdated(user.createdAt).time}</td>
+              <td>{parseCreatedUpdated(user.createdAt, 'date&time')}</td>
             </tr>
             </tbody>
           </table>
           <div className={s.buttons}>
 
             <Button onClick={() => handleDelete(user._id, user.email)} title='Delete User' type='submit' color='danger'
-                    width='120px'/>
+                    minWidth='110px'/>
             {user.isAdmin ? (
               <Button onClick={() => handleSetAsAdmin(user._id)} title='Set as user' type='submit' color='danger'
-                      width='120px'/>
+                      minWidth='110px'/>
             ) : (
               <Button onClick={() => handleSetAsAdmin(user._id)} title='Set as admin' type='submit' color='danger'
-                      width='120px'/>
+                      minWidth='110px'/>
 
             )}
           </div>

@@ -87,12 +87,12 @@ export const OrderEdit: FC = () => {
             </tr>
             <tr>
               <td>Created</td>
-              <td>{parseCreatedUpdated(orderInfo.createdAt).date} / {parseCreatedUpdated(orderInfo.createdAt).time}</td>
+              <td>{parseCreatedUpdated(orderInfo.createdAt, 'date&time')}</td>
             </tr>
             {orderInfo.createdAt !== orderInfo.updatedAt && (
               <tr>
                 <td>Last updated</td>
-                <td>{parseCreatedUpdated(orderInfo.updatedAt).date} / {parseCreatedUpdated(orderInfo.updatedAt).time}</td>
+                <td>{parseCreatedUpdated(orderInfo.createdAt, 'date&time')}</td>
               </tr>
             )}
             <tr>
@@ -103,9 +103,9 @@ export const OrderEdit: FC = () => {
               <td>Payment</td>
               <td>{orderInfo.isPaid
                 ? <Button onClick={() => manageOrderHandler('notPaid')} title='Paid' type='button' color='success'
-                          marginTop='0' width='110px' padding='3px'/>
+                          marginTop='0' minWidth='110px' padding='5px'/>
                 : <Button onClick={() => manageOrderHandler('paid')} title='Unpaid' type='button' color='danger'
-                          marginTop='0' width='110px' padding='3px'/>
+                          marginTop='0' minWidth='110px' padding='5px'/>
               }
 
               </td>
@@ -115,9 +115,9 @@ export const OrderEdit: FC = () => {
               <td>
                 {orderInfo.isDelivered
                   ? <Button onClick={() => manageOrderHandler('notDelivered')} title='Delivered' type='button'
-                            color='success' marginTop='0' width='110px' padding='3px'/>
+                            color='success' marginTop='0' minWidth='110px' padding='5px'/>
                   : <Button onClick={() => manageOrderHandler('delivered')} title='Not delivered' type='button'
-                            color='danger' marginTop='0' width='110px' padding='3px'/>
+                            color='danger' marginTop='0' minWidth='110px' padding='5px'/>
                 }
               </td>
             </tr>
@@ -147,7 +147,7 @@ export const OrderEdit: FC = () => {
             </tr>
             </tbody>
           </table>
-          <Button onClick={() => manageOrderHandler('delete')} title='Delete' type='submit' color='danger' marginTop='20px' width='100px'/>
+          <Button onClick={() => manageOrderHandler('delete')} title='Delete' type='submit' color='danger' marginTop='20px' minWidth='110px'/>
         </>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import s from './productEdit.module.scss'
 import { useDispatch } from 'react-redux'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
@@ -12,9 +12,9 @@ import { getUserTC } from '../../../../03_Reducers/admin/getUserReducer'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
+import { parseCreatedUpdated } from '../../../../04_Utils/utils'
+import { Button } from '../../../02_Chunks/Button/Button'
 
-
-// TODO Если что то изменили, то нужно перед выходом спросить, не забыл ли сохранить
 
 export const ProductEdit: FC = () => {
   const navigate = useNavigate()
@@ -25,7 +25,6 @@ export const ProductEdit: FC = () => {
   const { user } = useTypedSelector(state => state.getUser)
 
   // TODO Refactor to useReducer()
-  const [userName, setUserName] = useState<string>('')
   const [name, setName] = useState<string>('')
   const [brand, setBrand] = useState<string>('')
   const [category, setCategory] = useState<string>('')
@@ -39,9 +38,6 @@ export const ProductEdit: FC = () => {
   const [weight, setWeight] = useState<string>('')
   const [includes, setIncludes] = useState<string>('')
   const [price, setPrice] = useState<number>(0)
-  const [countInStock, setCountInStock] = useState<number>(0)
-  const [createdDate, setCreatedDate] = useState('')
-  const [lastUpdatedDate, setLastUpdatedDate] = useState('')
 
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
@@ -57,8 +53,8 @@ export const ProductEdit: FC = () => {
 
   const handleUpdate = () => {
     // TODO check fields
-    dispatch(
-      updateProductTC(productInfo?._id!, {
+    productInfo && dispatch(
+      updateProductTC(productInfo._id!, {
         name,
         brand,
         description,
@@ -66,7 +62,7 @@ export const ProductEdit: FC = () => {
         care,
         quality,
         category,
-        countInStock,
+        countInStock: productInfo.countInStock,
         colorsInText,
         materials,
         weight,
@@ -78,6 +74,9 @@ export const ProductEdit: FC = () => {
         isNewProduct: true,
       }),
     )
+  }
+  const handleReset = () => {
+    productId && dispatch(productInfoTC(productId))
   }
 
   useEffect(() => {
@@ -100,15 +99,8 @@ export const ProductEdit: FC = () => {
       setIncludes(productInfo.includes)
       setCategory(productInfo.category)
       setPrice(productInfo.price)
-      setCountInStock(productInfo.countInStock)
-      setCreatedDate(productInfo.createdAt)
-      setLastUpdatedDate(productInfo.updatedAt)
     }
   }, [productInfo])
-
-  useEffect(() => {
-    if (user) setUserName(user.name)
-  }, [user])
 
   return (
     <div className={s.container}>
@@ -137,19 +129,22 @@ export const ProductEdit: FC = () => {
             <tr>
               <td>Created by</td>
               <td>{user ? (
-                <button onClick={() => handleShowUser(user._id)} className='success'>{userName}</button>
+                <>
+                  <Button onClick={() => handleShowUser(user._id)} title={user.name} type='button' color='success' padding='5px' marginRight='20px'/>
+                  {user.isAdmin && <Button title='Admin' type='button' color='success' padding='5px'/>}
+                </>
               ) : 'User that created this product is no longer in database.'}</td>
             </tr>
             <tr>
               <td>Created</td>
               <td>
-                {createdDate}
+                {parseCreatedUpdated(productInfo.createdAt, 'date&time')}
               </td>
             </tr>
             <tr>
               <td>Last updated</td>
               <td>
-                {createdDate === lastUpdatedDate ? 'No updates' : lastUpdatedDate}
+                {productInfo.createdAt === productInfo.updatedAt ? '-' : parseCreatedUpdated(productInfo.updatedAt, 'date&time')}
               </td>
             </tr>
             <tr>
@@ -207,9 +202,13 @@ export const ProductEdit: FC = () => {
             <tr>
               <td>In stock</td>
               <td>
-                <div className={countInStock <= 0 ? 'danger' : 'success'}>
-                  {countInStock}
-                </div>
+                {productInfo.countInStock > 0 ? (
+                  <Button title={productInfo.countInStock.toString()} type='button' color='success' minWidth='50px'
+                          padding='5px'/>
+                ) : (
+                  <Button title={productInfo.countInStock.toString()} type='button' color='danger' minWidth='50px'
+                          padding='5px'/>
+                )}
               </td>
             </tr>
             <tr>
@@ -232,14 +231,7 @@ export const ProductEdit: FC = () => {
               <td>Reviews</td>
               <td>{productInfo.numReviews}</td>
             </tr>
-            <tr>
-              <td>Created</td>
-              <td>{productInfo.createdAt}</td>
-            </tr>
-            <tr>
-              <td>Last updated</td>
-              <td>{productInfo.updatedAt}</td>
-            </tr>
+
             <tr>
               <td>Image label</td>
               <td>{productInfo.isNewProduct ? 'NEW' : 'No label'}</td>
@@ -260,9 +252,10 @@ export const ProductEdit: FC = () => {
             </tbody>
           </table>
           <div className={s.buttons}>
-            <button className='success' onClick={handleUpdate}>Update</button>
-            <button className='danger' onClick={handleUpdate}>Reset</button>
-            <button className='danger' onClick={() => handleDelete(productId!, productInfo.name!)}>Delete</button>
+            <Button onClick={handleUpdate} title='Update' type='button' color='success'/>
+            <Button onClick={handleReset} title='Reset' type='button' color='danger'/>
+            <Button onClick={() => handleDelete(productId!, productInfo.name!)} title='Delete' type='button'
+                    color='danger'/>
           </div>
         </>
       )}

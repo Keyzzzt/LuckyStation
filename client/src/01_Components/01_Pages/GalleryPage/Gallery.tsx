@@ -286,9 +286,9 @@ export const Gallery: FC<GalleryProps> = ({ isAdmin, isAdminPage = false }) => {
               </div>
             </div>
             <div className={s.addedUpdated}>
-              <p>Added: {parseCreatedUpdated(itemInfo.createdAt).date}</p>
+              <p>Added: {parseCreatedUpdated(itemInfo.createdAt, 'date')}</p>
               {itemInfo.updatedAt === itemInfo.createdAt ? null :
-                <p>Updated: {parseCreatedUpdated(itemInfo.updatedAt).date}</p>}
+                <p>Updated: {parseCreatedUpdated(itemInfo.updatedAt, 'date')}</p>}
             </div>
             <div className={s.buttons}>
               <Button title='Submit' type='submit' color='success' marginTop='20px'/>

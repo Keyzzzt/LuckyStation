@@ -4,6 +4,8 @@ import { Message } from '../../../02_Chunks/Message/Message'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { useNavigate } from 'react-router-dom'
 import { ProductResponseType } from '../../../../05_Types/ResponseTypes'
+import { Button } from '../../../02_Chunks/Button/Button'
+import { toLocal } from '../../../../04_Utils/utils'
 
 type Props = {
   products: ProductResponseType[] | null
@@ -11,14 +13,12 @@ type Props = {
 }
 
 export const ProductsList: FC<Props> = ({ products, setSortFilter }) => {
-  console.log('PRODUCTS LIST')
   const [isNameAZ, setIsNameAZ] = useState(false)
   const [isCategoryAZ, setIsCategoryAZ] = useState(false)
   const [isBrandAZ, setIsBrandAZ] = useState(false)
   const [isInStockAZ, setIsInStockAZ] = useState(false)
   const [isPriceAZ, setIsPriceAZ] = useState(false)
   const navigate = useNavigate()
-
 
 
   const handleFilter = (filter: string) => {
@@ -96,13 +96,15 @@ export const ProductsList: FC<Props> = ({ products, setSortFilter }) => {
                   <td>{p.brand}</td>
                   <td>{p.category}</td>
                   <td>
-                    <div className={p.countInStock <= 0 ? 'danger' : 'success'}>
-                      {p.countInStock}
-                    </div>
+                    {p.countInStock > 0 ? (
+                      <Button title={p.countInStock.toString()} type='button' color='success' minWidth='50px' padding='5px'/>
+                    ) : (
+                      <Button title={p.countInStock.toString()} type='button' color='danger' minWidth='50px' padding='5px'/>
+                    )}
                   </td>
-                  <td>{p.price}</td>
+                  <td>{p.price.toLocaleString('en', toLocal)}</td>
                   <td>
-                    <button onClick={() => navigate(`/dashboard/products/${p._id}`)} className='success'>More info</button>
+                    <Button onClick={() => navigate(`/dashboard/products/${p._id}`)} title='More info' type='button' color='success' minWidth='120px'/>
                   </td>
                 </tr>
               ))}

@@ -46,18 +46,18 @@ export const UsersList: FC<Props> = ({ users, setSortFilter }) => {
               <td>{u.name}</td>
               <td>{u.email}</td>
               <td>{u.isAdmin ? (
-                <Button title='Admin' type='button' color='success' width='120px' padding='3px'/>
+                <Button title='Admin' type='button' color='success' minWidth='110px' padding='5px'/>
               ) : (
                 'Customer'
               )}</td>
               <td>{u.isActivated ? (
-                <Button title='Confirmed' type='button' color='success' width='120px' padding='3px'/>
+                <Button title='Confirmed' type='button' color='success' minWidth='110px' padding='5px'/>
               ) : (
-                <Button title='Not confirmed' type='button' color='danger' width='120px' padding='3px'/>
+                <Button title='Not confirmed' type='button' color='danger' minWidth='110px' padding='5px'/>
               )}</td>
               <td>
                 <Button onClick={() => navigate(`/dashboard/users/${u._id}`)} title='More info' type='button'
-                        color='success' width='110px'/>
+                        color='success' minWidth='110px'/>
               </td>
             </tr>
           ))}

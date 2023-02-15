@@ -5,8 +5,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useWindowSize } from '../../../../04_Utils/hooks'
 import { useDispatch } from 'react-redux'
 import { logoutThunk } from '../../../../03_Reducers/user/userInfoReducer'
-import { actions as myOrdersActions } from '../../../../03_Reducers/user/myOrdersReducer'
-import { actions as orderInfoActions } from '../../../../03_Reducers/order/orderInfoReducer'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 
 type Props = {

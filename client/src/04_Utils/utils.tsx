@@ -13,10 +13,15 @@ export let toLocal = {
   currency: 'eur',
 }
 
-export const parseCreatedUpdated = (str: string) => {
+export const parseCreatedUpdated = (str: string, flag: 'date' | 'time' | 'date&time') => {
   const arr = str.split('T')
-  return {
-    date: arr[0].split('-').reverse().join('.'),
-    time: arr[1].slice(0, 8),
+  switch (flag) {
+    case 'date':
+      return arr[0].split('-').reverse().join('.')
+    case 'time':
+      return arr[1].slice(0, 8)
+    default:
+      return `${arr[0].split('-').reverse().join('.')} / ${arr[1].slice(0, 8)}`
   }
+
 }

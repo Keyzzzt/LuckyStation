@@ -14,12 +14,21 @@
 }
 
 .buttons{
+  max-width: 400px;
   margin-top: 20px;
-  & button{
-    padding: 10px;
+  display: flex;
+  flex-direction: column;
+  @include breakpoint(480){
+    flex-direction: row;
   }
-  & button:not(:last-child){
+
+  & input:not(:last-child){
     margin-right: 20px;
+    margin-bottom: 20px;
+    @include breakpoint(480){
+      margin-bottom: 0;
+    }
+
   }
 }
 .colors {

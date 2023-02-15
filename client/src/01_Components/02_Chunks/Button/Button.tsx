@@ -6,16 +6,17 @@ type Props = {
   type: 'submit' | 'button'
   color: 'success' | 'danger'
   marginTop?: string
+  marginRight?: string
   onClick?: any
-  width?: string | undefined
+  minWidth?: string | undefined
   padding?: string | undefined
 
 }
 
-export const Button: FC<Props> = ({title, type, color, marginTop = undefined, onClick, width = undefined, padding = undefined}) => {
+export const Button: FC<Props> = ({title, type, color, marginTop = undefined, onClick, minWidth = undefined, padding = undefined, marginRight = undefined}) => {
   const className = color === 'success' ? s.success : s.danger
 
   return (
-    <input onClick={onClick} style={{marginTop, width, padding}} className={className} type={type} value={title}/>
+    <input onClick={onClick} style={{marginTop, marginRight, minWidth, padding}} className={className} type={type} value={title}/>
   )
 }

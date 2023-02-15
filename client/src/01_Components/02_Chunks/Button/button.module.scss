@@ -1,13 +1,14 @@
 @import './../../../02_Styles/variables.scss';
 
-.success {
-  width: 100%;
+.success,
+.danger {
   color: $white;
-  background-color: $success;
   padding: 10px;
   border-radius: $bRadius;
   cursor: pointer;
-
+}
+.success {
+  background-color: $success;
   &:hover {
     background-color: $successHover;
   }
@@ -18,12 +19,7 @@
 }
 
 .danger {
-  width: 100%;
-  color: $white;
   background-color: $danger;
-  padding: 10px;
-  border-radius: $bRadius;
-  cursor: pointer;
 
   &:hover {
     background-color: $dangerHover;
