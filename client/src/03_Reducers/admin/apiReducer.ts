@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -36,13 +36,13 @@ export function apiTC(): ThunkType {
       const { data } = await API.admin.getApiInfo()
       dispatch(actions.successAC(data))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }

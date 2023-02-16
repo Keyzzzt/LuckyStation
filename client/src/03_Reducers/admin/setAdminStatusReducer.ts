@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -11,7 +11,7 @@ const initialState = {
   fail: '',
 }
 
-export const toggleAdminStatusReducer = (state = initialState, action: ActionType): InitialStateType => {
+export const setAdminStatusReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'UPDATE_PROFILE_BY_ADMIN_REQUEST':
       return { ...state, success: false, fail: '', loading: true }
@@ -30,23 +30,23 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'UPDATE_PROFILE_BY_ADMIN_FAIL' as const, payload: errMessage }),
 }
 
-export type ToggleAdminStatusType = {
+export type SetAdminStatusType = {
   isAdmin: boolean
 }
-export function toggleAdminStatusTC(userId: string, status: ToggleAdminStatusType): ThunkType {
+export function setAdminStatusTC(userId: string, status: SetAdminStatusType): ThunkType {
   return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
       await API.admin.toggleAdminStatus(userId, status)
       dispatch(actions.successAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }

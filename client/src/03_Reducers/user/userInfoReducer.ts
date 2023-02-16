@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 import { UserResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -74,13 +74,13 @@ export function toggleFavoriteThunk(productId: string, isFavorite: boolean): Thu
         dispatch(actions.addToFavoriteAC(productId))
       }
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.favoriteFailAC(errMsg))
         return
       }
-      dispatch(actions.favoriteFailAC(error))
+      dispatch(actions.favoriteFailAC(fail))
     }
   }
 }
@@ -90,13 +90,13 @@ export function subscribeThunk(email: string): ThunkType {
       await API.user.subscribe(email)
       dispatch(actions.subscribeAC(email))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.subscribeFailAC(errMsg))
         return
       }
-      dispatch(actions.subscribeFailAC(error))
+      dispatch(actions.subscribeFailAC(fail))
     }
   }
 }
@@ -107,13 +107,13 @@ export function userInfoThunk(): ThunkType {
       const { data } = await API.user.getProfile()
       dispatch(actions.userInfoSuccessAC(data))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.userInfoFailAC(errMsg))
         return
       }
-      dispatch(actions.userInfoFailAC(error))
+      dispatch(actions.userInfoFailAC(fail))
     }
   }
 }

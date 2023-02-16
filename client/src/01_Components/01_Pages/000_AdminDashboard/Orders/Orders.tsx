@@ -6,7 +6,6 @@ import { Message } from '../../../02_Chunks/Message/Message'
 import { orderListTC } from '../../../../03_Reducers/order/ordersListReducer'
 import { OrdersList } from './OrdersList'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
-import { DashboardSVG } from '../../../02_Chunks/svg/DashboardSVG'
 
 
 export const Orders: FC = () => {
@@ -27,26 +26,22 @@ export const Orders: FC = () => {
   useEffect(() => {
     if (orders) {
       switch (ordersFilter) {
-        // case 'nameAZ':
-        //   return setProductsToRender([...users].sort((a, b) => a.name.localeCompare(b.name)))
-        // case 'nameZA':
-        //   return setProductsToRender([...users].sort((a, b) => b.name.localeCompare(a.name)))
-        // case 'categoryAZ':
-        //   return setProductsToRender([...users].sort((a, b) => a.category.localeCompare(b.category)))
-        // case 'categoryZA':
-        //   return setProductsToRender([...users].sort((a, b) => b.category.localeCompare(a.category)))
-        // case 'brandAZ':
-        //   return setProductsToRender([...users].sort((a, b) => a.brand.localeCompare(b.brand)))
-        // case 'brandZA':
-        //   return setProductsToRender([...users].sort((a, b) => b.brand.localeCompare(a.brand)))
-        // case 'inStockAZ':
-        //   return setProductsToRender([...users].sort((a, b) => a.countInStock - b.countInStock))
-        // case 'inStockZA':
-        //   return setProductsToRender([...users].sort((a, b) => b.countInStock - a.countInStock))
-        // case 'lowestPriceFirst':
-        //   return setProductsToRender([...users].sort((a, b) => a.price - b.price))
-        // case 'highestPriceFirst':
-        //   return setProductsToRender([...users].sort((a, b) => b.price - a.price))
+        case 'dateAZ':
+          return setOrdersToRender([...orders].sort((a, b) => a.createdAt.localeCompare(b.createdAt)))
+        case 'dateZA':
+          return setOrdersToRender([...orders].sort((a, b) => b.createdAt.localeCompare(a.createdAt)))
+        case 'paymentAZ':
+          return setOrdersToRender([...orders].sort((a, b) => a.isPaid.toString().localeCompare(b.isPaid.toString())))
+        case 'paymentZA':
+          return setOrdersToRender([...orders].sort((a, b) => b.isPaid.toString().localeCompare(a.isPaid.toString())))
+        case 'shippingAZ':
+          return setOrdersToRender([...orders].sort((a, b) => a.isDelivered.toString().localeCompare(b.isDelivered.toString())))
+        case 'shippingZA':
+          return setOrdersToRender([...orders].sort((a, b) => b.isDelivered.toString().localeCompare(a.isDelivered.toString())))
+        case 'itemsAZ':
+          return setOrdersToRender([...orders].sort((a, b) => a.orderItems.length - b.orderItems.length))
+        case 'itemsZA':
+          return setOrdersToRender([...orders].sort((a, b) => b.orderItems.length - a.orderItems.length))
         case 'all':
           return setOrdersToRender([...orders])
       }
@@ -58,8 +53,12 @@ export const Orders: FC = () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {orders?.length === 0 && <Message message='You have no orders yet...' type="fail"/>}
-      <BreadCrumbs pageTitle='Orders' breadcrumbs={['dashboard', 'orders']}/>
-      <OrdersList orders={ordersToRender} setSortFilter={setOrdersFilter} />
+      {orders && (
+        <>
+          <BreadCrumbs pageTitle='Orders' listCount={orders.length} breadcrumbs={['dashboard', 'orders']}/>
+          <OrdersList orders={ordersToRender} setSortFilter={setOrdersFilter}/>
+        </>
+      )}
     </div>
   )
 }

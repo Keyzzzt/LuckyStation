@@ -24,7 +24,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -73,7 +73,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -136,7 +136,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -191,7 +191,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - not found, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -218,7 +218,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -245,7 +245,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -272,7 +272,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -300,7 +300,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -327,7 +327,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -353,7 +353,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -384,7 +384,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -412,7 +412,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -437,7 +437,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -462,7 +462,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -487,7 +487,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -514,7 +514,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -541,7 +541,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -570,7 +570,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 400,
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -612,7 +612,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - users not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -652,7 +652,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - user not found, 401 - not admin, 500 - id not valid / server error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -691,7 +691,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - user not found, 401 - not admin, 500 - id not valid / server error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -718,7 +718,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - user not found, 401 - not admin, 500 - server error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -781,7 +781,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - orders not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -828,7 +828,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - surveys not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -901,7 +901,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -928,7 +928,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -955,7 +955,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -982,7 +982,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1009,7 +1009,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1087,7 +1087,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1131,7 +1131,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1158,7 +1158,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1197,7 +1197,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1223,7 +1223,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1260,7 +1260,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1287,7 +1287,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1317,7 +1317,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400; 401; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1357,7 +1357,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1399,7 +1399,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '401; PageNotFound404; 500',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1476,7 +1476,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - not found, 401 - not authorized, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1509,7 +1509,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: 'PageNotFound404 - order not found, 401 - not admin, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',
@@ -1538,7 +1538,7 @@ const apiDocumentation = [
     },
     errorResponse: {
       status: '400 - bad request, 401 - not authorized, 500 - other error',
-      error: 'Error message',
+      fail: 'Error message',
       errors: [
         {
           value: 'string',

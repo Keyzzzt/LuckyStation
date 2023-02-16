@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 import { ProductResponseType } from '../../05_Types/ResponseTypes'
 import { StateType } from '../../store'
 
@@ -80,13 +80,13 @@ export function addToCartThunk(productId: string, qty: number): ThunkType {
       dispatch(actions.cartAddAC(data))
       localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.cartFailAC(errMsg))
         return
       }
-      dispatch(actions.cartFailAC(error))
+      dispatch(actions.cartFailAC(fail))
     }
   }
 }
@@ -96,13 +96,13 @@ export function removeFromCartThunk(productId: string): ThunkType {
       dispatch(actions.cartRemoveAC(productId))
       localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.cartFailAC(errMsg))
         return
       }
-      dispatch(actions.cartFailAC(error))
+      dispatch(actions.cartFailAC(fail))
     }
   }
 }

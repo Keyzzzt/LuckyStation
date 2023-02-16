@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -37,13 +37,13 @@ export function registerTC(email: string, password: string): ThunkType {
       await API.auth.registration(email, password)
       dispatch(actions.successAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }

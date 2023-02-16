@@ -1,7 +1,7 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 import { userInfoThunk } from './userInfoReducer'
-import { UpdateProfileRequestType } from '../../05_Types/ResponseTypes'
+import { UpdateProfilePayloadType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -33,22 +33,22 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'UPDATE_OWN_PROFILE_FAIL' as const, payload: errMessage }),
 }
 
-export function updateOwnProfileTC(formData: UpdateProfileRequestType): ThunkType {
+export function updateOwnProfileTC(updateProfilePayload: UpdateProfilePayloadType): ThunkType {
   return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
-      const { data } = await API.user.updateOwnProfile(formData)
+      const { data } = await API.user.updateOwnProfile(updateProfilePayload)
       localStorage.setItem('token', JSON.stringify(data.accessToken))
       userInfoThunk()
       dispatch(actions.successAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg)
         dispatch(actions.failAC(errMsg[0]))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }

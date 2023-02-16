@@ -4,16 +4,16 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { Button } from '../../../02_Chunks/Button/Button'
-import { FC, useEffect } from 'react'
+import { FC, FormEvent, useEffect } from 'react'
 import { useScrollToTop } from '../../../../04_Utils/hooks'
 import { useTypedSelector } from '../../../../05_Types/01_Base'
 import { parseCreatedUpdated } from '../../../../04_Utils/utils'
 import { getUserTC } from '../../../../03_Reducers/admin/getUserReducer'
 import { userDeleteTC } from '../../../../03_Reducers/admin/userDeleteReducer'
-import { toggleAdminStatusTC } from '../../../../03_Reducers/admin/toggleAdminStatusReducer'
+import { setAdminStatusTC } from '../../../../03_Reducers/admin/setAdminStatusReducer'
 
 export const UserEdit: FC = () => {
-  const {success, loading, fail} = useTypedSelector(state => state.toggleAdminStatus)
+  const {success, loading, fail} = useTypedSelector(state => state.setAdminStatus)
   const { user } = useTypedSelector(state => state.getUser)
   const { userId } = useParams<string>()
   const navigate = useNavigate()
@@ -29,11 +29,15 @@ export const UserEdit: FC = () => {
     }
     return
   }
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+  }
+
 
   const handleSetAsAdmin = (userId: string) => {
     if (userId && window.confirm('Are toy sure?')) {
       const role = !user?.isAdmin
-      dispatch(toggleAdminStatusTC(userId, { isAdmin: role }))
+      dispatch(setAdminStatusTC(userId, { isAdmin: role }))
 
     }
     // If confirmed, request server, if there is more than 1 admin,
@@ -58,7 +62,7 @@ export const UserEdit: FC = () => {
       {!user ? (
         <Loader/>
       ) : (
-        <>
+        <form onSubmit={handleSubmit}>
           <div>{fail}</div>
           <table className='stationTable'>
             <thead>
@@ -135,7 +139,7 @@ export const UserEdit: FC = () => {
 
             )}
           </div>
-        </>
+        </form>
       )}
     </div>
 

@@ -96,7 +96,7 @@ export const OrderEdit: FC = () => {
               </tr>
             )}
             <tr>
-              <td>Customer </td>
+              <td>Customer</td>
               <td>TODO link to customers profile</td>
             </tr>
             <tr>
@@ -146,8 +146,9 @@ export const OrderEdit: FC = () => {
               <td>{orderInfo.totalPrice}</td>
             </tr>
             </tbody>
+            <Button onClick={() => manageOrderHandler('delete')} title='Delete' type='submit' color='danger'
+                    marginTop='20px' minWidth='110px'/>
           </table>
-          <Button onClick={() => manageOrderHandler('delete')} title='Delete' type='submit' color='danger' marginTop='20px' minWidth='110px'/>
         </>
       )}
     </div>

@@ -8,14 +8,14 @@ import {
   UserResponseType,
   GetAllOrdersResponse,
   GetAllProductsResponse,
-  OrderCreateRequestType,
-  UpdateProfileRequestType,
+  OrderCreatePayloadType,
+  UpdateProfilePayloadType,
   TermsAndConditionsResponseType, ConfigResponseType,
 } from './05_Types/ResponseTypes'
 import { GalleryListItemType } from './03_Reducers/gallery/galleryReducer'
-import { UpdateData } from './03_Reducers/gallery/editGalleryItemReducer'
-import { AddGalleryItemType } from './03_Reducers/gallery/addGalleryItemReducer'
-import { ToggleAdminStatusType } from './03_Reducers/admin/toggleAdminStatusReducer'
+import { UpdatePayloadType } from './03_Reducers/gallery/editGalleryItemReducer'
+import { AddGalleryItemPayloadType } from './03_Reducers/gallery/addGalleryItemReducer'
+import { SetAdminStatusType } from './03_Reducers/admin/setAdminStatusReducer'
 import { NewProductType } from './01_Components/01_Pages/000_AdminDashboard/AddProduct/AddProduct'
 
 export const API = {
@@ -45,7 +45,7 @@ export const API = {
     getTermsAndConditions: async (lang: string) => {
       return $api.get<TermsAndConditionsResponseType>(`/user/terms/${lang}`)
     },
-    updateOwnProfile: async (formData: UpdateProfileRequestType) => {
+    updateOwnProfile: async (formData: UpdateProfilePayloadType) => {
       return $api.put<UserResponseType>(`/user/profile`, formData)
     },
     myOrders: async (page: number, limit: number) => {
@@ -59,7 +59,7 @@ export const API = {
     },
   },
   order: {
-    createOrder: async (newOrder: OrderCreateRequestType) => {
+    createOrder: async (newOrder: OrderCreatePayloadType) => {
       return $api.post<string>('/order', newOrder)
     },
     payOrder: async (orderId: string, paymentResult: any) => {
@@ -82,10 +82,10 @@ export const API = {
     getGalleryItem: async (itemId: string) => {
       return $api.get<GalleryListItemType>(`gallery/${itemId}`)
     },
-    editGalleryItem: async (updateData: UpdateData, itemId: string) => {
+    editGalleryItem: async (updateData: UpdatePayloadType, itemId: string) => {
       return $api.put<GalleryListItemType>(`admin/gallery/${itemId}`, updateData)
     },
-    addGalleryItem: async (newImage: AddGalleryItemType) => {
+    addGalleryItem: async (newImage: AddGalleryItemPayloadType) => {
       return $api.post(`admin/gallery`, newImage)
     },
     deleteGalleryItem: async (itemId: string)=> {
@@ -95,7 +95,7 @@ export const API = {
       return $api.delete(`admin/user/${userId}`)
     },
 
-    toggleAdminStatus: async (userId: string, status: ToggleAdminStatusType) => {
+    toggleAdminStatus: async (userId: string, status: SetAdminStatusType) => {
       return $api.put<any>(`admin/user/${userId}`, status)
     },
 

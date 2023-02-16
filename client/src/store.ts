@@ -14,7 +14,7 @@ import { userInfoReducer } from './03_Reducers/user/userInfoReducer'
 import { usersListReducer } from './03_Reducers/admin/usersListReducer'
 import { registerReducer } from './03_Reducers/Auth/registerReducer'
 import { userUpdateOwnProfileReducer } from './03_Reducers/user/userUpdateOwnProfileReducer'
-import { toggleAdminStatusReducer } from './03_Reducers/admin/toggleAdminStatusReducer'
+import { setAdminStatusReducer } from './03_Reducers/admin/setAdminStatusReducer'
 import { getUserReducer } from './03_Reducers/admin/getUserReducer'
 import { createProductReducer } from './03_Reducers/admin/createProductReducer'
 import { updateProductReducer } from './03_Reducers/admin/updateProductReducer'
@@ -39,7 +39,7 @@ const rootReducer = combineReducers({
   userInfo: userInfoReducer,
   userList: usersListReducer,
   userDelete: userDeleteReducer,
-  toggleAdminStatus: toggleAdminStatusReducer,
+  setAdminStatus: setAdminStatusReducer,
   userUpdateOwnProfile: userUpdateOwnProfileReducer,
   productInfo: productInfoReducer,
   productList: productsListReducer,

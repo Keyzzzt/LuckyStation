@@ -1,8 +1,7 @@
 import { ContactInfo } from '../03_Reducers/cart/cartReducer'
-import { GalleryListItemType } from '../03_Reducers/gallery/galleryReducer'
 
 // Request
-export type OrderCreateRequestType = {
+export type OrderCreatePayloadType = {
   orderItems: {name: string, quantity: number | undefined, images: any, price: number, product: string}[]
   shippingAddress: ContactInfo
   itemsPrice: number
@@ -11,7 +10,7 @@ export type OrderCreateRequestType = {
   taxPrice: number
   totalPrice: number
 }
-export type UpdateProfileRequestType = {
+export type UpdateProfilePayloadType = {
   oldPassword: string
   newPassword: string
   confirmNewPassword: string

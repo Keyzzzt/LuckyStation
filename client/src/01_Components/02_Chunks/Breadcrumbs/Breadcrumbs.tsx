@@ -5,14 +5,15 @@ import { Link } from 'react-router-dom'
 type Props = {
   pageTitle: string
   breadcrumbs: string[]
+  listCount?: number
 }
 
 
-export const BreadCrumbs: FC<Props> = ({ pageTitle, breadcrumbs }) => {
+export const BreadCrumbs: FC<Props> = ({ pageTitle, breadcrumbs, listCount }) => {
           let link = ''
   return (
     <div className={s.breadcrumbs}>
-      <p className={s.pageTitle}>{pageTitle}</p>
+      <p className={s.pageTitle}>{pageTitle}{listCount ? `, TOTAL ${listCount}`: ''}</p>
       <ul>
         {breadcrumbs.map((b, i) => {
           if(i !== breadcrumbs.length - 1)

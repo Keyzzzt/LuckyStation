@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import s from './orders.module.scss'
 import Loader from '../../../02_Chunks/Loader/Loader'
 import { OrderResponseType } from '../../../../05_Types/ResponseTypes'
@@ -10,10 +10,36 @@ type Props = {
   orders: OrderResponseType[]
   setSortFilter: (filter: string) => void
 }
+type OrdersFilterType = 'date' | 'payment' | 'shipping' | 'items'
 
-export const OrdersList: FC<Props> = ({ orders }) => {
+export const OrdersList: FC<Props> = ({ orders, setSortFilter }) => {
+
+  const [sortByDate, setSortByDate] = useState(false)
+  const [sortByPayment, setSortByPayment] = useState(false)
+  const [sortByShipping, setSortByShipping] = useState(false)
+  const [sortByItemsCount, setSortByItemsCount] = useState(false)
   const navigate = useNavigate()
 
+  const handleFilter = (filter: OrdersFilterType) => {
+    switch (filter) {
+      case 'date':
+        setSortByDate(!sortByDate)
+        sortByDate ? setSortFilter('dateAZ') : setSortFilter('dateZA')
+        break
+      case 'payment':
+        setSortByPayment(!sortByPayment)
+        sortByPayment ? setSortFilter('paymentAZ') : setSortFilter('paymentZA')
+        break
+      case 'shipping':
+        setSortByShipping(!sortByShipping)
+        sortByShipping ? setSortFilter('shippingAZ') : setSortFilter('shippingZA')
+        break
+      case 'items':
+        setSortByItemsCount(!sortByItemsCount)
+        sortByItemsCount ? setSortFilter('itemsAZ') : setSortFilter('itemsZA')
+        break
+    }
+  }
   return (
     <div className={s.list}>
       {!orders ? (
@@ -23,16 +49,28 @@ export const OrdersList: FC<Props> = ({ orders }) => {
           <thead>
           <tr>
             <th>
-              <div>Date</div>
+              <div onClick={() => handleFilter('date')}>Date {sortByDate
+                ? <i className="fa-sharp fa-solid fa-caret-up"/>
+                : <i className="fa-sharp fa-solid fa-caret-down"/>}
+              </div>
             </th>
             <th>
-              <div>Payment</div>
+              <div onClick={() => handleFilter('payment')}>Payment {sortByDate
+                ? <i className="fa-sharp fa-solid fa-caret-up"/>
+                : <i className="fa-sharp fa-solid fa-caret-down"/>}
+              </div>
             </th>
             <th>
-              <div>Shipping</div>
+              <div onClick={() => handleFilter('shipping')}>Shipping {sortByDate
+                ? <i className="fa-sharp fa-solid fa-caret-up"/>
+                : <i className="fa-sharp fa-solid fa-caret-down"/>}
+              </div>
             </th>
             <th>
-              <div>Items</div>
+              <div onClick={() => handleFilter('items')}>Items {sortByDate
+                ? <i className="fa-sharp fa-solid fa-caret-up"/>
+                : <i className="fa-sharp fa-solid fa-caret-down"/>}
+              </div>
             </th>
             <th>Action</th>
           </tr>

@@ -54,6 +54,14 @@ export async function removeEmailFromList(req: RequestCustom, res: Response, nex
 export async function deleteUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params
+    const user = await UserModel.findById(id)
+    if(user.isAdmin) {
+      const users = await UserModel.find({})
+      const admins = users.filter(u => u.isAdmin)
+      if (admins.length === 1) {
+        return next(ApiError.BadRequest(`${admins[0].name} is the only one admin now. Please grant admin access to another person before make any changes.`))
+      }
+    }
     await UserModel.findOneAndDelete({ _id: id })
     await TokenModel.deleteOne({ user: id })
     return res.sendStatus(200)
@@ -87,13 +95,13 @@ export async function setUsersAdminStatus(req: Request, res: Response, next: Nex
     const newStatus = req.body.isAdmin
     if (!newStatus) {
       const users = await UserModel.find({})
-      const admins = users.filter(u => u._id.equals(id) )
+      const admins = users.filter(u => u.isAdmin)
       if (admins.length === 1) {
         return next(ApiError.BadRequest(`${admins[0].name} is the only one admin now. Please grant admin access to another person before make any changes.`))
       }
     }
     await UserModel.findByIdAndUpdate(id, { isAdmin: newStatus })
-    return res.status(200)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }
@@ -137,6 +145,7 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       quality,
       isNewProduct,
       isPromo,
+      isShowOnMainPage,
     } = req.body
     const product = new ProductModel({
       name,
@@ -161,11 +170,12 @@ export async function createProduct(req: RequestCustom, res: Response, next: Nex
       quality,
       isNewProduct,
       isPromo,
+      isShowOnMainPage,
     })
 
-    const createdProduct = await product.save()
+    await product.save()
 
-    return res.status(201).json(createdProduct)
+    return res.sendStatus(200)
   } catch (error) {
     return next(error.message)
   }

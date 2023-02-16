@@ -1,6 +1,6 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
-import { OrderCreateRequestType } from '../../05_Types/ResponseTypes'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
+import { OrderCreatePayloadType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -32,14 +32,14 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'ORDER_CREATE_FAIL' as const, payload: errMessage }),
 }
 
-export function createOrderTC(newOrder: OrderCreateRequestType): ThunkType {
+export function createOrderTC(payload: OrderCreatePayloadType): ThunkType {
   return async function (dispatch) {
     try {
       dispatch(actions.requestAC())
-      const { data } = await API.order.createOrder(newOrder)
+      const { data } = await API.order.createOrder(payload)
       dispatch(actions.successAC(data))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, error }: { errors: RequestBodyValidationErrorsType[]; error: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map(e => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))

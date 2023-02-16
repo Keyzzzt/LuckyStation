@@ -1,10 +1,10 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type ActionType = InferActionTypes<typeof actions>
 export type InitialState = typeof initialState
-export type AddGalleryItemType = {
+export type AddGalleryItemPayloadType = {
   title: string
   description: string
   className: 'h_stretch' | 'v_stretch' | 'big' | 'small'
@@ -40,20 +40,20 @@ export const actions = {
   failAC: (errMessage: string) => ({ type: 'ADD_GALLERY_ITEM_FAIL' as const, payload: errMessage }),
 }
 
-export function addGalleryItemTC(data: AddGalleryItemType): ThunkType {
+export function addGalleryItemTC(payload: AddGalleryItemPayloadType): ThunkType {
   return async (dispatch) => {
     try {
       dispatch(actions.requestAC())
-      await API.admin.addGalleryItem(data)
+      await API.admin.addGalleryItem(payload)
       dispatch(actions.successAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }

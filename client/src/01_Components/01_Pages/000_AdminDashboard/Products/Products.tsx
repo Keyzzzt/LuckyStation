@@ -62,9 +62,12 @@ export const Products: FC = () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {productsList?.length === 0 && <Message message='You have no products yet...' type="fail"/>}
-      <BreadCrumbs pageTitle='Products' breadcrumbs={['dashboard', 'products']}/>
-
-      <ProductsList products={productsToRender} setSortFilter={setProductsFilter}/>
+      {productsList && (
+        <>
+          <BreadCrumbs pageTitle='Products' listCount={productsList.length} breadcrumbs={['dashboard', 'products']}/>
+          <ProductsList products={productsToRender} setSortFilter={setProductsFilter}/>
+        </>
+      )}
     </div>
   )
 }

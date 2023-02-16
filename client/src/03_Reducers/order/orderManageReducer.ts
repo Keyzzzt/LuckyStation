@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
@@ -69,13 +69,13 @@ export function deliveredThunk(orderId: string): ThunkType {
       await API.admin.setToDelivered(orderId)
       dispatch(actions.deliveredSuccessAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.deliveredFailAC(errMsg))
         return
       }
-      dispatch(actions.deliveredFailAC(error))
+      dispatch(actions.deliveredFailAC(fail))
     }
   }
 }
@@ -86,13 +86,13 @@ export function notDeliveredThunk(orderId: string): ThunkType {
       await API.admin.setToNotDelivered(orderId)
       dispatch(actions.notDeliveredSuccessAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.notDeliveredFailAC(errMsg))
         return
       }
-      dispatch(actions.notDeliveredFailAC(error))
+      dispatch(actions.notDeliveredFailAC(fail))
     }
   }
 }
@@ -103,13 +103,13 @@ export function paidThunk(orderId: string): ThunkType {
       await API.admin.setToPaid(orderId)
       dispatch(actions.paidSuccessAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.paidFailAC(errMsg))
         return
       }
-      dispatch(actions.paidFailAC(error))
+      dispatch(actions.paidFailAC(fail))
     }
   }
 }
@@ -120,13 +120,13 @@ export function notPaidThunk(orderId: string): ThunkType {
       await API.admin.setToNotPaid(orderId)
       dispatch(actions.notPaidSuccessAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.notPaidFailAC(errMsg))
         return
       }
-      dispatch(actions.notPaidFailAC(error))
+      dispatch(actions.notPaidFailAC(fail))
     }
   }
 }
@@ -137,13 +137,13 @@ export function deleteOrderThunk(orderId: string): ThunkType {
       await API.admin.deleteOrder(orderId)
       dispatch(actions.deleteOrderSuccessAC())
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.deleteOrderFailAC(errMsg))
         return
       }
-      dispatch(actions.deleteOrderFailAC(error))
+      dispatch(actions.deleteOrderFailAC(fail))
     }
   }
 }

@@ -7,12 +7,6 @@ import { usersListTC } from '../../../../03_Reducers/admin/usersListReducer'
 import { UsersList } from './UsersList'
 import { BreadCrumbs } from '../../../02_Chunks/Breadcrumbs/Breadcrumbs'
 
-
-// TODO Add sort
-// TODO Polish styles
-
-
-
 export const Users: FC = () => {
   const dispatch = useDispatch()
   const { users, fail } = useTypedSelector(state => state.userList)
@@ -62,8 +56,12 @@ export const Users: FC = () => {
     <div className={s.container}>
       {fail && <Message message={fail} type="fail"/>}
       {users?.length === 0 && <Message message='You have no users yet...' type="fail"/>}
-      <BreadCrumbs pageTitle='Users' breadcrumbs={['dashboard', 'users']}/>
-      <UsersList users={usersToRender} setSortFilter={setUsersFilter}/>
+      {users && (
+        <>
+          <BreadCrumbs pageTitle='Users' listCount={users.length} breadcrumbs={['dashboard', 'users']}/>
+          <UsersList users={usersToRender} setSortFilter={setUsersFilter}/>
+        </>
+      )}
     </div>
   )
 }

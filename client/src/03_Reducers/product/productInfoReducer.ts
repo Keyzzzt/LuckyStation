@@ -1,5 +1,5 @@
 import { API } from '../../API'
-import { BaseThunkType, InferActionTypes, IValErrMsg } from '../../05_Types/01_Base'
+import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 import { ProductResponseType } from '../../05_Types/ResponseTypes'
 
 type ThunkType = BaseThunkType<ActionType>
@@ -15,11 +15,11 @@ const initialState = {
 export const productInfoReducer = (state = initialState, action: ActionType): InitialStateType => {
   switch (action.type) {
     case 'PRODUCT_INFO_REQUEST':
-      return { ...initialState, productInfo: null, fail: '', loading: true }
+      return { ...state, productInfo: null, fail: '', loading: true }
     case 'PRODUCT_INFO_SUCCESS':
-      return { ...initialState, productInfo: action.payload, loading: false }
+      return { ...state, productInfo: action.payload, loading: false }
     case 'PRODUCT_INFO_FAIL':
-      return { ...initialState, fail: action.payload, loading: false }
+      return { ...state, fail: action.payload, loading: false }
 
     default:
       return state
@@ -39,13 +39,13 @@ export function productInfoTC(productId: string): ThunkType {
       const { data } = await API.admin.getSingleProduct(productId)
       dispatch(actions.successAC(data))
     } catch (err: any) {
-      const { errors, error }: { errors: IValErrMsg[]; error: string } = err.response.data
+      const { errors, fail }: { errors: RequestBodyValidationErrorsType[], fail: string } = err.response.data
       if (errors && errors.length > 0) {
         const errMsg = errors.map((e) => e.msg).join('; ')
         dispatch(actions.failAC(errMsg))
         return
       }
-      dispatch(actions.failAC(error))
+      dispatch(actions.failAC(fail))
     }
   }
 }
