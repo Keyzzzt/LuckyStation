@@ -23,5 +23,4 @@ export const parseCreatedUpdated = (str: string, flag: 'date' | 'time' | 'date&t
     default:
       return `${arr[0].split('-').reverse().join('.')} / ${arr[1].slice(0, 8)}`
   }
-
 }

@@ -21,7 +21,6 @@ const initialState = {
       { title: 'Logout', link: '/', icon: false, type: 'private' },
       { title: 'Profile', link: '/profile', type: 'private' },
       { title: 'Admin', link: '/dashboard', type: 'admin' },
-
     ],
   },
   landingPage: {

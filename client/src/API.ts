@@ -1,5 +1,4 @@
 import $api, { API_URL } from './04_Utils/axiosSetup'
-import axios from 'axios'
 import {
   LoginResponseType,
   UsersListResponseType,
@@ -35,7 +34,8 @@ export const API = {
       return $api.post('/logout')
     },
     authenticate: async () => {
-      return axios.get<LoginResponseType>(`${API_URL}/refresh`, { withCredentials: true })
+      // return axios.get<LoginResponseType>(`${API_URL}/refresh`, { withCredentials: true })
+      return $api.get<LoginResponseType>(`${API_URL}/refresh`, { withCredentials: true })
     },
   },
   user: {

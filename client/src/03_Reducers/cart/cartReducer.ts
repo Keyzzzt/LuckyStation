@@ -1,7 +1,7 @@
 import { API } from '../../API'
 import { BaseThunkType, InferActionTypes, RequestBodyValidationErrorsType } from '../../05_Types/01_Base'
 import { ProductResponseType } from '../../05_Types/ResponseTypes'
-import { StateType } from '../../store'
+import { StateType } from '../../store/store'
 
 type ThunkType = BaseThunkType<ActionType>
 type InitialStateType = typeof initialState
